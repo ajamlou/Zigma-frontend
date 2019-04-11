@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './login_page.dart';
 import './search_page.dart';
+import './searchbar.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -52,7 +53,7 @@ class SearchFieldLandingPage extends StatelessWidget {
   }
   void routeSearchPage(context){
     Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => SearchPage()));
+        .push(MaterialPageRoute<void>(builder: (_) => Searchbar()));
   }
 
 
