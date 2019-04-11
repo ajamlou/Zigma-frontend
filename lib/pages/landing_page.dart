@@ -47,7 +47,7 @@ class SearchFieldLandingPage extends StatelessWidget{
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20.0))
                 ),
-                hintText: 'Search for a book'
+                hintText: 'Sök efter en bok'
             ),
             autocorrect: false,
           )
@@ -66,7 +66,7 @@ class LoginButton extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Icon(Icons.contacts),
-            Text('Log In'),
+            Text('Logga In'),
           ],
         ));
   }
