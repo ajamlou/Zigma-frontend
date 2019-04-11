@@ -22,13 +22,6 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text('LoginPage'),
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back))),
         body: _showLoginPage());
   }
 
@@ -65,6 +58,20 @@ class LoginPageState extends State<LoginPage> {
       color: Color(0xFFECE9DF),
       child: Column(
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: IconButton(
+                  color: Color(0xFF96070a),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back),
+                ),
+              )
+            ],
+          ),
           Padding(
             padding:
                 const EdgeInsets.only(top: 100.0, right: 100.0, left: 100.0),
@@ -171,14 +178,6 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('RegisterPage'),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back)),
-        ),
         body: _showRegisterPage());
   }
 
@@ -209,6 +208,20 @@ class RegisterPageState extends State<RegisterPage> {
       color: Color(0xFFECE9DF),
       child: Column(
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: IconButton(
+                  color: Color(0xFF96070a),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back),
+                ),
+              )
+            ],
+          ),
           Padding(
             padding:
                 const EdgeInsets.only(top: 100.0, right: 100.0, left: 100.0),
