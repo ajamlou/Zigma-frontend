@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './login_page.dart';
-//import './searchbar.dart';
-import './login_page_app.dart';
+import './search_page.dart';
 
 
 class LandingPage extends StatelessWidget{

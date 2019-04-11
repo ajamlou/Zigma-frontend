@@ -8,11 +8,11 @@ class LoginPage extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         title: Text('LoginPage'),
-        leading: MaterialButton(
+        leading: IconButton(
             onPressed: (){
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back)
+            icon: Icon(Icons.arrow_back)
         )
       ),
       body: Container(
