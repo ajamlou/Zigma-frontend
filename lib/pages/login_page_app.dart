@@ -4,6 +4,7 @@
 //import 'package:flutter/cupertino.dart';
 //import 'package:flutter/foundation.dart';
 //
+//
 //final FirebaseAuth _auth = FirebaseAuth.instance;
 //
 //class LoginPageApp extends StatelessWidget {
@@ -13,6 +14,7 @@
 //      title: "StartPage",
 //      home: StartPage(),
 //    );
+//    §
 //  }
 //}
 //
@@ -120,7 +122,9 @@
 //    return new Scaffold(
 //      appBar: new AppBar(
 //        title: new Text("Authentication Page"),
-//        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
+//        elevation: Theme
+//            .of(context)
+//            .platform == TargetPlatform.iOS ? 0.0 : 4.0,
 //      ),
 //      body: new Container(
 //        margin: const EdgeInsets.symmetric(horizontal: 0.0),
@@ -157,8 +161,8 @@
 //                    child: Text(_success == null
 //                        ? ''
 //                        : (_success
-//                            ? 'Successfully logged in ' + _userName
-//                            : 'Login failed')),
+//                        ? 'Successfully logged in ' + _userName
+//                        : 'Login failed')),
 //                  ),
 //                ],
 //              ),
@@ -217,9 +221,9 @@
 //
 //  void _signInWithNameAndPassword() async {
 //    final FirebaseUser user = await _auth.signInWithEmailAndPassword(
-//          email: _userName,
-//          password: _password,
-//        );
+//      email: _userName,
+//      password: _password,
+//    );
 //    if (user != null) {
 //      setState(() {
 //        _success = true;
@@ -276,8 +280,8 @@
 //                    child: Text(_success == null
 //                        ? ''
 //                        : (_success
-//                            ? 'Successfully registered in ' + _userName
-//                            : 'Registration failed')),
+//                        ? 'Successfully registered in ' + _userName
+//                        : 'Registration failed')),
 //                  ),
 //                ],
 //              ),
