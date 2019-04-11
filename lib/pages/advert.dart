@@ -1,51 +1,78 @@
-
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Advert {
   final String title;
-  final String author;
-  final String isbn;
+  final String ISBN;
 
-  const Advert({this.title, this.author, this.isbn});
+  Advert.fromJsonMap(Map map)
+      : title = map['title'],
+        ISBN = map['ISBN'];
 }
 
-final adverts = [
-  new Advert(
-      title: "Duke Of The River",
-      author: "Scarlett Johansson",
-      isbn: "asjd231"),
-  new Advert(
-      title: "King Of The Forsaken",
-      author: "Wolfgang Puck",
-      isbn: "a8s7d"),
-  new Advert(title: "Turtles Of Heaven",
-      author: "Miley Cyrus",
-      isbn: "a98sf7"),
-  new Advert(
-      title: "Spies Of The Forest",
-      author: "Ellen DeGeneres",
-      isbn: "sd9g8"),
-  new Advert(
-      title: "Strangers And Robots",
-      author: "Queen Latifah",
-      isbn: "oi12j3"),
-  new Advert(
-      title: "Friends And Guardians",
-      author: "Bethenny Frankel",
-      isbn: "l435j34"),
-  new Advert(
-      title: "Completion Of The Forsaken",
-      author: "Pope John Paul II",
-      isbn: "09ergsdf"),
-  new Advert(
-      title: "Nation Without A Conscience",
-      author: "John Lennon",
-      isbn: "j4o534"),
-  new Advert(
-      title: "Rejecting Time",
-      author: "James Earl Jones",
-      isbn: "2io353oij4"),
-  new Advert(
-      title: "Origin Of My School",
-      author: "James Patterson",
-      isbn: "9s8dgj"),
-];
+class AdvertList extends StatefulWidget {
+  @override
+  AdvertListState createState() => AdvertListState();
+}
+
+class AdvertListState extends State<AdvertList> {
+  StreamController<Advert> streamController;
+  List<Advert> list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    streamController = StreamController.broadcast();
+    streamController.stream.listen((a) => setState(() => list.add(a)));
+    load(streamController);
+  }
+
+  load(StreamController sc) async {
+    String url = "http://1aa15526.ngrok.io/api/books/?format=json";
+    var client = new http.Client();
+    var req = new http.Request('get', Uri.parse(url));
+    var streamedRes = await client.send(req);
+    streamedRes.stream
+        .transform(utf8.decoder)
+        .transform(json.decoder)
+        .expand((e) => e)
+        .map((map) => Advert.fromJsonMap(map))
+        .pipe(streamController);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    streamController?.close();
+    streamController = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) => _makeElement(index),
+      ),
+    );
+  }
+
+  Widget _makeElement(int index) {
+    if (index >= list.length) {
+      return null;
+    }
+    return Container(
+      child: MaterialButton(
+        padding: EdgeInsets.all(10.0),
+        onPressed: () {},
+        child: Column(
+          children: <Widget>[
+            Text(list[index].title),
+            Text(list[index].ISBN),
+          ],
+        ),
+      ),
+    );
+  }
+}

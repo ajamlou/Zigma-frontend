@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import './advert.dart';
+import 'dart:collection';
+
 
 class SearchPage extends SearchDelegate<Advert> {
+  //List<Advert> _adverts = adverts;
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -29,7 +32,6 @@ class SearchPage extends SearchDelegate<Advert> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    return Text(query);
+    return AdvertList();
   }
 }
