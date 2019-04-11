@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "731443940851",
+    "firebase_url": "https://zigma2.firebaseio.com",
+    "project_id": "zigma2",
+    "storage_bucket": "zigma2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731443940851:android:ac7b3d8d5f84989f",
+        "android_client_info": {
+          "package_name": "com.komm.zigma2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731443940851-5uacn03r0om017996ohr5fe3b8m27196.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCORQOKjfpjIhq9j27fEsrSVCsVQTnwtKA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731443940851-5uacn03r0om017996ohr5fe3b8m27196.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
