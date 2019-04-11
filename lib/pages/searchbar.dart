@@ -50,7 +50,7 @@ class _Searchbar extends State<Searchbar> {
       body: new MaterialSearch<String>(
         placeholder: 'Search for a book',
         getResults: (String criteria) async {
-          var list = await _fetchList(criteria);
+          var list = _list;
           return list.map((name) =>
           new MaterialSearchResult<String>(
             value: name,

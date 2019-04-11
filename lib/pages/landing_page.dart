@@ -38,34 +38,36 @@ class SearchFieldLandingPage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 30.0),
       child: MaterialButton(
-        onPressed: () async => routeSearchPage(context),
-        child: TextField(
-          decoration: InputDecoration(
-              fillColor: Color(0xFFFFFFFF),
-              filled: true,
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
-              hintText: 'Sök efter en bok'),
-          autocorrect: false,
-        ),
+        onPressed: () {
+          showSearch(
+            context: context,
+            delegate: SearchPage(),
+          );
+        },
+        child: Text('pressme'),
+//          decoration: InputDecoration(
+//              fillColor: Color(0xFFFFFFFF),
+//              filled: true,
+//              border: OutlineInputBorder(
+//                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+//              hintText: 'Sök efter en bok'),
+//          autocorrect: false,
+//        ),
       ),
     );
   }
-  void routeSearchPage(context){
+
+  void routeSearchPage(context) {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (_) => Searchbar()));
   }
-
-
 }
-
 
 class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: () async => routeLoginPage(context),
-      //crossAxisAlignment: CrossAxisAlignment.end,
       child: Column(
         children: <Widget>[
           Icon(Icons.contacts),

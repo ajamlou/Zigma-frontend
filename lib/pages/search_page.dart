@@ -15,20 +15,19 @@ class SearchPage extends SearchDelegate<Advert> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: () {},
+      onPressed: (){close(context,null);},
       icon: Icon(Icons.arrow_back),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    return null;
+    return Container();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
-    return null;
+    return Container();
   }
 }
