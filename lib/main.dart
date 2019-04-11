@@ -4,6 +4,8 @@ import './pages/advert.dart';
 
 void main() => runApp(MyApp());
 
+var advertList = new AdvertList();
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext Context) {

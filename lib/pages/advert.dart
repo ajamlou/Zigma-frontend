@@ -59,6 +59,7 @@ class AdvertListState extends State<AdvertList> {
   }
 
   Widget _makeElement(int index) {
+    _makeElement({this.query});
     if (index >= list.length) {
       return null;
     }

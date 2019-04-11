@@ -59,9 +59,9 @@ class LoginPageState extends State<LoginPage> {
       child: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
+                padding: EdgeInsets.only(top:25.0),
                 child: IconButton(
                   color: Color(0xFF96070a),
                   onPressed: () {
@@ -212,6 +212,7 @@ class RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
+                padding: EdgeInsets.only(top:25.0),
                 child: IconButton(
                   color: Color(0xFF96070a),
                   onPressed: () {
