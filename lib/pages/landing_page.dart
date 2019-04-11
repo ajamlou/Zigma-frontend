@@ -36,6 +36,13 @@ class SearchFieldLandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 50,
+      decoration: new BoxDecoration(
+        color: Color(0xFFFFFFFF),
+        borderRadius: new BorderRadius.all(
+          Radius.circular(5.0),
+        ),
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 30.0),
       child: MaterialButton(
         onPressed: () {
@@ -44,15 +51,20 @@ class SearchFieldLandingPage extends StatelessWidget {
             delegate: SearchPage(),
           );
         },
-        child: Text('pressme'),
-//          decoration: InputDecoration(
-//              fillColor: Color(0xFFFFFFFF),
-//              filled: true,
-//              border: OutlineInputBorder(
-//                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
-//              hintText: 'Sök efter en bok'),
-//          autocorrect: false,
-//        ),
+        child: Container(
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Icon(Icons.search),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 25.0),
+                child: Text('Sök efter din litteratur...'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

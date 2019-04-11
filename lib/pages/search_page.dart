@@ -6,7 +6,9 @@ class SearchPage extends SearchDelegate<Advert> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        onPressed: () {},
+        onPressed: () {
+          query = '';
+        },
         icon: Icon(Icons.clear),
       ),
     ];
@@ -28,6 +30,6 @@ class SearchPage extends SearchDelegate<Advert> {
   @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
-    return Container();
+    return Text(query);
   }
 }
