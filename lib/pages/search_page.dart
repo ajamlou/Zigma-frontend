@@ -24,7 +24,7 @@ class SearchPage extends SearchDelegate<Advert> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container();
+    return Text('Du har testat att söka!');
   }
 
   @override
