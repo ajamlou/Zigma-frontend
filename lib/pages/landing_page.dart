@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './login_page.dart';
 import './search_page.dart';
 import './searchbar.dart';
+import './advert_creation.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -24,11 +25,19 @@ class LandingPage extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 100.0, left: 50, right: 50, bottom: 100),
                 child: Image.asset('images/logo_frontpage.png')),
-            SearchFieldLandingPage()
+            SearchFieldLandingPage(),
+            RaisedButton(
+              child: Text("Advert Creation"),
+              onPressed: () async => routeCreationPage(context),
+            ),
           ],
         ),
       ),
     );
+  }
+  void routeCreationPage(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => advertCreation()));
   }
 }
 
