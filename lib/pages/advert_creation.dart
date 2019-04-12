@@ -37,12 +37,19 @@ class advertCreationState extends State<advertCreation>
 
   //Image selector
   File _image;
-  Future getImage() async {
+  Future getImageCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       _image = image;
     });
   }
+  Future getImageGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+  }
+
 
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Skickas
@@ -64,6 +71,7 @@ class advertCreationState extends State<advertCreation>
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only(top: 25.0),
@@ -74,10 +82,16 @@ class advertCreationState extends State<advertCreation>
                   },
                   icon: Icon(Icons.arrow_back),
                 ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 25.0, left: 50.0),
+                child: Text('Lägg till en ny annons'),
               )
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Center(
                 child: _image == null
@@ -85,7 +99,7 @@ class advertCreationState extends State<advertCreation>
                     : Image.file(_image),
               ),
               FloatingActionButton(
-                onPressed: getImage,
+                onPressed: getImageCamera,
                 tooltip: 'Pick Image',
                 child: Icon(Icons.add_a_photo),
                 ),
@@ -214,5 +228,7 @@ class advertCreationState extends State<advertCreation>
     );
   }
 
-  void _uploadNewAdvert() {}
+  void _uploadNewAdvert() {
+    print([{"titel: " + _title + ", \n  Pris: " + _price  + ", \n Datum: " + _author}].toString());
+  }
 }
