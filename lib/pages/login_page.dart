@@ -21,8 +21,7 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: _showLoginPage());
+    return Scaffold(body: _showLoginPage());
   }
 
   @override
@@ -61,7 +60,7 @@ class LoginPageState extends State<LoginPage> {
           Row(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(top:25.0),
+                padding: EdgeInsets.only(top: 25.0),
                 child: IconButton(
                   color: Color(0xFF96070a),
                   onPressed: () {
@@ -177,8 +176,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: _showRegisterPage());
+    return Scaffold(body: _showRegisterPage());
   }
 
   @override
@@ -212,7 +210,7 @@ class RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(top:25.0),
+                padding: EdgeInsets.only(top: 25.0),
                 child: IconButton(
                   color: Color(0xFF96070a),
                   onPressed: () {
