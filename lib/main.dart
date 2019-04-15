@@ -14,14 +14,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String url = "https://jsonplaceholder.typicode.com/posts";
+  final String url = "http://5f1a5767.ngrok.io/api/adverts/";
   List data;
 
   Future<String> getData() async {
     var res = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     setState(() {
-      data = json.decode(res.body);
+      data = json.decode(utf8.decode(res.bodyBytes));
+
     });
     return "Success!";
   }
