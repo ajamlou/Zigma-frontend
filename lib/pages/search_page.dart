@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import './advert.dart';
+import './advert_page.dart';
 
-class SearchPage extends SearchDelegate<Advert> {
+class SearchPage extends SearchDelegate<void> {
   final List data;
 
   SearchPage({this.data});
@@ -17,6 +17,7 @@ class SearchPage extends SearchDelegate<Advert> {
       ),
     ];
   }
+
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
@@ -37,26 +38,24 @@ class SearchPage extends SearchDelegate<Advert> {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (BuildContext context, int index) {
-        if (data[index]["book_title"].toLowerCase().contains(query.toLowerCase())) {
-          return Card(
-            child: MaterialButton(
-              onPressed: (){query = data[index]["book_title"];},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.book),
-                  Column(
-                    children: <Widget>[
-                      Text(data[index]["book_title"]),
-                      Text(data[index]["authors"]),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+        if (data[index]["book_title"]
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          return ListTile(
+            title: Text(data[index]["book_title"]),
+            leading: Icon(Icons.book),
+            trailing: Text(data[index]["authors"]),
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AdvertPage(data: data[index])));
+            },
           );
         }
       },
     );
+  }
+
+  void routeAdvertPage(context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => AdvertPage()));
   }
 }
