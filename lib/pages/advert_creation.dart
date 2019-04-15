@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:json_annotation/json_annotation.dart';
 
-
-@JsonSerializable()
 
 class advertCreation extends StatefulWidget {
   State createState() => new advertCreationState();
@@ -229,18 +227,16 @@ class advertCreationState extends State<advertCreation>
     );
   }
 
-  void _uploadNewAdvert() {
+
+  Future<String> _uploadNewAdvert() async {
     Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
-    dynamic toJson() => _newAd;
     print(_newAd);
-    var _newAdJson = json.encode(_newAd);
+    var data = json.encode(_newAd);
     String postURL = "https://5f1a5767.ngrok.io/api/adverts/?format=json";
-    Future<String> sendDataACK() async {
-      var resp = await http.post(Uri.encodeFull(postURL), body: _newAdJson);
+      var resp = await http
+          .post(Uri.encodeFull(postURL), body: data);
       print("ack recieved");
       return "success";
-    }
-
   }
 }
 
