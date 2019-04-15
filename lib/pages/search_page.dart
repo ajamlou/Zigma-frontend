@@ -87,7 +87,7 @@ class SearchPage extends SearchDelegate<Advert> {
   @override
   Widget buildSuggestions(BuildContext context) {
     return Container(
-      child: Text(SearchData().sendData())
+//      child: Text(SearchData().sendData())
     );
   }
 }
