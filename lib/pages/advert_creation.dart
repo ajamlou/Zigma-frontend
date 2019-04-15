@@ -1,7 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:json_annotation/json_annotation.dart';
+
+
+@JsonSerializable()
 
 class advertCreation extends StatefulWidget {
   State createState() => new advertCreationState();
@@ -27,13 +33,13 @@ class advertCreationState extends State<advertCreation>
   }
 
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
-  String _title; //Skickas
-  String _price; //Skickas som int
-  String _author; //Skickas
+  String _title; //Sent
+  String _price; //Sent
+  String _author; //Sent
   String _yearPublished;
   String _edition;
-  String _isbn; //Skickas
-  String _tags;
+  String _isbn; //Sent
+  String _contactInfo;
   String _subject;
 
   AnimationController _animation;
@@ -174,11 +180,11 @@ class advertCreationState extends State<advertCreation>
                     keyboardType: TextInputType.text,
                     autofocus: false,
                     decoration: new InputDecoration(
-                      hintText: 'Taggar',
+                      hintText: 'Contact info',
                     ),
                     validator: (value) =>
                         value.isEmpty ? 'Taggar can\'t be empty' : null,
-                    onSaved: (value) => _tags = value,
+                    onSaved: (value) => _contactInfo = value,
                   ),
                   new TextFormField(
                     maxLines: 1,
@@ -224,8 +230,59 @@ class advertCreationState extends State<advertCreation>
   }
 
   void _uploadNewAdvert() {
-    print([
-      {"titel: " + _title + ", \n  Pris: " + _price + ", \n Datum: " + _author}
-    ].toString());
+    Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
+    dynamic toJson() => _newAd;
+    print(_newAd);
+    var _newAdJson = json.encode(_newAd);
+    String postURL = "https://5f1a5767.ngrok.io/api/adverts/?format=json";
+    Future<String> sendDataACK() async {
+      var resp = await http.post(Uri.encodeFull(postURL), body: _newAdJson);
+      print("ack recieved");
+      return "success";
+    }
+
+  }
+}
+
+class Advert {
+  String title; //Skickas
+  String price; //Skickas som int
+  String authors; //Skickas
+  String ISBN; //Skickas
+  String state = "A";
+  String transaction_type = "S";
+  String contactInfo;
+
+  Advert(
+    this.title,
+    this.price,
+    this.authors,
+    this.ISBN,
+    this.contactInfo
+  );
+
+  Map<String, dynamic> toJson() =>
+  {'title': title,
+  'price': price,
+  'authors': authors,
+  'ISBN': ISBN,
+  'contact_info': contactInfo};
+
+  String toString() {
+    String adToString = ("title: " +
+        this.title +
+        ",\nprice: " +
+        this.price +
+        ",\nauthors: " +
+        this.authors +
+        ",\nISBN: " +
+        this.ISBN +
+        ",\ncontactInfo: " +
+        this.contactInfo +
+        ",\nstate: " +
+        this.state +
+        ",\ntransaction_type: " +
+        this.transaction_type);
+    return adToString;
   }
 }

@@ -17,7 +17,7 @@ class SearchDataState extends State<SearchData> {
     var res = await http.get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     setState(() {
       data = json.decode(res.body);
-    });
+    });https://5f1a5767.ngrok.io/api/adverts/?format=json
     return "Success!";
   }
 
