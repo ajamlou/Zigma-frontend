@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String url = "http://5f1a5767.ngrok.io/api/adverts/";
+  final String url = "https://jsonplaceholder.typicode.com/comments";
   List data;
 
   Future<String> getData() async {
@@ -26,6 +26,7 @@ class _MyAppState extends State<MyApp> {
     });
     return "Success!";
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
