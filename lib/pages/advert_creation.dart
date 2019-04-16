@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-
 class advertCreation extends StatefulWidget {
   State createState() => new advertCreationState();
 }
@@ -178,22 +177,11 @@ class advertCreationState extends State<advertCreation>
                     keyboardType: TextInputType.text,
                     autofocus: false,
                     decoration: new InputDecoration(
-                      hintText: 'Contact info',
+                      hintText: 'Kontaktinformation',
                     ),
                     validator: (value) =>
                         value.isEmpty ? 'Taggar can\'t be empty' : null,
                     onSaved: (value) => _contactInfo = value,
-                  ),
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.text,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'Ämne',
-                    ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Ämne can\'t be empty' : null,
-                    onSaved: (value) => _subject = value,
                   ),
                 ],
               ),
@@ -218,6 +206,70 @@ class advertCreationState extends State<advertCreation>
     );
   }
 
+  Widget buildTextFormField(identifier) {
+    int maxLines;
+    TextInputType keyboardType;
+    bool autofocus;
+    InputDecoration decoration;
+    String hintText = identifier;
+
+    switch (identifier) {
+      case 'Ämne':
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+          hintText: hintText,
+        );
+        break;
+      case 'Kontaktinformation':
+        hintText = identifier;
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+    hintText: identifier,
+    );
+    validator: (value) =>
+    value.isEmpty ? 'Taggar can\'t be empty' : null,
+    onSaved: (value) => _contactInfo = value,
+    }
+        hintText = identifier;
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+    hintText: identifier,
+    );
+    validator: (value) =>
+    value.isEmpty ? 'Taggar can\'t be empty' : null,
+    onSaved: (value) => _contactInfo = value,
+    }
+    return new TextFormField(
+      maxLines: maxLines,
+    return new TextFormField(
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      autofocus: autofocus,
+      decoration: d
+        hintText = identifier;
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+    hintText: identifier,
+    );
+    validator: (value) =>
+    value.isEmpty ? 'Taggar can\'t be empty' : null,
+    onSaved: (value) => _contactInfo = value,
+    }
+    return new TextFormField(
+      maxLines: maxLines,ecoration,
+      validator: (value) => value.isEmpty ? hintText + 'can\'t be empty' : null,
+      onSaved: (value) => _subject = value,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -227,16 +279,14 @@ class advertCreationState extends State<advertCreation>
     );
   }
 
-
   Future<String> _uploadNewAdvert() async {
     Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
     print(_newAd);
     var data = json.encode(_newAd);
     String postURL = "https://5f1a5767.ngrok.io/api/adverts/?format=json";
-      var resp = await http
-          .post(Uri.encodeFull(postURL), body: data);
-      print("ack recieved");
-      return "success";
+    var resp = await http.post(Uri.encodeFull(postURL), body: data);
+    print("ack recieved");
+    return "success";
   }
 }
 
@@ -249,20 +299,17 @@ class Advert {
   String transaction_type = "S";
   String contactInfo;
 
-  Advert(
-    this.title,
-    this.price,
-    this.authors,
-    this.ISBN,
-    this.contactInfo
-  );
+  Advert(this.title, this.price, this.authors, this.ISBN, this.contactInfo);
 
-  Map<String, dynamic> toJson() =>
-  {'title': title,
-  'price': price,
-  'authors': authors,
-  'ISBN': ISBN,
-  'contact_info': contactInfo};
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'price': price,
+        'authors': authors,
+        'ISBN': ISBN,
+        'state': state,
+        'transaction_type': transaction_type,
+        'contact_info': contactInfo
+      };
 
   String toString() {
     String adToString = ("title: " +
