@@ -92,98 +92,102 @@ class advertCreationState extends State<advertCreation>
               ),
             ],
           ),
-          Form(
-            key: _advertKey,
-            child: new Container(
-              decoration: new BoxDecoration(
-                color: Color(0xFFFFFFFF),
-                gradient: new LinearGradient(
-                  colors: [Color(0xFFFFFFFF), Color(0xFFECE9DF)],
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
+          Container(
+            padding: EdgeInsets.all(15.0),
+            child: Form(
+              key: _advertKey,
+              child: new Container(
+                decoration: new BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Color(0xFFFFFFFF),
+                  gradient: new LinearGradient(
+                    colors: [Color(0xFF96070a), Color(0xFFFFFFFF)],
+                    begin: Alignment.centerRight,
+                    end: Alignment.centerLeft,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.elliptical(10.0, 10.0)),
                 ),
-                borderRadius: BorderRadius.all(Radius.elliptical(10.0, 10.0)),
-              ),
-              child: Column(
-                children: <Widget>[
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.text,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'Title',
+                child: Column(
+                  children: <Widget>[
+                    new TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        hintText: 'Title',
+                      ),
+                      validator: (value) =>
+                          value.isEmpty ? 'Title can\'t be empty' : null,
+                      onSaved: (value) => _title = value,
                     ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Title can\'t be empty' : null,
-                    onSaved: (value) => _title = value,
-                  ),
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.number,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'Pris',
+                    new TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.number,
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        hintText: 'Pris',
+                      ),
+                      validator: (value) =>
+                          value.isEmpty ? 'Pris can\'t be empty' : null,
+                      onSaved: (value) => _price = value,
                     ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Pris can\'t be empty' : null,
-                    onSaved: (value) => _price = value,
-                  ),
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.text,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'Författare',
+                    new TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        hintText: 'Författare',
+                      ),
+                      validator: (value) =>
+                          value.isEmpty ? 'Författare can\'t be empty' : null,
+                      onSaved: (value) => _author = value,
                     ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Författare can\'t be empty' : null,
-                    onSaved: (value) => _author = value,
-                  ),
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.number,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'Utgivningsår',
+                    new TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.number,
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        hintText: 'Utgivningsår',
+                      ),
+                      validator: (value) =>
+                          value.isEmpty ? 'Utgivningsår can\'t be empty' : null,
+                      onSaved: (value) => _yearPublished = value,
                     ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Utgivningsår can\'t be empty' : null,
-                    onSaved: (value) => _yearPublished = value,
-                  ),
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.text,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'Upplaga',
+                    new TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        hintText: 'Upplaga',
+                      ),
+                      validator: (value) =>
+                          value.isEmpty ? 'Upplaga can\'t be empty' : null,
+                      onSaved: (value) => _edition = value,
                     ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Upplaga can\'t be empty' : null,
-                    onSaved: (value) => _edition = value,
-                  ),
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.text,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'ISBN',
+                    new TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        hintText: 'ISBN',
+                      ),
+                      validator: (value) =>
+                          value.isEmpty ? 'ISBN can\'t be empty' : null,
+                      onSaved: (value) => _isbn = value,
                     ),
-                    validator: (value) =>
-                        value.isEmpty ? 'ISBN can\'t be empty' : null,
-                    onSaved: (value) => _isbn = value,
-                  ),
-                  new TextFormField(
-                    maxLines: 1,
-                    keyboardType: TextInputType.text,
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      hintText: 'Kontaktinformation',
+                    new TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        hintText: 'Kontaktinformation',
+                      ),
+                      validator: (value) =>
+                          value.isEmpty ? 'Taggar can\'t be empty' : null,
+                      onSaved: (value) => _contactInfo = value,
                     ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Taggar can\'t be empty' : null,
-                    onSaved: (value) => _contactInfo = value,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -206,7 +210,40 @@ class advertCreationState extends State<advertCreation>
     );
   }
 
-  Widget buildTextFormField(identifier) {
+  /* Widget buildTextFormField(identifier) {
+    int maxLines;
+    TextInputType keyboardType;
+    bool autofocus;
+    InputDecoration decoration;
+    String hintText = identifier;
+
+    switch (identifier) {
+      case 'Ämne':
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+          hintText: hintText,
+        );
+        break;
+      case 'Kontaktinformation':
+        hintText = identifier;
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+    hintText: identifier,
+    );
+    validator: (value) =>
+    value.isEmpty ? 'Taggar can\'t be empty' : null,
+    onSaved: (value) => _contactInfo = value,
+    }
+        hintText = identifier;
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+    hintText: identifier,/* Widget buildTextFormField(identifier) {
     int maxLines;
     TextInputType keyboardType;
     bool autofocus;
@@ -268,7 +305,36 @@ class advertCreationState extends State<advertCreation>
       validator: (value) => value.isEmpty ? hintText + 'can\'t be empty' : null,
       onSaved: (value) => _subject = value,
     );
-  }
+  }*/
+    );
+    validator: (value) =>
+    value.isEmpty ? 'Taggar can\'t be empty' : null,
+    onSaved: (value) => _contactInfo = value,
+    }
+    return new TextFormField(
+      maxLines: maxLines,
+    return new TextFormField(
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      autofocus: autofocus,
+      decoration: d
+        hintText = identifier;
+        maxLines = 1;
+        keyboardType = TextInputType.text;
+        autofocus = false;
+        decoration = new InputDecoration(
+    hintText: identifier,
+    );
+    validator: (value) =>
+    value.isEmpty ? 'Taggar can\'t be empty' : null,
+    onSaved: (value) => _contactInfo = value,
+    }
+    return new TextFormField(
+      maxLines: maxLines,ecoration,
+      validator: (value) => value.isEmpty ? hintText + 'can\'t be empty' : null,
+      onSaved: (value) => _subject = value,
+    );
+  }*/
 
   @override
   void initState() {
@@ -281,12 +347,15 @@ class advertCreationState extends State<advertCreation>
 
   Future<String> _uploadNewAdvert() async {
     Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
-    print(_newAd);
     var data = json.encode(_newAd);
-    String postURL = "https://5f1a5767.ngrok.io/api/adverts/?format=json";
-    var resp = await http.post(Uri.encodeFull(postURL), body: data);
-    print("ack recieved");
-    return "success";
+    print (data);
+    String postURL = "http://da47fb35.ngrok.io/api/adverts/?format=json";
+    return await http.post(Uri.encodeFull(postURL), body: data, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    }).then((dynamic res) {
+      print(res.toString());
+    });
   }
 }
 
@@ -299,11 +368,17 @@ class Advert {
   String transaction_type = "S";
   String contactInfo;
 
-  Advert(this.title, this.price, this.authors, this.ISBN, this.contactInfo);
+ Advert(this.title, this.price, this.authors, this.ISBN, this.contactInfo);
+
+ int intToString(price) {
+   var priceInt = int.parse(price);
+   assert (priceInt is int);
+   return priceInt;
+ }
 
   Map<String, dynamic> toJson() => {
-        'title': title,
-        'price': price,
+        'book_title': title,
+        'price': intToString(price),
         'authors': authors,
         'ISBN': ISBN,
         'state': state,
