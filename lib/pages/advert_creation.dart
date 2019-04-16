@@ -94,7 +94,7 @@ class advertCreationState extends State<advertCreation>
             ],
           ),
           Container(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.only(left: 30.0, top: 10.0, right: 30.0, bottom: 10.0),
             child: Form(
               key: _advertKey,
               child: new Container(
@@ -106,7 +106,7 @@ class advertCreationState extends State<advertCreation>
                     begin: Alignment.centerRight,
                     end: Alignment.centerLeft,
                   ),
-                  borderRadius: BorderRadius.all(Radius.elliptical(10.0, 10.0)),
+                  borderRadius: BorderRadius.all(Radius.elliptical(20.0, 20.0)),
                 ),
                 child: Column(
                   children: <Widget>[
@@ -115,7 +115,7 @@ class advertCreationState extends State<advertCreation>
                       keyboardType: TextInputType.text,
                       autofocus: false,
                       decoration: new InputDecoration(
-                        hintText: 'Title',
+                        hintText: 'Titel',
                       ),
                       validator: (value) =>
                           value.isEmpty ? 'Title can\'t be empty' : null,
@@ -142,28 +142,6 @@ class advertCreationState extends State<advertCreation>
                       validator: (value) =>
                           value.isEmpty ? 'Författare can\'t be empty' : null,
                       onSaved: (value) => _author = value,
-                    ),
-                    new TextFormField(
-                      maxLines: 1,
-                      keyboardType: TextInputType.number,
-                      autofocus: false,
-                      decoration: new InputDecoration(
-                        hintText: 'Utgivningsår',
-                      ),
-                      validator: (value) =>
-                          value.isEmpty ? 'Utgivningsår can\'t be empty' : null,
-                      onSaved: (value) => _yearPublished = value,
-                    ),
-                    new TextFormField(
-                      maxLines: 1,
-                      keyboardType: TextInputType.text,
-                      autofocus: false,
-                      decoration: new InputDecoration(
-                        hintText: 'Upplaga',
-                      ),
-                      validator: (value) =>
-                          value.isEmpty ? 'Upplaga can\'t be empty' : null,
-                      onSaved: (value) => _edition = value,
                     ),
                     new TextFormField(
                       maxLines: 1,
@@ -224,7 +202,7 @@ class advertCreationState extends State<advertCreation>
     Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
     var data = json.encode(_newAd);
     print (data);
-    String postURL = "https://07487b83.ngrok.io/api/adverts/?format=json";
+    String postURL = "http://07487b83.ngrok.io/api/adverts/?format=json";
     return await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json"
