@@ -206,69 +206,69 @@ class advertCreationState extends State<advertCreation>
     );
   }
 
-  Widget buildTextFormField(identifier) {
-    int maxLines;
-    TextInputType keyboardType;
-    bool autofocus;
-    InputDecoration decoration;
-    String hintText = identifier;
-
-    switch (identifier) {
-      case 'Ämne':
-        maxLines = 1;
-        keyboardType = TextInputType.text;
-        autofocus = false;
-        decoration = new InputDecoration(
-          hintText: hintText,
-        );
-        break;
-      case 'Kontaktinformation':
-        hintText = identifier;
-        maxLines = 1;
-        keyboardType = TextInputType.text;
-        autofocus = false;
-        decoration = new InputDecoration(
-    hintText: identifier,
-    );
-    validator: (value) =>
-    value.isEmpty ? 'Taggar can\'t be empty' : null,
-    onSaved: (value) => _contactInfo = value,
-    }
-        hintText = identifier;
-        maxLines = 1;
-        keyboardType = TextInputType.text;
-        autofocus = false;
-        decoration = new InputDecoration(
-    hintText: identifier,
-    );
-    validator: (value) =>
-    value.isEmpty ? 'Taggar can\'t be empty' : null,
-    onSaved: (value) => _contactInfo = value,
-    }
-    return new TextFormField(
-      maxLines: maxLines,
-    return new TextFormField(
-      maxLines: maxLines,
-      keyboardType: keyboardType,
-      autofocus: autofocus,
-      decoration: d
-        hintText = identifier;
-        maxLines = 1;
-        keyboardType = TextInputType.text;
-        autofocus = false;
-        decoration = new InputDecoration(
-    hintText: identifier,
-    );
-    validator: (value) =>
-    value.isEmpty ? 'Taggar can\'t be empty' : null,
-    onSaved: (value) => _contactInfo = value,
-    }
-    return new TextFormField(
-      maxLines: maxLines,ecoration,
-      validator: (value) => value.isEmpty ? hintText + 'can\'t be empty' : null,
-      onSaved: (value) => _subject = value,
-    );
-  }
+//  Widget buildTextFormField(identifier) {
+//    int maxLines;
+//    TextInputType keyboardType;
+//    bool autofocus;
+//    InputDecoration decoration;
+//    String hintText = identifier;
+//
+//    switch (identifier) {
+//      case 'Ämne':
+//        maxLines = 1;
+//        keyboardType = TextInputType.text;
+//        autofocus = false;
+//        decoration = new InputDecoration(
+//          hintText: hintText,
+//        );
+//        break;
+//      case 'Kontaktinformation':
+//        hintText = identifier;
+//        maxLines = 1;
+//        keyboardType = TextInputType.text;
+//        autofocus = false;
+//        decoration = new InputDecoration(
+//    hintText: identifier,
+//    );
+//    validator: (value) =>
+//    value.isEmpty ? 'Taggar can\'t be empty' : null,
+//    onSaved: (value) => _contactInfo = value,
+//    }
+//        hintText = identifier;
+//        maxLines = 1;
+//        keyboardType = TextInputType.text;
+//        autofocus = false;
+//        decoration = new InputDecoration(
+//    hintText: identifier,
+//    );
+//    validator: (value) =>
+//    value.isEmpty ? 'Taggar can\'t be empty' : null,
+//    onSaved: (value) => _contactInfo = value,
+//    }
+//    return new TextFormField(
+//      maxLines: maxLines,
+//    return new TextFormField(
+//      maxLines: maxLines,
+//      keyboardType: keyboardType,
+//      autofocus: autofocus,
+//      decoration: d
+//        hintText = identifier;
+//        maxLines = 1;
+//        keyboardType = TextInputType.text;
+//        autofocus = false;
+//        decoration = new InputDecoration(
+//    hintText: identifier,
+//    );
+//    validator: (value) =>
+//    value.isEmpty ? 'Taggar can\'t be empty' : null,
+//    onSaved: (value) => _contactInfo = value,
+//    }
+//    return new TextFormField(
+//      maxLines: maxLines,ecoration,
+//      validator: (value) => value.isEmpty ? hintText + 'can\'t be empty' : null,
+//      onSaved: (value) => _subject = value,
+//    );
+//  }
 
   @override
   void initState() {
