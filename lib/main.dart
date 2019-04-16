@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String url = "https://jsonplaceholder.typicode.com/comments";
+  final String url = "http://07487b83.ngrok.io/api/adverts/";
   List data;
 
   Future<String> getData() async {
@@ -31,7 +31,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Zigma App',
-      home: LandingPage(data: data),
+      home: LandingPage(
+          data: data,
+          refreshPage: getData,
+      ),
       color: Color(0xFFECE9DF),
     );
   }

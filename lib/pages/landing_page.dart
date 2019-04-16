@@ -7,7 +7,8 @@ import './chat_page.dart';
 
 class LandingPage extends StatelessWidget {
   final List data;
-  LandingPage({this.data});
+  final Function refreshPage;
+  LandingPage({this.data, this.refreshPage});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,6 +46,7 @@ class LandingPage extends StatelessWidget {
                   context: context,
                   delegate: SearchPage(data: data),
                 );
+                refreshPage();
               },
               child: Container(
                 child: Row(
@@ -64,7 +66,8 @@ class LandingPage extends StatelessWidget {
           ),
               RaisedButton(
                 child: Text("Advert Creation"),
-                onPressed: () async => routeCreationPage(context),
+                onPressed: () async {Navigator.of(context)
+                    .push(MaterialPageRoute<void>(builder: (_) => advertCreation()));},
               ),
             ],
           ),
@@ -97,8 +100,7 @@ Widget showDrawer(context){
 
 
 void routeCreationPage(context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute<void>(builder: (_) => advertCreation()));
+
 }
 
 
