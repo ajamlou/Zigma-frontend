@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AdvertPage extends StatefulWidget {
-  final data;
+  final Map data;
 
   AdvertPage({this.data});
 
@@ -12,43 +12,52 @@ class AdvertPage extends StatefulWidget {
 class _AdvertPageState extends State<AdvertPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context, null);
-              },
-            ),
-            Text(widget.data["Title"]),
-          ],
-        ),
-        Image.asset('images/calc_book.png'),
-        Text("Annonsen skapades: " + widget.data["created_at"]),
-        Text("Pris" + widget.data["Price"]),
-        Container(
-          child: MaterialButton(
-            onPressed: () {},
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: 25),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.chat_bubble),
-                Text("Skicka ett meddelande till " + widget.data["authors"])
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: Text(widget.data["email"]),
+                )
               ],
             ),
           ),
-        ),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Image.asset('calc_book.png'),
-              Text(widget.data["authors"] +
-                  "har sålt 14 böcker och köpt 3 böcker.")
-            ],
+          Image.asset('images/calc_book.png'),
+          Text("Annonsen skapades: " + widget.data["id"].toString()),
+          Text("Pris: " + widget.data["id"].toString()),
+          Container(
+            child: MaterialButton(
+              onPressed: () {},
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.chat_bubble),
+                  Text("Skicka ett meddelande till " + widget.data["email"])
+                ],
+              ),
+            ),
           ),
-        ),
-      ],
+          Container(
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.face),
+                Text(widget.data["email"] +
+                    " har sålt 14 böcker och köpt 3 böcker.")
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

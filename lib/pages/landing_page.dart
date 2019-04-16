@@ -3,78 +3,104 @@ import './login_page.dart';
 import './search_page.dart';
 import './searchbar.dart';
 import './advert_creation.dart';
+import './chat_page.dart';
 
 class LandingPage extends StatelessWidget {
   final List data;
   LandingPage({this.data});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Color(0xFFECE9DF),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 35.0),
-                  child: LoginButton(),
+    return Container(
+      color: Color(0xFFECE9DF),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            LoginButton()
+          ],
+        ),
+        drawer: showDrawer(context),
+        body: Container(
+          color: Color(0xFFECE9DF),
+          child: Column(
+            children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.only(
+                      top: 100.0, left: 50, right: 50, bottom: 100),
+                  child: Image.asset('images/logo_frontpage.png')),
+          Container(
+            height: 50,
+            decoration: new BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: new BorderRadius.all(
+                Radius.circular(5.0),
+              ),
+            ),
+            margin: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: MaterialButton(
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: SearchPage(data: data),
+                );
+              },
+              child: Container(
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Icon(Icons.search),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25.0),
+                      child: Text('Sök efter din litteratur...'),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Container(
-                padding: const EdgeInsets.only(
-                    top: 100.0, left: 50, right: 50, bottom: 100),
-                child: Image.asset('images/logo_frontpage.png')),
-        Container(
-          height: 50,
-          decoration: new BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: new BorderRadius.all(
-              Radius.circular(5.0),
-            ),
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: MaterialButton(
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: SearchPage(data: data),
-              );
-            },
-            child: Container(
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Icon(Icons.search),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0),
-                    child: Text('Sök efter din litteratur...'),
-                  ),
-                ],
               ),
             ),
           ),
-        ),
-            RaisedButton(
-              child: Text("Advert Creation"),
-              onPressed: () async => routeCreationPage(context),
-            ),
-          ],
+              RaisedButton(
+                child: Text("Advert Creation"),
+                onPressed: () async => routeCreationPage(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  void routeCreationPage(context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => advertCreation()));
-  }
-
 }
+
+Widget showDrawer(context){
+  return Drawer(
+    child: ListView(
+      children: <Widget>[
+        UserAccountsDrawerHeader(
+          accountName: Text("RandomName"),
+          accountEmail: Text("random@random.com"),
+          currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage('https://pbs.twimg.com/profile_images/723864085826277376/P0w7UfP8.jpg'),
+          ),
+        ),
+        ListTile(
+          title: Text("Dina Chattar"),
+          onTap: (){ Navigator.of(context)
+              .push(MaterialPageRoute<void>(builder: (_) => FriendlyChatApp()));},
+        ),
+      ],
+    ),
+  );
+}
+
+
+void routeCreationPage(context) {
+  Navigator.of(context)
+      .push(MaterialPageRoute<void>(builder: (_) => advertCreation()));
+}
+
 
   void routeSearchPage(context) {
     Navigator.of(context)
@@ -84,13 +110,16 @@ class LandingPage extends StatelessWidget {
 class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: () async => routeLoginPage(context),
-      child: Column(
-        children: <Widget>[
-          Icon(Icons.contacts),
-          Text('Logga In'),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: MaterialButton(
+        onPressed: () async => routeLoginPage(context),
+        child: Column(
+          children: <Widget>[
+            Icon(Icons.contacts),
+            Text('Logga In'),
+          ],
+        ),
       ),
     );
   }

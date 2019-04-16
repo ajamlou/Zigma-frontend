@@ -38,15 +38,13 @@ class SearchPage extends SearchDelegate<void> {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (BuildContext context, int index) {
-        if (data[index]["book_title"]
-            .toLowerCase()
-            .contains(query.toLowerCase())) {
+        if (data[index]["name"].toLowerCase().contains(query.toLowerCase())) {
           return ListTile(
-            title: Text(data[index]["book_title"]),
+            title: Text(data[index]["name"]),
             leading: Icon(Icons.book),
-            trailing: Text(data[index]["authors"]),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AdvertPage(data: data[index])));
+            trailing: Text(data[index]["email"]),
+            onTap: () {
+              routeAdvertPage(context, index);
             },
           );
         }
@@ -54,8 +52,13 @@ class SearchPage extends SearchDelegate<void> {
     );
   }
 
-  void routeAdvertPage(context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => AdvertPage()));
+  void routeAdvertPage(context, index) {
+    print(index.toString());
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdvertPage(data: data[index]),
+      ),
+    );
   }
 }
