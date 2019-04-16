@@ -14,7 +14,13 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFFFFFFF),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage("images/backgroundImage.jpg"),
+            fit: BoxFit.fitHeight,
+        ),
+      ),
+      //color: Color(0xFFFFFFFF),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -27,7 +33,7 @@ class LandingPage extends StatelessWidget {
         ),
         drawer: showDrawer(context),
         body: Container(
-          color: Color(0xFFFFFFFF),
+         // color: Color(0xFFFFFFFF),
           child: Column(
             children: <Widget>[
               Container(
