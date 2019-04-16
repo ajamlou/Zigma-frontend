@@ -73,133 +73,130 @@ class advertCreationState extends State<advertCreation>
             actions: <Widget>[],
           ),
         ),
-        body: SingleChildScrollView(
-            child: Column(
+        body: GridView.count(
+          crossAxisCount: 1,
+          children: <Widget>[
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment(0.0, 0.0),
-                      child: _image == null
-                          ? Text('No image Selected')
-                          : Container(
-                              constraints: BoxConstraints(
-                                maxHeight: 150.0,
-                                maxWidth: 150.0,
-                                minWidth: 150.0,
-                                minHeight: 150.0,
-                              ),
-                              child: Image.file(_image),
-                            ),
-                    ),
-                    FloatingActionButton(
-                      onPressed: getImageCamera,
-                      tooltip: 'Pick Image',
-                      child: Icon(Icons.add_a_photo),
-                    ),
-                  ],
-                ),
                 Container(
-                  padding: EdgeInsets.only(
-                      left: 30.0, top: 10.0, right: 30.0, bottom: 10.0),
-                  child: Form(
-                    key: _advertKey,
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Color(0xFFFFFFFF),
-                        gradient: new LinearGradient(
-                          colors: [Color(0xFF96070a), Color(0xFFFFFFFF)],
-                          begin: Alignment.centerRight,
-                          end: Alignment.centerLeft,
+                  alignment: Alignment(0.0, 0.0),
+                  child: _image == null
+                      ? Text('No image Selected')
+                      : Container(
+                          constraints: BoxConstraints(
+                            maxHeight: 150.0,
+                            maxWidth: 150.0,
+                            minWidth: 150.0,
+                            minHeight: 150.0,
+                          ),
+                          child: Image.file(_image),
                         ),
-                        borderRadius:
-                            BorderRadius.all(Radius.elliptical(20.0, 20.0)),
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          new TextFormField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.text,
-                            autofocus: false,
-                            decoration: new InputDecoration(
-                              hintText: 'Titel',
-                            ),
-                            validator: (value) =>
-                                value.isEmpty ? 'Title can\'t be empty' : null,
-                            onSaved: (value) => _title = value,
-                          ),
-                          new TextFormField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.number,
-                            autofocus: false,
-                            decoration: new InputDecoration(
-                              hintText: 'Pris',
-                            ),
-                            validator: (value) =>
-                                value.isEmpty ? 'Pris can\'t be empty' : null,
-                            onSaved: (value) => _price = value,
-                          ),
-                          new TextFormField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.text,
-                            autofocus: false,
-                            decoration: new InputDecoration(
-                              hintText: 'Författare',
-                            ),
-                            validator: (value) => value.isEmpty
-                                ? 'Författare can\'t be empty'
-                                : null,
-                            onSaved: (value) => _author = value,
-                          ),
-                          new TextFormField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.text,
-                            autofocus: false,
-                            decoration: new InputDecoration(
-                              hintText: 'ISBN',
-                            ),
-                            validator: (value) =>
-                                value.isEmpty ? 'ISBN can\'t be empty' : null,
-                            onSaved: (value) => _isbn = value,
-                          ),
-                          new TextFormField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.text,
-                            autofocus: false,
-                            decoration: new InputDecoration(
-                              hintText: 'Kontaktinformation',
-                            ),
-                            validator: (value) =>
-                                value.isEmpty ? 'Taggar can\'t be empty' : null,
-                            onSaved: (value) => _contactInfo = value,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ),
-                Container(
-                  width: 150,
-                  child: MaterialButton(
-                    color: Color(0xFF008000),
-                    onPressed: () async {
-                      if (_advertKey.currentState.validate()) {
-                        _advertKey.currentState.save();
-                        _uploadNewAdvert();
-                      }
-                    },
-                    child: Text("Ladda upp",
-                        style: TextStyle(color: Color(0xFFFFFFFF))),
-                  ),
+                FloatingActionButton(
+                  onPressed: getImageCamera,
+                  tooltip: 'Pick Image',
+                  child: Icon(Icons.add_a_photo),
                 ),
               ],
             ),
-          ),
+            Container(
+              padding: EdgeInsets.only(
+                  left: 30.0, top: 10.0, right: 30.0, bottom: 10.0),
+              child: Form(
+                key: _advertKey,
+                child: new Container(
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Color(0xFFFFFFFF),
+                    gradient: new LinearGradient(
+                      colors: [Color(0xFF96070a), Color(0xFFFFFFFF)],
+                      begin: Alignment.centerRight,
+                      end: Alignment.centerLeft,
+                    ),
+                    borderRadius:
+                        BorderRadius.all(Radius.elliptical(20.0, 20.0)),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      new TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: new InputDecoration(
+                          hintText: 'Titel',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Title can\'t be empty' : null,
+                        onSaved: (value) => _title = value,
+                      ),
+                      new TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
+                        autofocus: false,
+                        decoration: new InputDecoration(
+                          hintText: 'Pris',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Pris can\'t be empty' : null,
+                        onSaved: (value) => _price = value,
+                      ),
+                      new TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: new InputDecoration(
+                          hintText: 'Författare',
+                        ),
+                        validator: (value) => value.isEmpty
+                            ? 'Författare can\'t be empty'
+                            : null,
+                        onSaved: (value) => _author = value,
+                      ),
+                      new TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: new InputDecoration(
+                          hintText: 'ISBN',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'ISBN can\'t be empty' : null,
+                        onSaved: (value) => _isbn = value,
+                      ),
+                      new TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: new InputDecoration(
+                          hintText: 'Kontaktinformation',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Taggar can\'t be empty' : null,
+                        onSaved: (value) => _contactInfo = value,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: 150,
+              child: MaterialButton(
+                color: Color(0xFF008000),
+                onPressed: () async {
+                  if (_advertKey.currentState.validate()) {
+                    _advertKey.currentState.save();
+                    _uploadNewAdvert();
+                  }
+                },
+                child: Text("Ladda upp",
+                    style: TextStyle(color: Color(0xFFFFFFFF))),
+              ),
+            ),
+          ],
+        ),
         ),
       );
   }
