@@ -28,21 +28,22 @@ class _AdvertPageState extends State<AdvertPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Text(widget.data["email"]),
+                  child: Text(widget.data["book_title"]),
                 )
               ],
             ),
           ),
           Image.asset('images/calc_book.png'),
-          Text("Annonsen skapades: " + widget.data["id"].toString()),
-          Text("Pris: " + widget.data["id"].toString()),
+          Text("Författare: " + widget.data["authors"]),
+          Text("Pris: " + widget.data["price"].toString()),
           Container(
             child: MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+              },
               child: Row(
                 children: <Widget>[
                   Icon(Icons.chat_bubble),
-                  Text("Skicka ett meddelande till " + widget.data["email"])
+                  Text("Skicka ett meddelande till " + widget.data["contact_info"])
                 ],
               ),
             ),
@@ -51,7 +52,7 @@ class _AdvertPageState extends State<AdvertPage> {
             child: Row(
               children: <Widget>[
                 Icon(Icons.face),
-                Text(widget.data["email"] +
+                Text(widget.data["contact_info"] +
                     " har sålt 14 böcker och köpt 3 böcker.")
               ],
             ),
@@ -61,3 +62,4 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 }
+

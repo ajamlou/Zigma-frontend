@@ -38,11 +38,11 @@ class SearchPage extends SearchDelegate<void> {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (BuildContext context, int index) {
-        if (data[index]["name"].toLowerCase().contains(query.toLowerCase())) {
+        if (data[index]["book_title"].toLowerCase().contains(query.toLowerCase())) {
           return ListTile(
-            title: Text(data[index]["name"]),
+            title: Text(data[index]["book_title"]),
             leading: Icon(Icons.book),
-            trailing: Text(data[index]["email"]),
+            trailing: Text(data[index]["authors"]),
             onTap: () {
               routeAdvertPage(context, index);
             },
