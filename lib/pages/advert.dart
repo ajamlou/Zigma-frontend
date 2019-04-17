@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -7,33 +6,46 @@ class Advert {
   final String title;
   final String ISBN;
 
+  Advert(
+      this.title,
+      this.ISBN
+      );
+
   Advert.fromJsonMap(Map map)
-      : title = map['title'],
+      : title = map['book_title'],
         ISBN = map['ISBN'];
 }
 
-class AdvertList extends StatefulWidget {
-  @override
-  AdvertListState createState() => AdvertListState();
-}
-
-class AdvertListState extends State<AdvertList> {
+class AdvertList {
   StreamController<Advert> streamController;
-  List<Advert> list = [];
+  final List<Advert> list = [];
 
-  @override
-  void initState() {
-    super.initState();
-    //streamController = StreamController.broadcast();
-    streamController.stream.listen((a) => setState(() => list.add(a)));
+  void loadAdvertList() {
+    streamController = StreamController();
+    print("im in Advert List Load function");
+    streamController.stream.listen((a) => list.add(a));
     load(streamController);
   }
 
-  load(StreamController sc) async {
+  List<Advert> getAdvertList(){
+    if(list.length == 0){
+      return null;
+    }
+    return list;
+  }
+
+  void closeStreamController(){
+    streamController?.close();
+    streamController = null;
+  }
+
+
+  Future<void> load(StreamController sc) async {
     String url = "http://3ff52c0d.ngrok.io/api/adverts/?format=json";
-    var client = new http.Client();
-    var req = new http.Request('get',Uri.parse(url));
+    var client = http.Client();
+    var req = http.Request('get',Uri.parse(url));
     var streamedRes = await client.send(req);
+    print("im in load method now");
     streamedRes.stream
         .transform(utf8.decoder)
         .transform(json.decoder)
@@ -42,22 +54,4 @@ class AdvertListState extends State<AdvertList> {
         .pipe(streamController);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    streamController?.close();
-    streamController = null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return null;
-  }
-
-  Widget _makeElement(int index) {
-    if (index >= list.length) {
-      return null;
-    }
-    return null;
-  }
 }
