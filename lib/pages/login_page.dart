@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import './landing_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class LoginPage extends StatefulWidget {
   State createState() => new LoginPageState();
@@ -32,14 +27,12 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _signInWithNameAndPassword() async {
-    final FirebaseUser user = await _auth.signInWithEmailAndPassword(
-      email: _userName,
-      password: _password,
-    );
+    final Map user = Map();
+      user["email"] = 10;
     if (user != null) {
       setState(() {
         _success = true;
-        _userName = user.email;
+        _userName = user["email"];
       });
     } else {
       _success = false;
@@ -131,7 +124,6 @@ class LoginPageState extends State<LoginPage> {
               color: Color(0xFF008000),
               onPressed: () async {
                 if (_userKey.currentState.validate()) {
-                  print(_auth.toString());
                   _userKey.currentState.save();
                   _signInWithNameAndPassword();
                 }
@@ -187,14 +179,12 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   void _registerWithEmailAndPassword() async {
-    final FirebaseUser user = await _auth.createUserWithEmailAndPassword(
-      email: _userName,
-      password: _password,
-    );
+    final Map user = Map();
+    user["email"] = 10;
     if (user != null) {
       setState(() {
         _success = true;
-        _userName = user.email;
+        _userName = user["email"];
       });
     } else {
       _success = false;

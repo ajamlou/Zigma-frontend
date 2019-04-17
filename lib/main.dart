@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String url = "http://07487b83.ngrok.io/api/adverts/";
+  final String url = "http://3ff52c0d.ngrok.io/api/adverts/";
   List data;
 
   Future<String> getData() async {
@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
       data = json.decode(utf8.decode(res.bodyBytes));
 
     });
+    print("Data was successfully retrived");
     return "Success!";
   }
 

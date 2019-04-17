@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -86,14 +87,14 @@ class advertCreationState extends State<advertCreation>
                   child: _image == null
                       ? Text('No image Selected')
                       : Container(
-                          constraints: BoxConstraints(
-                            maxHeight: 150.0,
-                            maxWidth: 150.0,
-                            minWidth: 150.0,
-                            minHeight: 150.0,
-                          ),
-                          child: Image.file(_image),
-                        ),
+                    constraints: BoxConstraints(
+                      maxHeight: 150.0,
+                      maxWidth: 150.0,
+                      minWidth: 150.0,
+                      minHeight: 150.0,
+                    ),
+                    child: Image.file(_image),
+                  ),
                 ),
                 FloatingActionButton(
                   onPressed: getImageCamera,
@@ -117,7 +118,7 @@ class advertCreationState extends State<advertCreation>
                       end: Alignment.centerLeft,
                     ),
                     borderRadius:
-                        BorderRadius.all(Radius.elliptical(20.0, 20.0)),
+                    BorderRadius.all(Radius.elliptical(20.0, 20.0)),
                   ),
                   child: Column(
                     children: <Widget>[
@@ -129,7 +130,7 @@ class advertCreationState extends State<advertCreation>
                           hintText: 'Titel',
                         ),
                         validator: (value) =>
-                            value.isEmpty ? 'Title can\'t be empty' : null,
+                        value.isEmpty ? 'Title can\'t be empty' : null,
                         onSaved: (value) => _title = value,
                       ),
                       new TextFormField(
@@ -140,7 +141,7 @@ class advertCreationState extends State<advertCreation>
                           hintText: 'Pris',
                         ),
                         validator: (value) =>
-                            value.isEmpty ? 'Pris can\'t be empty' : null,
+                        value.isEmpty ? 'Pris can\'t be empty' : null,
                         onSaved: (value) => _price = value,
                       ),
                       new TextFormField(
@@ -163,7 +164,7 @@ class advertCreationState extends State<advertCreation>
                           hintText: 'ISBN',
                         ),
                         validator: (value) =>
-                            value.isEmpty ? 'ISBN can\'t be empty' : null,
+                        value.isEmpty ? 'ISBN can\'t be empty' : null,
                         onSaved: (value) => _isbn = value,
                       ),
                       new TextFormField(
@@ -174,7 +175,7 @@ class advertCreationState extends State<advertCreation>
                           hintText: 'Kontaktinformation',
                         ),
                         validator: (value) =>
-                            value.isEmpty ? 'Taggar can\'t be empty' : null,
+                        value.isEmpty ? 'Taggar can\'t be empty' : null,
                         onSaved: (value) => _contactInfo = value,
                       ),
                     ],
@@ -198,8 +199,8 @@ class advertCreationState extends State<advertCreation>
             ),
           ],
         ),
-        ),
-      );
+      ),
+    );
   }
 
   @override
@@ -243,14 +244,14 @@ class Advert {
   }
 
   Map<String, dynamic> toJson() => {
-        'book_title': title,
-        'price': intToString(price),
-        'authors': authors,
-        'ISBN': ISBN,
-        'state': state,
-        'transaction_type': transaction_type,
-        'contact_info': contactInfo
-      };
+    'book_title': title,
+    'price': intToString(price),
+    'authors': authors,
+    'ISBN': ISBN,
+    'state': state,
+    'transaction_type': transaction_type,
+    'contact_info': contactInfo
+  };
 
   String toString() {
     String adToString = ("title: " +
@@ -270,3 +271,4 @@ class Advert {
     return adToString;
   }
 }
+

@@ -40,6 +40,7 @@ class SearchPage extends SearchDelegate<void> {
       itemBuilder: (BuildContext context, int index) {
         if (data[index]["book_title"].toLowerCase().contains(query.toLowerCase())) {
           return ListTile(
+            key: Key(data[index]["book_title"]),
             title: Text(data[index]["book_title"]),
             leading: Icon(Icons.book),
             trailing: Text(data[index]["authors"]),
