@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'advert.dart';
 
 class AdvertPage extends StatefulWidget {
-  final Map data;
+  final Advert data;
 
   AdvertPage({this.data});
 
@@ -28,14 +29,14 @@ class _AdvertPageState extends State<AdvertPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Text(widget.data["book_title"]),
+                  child: Text(widget.data.book_title),
                 )
               ],
             ),
           ),
           Image.asset('images/calc_book.png'),
-          Text("Författare: " + widget.data["authors"]),
-          Text("Pris: " + widget.data["price"].toString()),
+          Text("Författare: " + widget.data.authors),
+          Text("Pris: " + widget.data.price.toString()),
           Container(
             child: MaterialButton(
               onPressed: () {
@@ -43,7 +44,7 @@ class _AdvertPageState extends State<AdvertPage> {
               child: Row(
                 children: <Widget>[
                   Icon(Icons.chat_bubble),
-                  Text("Skicka ett meddelande till " + widget.data["contact_info"])
+                  Text("Skicka ett meddelande till " + widget.data.contact_info)
                 ],
               ),
             ),
@@ -52,7 +53,7 @@ class _AdvertPageState extends State<AdvertPage> {
             child: Row(
               children: <Widget>[
                 Icon(Icons.face),
-                Text(widget.data["contact_info"] +
+                Text(widget.data.contact_info +
                     " har sålt 14 böcker och köpt 3 böcker.")
               ],
             ),

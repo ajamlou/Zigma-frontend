@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import './pages/landing_page.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import './pages/AdvertListProvider.dart';
+import './pages/advert.dart';
 
 
 void main() => runApp(MyApp());
-
-
 
 class MyApp extends StatefulWidget {
   @override
@@ -15,37 +12,59 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String url = "http://3ff52c0d.ngrok.io/api/adverts/";
-  List data;
-
-  Future<String> getData() async {
-    var res = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
-    setState(() {
-      data = json.decode(utf8.decode(res.bodyBytes));
-
-    });
-    print("Data was successfully retrived");
-    return "Success!";
-  }
-
+  AdvertList advertList = new AdvertList();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Zigma App',
-      home: LandingPage(
-          data: data,
-          refreshPage: getData,
+    return AdvertListProvider(
+      advertList: advertList,
+      child: MaterialApp(
+        title: 'Zigma App',
+        home: LandingPage(),
+        color: Color(0xFFECE9DF),
       ),
-      color: Color(0xFFECE9DF),
-    );
+    );;
   }
-  @override
+
   void initState() {
     super.initState();
-    this.getData();
+    print("im in initState in the main MyApp");
+    advertList.loadAdvertList();
   }
 }
+
+
+//class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return
+//  }
+//
+
+
+
+//class _MyAppState extends State<MyApp> {
+//  final String url = "http://3ff52c0d.ngrok.io/api/adverts/";
+//  List data;
+//
+//  Future<String> getData() async {
+//    var res = await http
+//        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+//    setState(() {
+//      data = json.decode(utf8.decode(res.bodyBytes));
+//
+//    });
+//    print("Data was successfully retrived");
+//    return "Success!";
+//  }
+
+
+
+//  @override
+//  void initState() {
+//    super.initState();
+//    this.getData();
+//  }
+
 
 
 class LoadingScreen extends StatelessWidget {

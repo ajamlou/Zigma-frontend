@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import './advert_page.dart';
-import 'package:zigma2/main.dart';
+import './AdvertListProvider.dart';
 
 class SearchPage extends SearchDelegate<void> {
-  final List data;
-  SearchPage({this.data});
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -34,18 +33,18 @@ class SearchPage extends SearchDelegate<void> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    //final List data = context.inheritFromWidgetOfExactType(InheritedAdvertsList()).data;
+    List data = AdvertListProvider.of(context).advertList.getAdvertList();
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (BuildContext context, int index) {
-        if (data[index]["book_title"].toLowerCase().contains(query.toLowerCase())) {
+        if (data[index].book_title.toLowerCase().contains(query.toLowerCase())) {
           return ListTile(
-            key: Key(data[index]["book_title"]),
-            title: Text(data[index]["book_title"]),
+            key: Key(data[index].book_title),
+            title: Text(data[index].book_title),
             leading: Icon(Icons.book),
-            trailing: Text(data[index]["authors"]),
+            trailing: Text(data[index].authors),
             onTap: () {
-              routeAdvertPage(context, index);
+              routeAdvertPage(context, index, data);
             },
           );
         }
@@ -53,7 +52,7 @@ class SearchPage extends SearchDelegate<void> {
     );
   }
 
-  void routeAdvertPage(context, index) {
+  void routeAdvertPage(context, index, data) {
     print(index.toString());
     Navigator.push(
       context,

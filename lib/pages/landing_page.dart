@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zigma2/pages/advert_example.dart';
 import './login_page.dart';
 import './search_page.dart';
 import './searchbar.dart';
@@ -7,11 +6,6 @@ import './advert_creation.dart';
 import './chat_page.dart';
 
 class LandingPage extends StatelessWidget {
-  final Function refreshPage;
-  final List data;
-  final AdvertList advertList = AdvertList();
-
-  LandingPage({this.data, this.refreshPage});
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +32,6 @@ class LandingPage extends StatelessWidget {
          // color: Color(0xFFFFFFFF),
           child: Column(
             children: <Widget>[
-              RaisedButton(
-                onPressed: () {
-                  print("im pressing the button now");
-                  advertList.loadAdvertList();
-                  print(advertList.getAdvertList()[1].title);
-                  },
-              ),
               Container(
                   padding: const EdgeInsets.only(
                       top: 100.0, left: 50, right: 50, bottom: 100),
@@ -62,11 +49,8 @@ class LandingPage extends StatelessWidget {
                   onPressed: () {
                     showSearch(
                       context: context,
-                      delegate: SearchPage(
-                        data: data
-                      ),
+                      delegate: SearchPage(),
                     );
-                    refreshPage();
                   },
                   child: Container(
                     child: Row(
