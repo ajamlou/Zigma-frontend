@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../main.dart';
 
 class LoginPage extends StatefulWidget {
   State createState() => new LoginPageState();
@@ -11,8 +13,12 @@ class LoginPageState extends State<LoginPage> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _success;
-  String _userName;
   String _password;
+  int _newId;
+  String _newToken;
+  String _userName;
+  Map parsed;
+  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +33,27 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _signInWithNameAndPassword() async {
-    final Map user = Map();
-      user["email"] = 10;
-    if (user != null) {
-      setState(() {
-        _success = true;
-        _userName = user["email"];
-      });
-    } else {
-      _success = false;
-    }
+    UserLogin _loginUser = new UserLogin(_userName, _password);
+    var data = json.encode(_loginUser);
+    String postURL = "https://c46ab6c0.ngrok.io/users/get-token/?format=json";
+    return await http.post(Uri.encodeFull(postURL), body: data, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    }).then((dynamic response) {
+      final String res = response.body;
+      print(json.decode(res));
+      Map parsed = json.decode(res);
+      print(parsed.toString());
+      user = User.fromJson(parsed);
+      print(user);
+      if (user != null) {
+        setState(() {
+          _success = true;
+        });
+      } else {
+        _success = false;
+      }
+    });
   }
 
   void _pushPage(BuildContext context, Widget page) {
@@ -82,14 +99,14 @@ class LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     autofocus: false,
                     decoration: new InputDecoration(
-                      hintText: 'Email',
+                      hintText: 'Username',
                       icon: new Icon(
-                        Icons.mail,
+                        Icons.person,
                         color: Colors.grey,
                       ),
                     ),
                     validator: (value) =>
-                        value.isEmpty ? 'Email can\'t be empty' : null,
+                        value.isEmpty ? 'Username can\'t be empty' : null,
                     onSaved: (value) => _userName = value,
                   ),
                   new TextFormField(
@@ -163,8 +180,13 @@ class RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _success;
-  String _userName;
+  String _userEmail;
   String _password;
+  int _newId;
+  String _newToken;
+  String _userName;
+  Map parsed;
+  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -179,16 +201,29 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   void _registerWithEmailAndPassword() async {
-    final Map user = Map();
-    user["email"] = 10;
-    if (user != null) {
-      setState(() {
-        _success = true;
-        _userName = user["email"];
-      });
-    } else {
-      _success = false;
-    }
+    UserCreation _newUser = new UserCreation(_userEmail, _userName, _password);
+    var data = json.encode(_newUser);
+    print(data);
+    String postURL = "https://c46ab6c0.ngrok.io/users/create-user/?format=json";
+    return await http.post(Uri.encodeFull(postURL), body: data, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    }).then((dynamic response) {
+      final String res = response.body;
+      print(json.decode(res));
+      Map parsed = json.decode(res);
+      print(parsed.toString());
+      user = User.fromJson(parsed);
+      print(user);
+      if (user != null) {
+        setState(() {
+          _success = true;
+        });
+      } else {
+        _success = false;
+      }
+    });
+
   }
 
   Widget _showRegisterPage() {
@@ -237,7 +272,7 @@ class RegisterPageState extends State<RegisterPage> {
                     ),
                     validator: (value) =>
                         value.isEmpty ? 'Email can\'t be empty' : null,
-                    onSaved: (value) => _userName = value,
+                    onSaved: (value) => _userEmail = value,
                   ),
                   new TextFormField(
                     maxLines: 1,
@@ -252,6 +287,19 @@ class RegisterPageState extends State<RegisterPage> {
                     validator: (value) =>
                         value.isEmpty ? 'Password can\'t be empty' : null,
                     onSaved: (value) => _password = value,
+                  ),
+                  new TextFormField(
+                    maxLines: 1,
+                    autofocus: false,
+                    decoration: new InputDecoration(
+                        hintText: 'Username',
+                        icon: new Icon(
+                          Icons.person_add,
+                          color: Colors.grey,
+                        )),
+                    validator: (value) =>
+                        value.isEmpty ? 'Username can\'t be empty' : null,
+                    onSaved: (value) => _userName = value,
                   ),
                 ],
               ),
@@ -284,3 +332,28 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 }
+
+class UserCreation {
+  String email;
+  String username;
+  String password;
+
+  UserCreation(this.email, this.username, this.password);
+
+  Map<String, dynamic> toJson() => {
+        'username': username,
+        'password': password,
+        'email': email,
+      };
+}
+class UserLogin {
+  String username;
+  String password;
+  UserLogin(this.username, this.password);
+
+  Map<String, dynamic> toJson() => {
+    'username': username,
+    'password': password,
+  };
+}
+

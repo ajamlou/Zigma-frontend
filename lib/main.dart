@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 void main() => runApp(MyApp());
 
 
+
 class MyApp extends StatefulWidget {
   final Widget child;
   final List data;
@@ -87,5 +88,21 @@ class LoadingScreen extends StatelessWidget {
         );
   }
 }
+
+class User {
+  String email;
+  int id;
+  String username;
+  String token;
+
+  User(this.email, this.id, this.token, this.username);
+
+  User.fromJson(Map<String, dynamic> json)
+      : email = json['email'],
+        username = json['username'],
+        id = json['id'],
+        token = json['token'];
+}
+
 
 
