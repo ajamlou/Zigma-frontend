@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import './advert_page.dart';
+import 'package:zigma2/main.dart';
 
 class SearchPage extends SearchDelegate<void> {
-  final List data;
-
-  SearchPage({this.data});
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -35,6 +33,7 @@ class SearchPage extends SearchDelegate<void> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final List data = context.inheritFromWidgetOfExactType(InheritedAdvertsList()).data;
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (BuildContext context, int index) {

@@ -6,10 +6,9 @@ import './advert_creation.dart';
 import './chat_page.dart';
 
 class LandingPage extends StatelessWidget {
-  final List data;
   final Function refreshPage;
 
-  LandingPage({this.data, this.refreshPage});
+  LandingPage({this.refreshPage});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class LandingPage extends StatelessWidget {
                   onPressed: () {
                     showSearch(
                       context: context,
-                      delegate: SearchPage(data: data),
+                      delegate: SearchPage(),
                     );
                     refreshPage();
                   },
