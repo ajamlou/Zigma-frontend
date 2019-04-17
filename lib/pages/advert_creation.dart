@@ -39,6 +39,7 @@ class advertCreationState extends State<advertCreation>
   String _isbn; //Sent
   String _contactInfo;
   String _subject;
+  int randomInt = 42;
 
   AnimationController _animation;
 
