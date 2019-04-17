@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../main.dart';
 
 class LoginPage extends StatefulWidget {
   State createState() => new LoginPageState();
@@ -98,14 +99,14 @@ class LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     autofocus: false,
                     decoration: new InputDecoration(
-                      hintText: 'Email',
+                      hintText: 'Username',
                       icon: new Icon(
-                        Icons.mail,
+                        Icons.person,
                         color: Colors.grey,
                       ),
                     ),
                     validator: (value) =>
-                        value.isEmpty ? 'Email can\'t be empty' : null,
+                        value.isEmpty ? 'Username can\'t be empty' : null,
                     onSaved: (value) => _userName = value,
                   ),
                   new TextFormField(
@@ -356,17 +357,3 @@ class UserLogin {
   };
 }
 
-class User {
-  String email;
-  int id;
-  String username;
-  String token;
-
-  User(this.email, this.id, this.token, this.username);
-
-  User.fromJson(Map<String, dynamic> json)
-      : email = json['email'],
-        username = json['username'],
-        id = json['id'],
-        token = json['token'];
-}
