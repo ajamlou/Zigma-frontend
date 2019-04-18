@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
         home: LandingPage(),
         color: Color(0xFFECE9DF),
       ),
-    );;
+    );
   }
 
   void initState() {

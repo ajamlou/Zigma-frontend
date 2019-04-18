@@ -29,7 +29,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Text(widget.data.book_title),
+                  child: Text(widget.data.bookTitle),
                 )
               ],
             ),
@@ -44,7 +44,7 @@ class _AdvertPageState extends State<AdvertPage> {
               child: Row(
                 children: <Widget>[
                   Icon(Icons.chat_bubble),
-                  Text("Skicka ett meddelande till " + widget.data.contact_info)
+                  Text("Skicka ett meddelande till " + widget.data.contactInfo)
                 ],
               ),
             ),
@@ -53,7 +53,7 @@ class _AdvertPageState extends State<AdvertPage> {
             child: Row(
               children: <Widget>[
                 Icon(Icons.face),
-                Text(widget.data.contact_info +
+                Text(widget.data.contactInfo +
                     " har sålt 14 böcker och köpt 3 böcker.")
               ],
             ),

@@ -4,17 +4,17 @@ import './search_page.dart';
 import './searchbar.dart';
 import './advert_creation.dart';
 import './chat_page.dart';
-import './user.dart';
+import 'DataProvider.dart';
+import 'user.dart';
 
 class LandingPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage("images/backgroundImage.jpg"),
-            fit: BoxFit.fitHeight,
+          image: AssetImage("images/backgroundImage.jpg"),
+          fit: BoxFit.fitHeight,
         ),
       ),
       //color: Color(0xFFFFFFFF),
@@ -25,12 +25,35 @@ class LandingPage extends StatelessWidget {
           elevation: 0.0,
           backgroundColor: Colors.transparent,
           actions: <Widget>[
-            LoginButton()
+            DataProvider.of(context).user.checkUser()
+                ? Container(
+                    padding: EdgeInsets.only(right: 10),
+                    child: SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            "https://pbs.twimg.com/profile_images/723864085826277376/P0w7UfP8.jpg"),
+                      ),
+                    ),
+                  )
+                : LoginButton()
           ],
         ),
-        drawer: showDrawer(context),
+        drawer: DataProvider.of(context).user.checkUser()
+            ? showDrawer(context)
+            : Center(
+                child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 25),
+                color: Colors.white,
+                child: Text(
+                  "Du är inte inloggad, gör ett konto för att fortsätta",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, color: Colors.redAccent),
+                ),
+              )),
         body: Container(
-         // color: Color(0xFFFFFFFF),
+          // color: Color(0xFFFFFFFF),
           child: Column(
             children: <Widget>[
               Container(
@@ -84,7 +107,7 @@ Widget showDrawer(context) {
         UserAccountsDrawerHeader(
           accountName: Text("RandomName"),
           decoration: BoxDecoration(
-              color: const Color(0xff96070a),
+            color: const Color(0xff96070a),
           ),
           accountEmail: Text("random@random.com"),
           currentAccountPicture: CircleAvatar(
@@ -94,24 +117,20 @@ Widget showDrawer(context) {
         ),
         ListTile(
           title: Text("Din Profil"),
-          onTap: () {
-
-          },
+          onTap: () {},
         ),
         ListTile(
           title: Text("Skapa Annons"),
-          onTap:() async {
+          onTap: () async {
             routeCreationPage(context);
           },
         ),
         ListTile(
             title: Text("Dina Chattar"),
             onTap: () {
-              Navigator.of(context)
-                  .push(
+              Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => FriendlyChatApp()));
-            }
-        ),
+            }),
         ListTile(
           title: Text("Inställningar"),
           onTap: () {},
@@ -121,12 +140,10 @@ Widget showDrawer(context) {
   );
 }
 
-
 void routeCreationPage(context) {
   Navigator.of(context)
-      .push(MaterialPageRoute<void>(builder: (_) => advertCreation()));
+      .push(MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
 }
-
 
 void routeSearchPage(context) {
   Navigator.of(context)

@@ -3,24 +3,60 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Advert {
-  final String book_title;
-  final String ISBN;
-  final int id;
-  final int price;
+  final String bookTitle;
+  final String isbn;
+  int id;
+  final String price;
   final String authors;
-  final String state;
-  final String transaction_type;
-  final String contact_info;
+  String state;
+  String transactionType;
+  final String contactInfo;
+
+  Advert(this.bookTitle, this.price, this.authors, this.isbn, this.contactInfo);
 
   Advert.fromJson(Map map)
-      : book_title = map['book_title'],
-        ISBN = map['ISBN'],
+      : bookTitle = map['book_title'],
+        isbn = map['ISBN'],
         id = map["id"],
         price = map["price"],
         authors = map["authors"],
         state = map["state"],
-        transaction_type = map["transaction_type"],
-        contact_info = map["contact_info"];
+        transactionType = map["transaction_type"],
+        contactInfo = map["contact_info"];
+
+  String toString() {
+    String adToString = ("title: " +
+        this.bookTitle +
+        ",\nprice: " +
+        this.price.toString() +
+        ",\nauthors: " +
+        this.authors +
+        ",\nISBN: " +
+        this.isbn +
+        ",\ncontactInfo: " +
+        this.contactInfo +
+        ",\nstate: " +
+        this.state +
+        ",\ntransaction_type: " +
+        this.transactionType);
+    return adToString;
+  }
+
+  int stringToInt(price) {
+    var priceInt = int.parse(price);
+    assert(priceInt is int);
+    return priceInt;
+  }
+
+  Map<String, dynamic> toJson() => {
+        'book_title': bookTitle,
+        'price': stringToInt(price),
+        'authors': authors,
+        'ISBN': isbn,
+        'state': state,
+        'transaction_type': transactionType,
+        'contact_info': contactInfo
+      };
 }
 
 class AdvertList {
@@ -51,7 +87,8 @@ class AdvertList {
     streamController = null;
   }
 
-  Future<void> load(StreamController<Advert> sc, http.Client client, http.Request req) async {
+  Future<void> load(
+      StreamController<Advert> sc, http.Client client, http.Request req) async {
     var streamedRes = await client.send(req);
     print("im in load method now");
     streamedRes.stream

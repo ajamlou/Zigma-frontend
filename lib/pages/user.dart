@@ -48,6 +48,10 @@ class UserMethodBody {
     user = User(email, id, username, token);
   }
 
+  String getToken(){
+    return user.token;
+  }
+
   bool checkUser (){
     if (user == null){
       return false;
@@ -102,7 +106,8 @@ class UserMethodBody {
     final String res = response.body;
     Map parsed = json.decode(res);
     print(parsed.toString());
-    User user = User.fromJson(parsed);
+    User localUser = User.fromJson(parsed);
+    iniUser(localUser.email, localUser.id, localUser.username, localUser.token);
     print(user);
     if (user != null) {
       return true;

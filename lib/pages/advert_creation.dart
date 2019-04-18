@@ -5,12 +5,13 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-
+import 'advert.dart';
+import 'DataProvider.dart';
 File _image;
 Animation<double> _animation;
 
-class advertCreation extends StatefulWidget {
-  State createState() => new advertCreationState();
+class AdvertCreation extends StatefulWidget {
+  State createState() => new AdvertCreationState();
 }
 
 class AnimatedLogo extends AnimatedWidget {
@@ -30,7 +31,7 @@ class AnimatedLogo extends AnimatedWidget {
   }
 }
 
-class advertCreationState extends State<advertCreation>
+class AdvertCreationState extends State<AdvertCreation>
     with TickerProviderStateMixin {
   //Image selector
 
@@ -238,55 +239,11 @@ class advertCreationState extends State<advertCreation>
     String postURL = "https://1a244db6.ngrok.io/adverts/adverts/?format=json";
     return await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Token "+ DataProvider.of(context).user.getToken()
     }).then((dynamic res) {
-      print(res.toString());
+      final String resBody = res.body;
+      print(json.decode(resBody));
     });
-  }
-}
-
-class Advert {
-  String title; //Skickas
-  String price; //Skickas som int
-  String authors; //Skickas
-  String ISBN; //Skickas
-  String state = "A";
-  String transaction_type = "S";
-  String contactInfo;
-
-  Advert(this.title, this.price, this.authors, this.ISBN, this.contactInfo);
-
-  int intToString(price) {
-    var priceInt = int.parse(price);
-    assert(priceInt is int);
-    return priceInt;
-  }
-
-  Map<String, dynamic> toJson() => {
-        'book_title': title,
-        'price': intToString(price),
-        'authors': authors,
-        'ISBN': ISBN,
-        'state': state,
-        'transaction_type': transaction_type,
-        'contact_info': contactInfo
-      };
-
-  String toString() {
-    String adToString = ("title: " +
-        this.title +
-        ",\nprice: " +
-        this.price +
-        ",\nauthors: " +
-        this.authors +
-        ",\nISBN: " +
-        this.ISBN +
-        ",\ncontactInfo: " +
-        this.contactInfo +
-        ",\nstate: " +
-        this.state +
-        ",\ntransaction_type: " +
-        this.transaction_type);
-    return adToString;
   }
 }
