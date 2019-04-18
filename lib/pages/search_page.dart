@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './advert_page.dart';
-import './AdvertListProvider.dart';
+import './DataProvider.dart';
 
 class SearchPage extends SearchDelegate<void> {
 
@@ -33,7 +33,7 @@ class SearchPage extends SearchDelegate<void> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List data = AdvertListProvider.of(context).advertList.getAdvertList();
+    List data = DataProvider.of(context).advertList.getAdvertList();
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (BuildContext context, int index) {

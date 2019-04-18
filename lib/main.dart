@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import './pages/landing_page.dart';
-import './pages/AdvertListProvider.dart';
+import './pages/DataProvider.dart';
 import './pages/advert.dart';
+import './pages/user.dart';
 
 
 void main() => runApp(MyApp());
@@ -13,10 +14,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   AdvertList advertList = new AdvertList();
+  UserMethodBody user = new UserMethodBody();
   @override
   Widget build(BuildContext context) {
-    return AdvertListProvider(
+    return DataProvider(
       advertList: advertList,
+      user: user,
       child: MaterialApp(
         title: 'Zigma App',
         home: LandingPage(),
@@ -76,20 +79,20 @@ class LoadingScreen extends StatelessWidget {
   }
 }
 
-class User {
-  String email;
-  int id;
-  String username;
-  String token;
-
-  User(this.email, this.id, this.token, this.username);
-
-  User.fromJson(Map<String, dynamic> json)
-      : email = json['email'],
-        username = json['username'],
-        id = json['id'],
-        token = json['token'];
-}
-
+//class User {
+//  String email;
+//  int id;
+//  String username;
+//  String token;
+//
+//  User(this.email, this.id, this.token, this.username);
+//
+//  User.fromJson(Map<String, dynamic> json)
+//      : email = json['email'],
+//        username = json['username'],
+//        id = json['id'],
+//        token = json['token'];
+//}
+//
 
 

@@ -4,6 +4,7 @@ import './search_page.dart';
 import './searchbar.dart';
 import './advert_creation.dart';
 import './chat_page.dart';
+import './user.dart';
 
 class LandingPage extends StatelessWidget {
 

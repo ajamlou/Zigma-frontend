@@ -31,7 +31,7 @@ class AdvertList {
     streamController = StreamController.broadcast();
     print("im in Advert List Load function");
     streamController.stream.listen((a) => list.add(a));
-    String url = "https://3ff52c0d.ngrok.io/api/adverts/?format=json";
+    String url = "https://1a244db6.ngrok.io/adverts/adverts/?format=json";
     var client = http.Client();
     var req = http.Request('get', Uri.parse(url));
     load(streamController, client, req);
