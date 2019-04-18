@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import '../main.dart';
 
 File _image;
 Animation<double> _animation;
@@ -236,7 +235,7 @@ class advertCreationState extends State<advertCreation>
     Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
     var data = json.encode(_newAd);
     print(data);
-    String postURL = "http://07487b83.ngrok.io/api/adverts/?format=json";
+    String postURL = "http://3ff52c0d.ngrok.io/api/adverts/?format=json";
     return await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json"
