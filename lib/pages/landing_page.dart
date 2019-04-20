@@ -5,7 +5,7 @@ import './searchbar.dart';
 import './advert_creation.dart';
 import './chat_page.dart';
 import 'DataProvider.dart';
-import 'user.dart';
+import 'RegisterPage.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -43,15 +43,37 @@ class LandingPage extends StatelessWidget {
         drawer: DataProvider.of(context).user.checkUser()
             ? showDrawer(context)
             : Center(
-                child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 25),
-                color: Colors.white,
-                child: Text(
-                  "Du är inte inloggad, gör ett konto för att fortsätta",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, color: Colors.redAccent),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFECE9DF),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.0),
+                      ),
+                    ),
+                    height: 125,
+                    margin: EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "Du behöver ett konto för att fortsätta.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20, color: Color(0xff96070a)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        RaisedButton(
+                          color: Colors.lightBlueAccent,
+                          child: Text("Skapa ett Zigma konto", style: TextStyle(color: Colors.white)),
+                          onPressed: () async => routeRegisterPage(context),
+                        ),
+                      ],
+                    ),
                 ),
-              )),
+              ),
         body: Container(
           // color: Color(0xFFFFFFFF),
           child: Column(
@@ -62,9 +84,9 @@ class LandingPage extends StatelessWidget {
                   child: Image.asset('images/logo_frontpage.png')),
               Container(
                 height: 50,
-                decoration: new BoxDecoration(
+                decoration: BoxDecoration(
                   color: Color(0xFFECE9DF),
-                  borderRadius: new BorderRadius.all(
+                  borderRadius: BorderRadius.all(
                     Radius.circular(5.0),
                   ),
                 ),
@@ -98,6 +120,14 @@ class LandingPage extends StatelessWidget {
       ),
     );
   }
+  void routeRegisterPage(context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => RegisterPage()));
+  }
+
+
+
+
 }
 
 Widget showDrawer(context) {
@@ -140,6 +170,7 @@ Widget showDrawer(context) {
   );
 }
 
+
 void routeCreationPage(context) {
   Navigator.of(context)
       .push(MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
@@ -171,4 +202,5 @@ class LoginButton extends StatelessWidget {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (_) => LoginPage()));
   }
+
 }

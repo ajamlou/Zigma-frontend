@@ -18,7 +18,7 @@ class Advert {
       : bookTitle = map['book_title'],
         isbn = map['ISBN'],
         id = map["id"],
-        price = map["price"],
+        price = map["price"].toString(),
         authors = map["authors"],
         state = map["state"],
         transactionType = map["transaction_type"],
@@ -63,18 +63,17 @@ class AdvertList {
   StreamController<Advert> streamController;
   final List<Advert> list = [];
 
-  void loadAdvertList() {
+  Future<void> loadAdvertList() async {
     streamController = StreamController.broadcast();
     print("im in Advert List Load function");
     streamController.stream.listen((a) => list.add(a));
-    String url = "https://1a244db6.ngrok.io/adverts/adverts/?format=json";
+    String url = "https://5eef8986.ngrok.io/adverts/adverts/?format=json";
     var client = http.Client();
     var req = http.Request('get', Uri.parse(url));
-    load(streamController, client, req);
+    await load(streamController, client, req);
   }
 
   List<Advert> getAdvertList() {
-    print(list);
     return list;
   }
 
@@ -91,6 +90,7 @@ class AdvertList {
       StreamController<Advert> sc, http.Client client, http.Request req) async {
     var streamedRes = await client.send(req);
     print("im in load method now");
+    print("the streamed response contains "+streamedRes.contentLength.toString()+" amounts of characters" );
     streamedRes.stream
         .transform(utf8.decoder)
         .transform(json.decoder)

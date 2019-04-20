@@ -232,11 +232,17 @@ class AdvertCreationState extends State<AdvertCreation>
     );
   }
 
+  int stringToInt(price) {
+    var priceInt = int.parse(price);
+    assert(priceInt is int);
+    return priceInt;
+  }
+
   Future<String> _uploadNewAdvert() async {
     Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
     var data = json.encode(_newAd);
     print(data);
-    String postURL = "https://1a244db6.ngrok.io/adverts/adverts/?format=json";
+    String postURL = "https://5eef8986.ngrok.io/adverts/adverts/?format=json";
     return await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json",

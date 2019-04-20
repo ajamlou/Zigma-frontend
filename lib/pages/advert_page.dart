@@ -14,33 +14,31 @@ class _AdvertPageState extends State<AdvertPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Text(widget.data.bookTitle),
-                )
-              ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70),
+        child: AppBar(
+          iconTheme: IconThemeData(color: Color(0xff96070a)),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          title: Text(
+            widget.data.bookTitle,
+            style: TextStyle(
+              color: Color(0xff96070a),
             ),
           ),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
           Image.asset('images/calc_book.png'),
-          Text("Författare: " + widget.data.authors),
-          Text("Pris: " + widget.data.price.toString()),
+          widget.data.authors == null
+              ? Text("Det finns ingen författare till denna bok")
+              : Text("Författare: " + widget.data.authors),
+          Text("Pris: " + widget.data.price),
           Container(
             child: MaterialButton(
-              onPressed: () {
-              },
+              onPressed: () {},
               child: Row(
                 children: <Widget>[
                   Icon(Icons.chat_bubble),
@@ -63,4 +61,3 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 }
-
