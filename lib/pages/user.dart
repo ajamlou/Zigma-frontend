@@ -15,17 +15,25 @@ class User {
         id = json['id'],
         token = json['token'];
 
+
 }
 
 class UserCreation {
   String email;
   String username;
   String password;
+  String imageAsBytes;
 
-  UserCreation(this.email, this.username, this.password);
+  UserCreation(this.email, this.username, this.password, this.imageAsBytes);
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => imageAsBytes != null ? {
     'username': username,
+    'password': password,
+    'email': email,
+    'image': imageAsBytes,
+  }
+  :
+  { 'username': username,
     'password': password,
     'email': email,
   };
@@ -70,8 +78,11 @@ class UserMethodBody {
     }
   }
 
-  Future<bool> register(String email, String username, String password) async {
-    UserCreation _newUser = new UserCreation(email, username, password);
+  Future<bool> register(String email, String username, String password, String imageAsBytes) async {
+    if (imageAsBytes == null) {
+      UserCreation _newUser = new UserCreation(email, username, password, imageAsBytes);
+    }
+    UserCreation _newUser = new UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = "https://fecbb9af.ngrok.io/users/create-user/?format=json";
