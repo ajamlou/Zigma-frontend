@@ -4,6 +4,7 @@ import './DataProvider.dart';
 
 class SearchPage extends SearchDelegate<void> {
 
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -51,6 +52,7 @@ class SearchPage extends SearchDelegate<void> {
       },
     );
   }
+
 
   void routeAdvertPage(context, index, data) {
     print(index.toString());

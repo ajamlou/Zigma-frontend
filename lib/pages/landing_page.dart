@@ -92,7 +92,7 @@ class LandingPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MaterialButton(
                   onPressed: () {
-                    DataProvider.of(context).advertList.loadAdvertList();
+                    //DataProvider.of(context).advertList.loadAdvertList();
                     showSearch(
                       context: context,
                       delegate: SearchPage(),

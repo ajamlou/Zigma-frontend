@@ -43,47 +43,59 @@ class Advert {
 }
 
 class AdvertList {
-  StreamController<Advert> streamController;
+  //StreamController<Advert> streamController;
   List<Advert> list = [];
 
-  Future<void> loadAdvertList() async {
-    list = [];
-    streamController = StreamController.broadcast();
-    print("im in Advert List Load function");
-    streamController.stream.listen((a) => list.add(a));
+  Future<void> loadingAdvertList() async {
     String url = "https://fecbb9af.ngrok.io/adverts/adverts/?format=json";
-    var client = http.Client();
-    var req = http.Request('get', Uri.parse(url));
-    await load(streamController, client, req);
+    var req = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
+    print("im in load method now");
+    final List resBody = json.decode(utf8.decode(req.bodyBytes));
+    for(int i = 0; i< resBody.length;i++){
+      list.add(Advert.fromJson(resBody[i]));}
+    print("The Request body is: "+list.toString());
+
   }
+
+
+//  Future<void> loadAdvertList() async {
+//    streamController = StreamController.broadcast();
+//    print("im in Advert List Load function");
+//    streamController.stream.listen((a) => list.add(a));
+//    String url = "https://fecbb9af.ngrok.io/adverts/adverts/?format=json";
+//    var client = http.Client();
+//    var req = http.Request('get', Uri.parse(url));
+//    await load(streamController, client, req);
+//
+//  }
 
   List<Advert> getAdvertList() {
     return list;
   }
+//
+//  StreamController<Advert> getStreamController() {
+//    return streamController;
+//  }
+//
+//  void closeStreamController() {
+//    streamController?.close();
+//    streamController = null;
+//  }
 
-  StreamController<Advert> getStreamController() {
-    return streamController;
-  }
-
-  void closeStreamController() {
-    streamController?.close();
-    streamController = null;
-  }
-
-  Future<void> load(
-      StreamController<Advert> sc, http.Client client, http.Request req) async {
-    var streamedRes = await client.send(req);
-    print("im in load method now");
-    print("the streamed response contains " +
-        streamedRes.contentLength.toString() +
-        " amounts of characters");
-    streamedRes.stream
-        .transform(utf8.decoder)
-        .transform(json.decoder)
-        .expand((e) => e)
-        .map((map) => Advert.fromJson(map))
-        .pipe(sc);
-  }
+//  Future<void> load(
+//      StreamController<Advert> sc, http.Client client, http.Request req) async {
+//    var streamedRes = await client.send(req);
+//    print("im in load method now");
+//    print("the streamed response contains " +
+//        streamedRes.contentLength.toString() +
+//        " amounts of characters");
+//    streamedRes.stream
+//        .transform(utf8.decoder)
+//        .transform(json.decoder)
+//        .expand((e) => e)
+//        .map((map) => Advert.fromJson(map))
+//        .pipe(sc);
+//  }
 
   Future<void> uploadNewAdvert(String title, int price, String author,
       String isbn, String contactInfo, context) async {
@@ -97,5 +109,7 @@ class AdvertList {
       "content-type": "application/json",
       "Authorization": "Token "+DataProvider.of(context).user.getToken()
     });
+    if(response.statusCode == 200){}
+
   }
 }
