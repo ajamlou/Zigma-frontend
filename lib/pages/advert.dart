@@ -5,6 +5,7 @@ import 'DataProvider.dart';
 
 class Advert {
   final String bookTitle;
+  final int owner = 1;
   final String isbn;
   int id;
   final int price;
@@ -38,25 +39,27 @@ class Advert {
         'ISBN': isbn,
         'state': state,
         'transaction_type': transactionType,
-        'contact_info': contactInfo
+        'contact_info': contactInfo,
+        'owner': owner
       };
 }
 
 class AdvertList {
   //StreamController<Advert> streamController;
-  List<Advert> list = [];
+  final List<Advert> list = [];
 
-  Future<void> loadingAdvertList() async {
+  Future<void> loadAdvertList() async {
+    list.clear();
     String url = "https://fecbb9af.ngrok.io/adverts/adverts/?format=json";
-    var req = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
+    var req = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     print("im in load method now");
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
-    for(int i = 0; i< resBody.length;i++){
-      list.add(Advert.fromJson(resBody[i]));}
-    print("The Request body is: "+list.toString());
-
+    for (int i = 0; i < resBody.length; i++) {
+      list.add(Advert.fromJson(resBody[i]));
+    }
+    print("The Request body is: " + list.toString());
   }
-
 
 //  Future<void> loadAdvertList() async {
 //    streamController = StreamController.broadcast();
@@ -72,6 +75,7 @@ class AdvertList {
   List<Advert> getAdvertList() {
     return list;
   }
+
 //
 //  StreamController<Advert> getStreamController() {
 //    return streamController;
@@ -97,19 +101,24 @@ class AdvertList {
 //        .pipe(sc);
 //  }
 
-  Future<void> uploadNewAdvert(String title, int price, String author,
+  Future<int> uploadNewAdvert(String title, int price, String author,
       String isbn, String contactInfo, context) async {
     Advert _newAd = Advert(title, price, author, isbn, contactInfo);
     var data = json.encode(_newAd);
     print(data);
     final String postURL = "https://fecbb9af.ngrok.io/adverts/adverts/";
     print("token " + DataProvider.of(context).user.getToken());
-    final response = await http.post(Uri.encodeFull(postURL), body: data, headers: {
+    final response =
+        await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json",
-      "Authorization": "Token "+DataProvider.of(context).user.getToken()
+      "Authorization": "Token " + DataProvider.of(context).user.getToken()
     });
-    if(response.statusCode == 200){}
-
+    if (response.statusCode == 201) {
+        await loadAdvertList();
+    } else {
+      throw Exception("Skapandet av en annons var inte lyckad");
+    }
+    return response.statusCode;
   }
 }

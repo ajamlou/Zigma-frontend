@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:zigma2/pages/landing_page.dart';
 import 'DataProvider.dart';
 
 File _image;
@@ -56,6 +57,7 @@ class AdvertCreationState extends State<AdvertCreation>
   int randomInt = 42;
   FocusNode myFocusNode;
   AnimationController _controller;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -63,8 +65,8 @@ class AdvertCreationState extends State<AdvertCreation>
     _controller =
         AnimationController(duration: const Duration(seconds: 10), vsync: this);
     _animation = Tween<double>(begin: 0, end: 150).animate(_controller)
-      ..addStatusListener((status) {})..addStatusListener((state) =>
-          print('$state'));
+      ..addStatusListener((status) {})
+      ..addStatusListener((state) => print('$state'));
     _controller.forward();
     myFocusNode = FocusNode();
   }
@@ -113,134 +115,154 @@ class AdvertCreationState extends State<AdvertCreation>
             actions: <Widget>[],
           ),
         ),
-        body: Center(
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(15.0),
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment(0.0, 0.0),
-                    child: _image == null
-                        ? Text('No image Selected')
-                        : AnimatedLogo(
-                      animation: _animation,
-                    ),
-                  ),
-                  FloatingActionButton(
-                    onPressed: getImageCamera,
-                    tooltip: 'Pick Image',
-                    child: Icon(Icons.add_a_photo),
-                  ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                    left: 30.0, top: 10.0, right: 30.0, bottom: 10.0),
-                child: Form(
-                  key: _advertKey,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Color(0xFFFFFFFF),
-                      borderRadius:
-                      BorderRadius.all(Radius.elliptical(20.0, 20.0)),
-                    ),
-                    child: Column(
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(15.0),
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        TextFormField(
-                          focusNode: myFocusNode,
-                          maxLines: 1,
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Titel',
-                          ),
-                          validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
-                          onSaved: (value) => _title = value,
+                        Container(
+                          alignment: Alignment(0.0, 0.0),
+                          child: _image == null
+                              ? Text('No image Selected')
+                              : AnimatedLogo(
+                                  animation: _animation,
+                                ),
                         ),
-                        TextFormField(
-                          maxLines: 1,
-                          keyboardType: TextInputType.number,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Pris',
-                          ),
-                          validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
-                          onSaved: (value) => _price = stringToInt(value),
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Författare',
-                          ),
-                          validator: (value) =>
-                          value.isEmpty
-                              ? 'Obligatoriskt Fält'
-                              : null,
-                          onSaved: (value) => _author = value,
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'ISBN',
-                          ),
-                          validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
-                          onSaved: (value) => _isbn = value,
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Kontaktinformation',
-                          ),
-                          validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
-                          onSaved: (value) => _contactInfo = value,
+                        FloatingActionButton(
+                          onPressed: getImageCamera,
+                          tooltip: 'Pick Image',
+                          child: Icon(Icons.add_a_photo),
                         ),
                       ],
                     ),
-                  ),
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 30.0, top: 10.0, right: 30.0, bottom: 10.0),
+                      child: Form(
+                        key: _advertKey,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Color(0xFFFFFFFF),
+                            borderRadius:
+                                BorderRadius.all(Radius.elliptical(20.0, 20.0)),
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              TextFormField(
+                                focusNode: myFocusNode,
+                                maxLines: 1,
+                                keyboardType: TextInputType.text,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  hintText: 'Titel',
+                                ),
+                                validator: (value) =>
+                                    value.isEmpty ? 'Obligatoriskt Fält' : null,
+                                onSaved: (value) => _title = value,
+                              ),
+                              TextFormField(
+                                maxLines: 1,
+                                keyboardType: TextInputType.number,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  hintText: 'Pris',
+                                ),
+                                validator: (value) =>
+                                    value.isEmpty ? 'Obligatoriskt Fält' : null,
+                                onSaved: (value) => _price = stringToInt(value),
+                              ),
+                              TextFormField(
+                                maxLines: 1,
+                                keyboardType: TextInputType.text,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  hintText: 'Författare',
+                                ),
+                                validator: (value) =>
+                                    value.isEmpty ? 'Obligatoriskt Fält' : null,
+                                onSaved: (value) => _author = value,
+                              ),
+                              TextFormField(
+                                maxLines: 1,
+                                keyboardType: TextInputType.text,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  hintText: 'ISBN',
+                                ),
+                                validator: (value) =>
+                                    value.isEmpty ? 'Obligatoriskt Fält' : null,
+                                onSaved: (value) => _isbn = value,
+                              ),
+                              TextFormField(
+                                maxLines: 1,
+                                keyboardType: TextInputType.text,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  hintText: 'Kontaktinformation',
+                                ),
+                                validator: (value) =>
+                                    value.isEmpty ? 'Obligatoriskt Fält' : null,
+                                onSaved: (value) => _contactInfo = value,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 50,
+                      child: MaterialButton(
+                        color: Color(0xFF008000),
+                        onPressed: () async {
+                          int stsCode;
+                          if (_advertKey.currentState.validate()) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            _advertKey.currentState.save();
+                              stsCode = await DataProvider
+                                  .of(context)
+                                  .advertList
+                                  .uploadNewAdvert(
+                                  _title, _price, _author, _isbn,
+                                  _contactInfo, context);
+                          }
+                          if(stsCode == 201){
+                          routeLandingPage();
+                          }
+                          else{
+                            setState(() {
+                              isLoading = false;
+                            });
+                            createAlertDialog();
+                          }
+                        },
+                        child: Text("Ladda upp",
+                            style: TextStyle(color: Color(0xFFFFFFFF))),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                width: 150,
-                child: MaterialButton(
-                  color: Color(0xFF008000),
-                  onPressed: () async {
-                    if (_advertKey.currentState.validate()) {
-                      _advertKey.currentState.save();
-                      DataProvider
-                          .of(context)
-                          .advertList
-                          .uploadNewAdvert(
-                          _title, _price, _author, _isbn, _contactInfo, context);
-                    }
-                  },
-                  child: Text("Ladda upp",
-                      style: TextStyle(color: Color(0xFFFFFFFF))),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
 
+  createAlertDialog(){
 
+  }
 
-
-
+  void routeLandingPage() {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => LandingPage()));
+  }
 }

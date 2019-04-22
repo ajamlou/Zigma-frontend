@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     print("im in initState in the main MyApp");
     //advertList.loadAdvertList();
-    advertList.loadingAdvertList();
+    advertList.loadAdvertList();
   }
 }
 
