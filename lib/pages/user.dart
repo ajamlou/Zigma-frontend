@@ -30,7 +30,7 @@ class UserCreation {
           'username': username,
           'password': password,
           'email': email,
-          'image': imageAsBytes,
+          'profile_picture': imageAsBytes,
         }
       : {
           'username': username,
