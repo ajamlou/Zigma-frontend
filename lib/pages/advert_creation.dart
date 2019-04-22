@@ -242,7 +242,7 @@ class AdvertCreationState extends State<AdvertCreation>
     Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
     var data = json.encode(_newAd);
     print(data);
-    String postURL = "https://5eef8986.ngrok.io/adverts/adverts/?format=json";
+    String postURL = "https://2e2bedf4.ngrok.io/adverts/adverts/?format=json";
     return await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json",

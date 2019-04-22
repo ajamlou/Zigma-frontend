@@ -113,7 +113,7 @@ class RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Username can\'t be empty' : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _userName = value,
                         ),
                         TextFormField(
@@ -128,7 +128,7 @@ class RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Email can\'t be empty' : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _userEmail = value,
                         ),
                         TextFormField(
@@ -143,7 +143,7 @@ class RegisterPageState extends State<RegisterPage> {
                                 color: Colors.grey,
                               )),
                           validator: (value) =>
-                              value.isEmpty ? 'Password can\'t be empty' : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _password = value,
                         ),
                         Container(
@@ -173,7 +173,7 @@ class RegisterPageState extends State<RegisterPage> {
                       ? ''
                       : (_success
                           ? _userName+" är nu registrerad"
-                          : 'Register failed')),
+                          : 'Registreringen misslyckades')),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
@@ -188,7 +188,7 @@ class RegisterPageState extends State<RegisterPage> {
                             .user
                             .register(_userEmail, _userName, _password);
                         setState(() {});
-                      } else {}
+                      }
                     },
                   ),
                 ),
