@@ -35,7 +35,7 @@ class _AdvertPageState extends State<AdvertPage> {
           widget.data.authors == null
               ? Text("Det finns ingen författare till denna bok")
               : Text("Författare: " + widget.data.authors),
-          Text("Pris: " + widget.data.price),
+          Text("Pris: " + widget.data.price.toString()),
           Container(
             child: MaterialButton(
               onPressed: () {},

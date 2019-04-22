@@ -7,7 +7,7 @@ class User {
   String username;
   String token;
 
-  User(this.email, this.id, this.token, this.username);
+  User(this.email, this.id, this.username, this.token);
 
   User.fromJson(Map<String, dynamic> json)
       : email = json['email'],
@@ -85,7 +85,6 @@ class UserMethodBody {
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
     iniUser(localUser.email, localUser.id, localUser.username, localUser.token);
-    print(user);
     if (user != null) {
       return true;
     }

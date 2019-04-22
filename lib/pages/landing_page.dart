@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './login_page.dart';
 import './search_page.dart';
-import './searchbar.dart';
 import './advert_creation.dart';
 import './chat_page.dart';
 import 'DataProvider.dart';
@@ -93,6 +92,7 @@ class LandingPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MaterialButton(
                   onPressed: () {
+                    DataProvider.of(context).advertList.loadAdvertList();
                     showSearch(
                       context: context,
                       delegate: SearchPage(),
@@ -119,10 +119,6 @@ class LandingPage extends StatelessWidget {
         ),
       ),
     );
-  }
-  void routeRegisterPage(context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => RegisterPage()));
   }
 
 
@@ -169,17 +165,21 @@ Widget showDrawer(context) {
     ),
   );
 }
+void routeRegisterPage(context) {
+  Navigator.of(context)
+      .push(MaterialPageRoute<void>(builder: (_) => RegisterPage()));
+}
 
+void routeLoginPage(context) {
+  Navigator.of(context)
+      .push(MaterialPageRoute<void>(builder: (_) => LoginPage()));
+}
 
 void routeCreationPage(context) {
   Navigator.of(context)
       .push(MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
 }
 
-void routeSearchPage(context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute<void>(builder: (_) => Searchbar()));
-}
 
 class LoginButton extends StatelessWidget {
   @override
@@ -198,9 +198,5 @@ class LoginButton extends StatelessWidget {
     );
   }
 
-  void routeLoginPage(context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => LoginPage()));
-  }
 
 }

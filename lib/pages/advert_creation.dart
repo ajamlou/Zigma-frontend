@@ -9,7 +9,7 @@ File _image;
 Animation<double> _animation;
 
 class AdvertCreation extends StatefulWidget {
-  State createState() => new AdvertCreationState();
+  State createState() => AdvertCreationState();
 }
 
 class AnimatedLogo extends AnimatedWidget {
@@ -49,12 +49,13 @@ class AdvertCreationState extends State<AdvertCreation>
 
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Sent
-  String _price; //Sent
+  int _price; //Sent
   String _author; //Sent
   String _isbn; //Sent
   String _contactInfo;
   int randomInt = 42;
   FocusNode myFocusNode;
+  AnimationController _controller;
 
   @override
   void initState() {
@@ -75,13 +76,17 @@ class AdvertCreationState extends State<AdvertCreation>
     super.dispose();
   }
 
-  AnimationController _controller;
+  int stringToInt(price) {
+    var priceInt = int.parse(price);
+    assert(priceInt is int);
+    return priceInt;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Color(0xFFECE9DF),
-      child: new Scaffold(
+      child: Scaffold(
         resizeToAvoidBottomPadding: true,
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(
@@ -96,7 +101,7 @@ class AdvertCreationState extends State<AdvertCreation>
                   color: Color(0xFFFFFFFF),
                 )),
             centerTitle: true,
-            leading: new Container(
+            leading: Container(
               child: IconButton(
                 color: Color(0xFFFFFFFF),
                 onPressed: () {
@@ -137,8 +142,8 @@ class AdvertCreationState extends State<AdvertCreation>
                     left: 30.0, top: 10.0, right: 30.0, bottom: 10.0),
                 child: Form(
                   key: _advertKey,
-                  child: new Container(
-                    decoration: new BoxDecoration(
+                  child: Container(
+                    decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       color: Color(0xFFFFFFFF),
                       borderRadius:
@@ -146,62 +151,62 @@ class AdvertCreationState extends State<AdvertCreation>
                     ),
                     child: Column(
                       children: <Widget>[
-                        new TextFormField(
+                        TextFormField(
                           focusNode: myFocusNode,
                           maxLines: 1,
                           keyboardType: TextInputType.text,
                           autofocus: false,
-                          decoration: new InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Titel',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'Title can\'t be empty' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _title = value,
                         ),
-                        new TextFormField(
+                        TextFormField(
                           maxLines: 1,
                           keyboardType: TextInputType.number,
                           autofocus: false,
-                          decoration: new InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Pris',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'Pris can\'t be empty' : null,
-                          onSaved: (value) => _price = value,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          onSaved: (value) => _price = stringToInt(value),
                         ),
-                        new TextFormField(
+                        TextFormField(
                           maxLines: 1,
                           keyboardType: TextInputType.text,
                           autofocus: false,
-                          decoration: new InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Författare',
                           ),
                           validator: (value) =>
                           value.isEmpty
-                              ? 'Författare can\'t be empty'
+                              ? 'Obligatoriskt Fält'
                               : null,
                           onSaved: (value) => _author = value,
                         ),
-                        new TextFormField(
+                        TextFormField(
                           maxLines: 1,
                           keyboardType: TextInputType.text,
                           autofocus: false,
-                          decoration: new InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'ISBN',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'ISBN can\'t be empty' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _isbn = value,
                         ),
-                        new TextFormField(
+                        TextFormField(
                           maxLines: 1,
                           keyboardType: TextInputType.text,
                           autofocus: false,
-                          decoration: new InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Kontaktinformation',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'Taggar can\'t be empty' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _contactInfo = value,
                         ),
                       ],
@@ -220,7 +225,7 @@ class AdvertCreationState extends State<AdvertCreation>
                           .of(context)
                           .advertList
                           .uploadNewAdvert(
-                          _title, _price, _author, _isbn, _contactInfo);
+                          _title, _price, _author, _isbn, _contactInfo, context);
                     }
                   },
                   child: Text("Ladda upp",
@@ -234,11 +239,8 @@ class AdvertCreationState extends State<AdvertCreation>
     );
   }
 
-  int stringToInt(price) {
-    var priceInt = int.parse(price);
-    assert(priceInt is int);
-    return priceInt;
-  }
+
+
 
 
 }
