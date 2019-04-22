@@ -57,6 +57,9 @@ class Advert {
         'transaction_type': transactionType,
         'contact_info': contactInfo
       };
+
+
+
 }
 
 class AdvertList {
@@ -67,7 +70,7 @@ class AdvertList {
     streamController = StreamController.broadcast();
     print("im in Advert List Load function");
     streamController.stream.listen((a) => list.add(a));
-    String url = "https://2e2bedf4.ngrok.io/adverts/adverts/?format=json";
+    String url = "https://fecbb9af.ngrok.io/adverts/adverts/?format=json";
     var client = http.Client();
     var req = http.Request('get', Uri.parse(url));
     await load(streamController, client, req);
@@ -98,4 +101,21 @@ class AdvertList {
         .map((map) => Advert.fromJson(map))
         .pipe(sc);
   }
+  Future<String> uploadNewAdvert(String title, String price, String author, String isbn, String contactInfo) async {
+    final Advert _newAd = new Advert(title, price, author, isbn, contactInfo);
+    var data = json.encode(_newAd);
+    final String postURL = "https://fecbb9af.ngrok.io/adverts/adverts/?format=json";
+    var response =
+    await http.post(Uri.encodeFull(postURL), body: data, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      //"Authorization": "Token "+ DataProvider.of(context).user.getToken()
+    });
+    return json.decode(response.body);
+  }
+
+
+
 }
+
+

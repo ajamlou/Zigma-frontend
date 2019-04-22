@@ -1,12 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'advert.dart';
 import 'DataProvider.dart';
+
 File _image;
 Animation<double> _animation;
 
@@ -64,9 +62,8 @@ class AdvertCreationState extends State<AdvertCreation>
     _controller =
         AnimationController(duration: const Duration(seconds: 10), vsync: this);
     _animation = Tween<double>(begin: 0, end: 150).animate(_controller)
-      ..addStatusListener((status) {
-      })
-      ..addStatusListener((state) => print('$state'));
+      ..addStatusListener((status) {})..addStatusListener((state) =>
+          print('$state'));
     _controller.forward();
     myFocusNode = FocusNode();
   }
@@ -125,8 +122,8 @@ class AdvertCreationState extends State<AdvertCreation>
                     child: _image == null
                         ? Text('No image Selected')
                         : AnimatedLogo(
-                            animation: _animation,
-                          ),
+                      animation: _animation,
+                    ),
                   ),
                   FloatingActionButton(
                     onPressed: getImageCamera,
@@ -145,7 +142,7 @@ class AdvertCreationState extends State<AdvertCreation>
                       shape: BoxShape.rectangle,
                       color: Color(0xFFFFFFFF),
                       borderRadius:
-                          BorderRadius.all(Radius.elliptical(20.0, 20.0)),
+                      BorderRadius.all(Radius.elliptical(20.0, 20.0)),
                     ),
                     child: Column(
                       children: <Widget>[
@@ -158,7 +155,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Titel',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Title can\'t be empty' : null,
+                          value.isEmpty ? 'Title can\'t be empty' : null,
                           onSaved: (value) => _title = value,
                         ),
                         new TextFormField(
@@ -169,7 +166,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Pris',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Pris can\'t be empty' : null,
+                          value.isEmpty ? 'Pris can\'t be empty' : null,
                           onSaved: (value) => _price = value,
                         ),
                         new TextFormField(
@@ -179,7 +176,8 @@ class AdvertCreationState extends State<AdvertCreation>
                           decoration: new InputDecoration(
                             hintText: 'Författare',
                           ),
-                          validator: (value) => value.isEmpty
+                          validator: (value) =>
+                          value.isEmpty
                               ? 'Författare can\'t be empty'
                               : null,
                           onSaved: (value) => _author = value,
@@ -192,7 +190,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'ISBN',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'ISBN can\'t be empty' : null,
+                          value.isEmpty ? 'ISBN can\'t be empty' : null,
                           onSaved: (value) => _isbn = value,
                         ),
                         new TextFormField(
@@ -203,7 +201,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Kontaktinformation',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Taggar can\'t be empty' : null,
+                          value.isEmpty ? 'Taggar can\'t be empty' : null,
                           onSaved: (value) => _contactInfo = value,
                         ),
                       ],
@@ -218,7 +216,11 @@ class AdvertCreationState extends State<AdvertCreation>
                   onPressed: () async {
                     if (_advertKey.currentState.validate()) {
                       _advertKey.currentState.save();
-                      _uploadNewAdvert();
+                      DataProvider
+                          .of(context)
+                          .advertList
+                          .uploadNewAdvert(
+                          _title, _price, _author, _isbn, _contactInfo);
                     }
                   },
                   child: Text("Ladda upp",
@@ -238,18 +240,5 @@ class AdvertCreationState extends State<AdvertCreation>
     return priceInt;
   }
 
-  Future<String> _uploadNewAdvert() async {
-    Advert _newAd = new Advert(_title, _price, _author, _isbn, _contactInfo);
-    var data = json.encode(_newAd);
-    print(data);
-    String postURL = "https://2e2bedf4.ngrok.io/adverts/adverts/?format=json";
-    return await http.post(Uri.encodeFull(postURL), body: data, headers: {
-      "Accept": "application/json",
-      "content-type": "application/json",
-      "Authorization": "Token "+ DataProvider.of(context).user.getToken()
-    }).then((dynamic res) {
-      final String resBody = res.body;
-      print(json.decode(resBody));
-    });
-  }
+
 }
