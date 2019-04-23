@@ -239,7 +239,7 @@ class AdvertCreationState extends State<AdvertCreation>
                           if(stsCode == 201){
                           routeLandingPage();
                           }
-                          else{
+                          else if(stsCode == 400 || stsCode == 500){
                             setState(() {
                               isLoading = false;
                             });
