@@ -44,7 +44,7 @@ class SearchPage extends SearchDelegate<void> {
             title: Text(data[index].bookTitle),
             leading: Icon(Icons.book),
             trailing: Text(data[index].authors ?? ""),
-            onTap: () {
+            onTap: () async {
               routeAdvertPage(context, index, data);
             },
           );

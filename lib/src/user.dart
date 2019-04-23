@@ -62,6 +62,10 @@ class UserMethodBody {
     return user.token;
   }
 
+  void logout(){
+    user = null;
+  }
+
   bool checkUser() {
     if (user == null) {
       return false;
@@ -104,7 +108,7 @@ class UserMethodBody {
     }
   }
 
-  Future<bool> signIn(String username, String password) async {
+  Future<int> signIn(String username, String password) async {
     UserLogin _loginUser = new UserLogin(username, password);
     var data = json.encode(_loginUser);
     String postURL = "https://e0f8c4d8.ngrok.io/users/get-token/?format=json";
@@ -119,11 +123,6 @@ class UserMethodBody {
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
     iniUser(localUser.email, localUser.id, localUser.username, localUser.token);
-    print(user);
-    if (user != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return response.statusCode;
   }
 }

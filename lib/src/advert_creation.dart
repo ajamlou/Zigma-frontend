@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zigma2/pages/landing_page.dart';
+import 'package:zigma2/src/landing_page.dart';
 import 'DataProvider.dart';
 
 File _image;

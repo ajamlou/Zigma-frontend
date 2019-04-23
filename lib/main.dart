@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import './pages/landing_page.dart';
-import './pages/DataProvider.dart';
-import './pages/advert.dart';
-import './pages/user.dart';
+import 'package:zigma2/src/routes.dart';
+import './src/landing_page.dart';
+import './src/DataProvider.dart';
+import './src/advert.dart';
+import './src/user.dart';
 
 
 void main() => runApp(MyApp());
@@ -13,13 +14,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  AdvertList advertList = new AdvertList();
-  UserMethodBody user = new UserMethodBody();
+  AdvertList advertList = AdvertList();
+  UserMethodBody user = UserMethodBody();
+  Routing routing = Routing();
   @override
   Widget build(BuildContext context) {
     return DataProvider(
       advertList: advertList,
       user: user,
+      routing: routing,
       child: MaterialApp(
         title: 'Zigma App',
         home: LandingPage(),

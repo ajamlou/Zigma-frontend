@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:zigma2/pages/advert.dart';
+import 'package:zigma2/src/advert.dart';
+import 'package:zigma2/src/routes.dart';
 import './user.dart';
 
 class DataProvider extends InheritedWidget {
   final AdvertList advertList;
+  final Routing routing;
   final UserMethodBody user;
-  DataProvider({Key key, this.advertList, this.user, Widget child})
+  DataProvider({Key key, this.advertList, this.user, this.routing, Widget child})
       : assert(child != null),
         super(key: key, child: child);
 
