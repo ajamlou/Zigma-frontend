@@ -84,7 +84,7 @@ class UserMethodBody {
         new UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
-    String postURL = "https://fecbb9af.ngrok.io/users/create-user/?format=json";
+    String postURL = "https://f96f6f69.ngrok.io/users/create-user/?format=json";
     var response = await http.post(Uri.encodeFull(postURL),
         body: data,
         headers: {

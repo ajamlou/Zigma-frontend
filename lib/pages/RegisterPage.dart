@@ -25,17 +25,17 @@ class RegisterPageState extends State<RegisterPage> {
 
 
   Future getImageGallery() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      _image = image;
+      _image = imageFile;
     });
   }
 
   String imageFileToString() {
-    String imageString;
+    String imageString = _image.toString();
+    print(imageString);
     if (_image != null) {
-      List<int> imageBytes = _image.readAsBytesSync();
-      imageString = base64.encode(imageBytes);
+      imageString = base64.encode(_image.readAsBytesSync());
       return "data:image/jpg;base64,"+imageString;
     }
     else

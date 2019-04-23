@@ -12,23 +12,6 @@ class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
 }
 
-class AnimatedLogo extends AnimatedWidget {
-  AnimatedLogo({Key key, Animation<double> animation})
-      : super(key: key, listenable: animation);
-
-  Widget build(BuildContext contet) {
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: _animation.value,
-        maxWidth: _animation.value,
-        minWidth: _animation.value,
-        minHeight: _animation.value,
-      ),
-      child: Image.file(_image),
-    );
-  }
-}
-
 class AdvertCreationState extends State<AdvertCreation>
     with TickerProviderStateMixin {
   //Image selector
@@ -53,28 +36,6 @@ class AdvertCreationState extends State<AdvertCreation>
   String _author; //Sent
   String _isbn; //Sent
   String _contactInfo;
-  int randomInt = 42;
-  FocusNode myFocusNode;
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller =
-        AnimationController(duration: const Duration(seconds: 10), vsync: this);
-    _animation = Tween<double>(begin: 0, end: 150).animate(_controller)
-      ..addStatusListener((status) {})..addStatusListener((state) =>
-          print('$state'));
-    _controller.forward();
-    myFocusNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    myFocusNode.dispose();
-    _controller.dispose();
-    super.dispose();
-  }
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -126,9 +87,15 @@ class AdvertCreationState extends State<AdvertCreation>
                     alignment: Alignment(0.0, 0.0),
                     child: _image == null
                         ? Text('No image Selected')
-                        : AnimatedLogo(
-                      animation: _animation,
-                    ),
+                        : Container(
+                            constraints: BoxConstraints(
+                              maxHeight: 100.0,
+                              maxWidth: 150.0,
+                              minWidth: 150.0,
+                              minHeight: 100.0,
+                            ),
+                            child: Image.file(_image),
+                          ),
                   ),
                   FloatingActionButton(
                     onPressed: getImageCamera,
@@ -147,7 +114,7 @@ class AdvertCreationState extends State<AdvertCreation>
                       shape: BoxShape.rectangle,
                       color: Color(0xFFFFFFFF),
                       borderRadius:
-                      BorderRadius.all(Radius.elliptical(20.0, 20.0)),
+                          BorderRadius.all(Radius.elliptical(20.0, 20.0)),
                     ),
                     child: Column(
                       children: <Widget>[
@@ -160,7 +127,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Titel',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _title = value,
                         ),
                         TextFormField(
@@ -171,7 +138,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Pris',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _price = stringToInt(value),
                         ),
                         TextFormField(
@@ -182,9 +149,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Författare',
                           ),
                           validator: (value) =>
-                          value.isEmpty
-                              ? 'Obligatoriskt Fält'
-                              : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _author = value,
                         ),
                         TextFormField(
@@ -195,7 +160,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'ISBN',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _isbn = value,
                         ),
                         TextFormField(
@@ -206,7 +171,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Kontaktinformation',
                           ),
                           validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _contactInfo = value,
                         ),
                       ],
@@ -221,11 +186,13 @@ class AdvertCreationState extends State<AdvertCreation>
                   onPressed: () async {
                     if (_advertKey.currentState.validate()) {
                       _advertKey.currentState.save();
-                      DataProvider
-                          .of(context)
-                          .advertList
-                          .uploadNewAdvert(
-                          _title, _price, _author, _isbn, _contactInfo, context);
+                      DataProvider.of(context).advertList.uploadNewAdvert(
+                          _title,
+                          _price,
+                          _author,
+                          _isbn,
+                          _contactInfo,
+                          context);
                     }
                   },
                   child: Text("Ladda upp",
@@ -238,9 +205,4 @@ class AdvertCreationState extends State<AdvertCreation>
       ),
     );
   }
-
-
-
-
-
 }
