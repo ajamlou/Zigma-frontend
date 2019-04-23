@@ -21,8 +21,9 @@ class RegisterPageState extends State<RegisterPage> {
   bool validatedPwd = false;
   TextEditingController validatePasswordController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   File _image;
-
 
   Future getImageGallery() async {
     File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -36,15 +37,16 @@ class RegisterPageState extends State<RegisterPage> {
     print(imageString);
     if (_image != null) {
       imageString = base64.encode(_image.readAsBytesSync());
-      return "data:image/jpg;base64,"+imageString;
-    }
-    else
+      return "data:image/jpg;base64," + imageString;
+    } else
       return null;
   }
 
   @override
   void initState() {
     super.initState();
+    usernameController.addListener(_listenerMethod);
+    emailController.addListener(_listenerMethod);
     validatePasswordController.addListener(_listenerMethod);
     passwordController.addListener(_listenerMethod);
     same = Colors.grey;
@@ -101,12 +103,6 @@ class RegisterPageState extends State<RegisterPage> {
             iconTheme: IconThemeData(color: Color(0xff96070a)),
             elevation: 0.0,
             backgroundColor: Colors.transparent,
-            title: Text('Lägg till en ny annons',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff96070a),
-                )),
-            centerTitle: true,
             leading: Container(
               child: IconButton(
                 color: Color(0xff96070a),
@@ -119,7 +115,7 @@ class RegisterPageState extends State<RegisterPage> {
             actions: <Widget>[],
           ),
         ),
-        body: Center(
+        body: Container(
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
@@ -127,14 +123,19 @@ class RegisterPageState extends State<RegisterPage> {
                 padding: const EdgeInsets.only(right: 100.0, left: 100.0),
                 child: Image.asset('images/logo_frontpage.png'),
               ),
-              Text('Register',
-                  style:
-                  TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
+              Text(
+                'Skapa konto',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30.0,
+                    color: Color(0xff96070a)),
+                textAlign: TextAlign.center,
+              ),
               Form(
                 key: _userKey,
                 child: Container(
-                  margin: const EdgeInsets.only(
-                      top: 50.0, right: 40.0, left: 40.0),
+                  margin:
+                      const EdgeInsets.only(top: 50.0, right: 40.0, left: 40.0),
                   child: Column(
                     children: <Widget>[
                       Row(
@@ -145,16 +146,15 @@ class RegisterPageState extends State<RegisterPage> {
                             alignment: Alignment(0.0, 0.0),
                             child: _image == null
                                 ? Text('No image Selected')
-                                :
-                            Container(
-                              constraints: BoxConstraints(
-                                maxHeight: 150.0,
-                                maxWidth: 150.0,
-                                minWidth: 150.0,
-                                minHeight: 150.0,
-                              ),
-                              child: Image.file(_image),
-                            ),
+                                : Container(
+                                    constraints: BoxConstraints(
+                                      maxHeight: 150.0,
+                                      maxWidth: 150.0,
+                                      minWidth: 150.0,
+                                      minHeight: 150.0,
+                                    ),
+                                    child: Image.file(_image),
+                                  ),
                           ),
                           FloatingActionButton(
                             onPressed: getImageGallery,
@@ -165,31 +165,41 @@ class RegisterPageState extends State<RegisterPage> {
                       ),
                       TextFormField(
                         maxLines: 1,
+                        controller: usernameController,
                         autofocus: false,
+                        cursorColor: Color(0xff96070a),
                         decoration: InputDecoration(
                           hintText: 'Användarnamn',
                           icon: Icon(
                             Icons.person_add,
                             color: Colors.grey,
                           ),
+                          suffixIcon: usernameController.text == ""
+                              ? Icon(Icons.star, color: Color(0xff96070a))
+                              : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
-                        value.isEmpty ? 'Obligatoriskt Fält' : null,
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _userName = value,
                       ),
                       TextFormField(
                         maxLines: 1,
+                        controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         autofocus: false,
+                        cursorColor: Color(0xff96070a),
                         decoration: InputDecoration(
                           hintText: 'Email',
                           icon: Icon(
                             Icons.mail,
                             color: Colors.grey,
                           ),
+                          suffixIcon: emailController.text == ""
+                              ? Icon(Icons.star, color: Color(0xff96070a))
+                              : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
-                        value.isEmpty ? 'Obligatoriskt Fält' : null,
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _userEmail = value,
                       ),
                       TextFormField(
@@ -197,34 +207,42 @@ class RegisterPageState extends State<RegisterPage> {
                         controller: passwordController,
                         obscureText: true,
                         autofocus: false,
+                        cursorColor: Color(0xff96070a),
                         decoration: InputDecoration(
-                            hintText: 'Lösenord',
-                            icon: Icon(
-                              Icons.lock,
-                              color: Colors.grey,
-                            )),
+                          hintText: 'Lösenord',
+                          icon: Icon(
+                            Icons.lock,
+                            color: Colors.grey,
+                          ),
+                          suffixIcon: passwordController.text == ""
+                              ? Icon(Icons.star, color: Color(0xff96070a))
+                              : Icon(Icons.check, color: Colors.green),
+                        ),
                         validator: (value) =>
-                        value.isEmpty ? 'Obligatoriskt Fält' : null,
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _password = value,
                       ),
-                      Container(
-                        //color: same,
-                        child: TextFormField(
-                            maxLines: 1,
-                            controller: validatePasswordController,
-                            obscureText: true,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                                hintText: 'Repetera Lösenord',
-                                icon: Icon(
-                                  Icons.lock,
-                                  color: same,
-                                )),
-                            validator: (value) =>
-                            value.isEmpty
-                                ? 'Detta fält kan inte vara tomt'
-                                : null),
-                      ),
+                      //color: same,
+                      TextFormField(
+                          maxLines: 1,
+                          controller: validatePasswordController,
+                          obscureText: true,
+                          autofocus: false,
+                          cursorColor: Color(0xff96070a),
+                          decoration: InputDecoration(
+                            hintText: 'Repetera lösenord',
+                            icon: Icon(
+                              Icons.lock,
+                              color: same,
+                            ),
+                            suffixIcon: passwordController == "" && validatePasswordController.text !=
+                                    passwordController.text
+                                ? Icon(Icons.star, color: Color(0xff96070a))
+                                : Icon(Icons.check, color: Colors.green),
+                          ),
+                          validator: (value) => value.isEmpty
+                              ? 'Detta fält kan inte vara tomt'
+                              : null),
                     ],
                   ),
                 ),
@@ -234,11 +252,12 @@ class RegisterPageState extends State<RegisterPage> {
                 child: Text(_success == null
                     ? ''
                     : (_success
-                    ? _userName + " är nu registrerad"
-                    : 'Registreringen misslyckades')),
+                        ? _userName + " är nu registrerad"
+                        : 'Registreringen misslyckades')),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
+              Container(
+                margin:
+                    const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
                 child: MaterialButton(
                   color: Color(0xFF6C6CDF),
                   child: Text('Skapa nytt konto',
@@ -246,10 +265,10 @@ class RegisterPageState extends State<RegisterPage> {
                   onPressed: () async {
                     if (_userKey.currentState.validate()) {
                       _userKey.currentState.save();
-                      _success = await DataProvider
-                          .of(context)
-                          .user
-                          .register(_userEmail, _userName, _password,
+                      _success = await DataProvider.of(context).user.register(
+                          _userEmail,
+                          _userName,
+                          _password,
                           imageFileToString());
                       setState(() {});
                     }
