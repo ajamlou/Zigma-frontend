@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:zigma2/pages/landing_page.dart';
 import 'DataProvider.dart';
 
 File _image;
@@ -10,6 +11,23 @@ Animation<double> _animation;
 
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
+}
+
+class AnimatedLogo extends AnimatedWidget {
+  AnimatedLogo({Key key, Animation<double> animation})
+      : super(key: key, listenable: animation);
+
+  Widget build(BuildContext contet) {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: _animation.value,
+        maxWidth: _animation.value,
+        minWidth: _animation.value,
+        minHeight: _animation.value,
+      ),
+      child: Image.file(_image),
+    );
+  }
 }
 
 class AdvertCreationState extends State<AdvertCreation>
@@ -36,6 +54,29 @@ class AdvertCreationState extends State<AdvertCreation>
   String _author; //Sent
   String _isbn; //Sent
   String _contactInfo;
+  int randomInt = 42;
+  FocusNode myFocusNode;
+  AnimationController _controller;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(duration: const Duration(seconds: 10), vsync: this);
+    _animation = Tween<double>(begin: 0, end: 150).animate(_controller)
+      ..addStatusListener((status) {})
+      ..addStatusListener((state) => print('$state'));
+    _controller.forward();
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -74,7 +115,11 @@ class AdvertCreationState extends State<AdvertCreation>
             actions: <Widget>[],
           ),
         ),
-        body: Center(
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(),
+        )
+            : Center(
           child: ListView(
             shrinkWrap: true,
             padding: EdgeInsets.all(15.0),
@@ -87,15 +132,9 @@ class AdvertCreationState extends State<AdvertCreation>
                     alignment: Alignment(0.0, 0.0),
                     child: _image == null
                         ? Text('No image Selected')
-                        : Container(
-                            constraints: BoxConstraints(
-                              maxHeight: 100.0,
-                              maxWidth: 150.0,
-                              minWidth: 150.0,
-                              minHeight: 100.0,
-                            ),
-                            child: Image.file(_image),
-                          ),
+                        : AnimatedLogo(
+                      animation: _animation,
+                    ),
                   ),
                   FloatingActionButton(
                     onPressed: getImageCamera,
@@ -114,7 +153,7 @@ class AdvertCreationState extends State<AdvertCreation>
                       shape: BoxShape.rectangle,
                       color: Color(0xFFFFFFFF),
                       borderRadius:
-                          BorderRadius.all(Radius.elliptical(20.0, 20.0)),
+                      BorderRadius.all(Radius.elliptical(20.0, 20.0)),
                     ),
                     child: Column(
                       children: <Widget>[
@@ -127,7 +166,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Titel',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _title = value,
                         ),
                         TextFormField(
@@ -138,7 +177,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Pris',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _price = stringToInt(value),
                         ),
                         TextFormField(
@@ -149,7 +188,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Författare',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _author = value,
                         ),
                         TextFormField(
@@ -160,7 +199,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'ISBN',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _isbn = value,
                         ),
                         TextFormField(
@@ -171,7 +210,7 @@ class AdvertCreationState extends State<AdvertCreation>
                             hintText: 'Kontaktinformation',
                           ),
                           validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
                           onSaved: (value) => _contactInfo = value,
                         ),
                       ],
@@ -180,19 +219,31 @@ class AdvertCreationState extends State<AdvertCreation>
                 ),
               ),
               Container(
-                width: 150,
+                width: 50,
                 child: MaterialButton(
                   color: Color(0xFF008000),
                   onPressed: () async {
+                    int stsCode;
                     if (_advertKey.currentState.validate()) {
+                      setState(() {
+                        isLoading = true;
+                      });
                       _advertKey.currentState.save();
-                      DataProvider.of(context).advertList.uploadNewAdvert(
-                          _title,
-                          _price,
-                          _author,
-                          _isbn,
-                          _contactInfo,
-                          context);
+                      stsCode = await DataProvider
+                          .of(context)
+                          .advertList
+                          .uploadNewAdvert(
+                          _title, _price, _author, _isbn,
+                          _contactInfo, context);
+                    }
+                    if(stsCode == 201){
+                      routeLandingPage();
+                    }
+                    else if(stsCode == 400 || stsCode == 500){
+                      setState(() {
+                        isLoading = false;
+                      });
+                      createAlertDialog();
                     }
                   },
                   child: Text("Ladda upp",
@@ -204,5 +255,14 @@ class AdvertCreationState extends State<AdvertCreation>
         ),
       ),
     );
+  }
+
+  createAlertDialog(){
+
+  }
+
+  void routeLandingPage() {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => LandingPage()));
   }
 }
