@@ -116,8 +116,6 @@ class AdvertList {
     });
     if (response.statusCode == 201) {
         await loadAdvertList();
-    } else {
-      throw Exception("Skapandet av en annons var inte lyckad");
     }
     return response.statusCode;
   }
