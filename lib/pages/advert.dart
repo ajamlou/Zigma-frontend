@@ -45,12 +45,11 @@ class Advert {
 }
 
 class AdvertList {
-  //StreamController<Advert> streamController;
   final List<Advert> list = [];
 
   Future<void> loadAdvertList() async {
     list.clear();
-    String url = "https://fecbb9af.ngrok.io/adverts/adverts/?format=json";
+    String url = "https://e0f8c4d8.ngrok.io/adverts/adverts/?format=json";
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     print("im in load method now");
@@ -61,52 +60,17 @@ class AdvertList {
     print("The Request body is: " + list.toString());
   }
 
-//  Future<void> loadAdvertList() async {
-//    streamController = StreamController.broadcast();
-//    print("im in Advert List Load function");
-//    streamController.stream.listen((a) => list.add(a));
-//    String url = "https://fecbb9af.ngrok.io/adverts/adverts/?format=json";
-//    var client = http.Client();
-//    var req = http.Request('get', Uri.parse(url));
-//    await load(streamController, client, req);
-//
-//  }
 
   List<Advert> getAdvertList() {
     return list;
   }
-
-//
-//  StreamController<Advert> getStreamController() {
-//    return streamController;
-//  }
-//
-//  void closeStreamController() {
-//    streamController?.close();
-//    streamController = null;
-//  }
-
-//  Future<void> load(
-//      StreamController<Advert> sc, http.Client client, http.Request req) async {
-//    var streamedRes = await client.send(req);
-//    print("im in load method now");
-//    print("the streamed response contains " +
-//        streamedRes.contentLength.toString() +
-//        " amounts of characters");
-//    streamedRes.stream
-//        .transform(utf8.decoder)
-//        .transform(json.decoder)
-//        .expand((e) => e)
-//        .map((map) => Advert.fromJson(map))
-//        .pipe(sc);
-//  }
 
   Future<int> uploadNewAdvert(String title, int price, String author,
       String isbn, String contactInfo, context) async {
     Advert _newAd = Advert(title, price, author, isbn, contactInfo);
     var data = json.encode(_newAd);
     print(data);
-    final String postURL = "https://fecbb9af.ngrok.io/adverts/adverts/";
+    final String postURL = "https://e0f8c4d8.ngrok.io/adverts/adverts/";
     print("token " + DataProvider.of(context).user.getToken());
     final response =
         await http.post(Uri.encodeFull(postURL), body: data, headers: {

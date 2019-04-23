@@ -15,19 +15,6 @@ class AdvertCreation extends StatefulWidget {
 class AdvertCreationState extends State<AdvertCreation> {
   //Image selector
 
-  Future getImageCamera() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _image = image;
-    });
-  }
-
-  Future getImageGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-    });
-  }
 
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Sent
@@ -38,6 +25,12 @@ class AdvertCreationState extends State<AdvertCreation> {
   int randomInt = 42;
   FocusNode myFocusNode;
   bool isLoading = false;
+
+
+
+
+
+
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -94,7 +87,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         Container(
                           alignment: Alignment(0.0, 0.0),
                           child: _image == null
-                              ? Text('No image Selected')
+                              ? Text('')
                               : Container(
                                   child: Image.file(_image),
                                   width: 150,
@@ -102,7 +95,9 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 ),
                         ),
                         FloatingActionButton(
-                          onPressed: getImageCamera,
+                          onPressed: () {
+                            showImageAlertDialog();
+                            },
                           tooltip: 'Pick Image',
                           child: Icon(Icons.add_a_photo),
                         ),
@@ -201,7 +196,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                             setState(() {
                               isLoading = false;
                             });
-                            showAlertDialog(stsCode);
+                            showAdvertCreationAlertDialog(stsCode);
                           }
                         },
                         child: Text("Ladda upp",
@@ -215,7 +210,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     );
   }
 
-  void showAlertDialog(int value) {
+  void showAdvertCreationAlertDialog(int value) {
     String message;
     if (value == 400) {
       message = "Priset är för högt, maxpris är 9999kr per bok";
@@ -236,8 +231,61 @@ class AdvertCreationState extends State<AdvertCreation> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
+  void showImageAlertDialog() {
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      title: Text(
+        "Kamera eller Galleri?",
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xff96070a),
+        ),
+        textAlign: TextAlign.center,
+      ),
+      content: ButtonBar(
+        children: <Widget>[
+          RaisedButton(
+            color: Color(0xff96070a),
+            child: Icon(Icons.image),
+            onPressed: () {
+               getImageGallery();
+            },
+          ),
+          RaisedButton(
+            color: Color(0xff96070a),
+            child:Icon(Icons.camera_alt),
+            onPressed: () {
+               getImageCamera();
+            },
+          ),
+        ],
+      )
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+
+  }
+
+
   void routeLandingPage() {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (_) => LandingPage()));
   }
+
+  Future getImageCamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+    Navigator.of(context, rootNavigator: true).pop(null);
+  }
+
+  Future getImageGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+    Navigator.of(context, rootNavigator: true).pop(null);
+  }
+
+
 }

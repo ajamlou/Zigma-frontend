@@ -84,7 +84,7 @@ class UserMethodBody {
         new UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
-    String postURL = "https://f96f6f69.ngrok.io/users/create-user/?format=json";
+    String postURL = "https://e0f8c4d8.ngrok.io/users/create-user/?format=json";
     var response = await http.post(Uri.encodeFull(postURL),
         body: data,
         headers: {
@@ -107,7 +107,7 @@ class UserMethodBody {
   Future<bool> signIn(String username, String password) async {
     UserLogin _loginUser = new UserLogin(username, password);
     var data = json.encode(_loginUser);
-    String postURL = "https://fecbb9af.ngrok.io/users/get-token/?format=json";
+    String postURL = "https://e0f8c4d8.ngrok.io/users/get-token/?format=json";
     var response = await http.post(Uri.encodeFull(postURL),
         body: data,
         headers: {
