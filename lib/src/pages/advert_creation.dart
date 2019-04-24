@@ -258,14 +258,14 @@ class AdvertCreationState extends State<AdvertCreation> {
             color: Color(0xff96070a),
             child: Icon(Icons.image),
             onPressed: () {
-               getImageGallery();
+               getImage("gallery");
             },
           ),
           RaisedButton(
             color: Color(0xff96070a),
             child:Icon(Icons.camera_alt),
             onPressed: () {
-               getImageCamera();
+               getImage("camera");
             },
           ),
         ],
@@ -274,8 +274,10 @@ class AdvertCreationState extends State<AdvertCreation> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  Future getImageCamera() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+  Future getImage(String inputSource) async {
+    var image = inputSource == "camera"
+        ? await ImagePicker.pickImage(source: ImageSource.camera)
+        : await ImagePicker.pickImage(source: ImageSource.gallery);
     var compressedImage = await compressImageFile(image);
     setState(() {
       _image = compressedImage;
@@ -285,17 +287,6 @@ class AdvertCreationState extends State<AdvertCreation> {
     Navigator.of(context, rootNavigator: true).pop(null);
   }
 
-  Future getImageGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print(image.toString());
-    var compressedImage = await compressImageFile(image);
-    setState(() {
-      _image = compressedImage;
-      encodedImageList.add(imageFileToString());
-      print(encodedImageList.toString());
-    });
-    Navigator.of(context, rootNavigator: true).pop(null);
-  }
   Future<File> compressImageFile(File image) async {
     var compressedImage = await FlutterImageCompress.compressAndGetFile(image.toString(), image.toString(),
     quality: 90,
