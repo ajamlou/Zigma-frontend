@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './search_page.dart';
 import './chat_page.dart';
 import 'DataProvider.dart';
+import 'advert_creation.dart';
 
 
 
@@ -125,6 +126,12 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
+              RaisedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
+                }
+    ),
             ],
           ),
         ),

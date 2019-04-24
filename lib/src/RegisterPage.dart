@@ -235,7 +235,7 @@ class RegisterPageState extends State<RegisterPage> {
                               Icons.lock,
                               color: same,
                             ),
-                            suffixIcon: passwordController == "" && validatePasswordController.text !=
+                            suffixIcon: passwordController.text == "" || validatePasswordController.text !=
                                     passwordController.text
                                 ? Icon(Icons.star, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),

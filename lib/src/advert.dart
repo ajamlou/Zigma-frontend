@@ -13,8 +13,10 @@ class Advert {
   String state = "A";
   String transactionType = "S";
   final String contactInfo;
+  List<String> images;
 
-  Advert(this.bookTitle, this.price, this.authors, this.isbn, this.contactInfo);
+  Advert(this.bookTitle, this.price, this.authors, this.isbn, this.contactInfo,
+      this.images);
 
   Advert.fromJson(Map map)
       : bookTitle = map['book_title'],
@@ -24,7 +26,8 @@ class Advert {
         authors = map["authors"],
         state = map["state"],
         transactionType = map["transaction_type"],
-        contactInfo = map["contact_info"];
+        contactInfo = map["contact_info"],
+        images = map["image"];
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -40,7 +43,8 @@ class Advert {
         'state': state,
         'transaction_type': transactionType,
         'contact_info': contactInfo,
-        'owner': owner
+        'owner': owner,
+        'image': images,
       };
 }
 
@@ -60,17 +64,23 @@ class AdvertList {
     print("The Request body is: " + list.toString());
   }
 
-
   List<Advert> getAdvertList() {
     return list;
   }
 
-  Future<int> uploadNewAdvert(String title, int price, String author,
-      String isbn, String contactInfo, context) async {
-    Advert _newAd = Advert(title, price, author, isbn, contactInfo);
+  Future<int> uploadNewAdvert(
+      String title,
+      int price,
+      String author,
+      String isbn,
+      String contactInfo,
+      List<String> encodedImageList,
+      context) async {
+    Advert _newAd =
+        Advert(title, price, author, isbn, contactInfo, encodedImageList);
     var data = json.encode(_newAd);
     print(data);
-    final String postURL = "https://e0f8c4d8.ngrok.io/adverts/adverts/";
+    final String postURL = "https://f96f6f69.ngrok.io/adverts/adverts/?format=json";
     print("token " + DataProvider.of(context).user.getToken());
     final response =
         await http.post(Uri.encodeFull(postURL), body: data, headers: {
@@ -79,7 +89,7 @@ class AdvertList {
       "Authorization": "Token " + DataProvider.of(context).user.getToken()
     });
     if (response.statusCode == 201) {
-        await loadAdvertList();
+      await loadAdvertList();
     }
     return response.statusCode;
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zigma2/src/landing_page.dart';
 import 'DataProvider.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 File _image;
 
@@ -25,11 +27,19 @@ class AdvertCreationState extends State<AdvertCreation> {
   int randomInt = 42;
   FocusNode myFocusNode;
   bool isLoading = false;
+  List<String> encodedImageList = [];
 
 
 
-
-
+  String imageFileToString() {
+    String imageString = _image.toString();
+    print(imageString);
+    if (_image != null) {
+      imageString = base64.encode(_image.readAsBytesSync());
+      return "data:image/jpg;base64," + imageString;
+    } else
+      return null;
+  }
 
 
   int stringToInt(price) {
@@ -185,7 +195,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                             int temp = await DataProvider.of(context)
                                 .advertList
                                 .uploadNewAdvert(_title, _price, _author, _isbn,
-                                    _contactInfo, context);
+                                    _contactInfo, encodedImageList, context);
                             setState(() {
                               stsCode = temp;
                             });
@@ -208,6 +218,7 @@ class AdvertCreationState extends State<AdvertCreation> {
               ),
       ),
     );
+
   }
 
   void showAdvertCreationAlertDialog(int value) {
@@ -273,18 +284,31 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   Future getImageCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var compressedImage = await compressImageFile(image);
     setState(() {
-      _image = image;
+      _image = compressedImage;
+      encodedImageList.add(imageFileToString());
+      print(encodedImageList.toString());
     });
     Navigator.of(context, rootNavigator: true).pop(null);
   }
 
   Future getImageGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print(image.toString());
+    var compressedImage = await compressImageFile(image);
     setState(() {
-      _image = image;
+      _image = compressedImage;
+      encodedImageList.add(imageFileToString());
+      print(encodedImageList.toString());
     });
     Navigator.of(context, rootNavigator: true).pop(null);
+  }
+  Future<File> compressImageFile(File image) async {
+    var compressedImage = await FlutterImageCompress.compressAndGetFile(image.toString(), image.toString(),
+    quality: 90,
+    );
+    return compressedImage;
   }
 
 
