@@ -13,7 +13,7 @@ class Advert {
   String state = "A";
   String transactionType = "S";
   final String contactInfo;
-  List<String> images;
+  List<dynamic> images;
 
   Advert(this.bookTitle, this.price, this.authors, this.isbn, this.contactInfo,
       this.images);
@@ -53,7 +53,7 @@ class AdvertList {
 
   Future<void> loadAdvertList() async {
     list.clear();
-    String url = "https://e0f8c4d8.ngrok.io/adverts/adverts/?format=json";
+    String url = "https://af35d19f.ngrok.io/adverts/adverts/?format=json";
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     print("im in load method now");
@@ -80,7 +80,7 @@ class AdvertList {
         Advert(title, price, author, isbn, contactInfo, encodedImageList);
     var data = json.encode(_newAd);
     print(data);
-    final String postURL = "https://f96f6f69.ngrok.io/adverts/adverts/?format=json";
+    final String postURL = "https://af35d19f.ngrok.io/adverts/adverts/?format=json";
     print("token " + DataProvider.of(context).user.getToken());
     final response =
         await http.post(Uri.encodeFull(postURL), body: data, headers: {

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/pages/search_page.dart';
-import 'package:zigma2/src/pages/chat_page.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:zigma2/src/advert_creation.dart';
 
 
 
@@ -128,8 +126,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
               RaisedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
+                  DataProvider.of(context).routing.routeCreationPage(context);
                 }
     ),
             ],
@@ -165,9 +162,8 @@ class _LandingPageState extends State<LandingPage> {
           ),
           ListTile(
               title: Text("Dina Chattar"),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (_) => FriendlyChatApp()));
+              onTap: () async {
+                DataProvider.of(context).routing.routeChatPage(context);
               }),
           ListTile(
             title: Text("Inställningar"),

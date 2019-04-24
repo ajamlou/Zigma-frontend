@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zigma2/src/pages/landing_page.dart';
 import 'DataProvider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
@@ -201,7 +200,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                             });
                           }
                           if (stsCode == 201) {
-                            routeLandingPage();
+                            DataProvider.of(context).routing.routeLandingPage(context);
                           } else if (stsCode == 400) {
                             setState(() {
                               isLoading = false;
@@ -273,13 +272,6 @@ class AdvertCreationState extends State<AdvertCreation> {
       )
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
-
-  }
-
-
-  void routeLandingPage() {
-    Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => LandingPage()));
   }
 
   Future getImageCamera() async {

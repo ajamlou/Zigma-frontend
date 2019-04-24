@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zigma2/src/pages/advert_page.dart';
 import 'package:zigma2/src/DataProvider.dart';
 
 class SearchPage extends SearchDelegate<void> {
-
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -45,22 +42,13 @@ class SearchPage extends SearchDelegate<void> {
             leading: Icon(Icons.book),
             trailing: Text(data[index].authors ?? ""),
             onTap: () async {
-              routeAdvertPage(context, index, data);
+              DataProvider.of(context)
+                  .routing
+                  .routeAdvertPage(context, index, data);
             },
           );
         }
       },
-    );
-  }
-
-
-  void routeAdvertPage(context, index, data) {
-    print(index.toString());
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AdvertPage(data: data[index]),
-      ),
     );
   }
 }
