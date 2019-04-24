@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/pages/RegisterPage.dart';
-import 'package:zigma2/src/advert_creation.dart';
+import 'package:zigma2/src/pages/advert_creation.dart';
 import 'package:zigma2/src/pages/advert_page.dart';
 import 'package:zigma2/src/pages/chat_page.dart';
 import 'package:zigma2/src/pages/landing_page.dart';

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'DataProvider.dart';
+import 'package:zigma2/src/DataProvider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 File _image;
