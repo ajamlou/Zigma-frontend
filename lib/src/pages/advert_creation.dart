@@ -5,7 +5,9 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:math' as Math;
+import 'package:image/image.dart' as Im;
 
 File _image;
 
@@ -15,7 +17,6 @@ class AdvertCreation extends StatefulWidget {
 
 class AdvertCreationState extends State<AdvertCreation> {
   //Image selector
-
 
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Sent
@@ -28,8 +29,6 @@ class AdvertCreationState extends State<AdvertCreation> {
   bool isLoading = false;
   List<String> encodedImageList = [];
 
-
-
   String imageFileToString() {
     String imageString = _image.toString();
     print(imageString);
@@ -39,7 +38,6 @@ class AdvertCreationState extends State<AdvertCreation> {
     } else
       return null;
   }
-
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -106,7 +104,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         FloatingActionButton(
                           onPressed: () {
                             showImageAlertDialog();
-                            },
+                          },
                           tooltip: 'Pick Image',
                           child: Icon(Icons.add_a_photo),
                         ),
@@ -200,7 +198,9 @@ class AdvertCreationState extends State<AdvertCreation> {
                             });
                           }
                           if (stsCode == 201) {
-                            DataProvider.of(context).routing.routeLandingPage(context);
+                            DataProvider.of(context)
+                                .routing
+                                .routeLandingPage(context);
                           } else if (stsCode == 400) {
                             setState(() {
                               isLoading = false;
@@ -217,7 +217,6 @@ class AdvertCreationState extends State<AdvertCreation> {
               ),
       ),
     );
-
   }
 
   void showAdvertCreationAlertDialog(int value) {
@@ -243,34 +242,33 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   void showImageAlertDialog() {
     AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
-      title: Text(
-        "Kamera eller Galleri?",
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xff96070a),
+        backgroundColor: Color(0xFFECE9DF),
+        title: Text(
+          "Kamera eller Galleri?",
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xff96070a),
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
-      ),
-      content: ButtonBar(
-        children: <Widget>[
-          RaisedButton(
-            color: Color(0xff96070a),
-            child: Icon(Icons.image),
-            onPressed: () {
-               getImage("gallery");
-            },
-          ),
-          RaisedButton(
-            color: Color(0xff96070a),
-            child:Icon(Icons.camera_alt),
-            onPressed: () {
-               getImage("camera");
-            },
-          ),
-        ],
-      )
-    );
+        content: ButtonBar(
+          children: <Widget>[
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.image),
+              onPressed: () {
+                getImage("gallery");
+              },
+            ),
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.camera_alt),
+              onPressed: () {
+                getImage("camera");
+              },
+            ),
+          ],
+        ));
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
@@ -287,12 +285,18 @@ class AdvertCreationState extends State<AdvertCreation> {
     Navigator.of(context, rootNavigator: true).pop(null);
   }
 
-  Future<File> compressImageFile(File image) async {
-    var compressedImage = await FlutterImageCompress.compressAndGetFile(image.toString(), image.toString(),
-    quality: 90,
-    );
+  Future<File> compressImageFile(File _uploadedImage) async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    int rand = new Math.Random().nextInt(10000);
+
+    Im.Image image = Im.decodeImage(_uploadedImage.readAsBytesSync());
+    Im.Image smallerImage = Im.copyResize(image, 300);
+    var compressedImage = await new File('$path/img_$rand.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(
+        smallerImage,
+        quality: 85,
+      ));
     return compressedImage;
   }
-
-
 }
