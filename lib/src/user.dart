@@ -84,8 +84,7 @@ class UserMethodBody {
 
   Future<bool> register(String email, String username, String password,
       String imageAsBytes) async {
-    UserCreation _newUser =
-        new UserCreation(email, username, password, imageAsBytes);
+    UserCreation _newUser = UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = "https://af35d19f.ngrok.io/users/create-user/?format=json";
