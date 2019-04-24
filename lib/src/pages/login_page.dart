@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import './DataProvider.dart';
-import './user.dart';
+import 'package:zigma2/src/DataProvider.dart';
+import 'package:zigma2/src/user.dart';
 
 class LoginPage extends StatefulWidget {
   State createState() => LoginPageState();

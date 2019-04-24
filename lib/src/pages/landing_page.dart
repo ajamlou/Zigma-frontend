@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import './search_page.dart';
-import './chat_page.dart';
-import 'DataProvider.dart';
-import 'advert_creation.dart';
+import 'package:zigma2/src/pages/search_page.dart';
+import 'package:zigma2/src/pages/chat_page.dart';
+import 'package:zigma2/src/DataProvider.dart';
+import 'package:zigma2/src/advert_creation.dart';
 
 
 

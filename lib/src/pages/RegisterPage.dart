@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'user.dart';
-import 'DataProvider.dart';
+import 'package:zigma2/src/user.dart';
+import 'package:zigma2/src/DataProvider.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterPage extends StatefulWidget {

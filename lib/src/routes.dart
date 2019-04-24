@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zigma2/src/RegisterPage.dart';
+import 'package:zigma2/src/pages/RegisterPage.dart';
 import 'package:zigma2/src/advert_creation.dart';
-import 'package:zigma2/src/landing_page.dart';
-import 'package:zigma2/src/login_page.dart';
+import 'package:zigma2/src/pages/landing_page.dart';
+import 'package:zigma2/src/pages/login_page.dart';
 
 
 

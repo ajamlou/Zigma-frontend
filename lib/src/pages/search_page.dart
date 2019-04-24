@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './advert_page.dart';
-import './DataProvider.dart';
+import 'package:zigma2/src/pages/advert_page.dart';
+import 'package:zigma2/src/DataProvider.dart';
 
 class SearchPage extends SearchDelegate<void> {
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'advert.dart';
+import 'package:zigma2/src/advert.dart';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;

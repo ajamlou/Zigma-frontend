@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/routes.dart';
-import './src/landing_page.dart';
+import 'package:zigma2/src/pages/landing_page.dart';
 import './src/DataProvider.dart';
 import './src/advert.dart';
 import './src/user.dart';
