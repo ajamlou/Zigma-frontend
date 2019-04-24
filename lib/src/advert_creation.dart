@@ -17,7 +17,6 @@ class AdvertCreation extends StatefulWidget {
 class AdvertCreationState extends State<AdvertCreation> {
   //Image selector
 
-
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Sent
   int _price; //Sent
@@ -29,8 +28,6 @@ class AdvertCreationState extends State<AdvertCreation> {
   bool isLoading = false;
   List<String> encodedImageList = [];
 
-
-
   String imageFileToString() {
     String imageString = _image.toString();
     print(imageString);
@@ -40,7 +37,6 @@ class AdvertCreationState extends State<AdvertCreation> {
     } else
       return null;
   }
-
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -107,7 +103,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         FloatingActionButton(
                           onPressed: () {
                             showImageAlertDialog();
-                            },
+                          },
                           tooltip: 'Pick Image',
                           child: Icon(Icons.add_a_photo),
                         ),
@@ -218,7 +214,6 @@ class AdvertCreationState extends State<AdvertCreation> {
               ),
       ),
     );
-
   }
 
   void showAdvertCreationAlertDialog(int value) {
@@ -244,38 +239,35 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   void showImageAlertDialog() {
     AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
-      title: Text(
-        "Kamera eller Galleri?",
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xff96070a),
+        backgroundColor: Color(0xFFECE9DF),
+        title: Text(
+          "Kamera eller Galleri?",
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xff96070a),
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
-      ),
-      content: ButtonBar(
-        children: <Widget>[
-          RaisedButton(
-            color: Color(0xff96070a),
-            child: Icon(Icons.image),
-            onPressed: () {
-               getImageGallery();
-            },
-          ),
-          RaisedButton(
-            color: Color(0xff96070a),
-            child:Icon(Icons.camera_alt),
-            onPressed: () {
-               getImageCamera();
-            },
-          ),
-        ],
-      )
-    );
+        content: ButtonBar(
+          children: <Widget>[
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.image),
+              onPressed: () {
+                getImageGallery();
+              },
+            ),
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.camera_alt),
+              onPressed: () {
+                getImageCamera();
+              },
+            ),
+          ],
+        ));
     showDialog(context: context, builder: (BuildContext context) => dialog);
-
   }
-
 
   void routeLandingPage() {
     Navigator.of(context)
@@ -295,7 +287,7 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   Future getImageGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print(image.toString());
+    print(image.path);
     var compressedImage = await compressImageFile(image);
     setState(() {
       _image = compressedImage;
@@ -304,12 +296,14 @@ class AdvertCreationState extends State<AdvertCreation> {
     });
     Navigator.of(context, rootNavigator: true).pop(null);
   }
+
   Future<File> compressImageFile(File image) async {
-    var compressedImage = await FlutterImageCompress.compressAndGetFile(image.toString(), image.toString(),
-    quality: 90,
+    var compressedImage = await FlutterImageCompress.compressAndGetFile(
+      image.path,
+      '/storage/emulated/0/DCIM/Camera/20190424_112419_new.jpg',
+      quality: 90,
+      rotate: 100,
     );
     return compressedImage;
   }
-
-
 }
