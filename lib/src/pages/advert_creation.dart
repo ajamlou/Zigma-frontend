@@ -8,6 +8,7 @@ import 'package:zigma2/src/DataProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:math' as Math;
 import 'package:image/image.dart' as Im;
+import 'package:flutter/foundation.dart';
 
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
@@ -15,7 +16,9 @@ class AdvertCreation extends StatefulWidget {
 
 class AdvertCreationState extends State<AdvertCreation> {
   //Image selector
-
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  File _selectedItem;
+  int _nextItem;
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Sent
   int _price; //Sent
@@ -23,7 +26,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   String _isbn; //Sent
   String _contactInfo;
   bool isLoading = false;
-  List<File> compressedImageList = [];
+  ListModel<File> compressedImageList;
   List<String> encodedImageList = [];
 
   String imageFileToString(File _image) {
@@ -40,14 +43,6 @@ class AdvertCreationState extends State<AdvertCreation> {
     var priceInt = int.parse(price);
     assert(priceInt is int);
     return priceInt;
-  }
-
-  Widget buildGallery(int index) {
-    return Image.file(
-      compressedImageList[index],
-      width: 100.0,
-      height: 50.0,
-    );
   }
 
   @override
@@ -88,29 +83,43 @@ class AdvertCreationState extends State<AdvertCreation> {
                 ),
               )
             : Container(
+                width: MediaQuery.of(context).size.width,
                 child: ListView(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   padding: EdgeInsets.all(15.0),
                   children: <Widget>[
-                    compressedImageList.length == 0
-                        ? Text('')
-                        : Container(
-                            height: 150,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: compressedImageList.length,
-                              itemBuilder: (BuildContext context, int index) =>
-                                  buildGallery(index),
+                    Row(
+                      children: <Widget>[
+                        compressedImageList.length == 0
+                            ? Text('')
+                            : Expanded(
+                                child: AnimatedList(
+
+                                  shrinkWrap: true,
+                                  key: _listKey,
+                                  initialItemCount: compressedImageList.length,
+                                  itemBuilder: buildGallery,
+                                ),
+                              ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            FloatingActionButton(
+                              onPressed: () {
+                                showImageAlertDialog();
+                              },
+                              tooltip: 'Pick Image',
+                              child: Icon(Icons.add_a_photo),
                             ),
-                          ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        showImageAlertDialog();
-                      },
-                      tooltip: 'Pick Image',
-                      child: Icon(Icons.add_a_photo),
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle),
+                              onPressed: _remove,
+                              tooltip: 'remove the selected item',
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                     Container(
                       padding: EdgeInsets.only(
@@ -220,6 +229,70 @@ class AdvertCreationState extends State<AdvertCreation> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    compressedImageList = ListModel<File>(
+      listKey: _listKey,
+      initialItems: <File>[],
+      removedItemBuilder: _buildRemovedItem,
+    );
+    _nextItem = 3;
+  }
+
+  Widget buildGallery(
+      BuildContext context, int index, Animation<double> animation) {
+    return CardItem(
+      animation: animation,
+      item: Image.file(
+        compressedImageList[index],
+        width: 100.0,
+        height: 50.0,
+      ),
+      selected: _selectedItem == compressedImageList[index],
+      onTap: () {
+        setState(() {
+          _selectedItem = _selectedItem == compressedImageList[index]
+              ? null
+              : compressedImageList[index];
+        });
+      },
+    );
+  }
+
+  Widget _buildRemovedItem(
+      int index, BuildContext context, Animation<double> animation) {
+    return CardItem(
+      animation: animation,
+      item: Image.file(
+        compressedImageList[index],
+        width: 100.0,
+        height: 100.0,
+      ),
+      selected: false,
+      // No gesture detector here: we don't want removed items to be interactive.
+    );
+  }
+
+  void _insert(File _nextItem) {
+    final int index = _selectedItem == null
+        ? compressedImageList.length
+        : compressedImageList.indexOf(_selectedItem);
+    compressedImageList.insert(index, _nextItem);
+    encodedImageList.add(imageFileToString(_nextItem));
+  }
+
+  // Remove the selected item from the list model.
+  void _remove() {
+    if (_selectedItem != null) {
+      compressedImageList.removeAt(compressedImageList.indexOf(_selectedItem));
+   //   encodedImageList.remove(_selectedItem);
+      setState(() {
+        _selectedItem = null;
+      });
+    }
+  }
+
   void showAdvertCreationAlertDialog(int value) {
     String message;
     if (value == 400) {
@@ -279,8 +352,7 @@ class AdvertCreationState extends State<AdvertCreation> {
         : await ImagePicker.pickImage(source: ImageSource.gallery);
     var compressedImage = await compressImageFile(image);
     setState(() {
-      compressedImageList.add(compressedImage);
-      encodedImageList.add(imageFileToString(compressedImage));
+      _insert(compressedImage);
       print(encodedImageList.toString());
     });
     Navigator.of(context, rootNavigator: true).pop(null);
@@ -299,5 +371,89 @@ class AdvertCreationState extends State<AdvertCreation> {
         quality: 85,
       ));
     return compressedImage;
+  }
+}
+
+class ListModel<E> {
+  ListModel({
+    @required this.listKey,
+    @required this.removedItemBuilder,
+    List<E> initialItems,
+  })  : assert(listKey != null),
+        assert(removedItemBuilder != null),
+        _items = initialItems;
+
+  final GlobalKey<AnimatedListState> listKey;
+  final dynamic removedItemBuilder;
+  final List<E> _items;
+
+  AnimatedListState get _animatedList => listKey.currentState;
+
+  void insert(int index, E item) {
+    _items.insert(index, item);
+    _animatedList?.insertItem(index);
+  }
+
+  E removeAt(int index) {
+    final E removedItem = _items.removeAt(index);
+    if (removedItem != null) {
+      _animatedList.removeItem(index,
+          (BuildContext context, Animation<double> animation) {
+        return removedItemBuilder(removedItem, context, animation);
+      });
+    }
+    return removedItem;
+  }
+
+  int get length => _items.length;
+
+  E operator [](int index) => _items[index];
+
+  int indexOf(E item) => _items.indexOf(item);
+}
+
+/// Displays its integer item as 'item N' on a Card whose color is based on
+/// the item's value. The text is displayed in bright green if selected is true.
+/// This widget's height is based on the animation parameter, it varies
+/// from 0 to 128 as the animation varies from 0.0 to 1.0.
+class CardItem extends StatelessWidget {
+  const CardItem(
+      {Key key,
+      @required this.animation,
+      this.onTap,
+      @required this.item,
+      this.selected: false})
+      : assert(animation != null),
+        assert(item != null),
+        assert(selected != null),
+        super(key: key);
+
+  final Animation<double> animation;
+  final VoidCallback onTap;
+  final Image item;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    TextStyle textStyle = Theme.of(context).textTheme.display1;
+    if (selected)
+      textStyle = textStyle.copyWith(color: Colors.lightGreenAccent[400]);
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: SizeTransition(
+        axis: Axis.horizontal,
+        sizeFactor: animation,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: SizedBox(
+            height: 128.0,
+              child: Center(
+                child: item,
+              ),
+            ),
+          ),
+        ),
+    );
   }
 }
