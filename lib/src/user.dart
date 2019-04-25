@@ -54,6 +54,8 @@ class UserLogin {
 class UserMethodBody {
   User user;
 
+  UserMethodBody(this.user);
+
   void iniUser(String email, int id, String username, String token) {
     user = User(email, id, username, token);
   }
@@ -74,13 +76,6 @@ class UserMethodBody {
     }
   }
 
-  bool loggedIn() {
-    if (user.token == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   Future<bool> register(String email, String username, String password,
       String imageAsBytes) async {

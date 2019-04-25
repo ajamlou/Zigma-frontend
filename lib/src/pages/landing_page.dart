@@ -140,11 +140,11 @@ class _LandingPageState extends State<LandingPage> {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("RandomName"),
+            accountName: Text(DataProvider.of(context).user.user.username),
             decoration: BoxDecoration(
               color: const Color(0xff96070a),
             ),
-            accountEmail: Text("random@random.com"),
+            accountEmail: Text(DataProvider.of(context).user.user.email),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
                   'https://pbs.twimg.com/profile_images/723864085826277376/P0w7UfP8.jpg'),
@@ -177,6 +177,7 @@ class _LandingPageState extends State<LandingPage> {
                     .user
                     .logout();
                 setState(() {
+                  Navigator.of(context, rootNavigator: true).pop(null);
                 });
               }
           ),

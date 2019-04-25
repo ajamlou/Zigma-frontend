@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/advert.dart';
+import 'package:zigma2/src/DataProvider.dart';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;
@@ -31,7 +32,18 @@ class _AdvertPageState extends State<AdvertPage> {
       ),
       body: Column(
         children: <Widget>[
-          Image.asset('images/calc_book.png'),
+          widget.data.images.length == 0
+              ? Image.asset('images/calc_book.png')
+              : Container(
+                  height: 150,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.data.images.length,
+                    itemBuilder: (BuildContext context, int index) =>
+                        makeElement(index),
+                  ),
+                ),
           widget.data.authors == null
               ? Text("Det finns ingen författare till denna bok")
               : Text("Författare: " + widget.data.authors),
@@ -57,6 +69,18 @@ class _AdvertPageState extends State<AdvertPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget makeElement(int index) {
+    print(widget.data.images[index]);
+    return Center(
+      child: FittedBox(
+        fit: BoxFit.fitHeight,
+        child: Image.network(
+          widget.data.images[index]
+        ),
       ),
     );
   }

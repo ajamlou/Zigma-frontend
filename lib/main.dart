@@ -15,7 +15,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   AdvertList advertList = AdvertList();
-  UserMethodBody user = UserMethodBody();
+  UserMethodBody user = UserMethodBody(null);
   Routing routing = Routing();
   @override
   Widget build(BuildContext context) {
