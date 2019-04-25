@@ -14,15 +14,10 @@ class LoginPageState extends State<LoginPage> {
   String _userName;
   Map parsed;
   User user;
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? Center(
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation(Colors.redAccent),
-      )
-    ) : Scaffold(
+    return  Scaffold(
       body: Container(
         color: Color(0xFFECE9DF),
         child: Column(
@@ -94,6 +89,7 @@ class LoginPageState extends State<LoginPage> {
                 color: Color(0xFF008000),
                 onPressed: () async {
                   if (_userKey.currentState.validate()) {
+                    showLoadingAlertDialog();
                     _userKey.currentState.save();
                     _success = await DataProvider.of(context)
                         .user
@@ -103,9 +99,6 @@ class LoginPageState extends State<LoginPage> {
                     DataProvider.of(context).routing.routeLandingPage(context);
                   }
                   else{
-                   setState(() {
-                     isLoading=false;
-                   });
                    showLoginAlertDialog(_success);
                   }
                 },
@@ -135,6 +128,23 @@ class LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  void showLoadingAlertDialog() {
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      title: Text(
+        "Laddar...",
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xff96070a),
+        ),
+        textAlign: TextAlign.center,
+      ),
+      content: DataProvider.of(context).loadingScreen,
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
   void showLoginAlertDialog(int value) {
     String message;
     if (value == 400) {

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:zigma2/src/pages/spashscreen.dart';
 import 'package:zigma2/src/user.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -322,7 +321,7 @@ class RegisterPageState extends State<RegisterPage> {
         ),
         textAlign: TextAlign.center,
       ),
-      content: SplashScreen(),
+      content: DataProvider.of(context).loadingScreen,
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }

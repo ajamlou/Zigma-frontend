@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'dart:async';
 
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+
+class LoadingScreen extends StatefulWidget {
+  @override
+  _LoadingScreenState createState() => _LoadingScreenState();
+
+}
+class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> rotation;
   Animation<double> text;
@@ -30,14 +31,22 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  void disposeTimer(){
+    timer.cancel();
+    timer = null;
+  }
+
+  void routeAway(){
+    DataProvider.of(context).routing.routeLandingPage(context);
+  }
 
   @override
   void initState() {
     timer = Timer.periodic(Duration(milliseconds: 1500), (Timer t) {
       if (i == 4) {
-        timer.cancel();
-        timer = null;
-        DataProvider.of(context).routing.routeLandingPage(context);
+        setState(() {
+          i = 0;
+        });
       }
       setState(() {
         i++;
