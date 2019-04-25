@@ -11,13 +11,14 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _userKey = GlobalKey<FormState>();
-  bool _success;
+  int _success;
   String _userEmail;
   String _password;
   Color same;
   String _userName;
   Map parsed;
   User user;
+  bool isLoading = false;
   bool validatedPwd = false;
   TextEditingController validatePasswordController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -235,8 +236,9 @@ class RegisterPageState extends State<RegisterPage> {
                               Icons.lock,
                               color: same,
                             ),
-                            suffixIcon: passwordController.text == "" || validatePasswordController.text !=
-                                    passwordController.text
+                            suffixIcon: passwordController.text == "" ||
+                                    validatePasswordController.text !=
+                                        passwordController.text
                                 ? Icon(Icons.star, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
@@ -248,14 +250,6 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               Container(
-                alignment: Alignment.center,
-                child: Text(_success == null
-                    ? ''
-                    : (_success
-                        ? _userName + " är nu registrerad"
-                        : 'Registreringen misslyckades')),
-              ),
-              Container(
                 margin:
                     const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
                 child: MaterialButton(
@@ -263,6 +257,7 @@ class RegisterPageState extends State<RegisterPage> {
                   child: Text('Skapa nytt konto',
                       style: TextStyle(color: Color(0xFFFFFFFF))),
                   onPressed: () async {
+                      showLoadingAlertDialog();
                     if (_userKey.currentState.validate()) {
                       _userKey.currentState.save();
                       _success = await DataProvider.of(context).user.register(
@@ -270,7 +265,8 @@ class RegisterPageState extends State<RegisterPage> {
                           _userName,
                           _password,
                           imageFileToString());
-                      setState(() {});
+                        Navigator.of(context, rootNavigator: true).pop(null);
+                        showRegisterAlertDialog(_success);
                     }
                   },
                 ),
@@ -280,5 +276,58 @@ class RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  void showLoadingAlertDialog() {
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      title: Text(
+        "Laddar...",
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xff96070a),
+        ),
+        textAlign: TextAlign.center,
+      ),
+      content: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation(Color(0xff96070a)),
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+  void showRegisterAlertDialog(value) {
+    String message;
+    if (value == 400) {
+      message = "Användarnamn eller lösenord är upptaget";
+    } else if (value == 500) {
+      message = "Serverfel, testa igen";
+    } else if (value == 201) {
+      message = "Du är nu registerad!";
+    }
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      title: Text(
+        message,
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xff96070a),
+        ),
+        textAlign: TextAlign.center,
+      ),
+      content: value == 201
+          ? RaisedButton(
+        child: Text("Gå vidare"),
+        onPressed: (){
+          DataProvider.of(context).routing.routeLandingPage(context);
+        },
+      )
+          : RaisedButton(
+              child: Text("Tillbaka"),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop(null);
+              }),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 }

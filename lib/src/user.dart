@@ -6,14 +6,16 @@ class User {
   int id;
   String username;
   String token;
+  String image;
 
-  User(this.email, this.id, this.username, this.token);
+  User(this.email, this.id, this.username, this.token, this.image);
 
   User.fromJson(Map<String, dynamic> json)
       : email = json['email'],
         username = json['username'],
         id = json['id'],
-        token = json['token'];
+        token = json['token'],
+        image = json['img_link'];
 }
 
 class UserCreation {
@@ -56,8 +58,8 @@ class UserMethodBody {
 
   UserMethodBody(this.user);
 
-  void iniUser(String email, int id, String username, String token) {
-    user = User(email, id, username, token);
+  void iniUser(String email, int id, String username, String token, String image) {
+    user = User(email, id, username, token, image);
   }
 
   String getToken() {
@@ -77,7 +79,7 @@ class UserMethodBody {
   }
 
 
-  Future<bool> register(String email, String username, String password,
+  Future<int> register(String email, String username, String password,
       String imageAsBytes) async {
     UserCreation _newUser = UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
@@ -94,12 +96,8 @@ class UserMethodBody {
     Map parsed = json.decode(res);
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
-    iniUser(localUser.email, localUser.id, localUser.username, localUser.token);
-    if (user != null) {
-      return true;
-    } else {
-      return false;
-    }
+    iniUser(localUser.email, localUser.id, localUser.username, localUser.token, localUser.image);
+    return response.statusCode;
   }
 
   Future<int> signIn(String username, String password) async {
@@ -116,7 +114,7 @@ class UserMethodBody {
     Map parsed = json.decode(res);
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
-    iniUser(localUser.email, localUser.id, localUser.username, localUser.token);
+    iniUser(localUser.email, localUser.id, localUser.username, localUser.token, localUser.image);
     return response.statusCode;
   }
 }

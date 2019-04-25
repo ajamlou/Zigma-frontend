@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/advert.dart';
 import 'package:zigma2/src/DataProvider.dart';
+import 'dart:async';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;
@@ -40,8 +41,8 @@ class _AdvertPageState extends State<AdvertPage> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.data.images.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        makeElement(index),
+                    itemBuilder: (BuildContext context, int index) {
+                        return makeElement(index); }
                   ),
                 ),
           widget.data.authors == null

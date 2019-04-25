@@ -124,11 +124,6 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
-              RaisedButton(
-                onPressed: () {
-                  DataProvider.of(context).routing.routeCreationPage(context);
-                }
-    ),
             ],
           ),
         ),

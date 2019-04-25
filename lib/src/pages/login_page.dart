@@ -143,7 +143,7 @@ class LoginPageState extends State<LoginPage> {
     if (value == 400) {
       message = "Fel lösenord eller användarnamn";
     } else if (value == 500) {
-      message = "Server fel, testa igen";
+      message = "Serverfel, testa igen";
     }
     AlertDialog dialog = AlertDialog(
       backgroundColor: Color(0xFFECE9DF),
