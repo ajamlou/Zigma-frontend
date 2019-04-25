@@ -9,8 +9,6 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:math' as Math;
 import 'package:image/image.dart' as Im;
 
-File _image;
-
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
 }
@@ -24,12 +22,11 @@ class AdvertCreationState extends State<AdvertCreation> {
   String _author; //Sent
   String _isbn; //Sent
   String _contactInfo;
-  int randomInt = 42;
-  FocusNode myFocusNode;
   bool isLoading = false;
+  List<File> compressedImageList = [];
   List<String> encodedImageList = [];
 
-  String imageFileToString() {
+  String imageFileToString(File _image) {
     String imageString = _image.toString();
     print(imageString);
     if (_image != null) {
@@ -43,6 +40,14 @@ class AdvertCreationState extends State<AdvertCreation> {
     var priceInt = int.parse(price);
     assert(priceInt is int);
     return priceInt;
+  }
+
+  Widget buildGallery(int index) {
+    return Image.file(
+      compressedImageList[index],
+      width: 100.0,
+      height: 50.0,
+    );
   }
 
   @override
@@ -84,31 +89,28 @@ class AdvertCreationState extends State<AdvertCreation> {
               )
             : Container(
                 child: ListView(
+                  scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   padding: EdgeInsets.all(15.0),
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment(0.0, 0.0),
-                          child: _image == null
-                              ? Text('')
-                              : Container(
-                                  child: Image.file(_image),
-                                  width: 150,
-                                  height: 150,
-                                ),
-                        ),
-                        FloatingActionButton(
-                          onPressed: () {
-                            showImageAlertDialog();
-                          },
-                          tooltip: 'Pick Image',
-                          child: Icon(Icons.add_a_photo),
-                        ),
-                      ],
+                    compressedImageList.length == 0
+                        ? Text('')
+                        : Container(
+                            height: 150,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: compressedImageList.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  buildGallery(index),
+                            ),
+                          ),
+                    FloatingActionButton(
+                      onPressed: () {
+                        showImageAlertDialog();
+                      },
+                      tooltip: 'Pick Image',
+                      child: Icon(Icons.add_a_photo),
                     ),
                     Container(
                       padding: EdgeInsets.only(
@@ -118,7 +120,6 @@ class AdvertCreationState extends State<AdvertCreation> {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
-                              focusNode: myFocusNode,
                               maxLines: 1,
                               keyboardType: TextInputType.text,
                               autofocus: false,
@@ -278,8 +279,8 @@ class AdvertCreationState extends State<AdvertCreation> {
         : await ImagePicker.pickImage(source: ImageSource.gallery);
     var compressedImage = await compressImageFile(image);
     setState(() {
-      _image = compressedImage;
-      encodedImageList.add(imageFileToString());
+      compressedImageList.add(compressedImage);
+      encodedImageList.add(imageFileToString(compressedImage));
       print(encodedImageList.toString());
     });
     Navigator.of(context, rootNavigator: true).pop(null);
@@ -288,11 +289,11 @@ class AdvertCreationState extends State<AdvertCreation> {
   Future<File> compressImageFile(File _uploadedImage) async {
     final tempDir = await getTemporaryDirectory();
     final path = tempDir.path;
-    int rand = new Math.Random().nextInt(10000);
+    final int rand = new Math.Random().nextInt(10000);
 
     Im.Image image = Im.decodeImage(_uploadedImage.readAsBytesSync());
     Im.Image smallerImage = Im.copyResize(image, 300);
-    var compressedImage = await new File('$path/img_$rand.jpg')
+    File compressedImage = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(
         smallerImage,
         quality: 85,
