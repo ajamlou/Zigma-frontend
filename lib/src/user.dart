@@ -66,6 +66,10 @@ class UserMethodBody {
     return user.token;
   }
 
+  String getImage(){
+    return user.image;
+  }
+
   void logout(){
     user = null;
   }

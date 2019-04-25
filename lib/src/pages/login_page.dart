@@ -93,9 +93,6 @@ class LoginPageState extends State<LoginPage> {
               child: MaterialButton(
                 color: Color(0xFF008000),
                 onPressed: () async {
-                  setState(() {
-                    isLoading=true;
-                  });
                   if (_userKey.currentState.validate()) {
                     _userKey.currentState.save();
                     _success = await DataProvider.of(context)

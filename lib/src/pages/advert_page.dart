@@ -36,6 +36,7 @@ class _AdvertPageState extends State<AdvertPage> {
           widget.data.images.length == 0
               ? Image.asset('images/calc_book.png')
               : Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
                   height: 150,
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -77,10 +78,13 @@ class _AdvertPageState extends State<AdvertPage> {
   Widget makeElement(int index) {
     print(widget.data.images[index]);
     return Center(
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        child: Image.network(
-          widget.data.images[index]
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 2.5),
+        child: FittedBox(
+          fit: BoxFit.fitHeight,
+          child: Image.network(
+            widget.data.images[index]
+          ),
         ),
       ),
     );

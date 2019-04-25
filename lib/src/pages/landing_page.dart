@@ -38,7 +38,7 @@ class _LandingPageState extends State<LandingPage> {
                 height: 60,
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(
-                      "https://pbs.twimg.com/profile_images/723864085826277376/P0w7UfP8.jpg"),
+                      DataProvider.of(context).user.getImage()),
                 ),
               ),
             )
@@ -58,7 +58,7 @@ class _LandingPageState extends State<LandingPage> {
                 Radius.circular(5.0),
               ),
             ),
-            height: 125,
+            height: 190,
             margin: EdgeInsets.symmetric(horizontal: 25),
             child: Column(
               children: <Widget>[
@@ -74,11 +74,19 @@ class _LandingPageState extends State<LandingPage> {
                   height: 8,
                 ),
                 RaisedButton(
+                  color: Colors.greenAccent,
+                  child: Text("Logga in",
+                      style: TextStyle(color: Colors.white)),
+                  onPressed: () async => DataProvider.of(context).routing.routeLoginPage(context),
+                ),
+                Text("eller"),
+                RaisedButton(
                   color: Colors.lightBlueAccent,
                   child: Text("Skapa ett Zigma konto",
                       style: TextStyle(color: Colors.white)),
                   onPressed: () async => DataProvider.of(context).routing.routeRegisterPage(context),
                 ),
+
               ],
             ),
           ),
@@ -142,7 +150,7 @@ class _LandingPageState extends State<LandingPage> {
             accountEmail: Text(DataProvider.of(context).user.user.email),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
-                  'https://pbs.twimg.com/profile_images/723864085826277376/P0w7UfP8.jpg'),
+                  DataProvider.of(context).user.getImage()),
             ),
           ),
           ListTile(
@@ -171,9 +179,8 @@ class _LandingPageState extends State<LandingPage> {
                     .of(context)
                     .user
                     .logout();
-                setState(() {
-                  Navigator.of(context, rootNavigator: true).pop(null);
-                });
+                setState(() {});
+                Navigator.of(context, rootNavigator: true).pop(null);
               }
           ),
         ],
