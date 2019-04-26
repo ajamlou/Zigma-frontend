@@ -27,9 +27,9 @@ class _LandingPageState extends State<LandingPage> {
           actions: <Widget>[
             DataProvider.of(context).user.checkUser()
                 ? SizedBox(
-              width: 0,
-              height: 0,
-            )
+                    width: 0,
+                    height: 0,
+                  )
                 : LoginButton()
           ],
         ),
@@ -137,11 +137,23 @@ class _LandingPageState extends State<LandingPage> {
             decoration: BoxDecoration(
               color: const Color(0xff96070a),
             ),
-            accountEmail: Text(DataProvider.of(context).user.user.email),
+            accountEmail: DataProvider.of(context).user.getImage() == null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child:
+                            Image.asset('images/circularProgressIndicator.gif'),
+                      ),
+                    ))
+                : Text(DataProvider.of(context).user.user.email),
             currentAccountPicture: ClipRRect(
               borderRadius: BorderRadius.circular(40),
               child: FadeInImage(
-                fit:BoxFit.cover,
+                fit: BoxFit.cover,
                 width: 50,
                 height: 50,
                 placeholder: AssetImage('images/circularProgressIndicator.gif'),
