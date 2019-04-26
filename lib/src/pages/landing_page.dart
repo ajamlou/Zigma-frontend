@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/pages/search_page.dart';
 import 'package:zigma2/src/DataProvider.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -137,29 +138,34 @@ class _LandingPageState extends State<LandingPage> {
             decoration: BoxDecoration(
               color: const Color(0xff96070a),
             ),
-            accountEmail: DataProvider.of(context).user.getImage() == null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      child: FittedBox(
-                        fit: BoxFit.cover,
-                        child:
-                            Image.asset('images/circularProgressIndicator.gif'),
+            accountEmail: Text(DataProvider.of(context).user.user.email),
+            currentAccountPicture:  DataProvider.of(context).user.getImage() == null
+                ? Container(
+                  width: 50,
+                  height: 50,
+                  child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Icon(Icons.account_circle, color: Color(0xFFece9df),),
+                  ),
+                  )
+                : Stack(
+                  alignment: Alignment(0, 0),
+                  children: <Widget>[
+                    Center(child: CircularProgressIndicator()),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        child: FadeInImage.memoryNetwork(
+                          fit: BoxFit.fitWidth,
+                          placeholder: kTransparentImage,
+                          image: DataProvider.of(context).user.getImage(),
+                        ),
                       ),
-                    ))
-                : Text(DataProvider.of(context).user.user.email),
-            currentAccountPicture: ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: FadeInImage(
-                fit: BoxFit.cover,
-                width: 50,
-                height: 50,
-                placeholder: AssetImage('images/circularProgressIndicator.gif'),
-                image: NetworkImage(DataProvider.of(context).user.getImage()),
-              ),
-            ),
+                    ),
+                  ],
+                ),
           ),
           ListTile(
             title: Text("Din Profil"),

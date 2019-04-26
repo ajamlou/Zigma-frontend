@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zigma2/src/DataProvider.dart';
 import 'dart:async';
 
 
@@ -16,12 +15,12 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
   int i = 0;
   Timer timer;
   List<String> loadingMessages = [
-    "Fooing the bar...",
-    "Burning the cats...",
-    "Stacking the Widgets...",
-    "Looking up your mom...",
+    "Hämtar databasen...",
+    "Bränner lite katter...",
+    "Lägger ihop komponenterna...",
+    "Letar upp din mamma...",
     "Kevvakå fixar käk...",
-    "Pillar med koden..."
+    "Pillar med korven..."
   ];
 
   @override
