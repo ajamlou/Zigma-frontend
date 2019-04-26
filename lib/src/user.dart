@@ -74,6 +74,10 @@ class UserMethodBody {
     user = null;
   }
 
+  User getUser(){
+    return user;
+  }
+
   bool checkUser() {
     if (user == null) {
       return false;

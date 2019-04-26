@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
@@ -32,7 +33,9 @@ class _AdvertPageState extends State<AdvertPage> {
             backgroundColor: Colors.transparent,
           ),
         ),
-        body: Column(
+        body: ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(horizontal: 10),
           children: <Widget>[
             Container(
               margin: EdgeInsets.symmetric(horizontal: 25),
@@ -48,14 +51,13 @@ class _AdvertPageState extends State<AdvertPage> {
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 8,
             ),
             widget.data.images.length == 0
                 ? Image.asset('images/calc_book.png')
                 : Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    margin: EdgeInsets.symmetric(horizontal: 75),
                     height: 300,
-                    width: 200,
                     child: Carousel(images: widget.data.images),
                   ),
             SizedBox(
@@ -77,23 +79,23 @@ class _AdvertPageState extends State<AdvertPage> {
             ),
             Text(
               widget.data.price.toString() + ":-",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
                 color: Color(0xff96070a),
               ),
             ),
-            Container(
-              child: MaterialButton(
-                onPressed: () {},
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.chat_bubble),
-                    Text(
-                        "Skicka ett meddelande till " + widget.data.contactInfo)
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.chat),
+                Flexible(
+                  child: Text(
+                      "Skicka ett meddelande till : SÄTT NAMN PÅ ANVÄNDARE SOM ÄGER ANNONSEN HÄR",
+                  textAlign: TextAlign.center,),
                 ),
-              ),
+              ],
             ),
             Container(
               child: Row(
