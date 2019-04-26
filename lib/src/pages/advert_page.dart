@@ -19,7 +19,7 @@ class _AdvertPageState extends State<AdvertPage> {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage("images/advertPageBackground.jpg"),
-          fit: BoxFit.fitHeight,
+          fit: BoxFit.cover,
         ),
       ),
       child: Scaffold(
