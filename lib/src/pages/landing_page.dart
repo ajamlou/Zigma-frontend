@@ -26,17 +26,10 @@ class _LandingPageState extends State<LandingPage> {
           backgroundColor: Colors.transparent,
           actions: <Widget>[
             DataProvider.of(context).user.checkUser()
-                ? Container(
-                    padding: EdgeInsets.only(right: 10),
-                    child: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            DataProvider.of(context).user.getImage()),
-                      ),
-                    ),
-                  )
+                ? SizedBox(
+              width: 0,
+              height: 0,
+            )
                 : LoginButton()
           ],
         ),
@@ -158,7 +151,9 @@ class _LandingPageState extends State<LandingPage> {
           ),
           ListTile(
             title: Text("Din Profil"),
-            onTap: () {},
+            onTap: () async {
+              DataProvider.of(context).routing.routeProfilePage(context);
+            },
           ),
           ListTile(
             title: Text("Skapa Annons"),

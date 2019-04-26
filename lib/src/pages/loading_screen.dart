@@ -38,9 +38,6 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
     timer = null;
   }
 
-  void routeAway(){
-    DataProvider.of(context).routing.routeLandingPage(context);
-  }
 
   @override
   void initState() {

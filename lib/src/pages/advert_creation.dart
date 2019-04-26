@@ -195,9 +195,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         onPressed: () async {
                           int stsCode;
                           if (_advertKey.currentState.validate()) {
-                            setState(() {
-                              isLoading = true;
-                            });
+                           showLoadingAlertDialog();
                             _advertKey.currentState.save();
                             int temp = await DataProvider.of(context)
                                 .advertList
@@ -212,9 +210,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 .routing
                                 .routeLandingPage(context);
                           } else if (stsCode == 400) {
-                            setState(() {
-                              isLoading = false;
-                            });
+                            Navigator.of(context, rootNavigator: true).pop(null);
                             showAdvertCreationAlertDialog(stsCode);
                           }
                         },
@@ -228,6 +224,77 @@ class AdvertCreationState extends State<AdvertCreation> {
       ),
     );
   }
+
+  void showLoadingAlertDialog() {
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      title: Text(
+        "Laddar...",
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xff96070a),
+        ),
+        textAlign: TextAlign.center,
+      ),
+      content: DataProvider.of(context).loadingScreen,
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+  void showAdvertCreationAlertDialog(int value) {
+    String message;
+    if (value == 400) {
+      message = "Priset är för högt, maxpris är 9999kr per bok";
+    } else if (value == 500) {
+      message = "Server Error, testa igen";
+    }
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      content: Text(
+        message,
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xff96070a),
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+  void showImageAlertDialog() {
+    AlertDialog dialog = AlertDialog(
+        backgroundColor: Color(0xFFECE9DF),
+        title: Text(
+          "Kamera eller Galleri?",
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xff96070a),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: ButtonBar(
+          children: <Widget>[
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.image),
+              onPressed: () {
+                getImage("gallery");
+              },
+            ),
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.camera_alt),
+              onPressed: () {
+                getImage("camera");
+              },
+            ),
+          ],
+        ));
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+
 
   @override
   void initState() {
@@ -293,58 +360,6 @@ class AdvertCreationState extends State<AdvertCreation> {
     }
   }
 
-  void showAdvertCreationAlertDialog(int value) {
-    String message;
-    if (value == 400) {
-      message = "Priset är för högt, maxpris är 9999kr per bok";
-    } else if (value == 500) {
-      message = "Server Error, testa igen";
-    }
-    AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
-      content: Text(
-        message,
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xff96070a),
-        ),
-        textAlign: TextAlign.center,
-      ),
-    );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
-
-  void showImageAlertDialog() {
-    AlertDialog dialog = AlertDialog(
-        backgroundColor: Color(0xFFECE9DF),
-        title: Text(
-          "Kamera eller Galleri?",
-          style: TextStyle(
-            fontSize: 20,
-            color: Color(0xff96070a),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        content: ButtonBar(
-          children: <Widget>[
-            RaisedButton(
-              color: Color(0xff96070a),
-              child: Icon(Icons.image),
-              onPressed: () {
-                getImage("gallery");
-              },
-            ),
-            RaisedButton(
-              color: Color(0xff96070a),
-              child: Icon(Icons.camera_alt),
-              onPressed: () {
-                getImage("camera");
-              },
-            ),
-          ],
-        ));
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
 
   Future getImage(String inputSource) async {
     var image = inputSource == "camera"
