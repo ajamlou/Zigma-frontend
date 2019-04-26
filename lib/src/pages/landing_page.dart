@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/pages/search_page.dart';
 import 'package:zigma2/src/DataProvider.dart';
 
-
-
 class LandingPage extends StatefulWidget {
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -27,70 +25,68 @@ class _LandingPageState extends State<LandingPage> {
           elevation: 0.0,
           backgroundColor: Colors.transparent,
           actions: <Widget>[
-            DataProvider
-                .of(context)
-                .user
-                .checkUser()
+            DataProvider.of(context).user.checkUser()
                 ? Container(
-              padding: EdgeInsets.only(right: 10),
-              child: SizedBox(
-                width: 60,
-                height: 60,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      DataProvider.of(context).user.getImage()),
-                ),
-              ),
-            )
+                    padding: EdgeInsets.only(right: 10),
+                    child: SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            DataProvider.of(context).user.getImage()),
+                      ),
+                    ),
+                  )
                 : LoginButton()
           ],
         ),
-        drawer: DataProvider
-            .of(context)
-            .user
-            .checkUser()
+        drawer: DataProvider.of(context).user.checkUser()
             ? showDrawer(context)
             : Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Color(0xFFECE9DF),
-              borderRadius: BorderRadius.all(
-                Radius.circular(5.0),
-              ),
-            ),
-            height: 190,
-            margin: EdgeInsets.symmetric(horizontal: 25),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "Du behöver ett konto för att fortsätta.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, color: Color(0xff96070a)),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFECE9DF),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                  ),
+                  height: 190,
+                  margin: EdgeInsets.symmetric(horizontal: 25),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          "Du behöver ett konto för att fortsätta.",
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(fontSize: 20, color: Color(0xff96070a)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      RaisedButton(
+                        color: Colors.greenAccent,
+                        child: Text("Logga in",
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () async => DataProvider.of(context)
+                            .routing
+                            .routeLoginPage(context),
+                      ),
+                      Text("eller"),
+                      RaisedButton(
+                        color: Colors.lightBlueAccent,
+                        child: Text("Skapa ett Zigma konto",
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () async => DataProvider.of(context)
+                            .routing
+                            .routeRegisterPage(context),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 8,
-                ),
-                RaisedButton(
-                  color: Colors.greenAccent,
-                  child: Text("Logga in",
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () async => DataProvider.of(context).routing.routeLoginPage(context),
-                ),
-                Text("eller"),
-                RaisedButton(
-                  color: Colors.lightBlueAccent,
-                  child: Text("Skapa ett Zigma konto",
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () async => DataProvider.of(context).routing.routeRegisterPage(context),
-                ),
-
-              ],
-            ),
-          ),
-        ),
+              ),
         body: Container(
           // color: Color(0xFFFFFFFF),
           child: Column(
@@ -138,6 +134,7 @@ class _LandingPageState extends State<LandingPage> {
       ),
     );
   }
+
   Widget showDrawer(context) {
     return Drawer(
       child: ListView(
@@ -148,9 +145,15 @@ class _LandingPageState extends State<LandingPage> {
               color: const Color(0xff96070a),
             ),
             accountEmail: Text(DataProvider.of(context).user.user.email),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  DataProvider.of(context).user.getImage()),
+            currentAccountPicture: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: FadeInImage(
+                fit:BoxFit.cover,
+                width: 50,
+                height: 50,
+                placeholder: AssetImage('images/circularProgressIndicator.gif'),
+                image: NetworkImage(DataProvider.of(context).user.getImage()),
+              ),
             ),
           ),
           ListTile(
@@ -175,21 +178,15 @@ class _LandingPageState extends State<LandingPage> {
           ListTile(
               title: Text("Logga ut"),
               onTap: () {
-                DataProvider
-                    .of(context)
-                    .user
-                    .logout();
+                DataProvider.of(context).user.logout();
                 setState(() {});
                 Navigator.of(context, rootNavigator: true).pop(null);
-              }
-          ),
+              }),
         ],
       ),
     );
   }
-
 }
-
 
 class LoginButton extends StatelessWidget {
   @override
@@ -197,7 +194,8 @@ class LoginButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: MaterialButton(
-        onPressed: () async => DataProvider.of(context).routing.routeLoginPage(context),
+        onPressed: () async =>
+            DataProvider.of(context).routing.routeLoginPage(context),
         child: Column(
           children: <Widget>[
             Icon(Icons.contacts),
@@ -207,6 +205,4 @@ class LoginButton extends StatelessWidget {
       ),
     );
   }
-
-
 }

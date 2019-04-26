@@ -28,6 +28,8 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
   void dispose() {
     timer.cancel();
     timer = null;
+    controller.dispose();
+    controller = null;
     super.dispose();
   }
 

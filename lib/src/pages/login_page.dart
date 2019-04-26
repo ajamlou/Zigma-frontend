@@ -95,6 +95,7 @@ class LoginPageState extends State<LoginPage> {
                         .user
                         .signIn(_userName, _password);
                   }
+                  Navigator.of(context, rootNavigator: true).pop(null);
                   if(_success == 200) {
                     DataProvider.of(context).routing.routeLandingPage(context);
                   }
