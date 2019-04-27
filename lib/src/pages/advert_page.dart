@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+import 'package:zigma2/src/components/carousel.dart';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;
