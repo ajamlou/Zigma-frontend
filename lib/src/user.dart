@@ -66,6 +66,10 @@ class UserMethodBody {
     return user.token;
   }
 
+  String getUsername() {
+    return user.username;
+  }
+
   String getImage(){
     return user.image;
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:zigma2/src/DataProvider.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class FriendlyChatApp extends StatelessWidget {
   @override
@@ -30,9 +32,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: Text("Friendlychat"),
-        elevation: Theme
-            .of(context)
-            .platform == TargetPlatform.iOS ? 0.0 : 4.0,
+        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
       body: Container(
           child: Column(
@@ -47,30 +47,24 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               ),
               Divider(height: 1.0),
               Container(
-                decoration: BoxDecoration(color: Theme
-                    .of(context)
-                    .cardColor),
+                decoration: BoxDecoration(color: Theme.of(context).cardColor),
                 child: _buildTextComposer(),
               ),
             ],
           ),
-          decoration: Theme
-              .of(context)
-              .platform == TargetPlatform.iOS
+          decoration: Theme.of(context).platform == TargetPlatform.iOS
               ? BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.grey[200]),
-            ),
-          ) : null
-      ),
+                  border: Border(
+                    top: BorderSide(color: Colors.grey[200]),
+                  ),
+                )
+              : null),
     );
   }
 
   Widget _buildTextComposer() {
     return IconTheme(
-      data: IconThemeData(color: Theme
-          .of(context)
-          .accentColor),
+      data: IconThemeData(color: Theme.of(context).accentColor),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 0.0),
         child: Row(
@@ -85,26 +79,24 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 },
                 onSubmitted: _handleSubmitted,
                 decoration:
-                InputDecoration.collapsed(hintText: "Send a message"),
+                    InputDecoration.collapsed(hintText: "Send a message"),
               ),
             ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 4.0),
-                child: Theme
-                    .of(context)
-                    .platform == TargetPlatform.iOS
+                child: Theme.of(context).platform == TargetPlatform.iOS
                     ? CupertinoButton(
-                  child: Text("Send"),
-                  onPressed: _isComposing
-                      ? () => _handleSubmitted(_textController.text)
-                      : null,
-                )
+                        child: Text("Send"),
+                        onPressed: _isComposing
+                            ? () => _handleSubmitted(_textController.text)
+                            : null,
+                      )
                     : IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: _isComposing
-                      ? () => _handleSubmitted(_textController.text)
-                      : null,
-                )),
+                        icon: Icon(Icons.send),
+                        onPressed: _isComposing
+                            ? () => _handleSubmitted(_textController.text)
+                            : null,
+                      )),
           ],
         ),
       ),
@@ -137,7 +129,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 }
 
-
 class ChatMessage extends StatelessWidget {
   ChatMessage({this.text, this.animationController});
 
@@ -147,26 +138,33 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizeTransition(
-      sizeFactor: CurvedAnimation(
-          parent: animationController, curve: Curves.easeOut),
+      sizeFactor:
+          CurvedAnimation(parent: animationController, curve: Curves.easeOut),
       axisAlignment: 0.0,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(right: 10.0),
-              child: CircleAvatar(child: Text(_name[0])),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Container(
+                width: 50,
+                height: 50,
+                child: FadeInImage.memoryNetwork(
+                  fit: BoxFit.fitWidth,
+                  placeholder: kTransparentImage,
+                  image: DataProvider.of(context).user.getImage(),
+                ),
+              ),
             ),
+            Padding(padding: const EdgeInsets.all(8.0)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(_name, style: Theme
-                      .of(context)
-                      .textTheme
-                      .subhead),
+                  Text(DataProvider.of(context).user.getUsername(),
+                      style: Theme.of(context).textTheme.subhead),
                   Container(
                     margin: const EdgeInsets.only(top: 5.0),
                     child: Text(text),

@@ -4,6 +4,7 @@ import 'package:zigma2/src/pages/loading_screen.dart';
 import 'package:zigma2/src/routes.dart';
 import './user.dart';
 
+
 class DataProvider extends InheritedWidget {
   final LoadingScreen loadingScreen;
   final AdvertList advertList;
