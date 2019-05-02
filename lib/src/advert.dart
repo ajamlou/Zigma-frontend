@@ -7,6 +7,8 @@ class Advert {
   final String bookTitle;
   final int owner = 1;
   final String isbn;
+  final String condition;
+  final String edition;
   int id;
   final int price;
   final String authors;
@@ -16,7 +18,7 @@ class Advert {
   List<dynamic> images;
 
   Advert(this.bookTitle, this.price, this.authors, this.isbn, this.contactInfo,
-      this.images);
+      this.images, this.condition, this.edition);
 
   Advert.fromJson(Map map)
       : bookTitle = map['book_title'],
@@ -27,7 +29,9 @@ class Advert {
         state = map["state"],
         transactionType = map["transaction_type"],
         contactInfo = map["contact_info"],
-        images = map["image"];
+        images = map["image"],
+        condition = map["condition"],
+        edition = map["edition"];
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -77,10 +81,11 @@ class AdvertList {
       List<String> encodedImageList,
       context) async {
     Advert _newAd =
-        Advert(title, price, author, isbn, contactInfo, encodedImageList);
+        Advert(title, price, author, isbn, contactInfo, encodedImageList,"1","Kinda fucked");
     var data = json.encode(_newAd);
     print(data);
-    final String postURL = "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
+    final String postURL =
+        "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
     print("token " + DataProvider.of(context).user.getToken());
     final response =
         await http.post(Uri.encodeFull(postURL), body: data, headers: {

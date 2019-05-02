@@ -58,7 +58,8 @@ class UserMethodBody {
 
   UserMethodBody(this.user);
 
-  void iniUser(String email, int id, String username, String token, String image) {
+  void iniUser(
+      String email, int id, String username, String token, String image) {
     user = User(email, id, username, token, image);
   }
 
@@ -70,15 +71,19 @@ class UserMethodBody {
     return user.username;
   }
 
-  String getImage(){
-    return user.image;
+  String getImage() {
+    if (user == null) {
+      return null;
+    } else {
+      return user.image;
+    }
   }
 
-  void logout(){
+  void logout() {
     user = null;
   }
 
-  User getUser(){
+  User getUser() {
     return user;
   }
 
@@ -90,10 +95,10 @@ class UserMethodBody {
     }
   }
 
-
   Future<int> register(String email, String username, String password,
       String imageAsBytes) async {
-    UserCreation _newUser = UserCreation(email, username, password, imageAsBytes);
+    UserCreation _newUser =
+        UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = "https://9548fc36.ngrok.io/users/create-user/?format=json";
@@ -108,7 +113,8 @@ class UserMethodBody {
     Map parsed = json.decode(res);
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
-    iniUser(localUser.email, localUser.id, localUser.username, localUser.token, localUser.image);
+    iniUser(localUser.email, localUser.id, localUser.username, localUser.token,
+        localUser.image);
     return response.statusCode;
   }
 
@@ -126,7 +132,8 @@ class UserMethodBody {
     Map parsed = json.decode(res);
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
-    iniUser(localUser.email, localUser.id, localUser.username, localUser.token, localUser.image);
+    iniUser(localUser.email, localUser.id, localUser.username, localUser.token,
+        localUser.image);
     return response.statusCode;
   }
 }

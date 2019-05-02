@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
 import 'package:zigma2/src/components/carousel.dart';
 
@@ -46,6 +47,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 style: TextStyle(
                   fontSize: 20,
                   color: Color(0xFFECE9DF),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -62,48 +64,91 @@ class _AdvertPageState extends State<AdvertPage> {
             SizedBox(
               height: 30,
             ),
+            getText("Författare: ", widget.data.authors),
+            getText("Upplaga: ", "SÄTT UPPLAGA HÄR"),
+            getText("Skick: ", widget.data.condition),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                widget.data.price.toString() + ":-",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Color(0xff96070a),
+                ),
+              ),
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  "Författare: ",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Color(0xff96070a),
+                DataProvider.of(context).user.getImage() == null
+                    ? Container(
+                        width: 50,
+                        height: 50,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Icon(
+                            Icons.account_circle,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      )
+                    : Stack(
+                        alignment: Alignment(0, 0),
+                        children: <Widget>[
+                          Center(child: CircularProgressIndicator()),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              child: FadeInImage.memoryNetwork(
+                                fit: BoxFit.fitWidth,
+                                placeholder: kTransparentImage,
+                                image: DataProvider.of(context).user.getImage(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                Container(
+                  width: 220,
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    widget.data.contactInfo +
+                        " har sålt 14 böcker och köpt 3 böcker.",
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                Text(widget.data.authors)
-              ],
-            ),
-            Text(
-              widget.data.price.toString() + ":-",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-                color: Color(0xff96070a),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.chat),
-                Flexible(
-                  child: Text(
-                      "Skicka ett meddelande till : SÄTT NAMN PÅ ANVÄNDARE SOM ÄGER ANNONSEN HÄR",
-                  textAlign: TextAlign.center,),
+                FlatButton(
+                  padding: EdgeInsets.only(right: 10),
+                  onPressed: (){},
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        width: 120,
+                        height: 120,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Icon(
+                            Icons.chat_bubble,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 90,
+                        padding: EdgeInsets.only(top: 10, left: 25),
+                        child: Text(
+                          "Skicka ett meddelande till " + widget.data.contactInfo,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
-            ),
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.face),
-                  Text(widget.data.contactInfo +
-                      " har sålt 14 böcker och köpt 3 böcker.")
-                ],
-              ),
             ),
           ],
         ),
@@ -111,22 +156,25 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-  Widget makeElement(int index) {
-    print(widget.data.images[index]);
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 2.5),
-      child: Center(
-        child: Stack(
-          alignment: Alignment(0, 0),
-          children: <Widget>[
-            Center(child: CircularProgressIndicator()),
-            FadeInImage.memoryNetwork(
-              fit: BoxFit.fitWidth,
-              placeholder: kTransparentImage,
-              image: widget.data.images[index],
-            ),
-          ],
+  RichText getText(leading, content) {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        text: leading,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Color(0xff96070a),
         ),
+        children: [
+          TextSpan(
+            text: content,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ],
       ),
     );
   }
