@@ -136,61 +136,61 @@ class RegisterPageState extends State<RegisterPage> {
                 key: _userKey,
                 child: Container(
                   margin:
-                  const EdgeInsets.only(top: 50.0, right: 40.0, left: 40.0),
+                      const EdgeInsets.only(top: 50.0, right: 40.0, left: 40.0),
                   child: Column(
                     children: <Widget>[
                       Container(
                         child: _image == null
                             ? Container(
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(5)),
-                            color: Colors.grey,
-                            boxShadow: [
-                              BoxShadow(),
-                            ],
-                          ),
-                          child: MaterialButton(
-                            onPressed: getImageGallery,
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  "Lägg till en profilbild",
-                                  textAlign: TextAlign.center,
-                                  style:
-                                  TextStyle(color: Color(0xff96070a)),
-                                ),
-                                Icon(Icons.add_a_photo),
-                              ],
-                            ),
-                          ),
-                        )
-                            : Container(
-                          height: 200,
-                          child: Column(
-                            children: <Widget>[
-                              Container(
                                 width: 150,
                                 height: 150,
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: Image.file(_image),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.grey,
+                                  boxShadow: [
+                                    BoxShadow(),
+                                  ],
+                                ),
+                                child: MaterialButton(
+                                  onPressed: getImageGallery,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "Lägg till en profilbild",
+                                        textAlign: TextAlign.center,
+                                        style:
+                                            TextStyle(color: Color(0xff96070a)),
+                                      ),
+                                      Icon(Icons.add_a_photo),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 200,
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 150,
+                                      height: 150,
+                                      child: FittedBox(
+                                        fit: BoxFit.contain,
+                                        child: Image.file(_image),
+                                      ),
+                                    ),
+                                    RaisedButton(
+                                      child: Text("Ta en ny bild"),
+                                      onPressed: () {
+                                        getImageGallery();
+                                        setState(() {
+                                          _image = null;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
-                              RaisedButton(
-                                child: Text("Ta en ny bild"),
-                                onPressed: (){
-                                  getImageGallery();
-                                  setState(() {
-                                    _image = null;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
                       TextFormField(
                         maxLines: 1,
@@ -208,7 +208,7 @@ class RegisterPageState extends State<RegisterPage> {
                               : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
-                        value.isEmpty ? 'Obligatoriskt Fält' : null,
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _userName = value,
                       ),
                       TextFormField(
@@ -228,7 +228,7 @@ class RegisterPageState extends State<RegisterPage> {
                               : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
-                        value.isEmpty ? 'Obligatoriskt Fält' : null,
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _userEmail = value,
                       ),
                       TextFormField(
@@ -248,7 +248,7 @@ class RegisterPageState extends State<RegisterPage> {
                               : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
-                        value.isEmpty ? 'Obligatoriskt Fält' : null,
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _password = value,
                       ),
                       //color: same,
@@ -265,13 +265,12 @@ class RegisterPageState extends State<RegisterPage> {
                               color: same,
                             ),
                             suffixIcon: passwordController.text == "" ||
-                                validatePasswordController.text !=
-                                    passwordController.text
+                                    validatePasswordController.text !=
+                                        passwordController.text
                                 ? Icon(Icons.star, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
-                          validator: (value) =>
-                          value.isEmpty
+                          validator: (value) => value.isEmpty
                               ? 'Detta fält kan inte vara tomt'
                               : null),
                     ],
@@ -280,7 +279,7 @@ class RegisterPageState extends State<RegisterPage> {
               ),
               Container(
                 margin:
-                const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
+                    const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
                 child: MaterialButton(
                   color: Color(0xFF6C6CDF),
                   child: Text('Skapa nytt konto',
@@ -289,10 +288,7 @@ class RegisterPageState extends State<RegisterPage> {
                     if (_userKey.currentState.validate()) {
                       showLoadingAlertDialog();
                       _userKey.currentState.save();
-                      _success = await DataProvider
-                          .of(context)
-                          .user
-                          .register(
+                      _success = await DataProvider.of(context).user.register(
                           _userEmail,
                           _userName,
                           _password,
@@ -347,19 +343,16 @@ class RegisterPageState extends State<RegisterPage> {
       ),
       content: value == 201
           ? RaisedButton(
-        child: Text("Gå vidare"),
-        onPressed: () {
-          DataProvider
-              .of(context)
-              .routing
-              .routeLandingPage(context);
-        },
-      )
+              child: Text("Gå vidare"),
+              onPressed: () {
+                DataProvider.of(context).routing.routeLandingPage(context);
+              },
+            )
           : RaisedButton(
-          child: Text("Tillbaka"),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop(null);
-          }),
+              child: Text("Tillbaka"),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop(null);
+              }),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }

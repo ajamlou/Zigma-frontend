@@ -17,114 +17,137 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: Container(
-        color: Color(0xFFECE9DF),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 25.0),
-                  child: IconButton(
-                    color: Color(0xFF96070a),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back),
-                  ),
-                )
-              ],
+    return Container(
+      color: Color(0xFFECE9DF),
+      child: Scaffold(
+        resizeToAvoidBottomPadding: true,
+        backgroundColor: Colors.transparent,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60.0),
+          child: AppBar(
+            iconTheme: IconThemeData(color: Color(0xff96070a)),
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
+            leading: Container(
+              child: IconButton(
+                color: Color(0xff96070a),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 100.0, right: 100.0, left: 100.0),
-              child: Image.asset('images/logo_frontpage.png'),
-            ),
-            Text('Logga In',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
-            Form(
-              key: _userKey,
-              child: Container(
-                margin:
-                    const EdgeInsets.only(top: 50.0, right: 40.0, left: 40.0),
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      maxLines: 1,
-                      keyboardType: TextInputType.emailAddress,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: 'Username',
-                        icon: Icon(
-                          Icons.person,
-                          color: Colors.grey,
+            actions: <Widget>[],
+          ),
+        ),
+        body: Container(
+          color: Color(0xFFECE9DF),
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 100.0, left: 100.0),
+                child: Image.asset('images/logo_frontpage.png'),
+              ),
+              Center(
+                child: Text('Logga In',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _userKey,
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        top: 50.0, right: 40.0, left: 40.0),
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          maxLines: 1,
+                          keyboardType: TextInputType.emailAddress,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            hintText: 'Username',
+                            icon: Icon(
+                              Icons.person,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          validator: (value) =>
+                              value.isEmpty ? 'Username can\'t be empty' : null,
+                          onSaved: (value) => _userName = value,
                         ),
-                      ),
-                      validator: (value) =>
-                          value.isEmpty ? 'Username can\'t be empty' : null,
-                      onSaved: (value) => _userName = value,
+                        TextFormField(
+                          maxLines: 1,
+                          obscureText: true,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                              hintText: 'Password',
+                              icon: Icon(
+                                Icons.lock,
+                                color: Colors.grey,
+                              )),
+                          validator: (value) =>
+                              value.isEmpty ? 'Password can\'t be empty' : null,
+                          onSaved: (value) => _password = value,
+                        ),
+                      ],
                     ),
-                    TextFormField(
-                      maxLines: 1,
-                      obscureText: true,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                          hintText: 'Password',
-                          icon: Icon(
-                            Icons.lock,
-                            color: Colors.grey,
-                          )),
-                      validator: (value) =>
-                          value.isEmpty ? 'Password can\'t be empty' : null,
-                      onSaved: (value) => _password = value,
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: 150,
-              child: MaterialButton(
-                color: Color(0xFF008000),
-                onPressed: () async {
-                  if (_userKey.currentState.validate()) {
-                    showLoadingAlertDialog();
-                    _userKey.currentState.save();
-                    _success = await DataProvider.of(context)
-                        .user
-                        .signIn(_userName, _password);
-                  }
-                  Navigator.of(context, rootNavigator: true).pop(null);
-                  if(_success == 200) {
-                    DataProvider.of(context).routing.routeLandingPage(context);
-                  }
-                  else{
-                   showLoginAlertDialog(_success);
-                  }
-                },
-                child: Text('Logga in',
-                    style: TextStyle(color: Color(0xFFFFFFFF))),
+              Column(
+                children: <Widget>[
+                  Container(
+                    width: 99.9,
+                    margin: const EdgeInsets.only(right: 35.0, left: 35.0),
+                    child: MaterialButton(
+                      color: Color(0xFF008000),
+                      onPressed: () async {
+                        if (_userKey.currentState.validate()) {
+                          showLoadingAlertDialog();
+                          _userKey.currentState.save();
+                          _success = await DataProvider.of(context)
+                              .user
+                              .signIn(_userName, _password);
+                          Navigator.of(context, rootNavigator: true).pop(null);
+                          if (_success == 200) {
+                            DataProvider.of(context)
+                                .routing
+                                .routeLandingPage(context);
+                          } else {
+                            showLoginAlertDialog(_success);
+                          }
+                        }
+                      },
+                      child: Text('Logga in',
+                          style: TextStyle(color: Color(0xFFFFFFFF))),
+                    ),
+                  ),
+                  Container(
+                    height: 15,
+                    child: MaterialButton(
+                      child: Text('Glömt ditt lösenord?'),
+                      onPressed: () {},
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(
+                        top: 20.0, right: 55.0, left: 55.0),
+                    child: MaterialButton(
+                      color: Color(0xFF6C6CDF),
+                      child: Text('Skapa nytt konto',
+                          style: TextStyle(color: Color(0xFFFFFFFF))),
+                      onPressed: () async => DataProvider.of(context)
+                          .routing
+                          .routeRegisterPage(context),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Container(
-              height: 15,
-              child: MaterialButton(
-                child: Text('Glömt ditt lösenord?'),
-                onPressed: () {},
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0),
-              child: MaterialButton(
-                color: Color(0xFF6C6CDF),
-                child: Text('Skapa nytt konto',
-                    style: TextStyle(color: Color(0xFFFFFFFF))),
-                onPressed: () async =>
-                    DataProvider.of(context).routing.routeRegisterPage(context),
-              ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -166,7 +189,4 @@ class LoginPageState extends State<LoginPage> {
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
-
-
-
 }

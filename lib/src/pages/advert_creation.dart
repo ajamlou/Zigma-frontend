@@ -16,7 +16,7 @@ class AdvertCreation extends StatefulWidget {
 
 class AdvertCreationState extends State<AdvertCreation> {
   //Image selector
-  File _selectedItem;
+  List<int> _selectedItemsIndex = [];
 
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Sent
@@ -88,7 +88,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   shrinkWrap: true,
                   padding: EdgeInsets.all(15.0),
                   children: <Widget>[
-                    Row(
+                    Column(
                       children: <Widget>[
                         compressedImageList.length == 0
                             ? Text('')
@@ -101,28 +101,41 @@ class AdvertCreationState extends State<AdvertCreation> {
                                   itemBuilder: buildGallery,
                                 ),
                               ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            FloatingActionButton(
-                              onPressed: () {
-                                showImageAlertDialog();
-                              },
-                              tooltip: 'Pick Image',
-                              child: Icon(Icons.add_a_photo),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.remove_circle),
-                              onPressed: _remove,
-                              tooltip: 'remove the selected item',
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              FloatingActionButton(
+                                onPressed: () {
+                                  showImageAlertDialog();
+                                },
+                                tooltip: 'Pick Image',
+                                child: Icon(Icons.add_a_photo),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: compressedImageList.length == 0
+                                    ? Text('')
+                                    : RaisedButton(
+                                        color: Colors.red,
+                                        child: const Text(
+                                            'Ta bort markerade bilder',
+                                            style: TextStyle(
+                                            color: Colors.white,
+                                            ),
+                                        ),
+                                        onPressed: _remove,
+                                      ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                     Container(
                       padding: EdgeInsets.only(
-                          left: 30.0, top: 10.0, right: 30.0, bottom: 10.0),
+                          left: 30.0, right: 30.0, bottom: 10.0),
                       child: Form(
                         key: _advertKey,
                         child: Column(
@@ -203,6 +216,12 @@ class AdvertCreationState extends State<AdvertCreation> {
                             setState(() {
                               stsCode = temp;
                             });
+
+                            // Prototyp för redirect till ny advert page för uppladdad advert
+                            // Ändra return från uploadNewAdvert till att skicka tillbaka ID för nya advert
+                            // if (stscode == 201) {
+
+
                           }
                           if (stsCode == 201) {
                             DataProvider.of(context)
@@ -295,35 +314,42 @@ class AdvertCreationState extends State<AdvertCreation> {
   }
 
   Widget buildGallery(BuildContext context, int index) {
+    Image _galleryImage = Image.file(compressedImageList[index]);
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedItem = compressedImageList[index];
+          print('im in setState of gesturedetector');
+          _selectedItemsIndex.contains(index)
+              ? _selectedItemsIndex.remove(index)
+              : _selectedItemsIndex.add(index);
+          print(index);
+          print(_selectedItemsIndex);
         });
       },
-      child: compressedImageList.indexOf(_selectedItem) == index
-        ? Container(
-        decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(width: 3.0, color: Colors.black),
-              left: BorderSide(width: 3.0, color: Colors.black),
-              right: BorderSide(width: 3.0, color: Colors.black),
-              bottom: BorderSide(width: 3.0, color: Colors.black),
-            )
-        ),
-        margin: EdgeInsets.symmetric(horizontal: 2.5),
-        child: FittedBox(
-          fit: BoxFit.fitHeight,
-          child: Image.file(compressedImageList[index]),
-        ),
-      )
-      : Container(
-        margin: EdgeInsets.symmetric(horizontal: 2.5),
-        child: FittedBox(
-          fit: BoxFit.fitHeight,
-          child: Image.file(compressedImageList[index]),
-        ),
-      ),
+      child: _selectedItemsIndex.contains(index)
+          ? Container(
+              height: 250,
+              width: 150,
+              decoration: BoxDecoration(
+                  border: Border(
+                top: BorderSide(width: 3.0, color: Color(0xFF008000)),
+                left: BorderSide(width: 3.0, color: Color(0xFF008000)),
+                right: BorderSide(width: 3.0, color: Color(0xFF008000)),
+                bottom: BorderSide(width: 3.0, color: Color(0xFF008000)),
+              )),
+              margin: EdgeInsets.symmetric(horizontal: 2.5),
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: _galleryImage,
+              ))
+          : Container(
+              height: 250,
+              width: 150,
+              margin: EdgeInsets.symmetric(horizontal: 2.5),
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: _galleryImage,
+              )),
     );
 
     // {
@@ -333,21 +359,26 @@ class AdvertCreationState extends State<AdvertCreation> {
     //}
   }
 
+  // Insert the new item to the lists
   void _insert(File _nextItem) {
     compressedImageList.add(_nextItem);
     encodedImageList.add(imageFileToString(_nextItem));
-    setState(() {
-      _selectedItem = _nextItem;
-    });
+    setState(() {});
   }
 
-// Remove the selected item from the list model.
+// Remove the selected items from the lists
   void _remove() {
-    if (_selectedItem != null) {
-      compressedImageList.removeAt(compressedImageList.indexOf(_selectedItem));
-      //   encodedImageList.remove(_selectedItem);
+    if (_selectedItemsIndex.length != 0) {
+      for (int index = compressedImageList.length; index >= 0 ; index--) {
+        if (_selectedItemsIndex.contains(index)) {
+        compressedImageList.removeAt(index);
+        encodedImageList.removeAt(index);
+        }
+        print(compressedImageList);
+        print(encodedImageList);
+      }
       setState(() {
-        _selectedItem = null;
+        _selectedItemsIndex = [];
       });
     }
   }
@@ -370,11 +401,11 @@ class AdvertCreationState extends State<AdvertCreation> {
     final int rand = new Math.Random().nextInt(10000);
 
     Im.Image image = Im.decodeImage(_uploadedImage.readAsBytesSync());
-    Im.Image smallerImage = Im.copyResize(image, 300);
+    Im.Image smallerImage = Im.copyResize(image, 400);
     File compressedImage = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(
         smallerImage,
-        quality: 85,
+        quality: 100,
       ));
     return compressedImage;
   }
