@@ -405,7 +405,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     File compressedImage = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(
         smallerImage,
-        quality: 100,
+        quality: 90,
       ));
     return compressedImage;
   }

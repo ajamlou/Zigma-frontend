@@ -113,6 +113,7 @@ class AdvertList {
           .user
           .getToken()
     });
+    print(response.body);
     if (response.statusCode == 201) {
       await loadAdvertList();
     }
