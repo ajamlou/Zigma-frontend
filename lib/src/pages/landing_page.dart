@@ -155,6 +155,7 @@ class _LandingPageState extends State<LandingPage> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(40),
                       child: Container(
+
                         width: 80,
                         height: 80,
                         child: FadeInImage.memoryNetwork(
