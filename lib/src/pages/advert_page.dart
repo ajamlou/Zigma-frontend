@@ -82,9 +82,8 @@ class _AdvertPageState extends State<AdvertPage> {
             Row(
               children: <Widget>[
                 DataProvider.of(context).user.getImage() == null
-                    ? Container(
-                        width: 50,
-                        height: 50,
+                    ? Expanded(
+                        flex: 2,
                         child: FittedBox(
                           fit: BoxFit.contain,
                           child: Icon(
@@ -93,59 +92,51 @@ class _AdvertPageState extends State<AdvertPage> {
                           ),
                         ),
                       )
-                    : Stack(
-                        alignment: Alignment(0, 0),
-                        children: <Widget>[
-                          Center(child: CircularProgressIndicator()),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(40),
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              child: FadeInImage.memoryNetwork(
-                                fit: BoxFit.fitWidth,
-                                placeholder: kTransparentImage,
-                                image: DataProvider.of(context).user.getImage(),
+                    : Expanded(
+                        flex: 2,
+                        child: Stack(
+                          alignment: Alignment(0, 0),
+                          children: <Widget>[
+                            Center(child: CircularProgressIndicator()),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(40),
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                child: FadeInImage.memoryNetwork(
+                                  fit: BoxFit.fitWidth,
+                                  placeholder: kTransparentImage,
+                                  image:
+                                      DataProvider.of(context).user.getImage(),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                Container(
-                  width: 220,
-                  padding: const EdgeInsets.only(left: 10.0),
+                Expanded(
+                  flex: 8,
                   child: Text(
                     widget.data.contactInfo +
                         " har sålt 14 böcker och köpt 3 böcker.",
                     textAlign: TextAlign.center,
                   ),
                 ),
-                FlatButton(
-                  padding: EdgeInsets.only(right: 10),
-                  onPressed: (){},
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        width: 120,
-                        height: 120,
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: Icon(
-                            Icons.chat_bubble,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 90,
-                        padding: EdgeInsets.only(top: 10, left: 25),
-                        child: Text(
-                          "Skicka ett meddelande till " + widget.data.contactInfo,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    ],
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  child: RaisedButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.chat_bubble),
+                        Text("Skicka ett meddelande till " +
+                            widget.data.contactInfo)
+                      ],
+                    ),
                   ),
                 ),
               ],

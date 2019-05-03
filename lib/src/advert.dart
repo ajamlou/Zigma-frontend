@@ -49,6 +49,8 @@ class Advert {
         'contact_info': contactInfo,
         'owner': owner,
         'image': images,
+        'condition': condition,
+        'edition': edition
       };
 }
 
@@ -80,8 +82,8 @@ class AdvertList {
       String contactInfo,
       List<String> encodedImageList,
       context) async {
-    Advert _newAd =
-        Advert(title, price, author, isbn, contactInfo, encodedImageList,"1","Kinda fucked");
+    Advert _newAd = Advert(title, price, author, isbn, contactInfo,
+        encodedImageList, "1", "Kinda fucked");
     var data = json.encode(_newAd);
     print(data);
     final String postURL =

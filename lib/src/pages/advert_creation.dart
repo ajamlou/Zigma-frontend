@@ -227,7 +227,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                             DataProvider.of(context)
                                 .routing
                                 .routeLandingPage(context);
-                          } else if (stsCode == 400) {
+                          } else{
                             Navigator.of(context, rootNavigator: true)
                                 .pop(null);
                             showAdvertCreationAlertDialog(stsCode);
@@ -263,7 +263,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   void showAdvertCreationAlertDialog(int value) {
     String message;
     if (value == 400) {
-      message = "Priset är för högt, maxpris är 9999kr per bok";
+      message = "Bad Request";
     } else if (value == 500) {
       message = "Server Error, testa igen";
     }
