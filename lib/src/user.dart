@@ -81,6 +81,10 @@ class UserMethodBody {
     return user.token;
   }
 
+  String getEmail() {
+    return user.email;
+  }
+
   String getUsername() {
     return user.username;
   }
