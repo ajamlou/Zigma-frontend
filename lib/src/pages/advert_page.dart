@@ -3,6 +3,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
 import 'package:zigma2/src/components/carousel.dart';
+import 'dart:async';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;
@@ -14,6 +15,13 @@ class AdvertPage extends StatefulWidget {
 }
 
 class _AdvertPageState extends State<AdvertPage> {
+  Future<dynamic> getUser() async {
+    print(widget.data.id.toString());
+    var userData =
+        await DataProvider.of(context).user.getUserById(widget.data.id);
+    return userData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +63,10 @@ class _AdvertPageState extends State<AdvertPage> {
               height: 8,
             ),
             widget.data.images.length == 0
-                ? Image.asset('images/calc_book.png')
+                ? Container(
+                    height: 300,
+                    child: Image.asset('images/calc_book.png'),
+                  )
                 : Container(
                     margin: EdgeInsets.symmetric(horizontal: 75),
                     height: 300,
@@ -65,7 +76,7 @@ class _AdvertPageState extends State<AdvertPage> {
               height: 30,
             ),
             getText("Författare: ", widget.data.authors),
-            getText("Upplaga: ", "SÄTT UPPLAGA HÄR"),
+            getText("Upplaga: ", widget.data.edition),
             getText("Skick: ", widget.data.condition),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -74,7 +85,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontSize: 40,
                   color: Color(0xff96070a),
                 ),
               ),
@@ -116,28 +127,66 @@ class _AdvertPageState extends State<AdvertPage> {
                       ),
                 Expanded(
                   flex: 8,
-                  child: Text(
-                    widget.data.contactInfo +
-                        " har sålt 14 böcker och köpt 3 böcker.",
-                    textAlign: TextAlign.center,
+                  child: FutureBuilder(
+                    future: getUser(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          snapshot.data.username +
+                              " har sålt 0 böcker och köpt 3 böcker.",
+                          textAlign: TextAlign.center,
+                        );
+                      } else {
+                        return Text("Laddar...");
+                      }
+                    },
                   ),
                 ),
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                Expanded(
+                  flex: 2,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 6,
                   child: RaisedButton(
+                    color: Colors.blueGrey,
                     onPressed: () {},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.chat_bubble),
-                        Text("Skicka ett meddelande till " +
-                            widget.data.contactInfo)
+                        Expanded(
+                          child: Icon(
+                            Icons.chat_bubble,
+                            size: 30,
+                            color: Color(0xff96070a),
+                          ),
+                          flex: 2,
+                        ),
+                        Expanded(
+                          child: FutureBuilder(
+                            future: getUser(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text("Skicka ett meddelande till "+ snapshot.data.username);
+                              } else {
+                                return Text("Laddar...");
+                              }
+                            },
+                          ),
+                          flex: 8,
+                        )
                       ],
                     ),
                   ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(),
                 ),
               ],
             ),
@@ -147,26 +196,33 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-  RichText getText(leading, content) {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        text: leading,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: Color(0xff96070a),
-        ),
-        children: [
-          TextSpan(
-            text: content,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-            ),
+  Widget getText(leading, content) {
+    if (content == "") {
+      return SizedBox(
+        height: 0,
+        width: 0,
+      );
+    } else {
+      return RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          text: leading,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Color(0xff96070a),
           ),
-        ],
-      ),
-    );
+          children: [
+            TextSpan(
+              text: content,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

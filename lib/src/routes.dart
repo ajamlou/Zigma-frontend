@@ -33,11 +33,11 @@ class Routing {
         .push(MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
   }
 
-  void routeAdvertPage(context, index, data) {
+  void routeAdvertPage(context, data) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AdvertPage(data: data[index]),
+        builder: (context) => AdvertPage(data: data),
       ),
     );
   }

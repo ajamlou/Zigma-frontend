@@ -41,6 +41,20 @@ class UserCreation {
         };
 }
 
+class UserAdvert {
+  String username;
+  int id;
+  String profilePic;
+
+
+  UserAdvert(this.username, this.id, this.profilePic);
+
+  UserAdvert.fromJson(Map<String, dynamic> json)
+      : username = json['owner_username'],
+        id = json['owner_id'],
+        profilePic = json['owner_profilepic'];
+}
+
 class UserLogin {
   String username;
   String password;
@@ -69,6 +83,22 @@ class UserMethodBody {
 
   String getUsername() {
     return user.username;
+  }
+
+
+  Future<UserAdvert> getUserById(int id) async {
+    final String url = "https://9548fc36.ngrok.io/adverts/adverts/" +
+        id.toString() +
+        "/?fields=owner_profilepic,owner_username,owner_id";
+    print("IM IN getUserById wihooo");
+    var req = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    print("Im finished with the http request");
+    var resBody = json.decode(utf8.decode(req.bodyBytes));
+    print(resBody.toString());
+    UserAdvert user = UserAdvert.fromJson(resBody);
+    print(user);
+    return user;
   }
 
   String getImage() {

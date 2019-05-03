@@ -33,13 +33,9 @@ class Advert {
         condition = map["condition"],
         edition = map["edition"];
 
-  int stringToInt(price) {
-    var priceInt = int.parse(price);
-    assert(priceInt is int);
-    return priceInt;
-  }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'book_title': bookTitle,
         'price': price,
         'authors': authors,
@@ -74,26 +70,48 @@ class AdvertList {
     return list;
   }
 
-  Future<int> uploadNewAdvert(
-      String title,
+  Future<Advert> getAdvertById(id) async {
+    final String url = "https://9548fc36.ngrok.io/adverts/adverts/" + id + "/";
+    var req = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    final resBody = json.decode(utf8.decode(req.bodyBytes));
+    return Advert.fromJson(resBody);
+  }
+
+
+
+  Future<int> uploadNewAdvert(String title,
       int price,
       String author,
       String isbn,
       String contactInfo,
       List<String> encodedImageList,
       context) async {
-    Advert _newAd = Advert(title, price, author, isbn, contactInfo,
-        encodedImageList, "1", "Kinda fucked");
+    Advert _newAd = Advert(
+        title,
+        price,
+        author,
+        isbn,
+        contactInfo,
+        encodedImageList,
+        "1",
+        "Kinda fucked");
     var data = json.encode(_newAd);
     print(data);
     final String postURL =
         "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
-    print("token " + DataProvider.of(context).user.getToken());
+    print("token " + DataProvider
+        .of(context)
+        .user
+        .getToken());
     final response =
-        await http.post(Uri.encodeFull(postURL), body: data, headers: {
+    await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json",
-      "Authorization": "Token " + DataProvider.of(context).user.getToken()
+      "Authorization": "Token " + DataProvider
+          .of(context)
+          .user
+          .getToken()
     });
     if (response.statusCode == 201) {
       await loadAdvertList();
