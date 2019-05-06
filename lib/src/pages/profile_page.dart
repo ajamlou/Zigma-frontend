@@ -148,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget cardBuilder() {
     List<String> yo = [DataProvider.of(context).user.getImage()];
     Advert newAdvert = Advert("Den stora boken", 911, "Bok Larsson",
-        "9876-1234", "026-164590", yo, "Good condition", "best edition");
+        "9876-1234", "026-164590", yo, "Good condition", "best edition",9);
 
     final makeListTile = ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

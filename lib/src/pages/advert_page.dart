@@ -16,9 +16,9 @@ class AdvertPage extends StatefulWidget {
 
 class _AdvertPageState extends State<AdvertPage> {
   Future<dynamic> getUser() async {
-    print(widget.data.id.toString());
+    print(widget.data.owner.toString());
     var userData =
-        await DataProvider.of(context).user.getUserById(widget.data.id);
+        await DataProvider.of(context).user.getUserById(widget.data.owner);
     return userData;
   }
 
@@ -68,6 +68,9 @@ class _AdvertPageState extends State<AdvertPage> {
                     child: Image.asset('images/calc_book.png'),
                   )
                 : Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.lightBlueAccent, width: 5)),
                     margin: EdgeInsets.symmetric(horizontal: 75),
                     height: 300,
                     child: Carousel(images: widget.data.images),
@@ -90,41 +93,74 @@ class _AdvertPageState extends State<AdvertPage> {
                 ),
               ),
             ),
+            Container(
+              padding: EdgeInsets.only(top: 8, left: 10),
+              child: FutureBuilder(
+                future: getUser(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      "Denna bok säljs av " + snapshot.data.username + ".",
+                      style: TextStyle(fontSize: 20),
+                    );
+                  } else {
+                    return Text(
+                      "Denna bok säljs av " + "laddar...",
+                      style: TextStyle(fontSize: 20),
+                    );
+                  }
+                },
+              ),
+            ),
             Row(
               children: <Widget>[
-                DataProvider.of(context).user.getImage() == null
-                    ? Expanded(
-                        flex: 2,
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Icon(
-                            Icons.account_circle,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      )
-                    : Expanded(
-                        flex: 2,
-                        child: Stack(
-                          alignment: Alignment(0, 0),
-                          children: <Widget>[
-                            Center(child: CircularProgressIndicator()),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child: Container(
-                                width: 80,
-                                height: 80,
-                                child: FadeInImage.memoryNetwork(
-                                  fit: BoxFit.fitWidth,
-                                  placeholder: kTransparentImage,
-                                  image:
-                                      DataProvider.of(context).user.getImage(),
+                FutureBuilder(
+                  future: getUser(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data.image == null
+                          ? Expanded(
+                              flex: 2,
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Icon(
+                                  Icons.account_circle,
+                                  color: Colors.grey,
                                 ),
                               ),
-                            ),
-                          ],
+                            )
+                          : Expanded(
+                              flex: 2,
+                              child: Stack(
+                                alignment: Alignment(0, 0),
+                                children: <Widget>[
+                                  Center(child: CircularProgressIndicator()),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: Container(
+                                      width: 80,
+                                      height: 80,
+                                      child: FadeInImage.memoryNetwork(
+                                        fit: BoxFit.fitWidth,
+                                        placeholder: kTransparentImage,
+                                        image: snapshot.data.image,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                    } else {
+                      return Expanded(
+                        flex: 2,
+                        child: FittedBox(
+                          fit: BoxFit.none,
+                          child: CircularProgressIndicator(),
                         ),
-                      ),
+                      );
+                    }
+                  },
+                ),
                 Expanded(
                   flex: 8,
                   child: FutureBuilder(
@@ -137,7 +173,8 @@ class _AdvertPageState extends State<AdvertPage> {
                           textAlign: TextAlign.center,
                         );
                       } else {
-                        return Text("Laddar...");
+                        return Text(
+                            "Laddar... har sålt 0 böcker och köpt 3 böcker.");
                       }
                     },
                   ),
@@ -172,9 +209,16 @@ class _AdvertPageState extends State<AdvertPage> {
                             future: getUser(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                return Text("Skicka ett meddelande till "+ snapshot.data.username);
+                                return Text(
+                                  "Skicka ett meddelande till " +
+                                      snapshot.data.username,
+                                  textAlign: TextAlign.center,
+                                );
                               } else {
-                                return Text("Laddar...");
+                                return Text(
+                                  "Skicka ett meddelande till " + "laddar...",
+                                  textAlign: TextAlign.center,
+                                );
                               }
                             },
                           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'dart:convert';
+import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,25 +18,18 @@ class AdvertCreationState extends State<AdvertCreation> {
   //Image selector
   List<int> _selectedItemsIndex = [];
 
+  //List for response
+  List<dynamic> responseList;
   final GlobalKey<FormState> _advertKey = GlobalKey<FormState>();
   String _title; //Sent
   int _price; //Sent
   String _author; //Sent
   String _isbn; //Sent
   String _contactInfo;
-  bool isLoading = false;
   List<File> compressedImageList = [];
   List<String> encodedImageList = [];
 
-  String imageFileToString(File _image) {
-    String imageString = _image.toString();
-    print(imageString);
-    if (_image != null) {
-      imageString = base64.encode(_image.readAsBytesSync());
-      return "data:image/jpg;base64," + imageString;
-    } else
-      return null;
-  }
+
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -75,171 +68,160 @@ class AdvertCreationState extends State<AdvertCreation> {
             actions: <Widget>[],
           ),
         ),
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(Color(0xff96070a)),
-                ),
-              )
-            : Container(
-                width: MediaQuery.of(context).size.width,
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(15.0),
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        compressedImageList.length == 0
-                            ? Text('')
-                            : Container(
-                                height: 150.0,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: compressedImageList.length,
-                                  itemBuilder: buildGallery,
-                                ),
-                              ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              FloatingActionButton(
-                                onPressed: () {
-                                  showImageAlertDialog();
-                                },
-                                tooltip: 'Pick Image',
-                                child: Icon(Icons.add_a_photo),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: compressedImageList.length == 0
-                                    ? Text('')
-                                    : RaisedButton(
-                                        color: Colors.red,
-                                        child: const Text(
-                                            'Ta bort markerade bilder',
-                                            style: TextStyle(
-                                            color: Colors.white,
-                                            ),
-                                        ),
-                                        onPressed: _remove,
-                                      ),
-                              ),
-                            ],
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            padding: EdgeInsets.all(15.0),
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  compressedImageList.length == 0
+                      ? Text('')
+                      : Container(
+                          height: 150.0,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount: compressedImageList.length,
+                            itemBuilder: buildGallery,
                           ),
+                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        FloatingActionButton(
+                          onPressed: () {
+                            showImageAlertDialog();
+                          },
+                          tooltip: 'Pick Image',
+                          child: Icon(Icons.add_a_photo),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: compressedImageList.length == 0
+                              ? Text('')
+                              : RaisedButton(
+                                  color: Colors.red,
+                                  child: const Text(
+                                    'Ta bort markerade bilder',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: _remove,
+                                ),
                         ),
                       ],
                     ),
-                    Container(
-                      padding: EdgeInsets.only(
-                          left: 30.0, right: 30.0, bottom: 10.0),
-                      child: Form(
-                        key: _advertKey,
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              maxLines: 1,
-                              keyboardType: TextInputType.text,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                hintText: 'Titel',
-                              ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
-                              onSaved: (value) => _title = value,
-                            ),
-                            TextFormField(
-                              maxLines: 1,
-                              keyboardType: TextInputType.number,
-                              autofocus: false,
-                              // maxLength: 4,
-                              decoration: InputDecoration(
-                                hintText: 'Pris',
-                              ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
-                              onSaved: (value) => _price = stringToInt(value),
-                            ),
-                            TextFormField(
-                              maxLines: 1,
-                              keyboardType: TextInputType.text,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                hintText: 'Författare',
-                              ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
-                              onSaved: (value) => _author = value,
-                            ),
-                            TextFormField(
-                              maxLines: 1,
-                              keyboardType: TextInputType.text,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                hintText: 'ISBN',
-                              ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
-                              onSaved: (value) => _isbn = value,
-                            ),
-                            TextFormField(
-                              maxLines: 1,
-                              keyboardType: TextInputType.text,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                hintText: 'Kontaktinformation',
-                              ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
-                              onSaved: (value) => _contactInfo = value,
-                            ),
-                          ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 30.0, right: 30.0, bottom: 10.0),
+                child: Form(
+                  key: _advertKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'Titel',
                         ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
+                        onSaved: (value) => _title = value,
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 60),
-                      child: MaterialButton(
-                        color: Color(0xFF008000),
-                        onPressed: () async {
-                          int stsCode;
-                          if (_advertKey.currentState.validate()) {
-                            showLoadingAlertDialog();
-                            _advertKey.currentState.save();
-                            int temp = await DataProvider.of(context)
-                                .advertList
-                                .uploadNewAdvert(_title, _price, _author, _isbn,
-                                    _contactInfo, encodedImageList, context);
-                            setState(() {
-                              stsCode = temp;
-                            });
-
-                            // Prototyp för redirect till ny advert page för uppladdad advert
-                            // Ändra return från uploadNewAdvert till att skicka tillbaka ID för nya advert
-                            // if (stscode == 201) {
-
-
-                          }
-                          if (stsCode == 201) {
-                            DataProvider.of(context)
-                                .routing
-                                .routeLandingPage(context);
-                          } else{
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(null);
-                            showAdvertCreationAlertDialog(stsCode);
-                          }
-                        },
-                        child: Text("Ladda upp",
-                            style: TextStyle(color: Color(0xFFFFFFFF))),
+                      TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
+                        autofocus: false,
+                        // maxLength: 4,
+                        decoration: InputDecoration(
+                          hintText: 'Pris',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
+                        onSaved: (value) => _price = stringToInt(value),
                       ),
-                    ),
-                  ],
+                      TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'Författare',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
+                        onSaved: (value) => _author = value,
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'ISBN',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
+                        onSaved: (value) => _isbn = value,
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'Kontaktinformation',
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
+                        onSaved: (value) => _contactInfo = value,
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 60),
+                child: MaterialButton(
+                  color: Color(0xFF008000),
+                  onPressed: () async {
+                    int stsCode;
+                    if (_advertKey.currentState.validate()) {
+                      showLoadingAlertDialog();
+                      _advertKey.currentState.save();
+                      responseList = await DataProvider.of(context)
+                          .advertList
+                          .uploadNewAdvert(_title, _price, _author, _isbn,
+                              _contactInfo, encodedImageList, context);
+                      setState(() {
+                        stsCode = responseList[0];
+                      });
+                    }
+                    if (stsCode == 201) {
+                      var a = await DataProvider.of(context)
+                          .advertList
+                          .getAdvertById(responseList[1]);
+                      DataProvider.of(context)
+                          .routing
+                          .routeAdvertPage(context, a);
+                    } else {
+                      Navigator.of(context, rootNavigator: true).pop(null);
+                      showAdvertCreationAlertDialog(stsCode);
+                    }
+                  },
+                  child: Text("Ladda upp",
+                      style: TextStyle(color: Color(0xFFFFFFFF))),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -352,27 +334,22 @@ class AdvertCreationState extends State<AdvertCreation> {
               )),
     );
 
-    // {
-    //_selectedItem = _selectedItem == compressedImageList[index]
-    //  ? null
-    //: compressedImageList[index]
-    //}
   }
 
   // Insert the new item to the lists
   void _insert(File _nextItem) {
     compressedImageList.add(_nextItem);
-    encodedImageList.add(imageFileToString(_nextItem));
+    encodedImageList.add(Ih.imageFileToString(_nextItem));
     setState(() {});
   }
 
 // Remove the selected items from the lists
   void _remove() {
     if (_selectedItemsIndex.length != 0) {
-      for (int index = compressedImageList.length; index >= 0 ; index--) {
+      for (int index = compressedImageList.length; index >= 0; index--) {
         if (_selectedItemsIndex.contains(index)) {
-        compressedImageList.removeAt(index);
-        encodedImageList.removeAt(index);
+          compressedImageList.removeAt(index);
+          encodedImageList.removeAt(index);
         }
         print(compressedImageList);
         print(encodedImageList);

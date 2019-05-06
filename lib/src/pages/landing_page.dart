@@ -9,120 +9,142 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  Future<bool> _onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Vill du verkligen stänga appen?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Nej"),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+                FlatButton(
+                  child: Text("Ja"),
+                  onPressed: () => Navigator.pop(context, true),
+                ),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("images/backgroundImage.jpg"),
-          fit: BoxFit.fitHeight,
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/backgroundImage.jpg"),
+            fit: BoxFit.fitHeight,
+          ),
         ),
-      ),
-      //color: Color(0xFFFFFFFF),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Color(0xff96070a)),
-          elevation: 0.0,
+        //color: Color(0xFFFFFFFF),
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          actions: <Widget>[
-            DataProvider.of(context).user.checkUser()
-                ? SizedBox(
-                    width: 0,
-                    height: 0,
-                  )
-                : LoginButton()
-          ],
-        ),
-        drawer: DataProvider.of(context).user.checkUser()
-            ? showDrawer(context)
-            : Center(
-                child: Container(
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Color(0xff96070a)),
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
+            actions: <Widget>[
+              DataProvider.of(context).user.checkUser()
+                  ? SizedBox(
+                      width: 0,
+                      height: 0,
+                    )
+                  : LoginButton()
+            ],
+          ),
+          drawer: DataProvider.of(context).user.checkUser()
+              ? showDrawer(context)
+              : Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFECE9DF),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.0),
+                      ),
+                    ),
+                    height: 190,
+                    margin: EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "Du behöver ett konto för att fortsätta.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 20, color: Color(0xff96070a)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        RaisedButton(
+                          color: Colors.greenAccent,
+                          child: Text("Logga in",
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: () async => DataProvider.of(context)
+                              .routing
+                              .routeLoginPage(context),
+                        ),
+                        Text("eller"),
+                        RaisedButton(
+                          color: Colors.lightBlueAccent,
+                          child: Text("Skapa ett Zigma konto",
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: () async => DataProvider.of(context)
+                              .routing
+                              .routeRegisterPage(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          body: Container(
+            // color: Color(0xFFFFFFFF),
+            child: Column(
+              children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.only(
+                        top: 100.0, left: 50, right: 50, bottom: 100),
+                    child: Image.asset('images/logo_frontpage.png')),
+                Container(
+                  height: 50,
                   decoration: BoxDecoration(
                     color: Color(0xFFECE9DF),
                     borderRadius: BorderRadius.all(
                       Radius.circular(5.0),
                     ),
                   ),
-                  height: 190,
-                  margin: EdgeInsets.symmetric(horizontal: 25),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          "Du behöver ett konto för att fortsätta.",
-                          textAlign: TextAlign.center,
-                          style:
-                              TextStyle(fontSize: 20, color: Color(0xff96070a)),
-                        ),
+                  margin: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: MaterialButton(
+                    onPressed: () {
+                      //DataProvider.of(context).advertList.loadAdvertList();
+                      showSearch(
+                        context: context,
+                        delegate: SearchPage(),
+                      );
+                    },
+                    child: Container(
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Icon(Icons.search),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25.0),
+                            child: Text('Sök efter din litteratur...'),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      RaisedButton(
-                        color: Colors.greenAccent,
-                        child: Text("Logga in",
-                            style: TextStyle(color: Colors.white)),
-                        onPressed: () async => DataProvider.of(context)
-                            .routing
-                            .routeLoginPage(context),
-                      ),
-                      Text("eller"),
-                      RaisedButton(
-                        color: Colors.lightBlueAccent,
-                        child: Text("Skapa ett Zigma konto",
-                            style: TextStyle(color: Colors.white)),
-                        onPressed: () async => DataProvider.of(context)
-                            .routing
-                            .routeRegisterPage(context),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        body: Container(
-          // color: Color(0xFFFFFFFF),
-          child: Column(
-            children: <Widget>[
-              Container(
-                  padding: const EdgeInsets.only(
-                      top: 100.0, left: 50, right: 50, bottom: 100),
-                  child: Image.asset('images/logo_frontpage.png')),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color(0xFFECE9DF),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //DataProvider.of(context).advertList.loadAdvertList();
-                    showSearch(
-                      context: context,
-                      delegate: SearchPage(),
-                    );
-                  },
-                  child: Container(
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Icon(Icons.search),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 25.0),
-                          child: Text('Sök efter din litteratur...'),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -139,34 +161,37 @@ class _LandingPageState extends State<LandingPage> {
               color: const Color(0xff96070a),
             ),
             accountEmail: Text(DataProvider.of(context).user.user.email),
-            currentAccountPicture:  DataProvider.of(context).user.getImage() == null
-                ? Container(
-                  width: 50,
-                  height: 50,
-                  child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Icon(Icons.account_circle, color: Color(0xFFece9df),),
-                  ),
-                  )
-                : Stack(
-                  alignment: Alignment(0, 0),
-                  children: <Widget>[
-                    Center(child: CircularProgressIndicator()),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: Container(
-
-                        width: 80,
-                        height: 80,
-                        child: FadeInImage.memoryNetwork(
-                          fit: BoxFit.fitWidth,
-                          placeholder: kTransparentImage,
-                          image: DataProvider.of(context).user.getImage(),
+            currentAccountPicture:
+                DataProvider.of(context).user.getImage() == null
+                    ? Container(
+                        width: 50,
+                        height: 50,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Icon(
+                            Icons.account_circle,
+                            color: Color(0xFFece9df),
+                          ),
                         ),
+                      )
+                    : Stack(
+                        alignment: Alignment(0, 0),
+                        children: <Widget>[
+                          Center(child: CircularProgressIndicator()),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              child: FadeInImage.memoryNetwork(
+                                fit: BoxFit.fitWidth,
+                                placeholder: kTransparentImage,
+                                image: DataProvider.of(context).user.getImage(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
           ),
           ListTile(
             title: Text("Din Profil"),
@@ -183,7 +208,7 @@ class _LandingPageState extends State<LandingPage> {
           ListTile(
               title: Text("Dina Chattar"),
               onTap: () async {
-                DataProvider.of(context).routing.routeChatPage(context);
+                DataProvider.of(context).routing.routeChatPage(context, false);
               }),
           ListTile(
             title: Text("Inställningar"),
@@ -194,7 +219,7 @@ class _LandingPageState extends State<LandingPage> {
               onTap: () {
                 DataProvider.of(context).user.logout();
                 setState(() {});
-                Navigator.of(context, rootNavigator: true).pop(null);
+                Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
               }),
         ],
       ),

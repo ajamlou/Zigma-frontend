@@ -11,18 +11,13 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 5), () {
       DataProvider
           .of(context)
           .routing
-          .routeLandingPage(context);
+          .routeLandingPage(context, true);
     });
   }
 

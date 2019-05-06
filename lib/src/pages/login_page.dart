@@ -115,7 +115,7 @@ class LoginPageState extends State<LoginPage> {
                           if (_success == 200) {
                             DataProvider.of(context)
                                 .routing
-                                .routeLandingPage(context);
+                                .routeLandingPage(context, true);
                           } else {
                             showLoginAlertDialog(_success);
                           }

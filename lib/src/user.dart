@@ -7,15 +7,20 @@ class User {
   String username;
   String token;
   String image;
+  List adverts;
+  int soldBooks;
 
-  User(this.email, this.id, this.username, this.token, this.image);
+  User(this.email, this.id, this.username, this.token, this.image, this.adverts,
+      this.soldBooks);
 
   User.fromJson(Map<String, dynamic> json)
       : email = json['email'],
         username = json['username'],
         id = json['id'],
         token = json['token'],
-        image = json['img_link'];
+        image = json['img_link'],
+        adverts = json['adverts'],
+        soldBooks = json['sold_books'];
 }
 
 class UserCreation {
@@ -44,15 +49,18 @@ class UserCreation {
 class UserAdvert {
   String username;
   int id;
-  String profilePic;
+  String image;
+  List<int> adverts;
+  int soldBooks;
 
-
-  UserAdvert(this.username, this.id, this.profilePic);
+  UserAdvert(this.username, this.id, this.image, this.adverts, this.soldBooks);
 
   UserAdvert.fromJson(Map<String, dynamic> json)
       : username = json['owner_username'],
         id = json['owner_id'],
-        profilePic = json['owner_profilepic'];
+        image = json['img_link'],
+        adverts = json['adverts'],
+        soldBooks = json['sold_books'];
 }
 
 class UserLogin {
@@ -74,7 +82,7 @@ class UserMethodBody {
 
   void iniUser(
       String email, int id, String username, String token, String image) {
-    user = User(email, id, username, token, image);
+    user = User(email, id, username, token, image, [], 0);
   }
 
   String getToken() {
@@ -89,19 +97,17 @@ class UserMethodBody {
     return user.username;
   }
 
-
-  Future<UserAdvert> getUserById(int id) async {
-    final String url = "https://9548fc36.ngrok.io/adverts/adverts/" +
-        id.toString() +
-        "/?fields=owner_profilepic,owner_username,owner_id";
+  Future<User> getUserById(int id) async {
+    final String url =
+        "https://9548fc36.ngrok.io/users/user/" + id.toString() + "/";
     print("IM IN getUserById wihooo");
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     print("Im finished with the http request");
     var resBody = json.decode(utf8.decode(req.bodyBytes));
     print(resBody.toString());
-    UserAdvert user = UserAdvert.fromJson(resBody);
-    print(user);
+    User user = User.fromJson(resBody);
+    print(user.username);
     return user;
   }
 

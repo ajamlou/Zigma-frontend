@@ -1,9 +1,8 @@
 import 'dart:io';
-import 'dart:convert';
+import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/user.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:image_picker/image_picker.dart';
 
 class RegisterPage extends StatefulWidget {
   State createState() => RegisterPageState();
@@ -26,22 +25,47 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController usernameController = TextEditingController();
   File _image;
 
-  Future getImageGallery() async {
-    File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = imageFile;
-    });
+void showImageAlertDialog() async {
+  File tempImage;
+    AlertDialog dialog = AlertDialog(
+        backgroundColor: Color(0xFFECE9DF),
+        title: Text(
+          "Kamera eller Galleri?",
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xff96070a),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: ButtonBar(
+          children: <Widget>[
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.image),
+              onPressed: () async {
+                tempImage = await Ih.getImage("gallery");
+                setState(() {
+                  _image = tempImage;
+                });
+                Navigator.of(context, rootNavigator: true).pop(null);
+              },
+            ),
+            RaisedButton(
+              color: Color(0xff96070a),
+              child: Icon(Icons.camera_alt),
+              onPressed: () async {
+                tempImage = await Ih.getImage("camera");
+                setState(() {
+                  _image = tempImage;
+                });
+                Navigator.of(context, rootNavigator: true).pop(null);
+              },
+            ),
+          ],
+        ));
+    showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  String imageFileToString() {
-    String imageString = _image.toString();
-    print(imageString);
-    if (_image != null) {
-      imageString = base64.encode(_image.readAsBytesSync());
-      return "data:image/jpg;base64," + imageString;
-    } else
-      return null;
-  }
 
   @override
   void initState() {
@@ -62,7 +86,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   void _listenerMethod() {
     same = passwordChecker();
-    print("im in listening right now");
     setState(() {});
   }
 
@@ -153,7 +176,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   ],
                                 ),
                                 child: MaterialButton(
-                                  onPressed: getImageGallery,
+                                  onPressed: showImageAlertDialog,
                                   child: Column(
                                     children: <Widget>[
                                       Text(
@@ -182,7 +205,7 @@ class RegisterPageState extends State<RegisterPage> {
                                     RaisedButton(
                                       child: Text("Ta en ny bild"),
                                       onPressed: () {
-                                        getImageGallery();
+                                        showImageAlertDialog();
                                         setState(() {
                                           _image = null;
                                         });
@@ -292,7 +315,7 @@ class RegisterPageState extends State<RegisterPage> {
                           _userEmail,
                           _userName,
                           _password,
-                          imageFileToString());
+                          Ih.imageFileToString(_image));
                       Navigator.of(context, rootNavigator: true).pop(null);
                       showRegisterAlertDialog(_success);
                     }
@@ -345,7 +368,7 @@ class RegisterPageState extends State<RegisterPage> {
           ? RaisedButton(
               child: Text("Gå vidare"),
               onPressed: () {
-                DataProvider.of(context).routing.routeLandingPage(context);
+                DataProvider.of(context).routing.routeLandingPage(context, true);
               },
             )
           : RaisedButton(

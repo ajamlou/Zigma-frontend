@@ -5,7 +5,7 @@ import 'DataProvider.dart';
 
 class Advert {
   final String bookTitle;
-  final int owner = 1;
+  final int owner;
   final String isbn;
   final String condition;
   final String edition;
@@ -18,7 +18,7 @@ class Advert {
   List<dynamic> images;
 
   Advert(this.bookTitle, this.price, this.authors, this.isbn, this.contactInfo,
-      this.images, this.condition, this.edition);
+      this.images, this.condition, this.edition, this.owner);
 
   Advert.fromJson(Map map)
       : bookTitle = map['book_title'],
@@ -31,11 +31,10 @@ class Advert {
         contactInfo = map["contact_info"],
         images = map["image"],
         condition = map["condition"],
-        edition = map["edition"];
+        edition = map["edition"],
+        owner = map["owner "];
 
-
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'book_title': bookTitle,
         'price': price,
         'authors': authors,
@@ -70,53 +69,43 @@ class AdvertList {
     return list;
   }
 
-  Future<Advert> getAdvertById(id) async {
-    final String url = "https://9548fc36.ngrok.io/adverts/adverts/" + id + "/";
+  Future<Advert> getAdvertById(int id) async {
+    final String url =
+        "https://9548fc36.ngrok.io/adverts/adverts/" + id.toString() + "/";
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final resBody = json.decode(utf8.decode(req.bodyBytes));
     return Advert.fromJson(resBody);
   }
 
-
-
-  Future<int> uploadNewAdvert(String title,
+  Future<List> uploadNewAdvert(
+      String title,
       int price,
       String author,
       String isbn,
       String contactInfo,
       List<String> encodedImageList,
       context) async {
-    Advert _newAd = Advert(
-        title,
-        price,
-        author,
-        isbn,
-        contactInfo,
-        encodedImageList,
-        "1",
-        "Kinda fucked");
+    List<int> l = [];
+    Advert _newAd = Advert(title, price, author, isbn, contactInfo,
+        encodedImageList, "1", "Kinda fucked", 8);
     var data = json.encode(_newAd);
     print(data);
     final String postURL =
         "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
-    print("token " + DataProvider
-        .of(context)
-        .user
-        .getToken());
+    print("token " + DataProvider.of(context).user.getToken());
     final response =
-    await http.post(Uri.encodeFull(postURL), body: data, headers: {
+        await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json",
-      "Authorization": "Token " + DataProvider
-          .of(context)
-          .user
-          .getToken()
+      "Authorization": "Token " + DataProvider.of(context).user.getToken()
     });
-    print(response.body);
+    Map decoded = json.decode(response.body);
+    l.add(response.statusCode);
+    l.add(decoded["id"]);
     if (response.statusCode == 201) {
       await loadAdvertList();
     }
-    return response.statusCode;
+    return l;
   }
 }
