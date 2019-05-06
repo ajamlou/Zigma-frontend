@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _profileNameStyled(),
               _profileRatingStyled(),
               _profileInfoStyled(),
-              _profileMenusStyled(),
+              //_profileMenusStyled(),
             ],
           ),
         ),
@@ -65,7 +65,10 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: Color(0xFF95453),
             radius: 75,
             backgroundImage: NetworkImage(
-              DataProvider.of(context).user.getImage(),
+              DataProvider
+                  .of(context)
+                  .user
+                  .getImage(),
             ),
           ),
         ),
@@ -77,11 +80,18 @@ class _ProfilePageState extends State<ProfilePage> {
     return Center(
       child: RichText(
         text: TextSpan(
-            // set the default style for the children TextSpans
-            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
+          // set the default style for the children TextSpans
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(fontSize: 30),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.getUsername(),
+                text: DataProvider
+                    .of(context)
+                    .user
+                    .getUsername(),
                 style: TextStyle(
                   color: Color(0xFFE36B1B),
                 ),
@@ -92,14 +102,21 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _profileRatingStyled() {
-    return  Center(
+    return Center(
       child: RichText(
         text: TextSpan(
           // set the default style for the children TextSpans
-            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(fontSize: 20),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.getEmail(),
+                text: DataProvider
+                    .of(context)
+                    .user
+                    .getEmail(),
                 // Email tills vidare
                 style: TextStyle(
                   color: Colors.black,
@@ -114,46 +131,57 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold();
   }
 
-  Widget _profileMenusStyled() {
-    return Column(
-      children: <Widget> [
-        Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _displayAds ?
-              Container()
-              :
-              Container()
-        ],
-    ),
-        _displayAds ?
-    Container(
-    height: 250.0,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: adList.length,
-        itemBuilder: cardBuilder(context, "ads"),)
-    ) :
-
-
-            cardBuilder("ads")
-            : cardBuilder("reviews");
-      ]
-    );
-  }
+//  Widget _profileMenusStyled() {
+//    return Column(
+//      children: <Widget> [
+//    Row(
+//    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//      children: <Widget>[
+//        _displayAds ?
+//        Container()
+//            :
+//        Container()
+//      ],
+//    ),
+//    _displayAds ?
+//    Container(
+//    height: 250.0,
+//    child: ListView.builder(
+//    scrollDirection: Axis.vertical,
+//    shrinkWrap: true,
+//    itemCount: adList.length,
+//    itemBuilder: cardBuilder(context, "ads"),)
+//    ) :
+//
+//
+//    cardBuilder("ads")
+//        : cardBuilder("reviews");
+//    ]
+//    );
+//  }
 
   Widget showDrawer(context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text(DataProvider.of(context).user.user.username),
+            accountName: Text(DataProvider
+                .of(context)
+                .user
+                .user
+                .username),
             decoration: BoxDecoration(
               color: const Color(0xff96070a),
             ),
-            accountEmail: Text(DataProvider.of(context).user.user.email),
-            currentAccountPicture:  DataProvider.of(context).user.getImage() == null
+            accountEmail: Text(DataProvider
+                .of(context)
+                .user
+                .user
+                .email),
+            currentAccountPicture: DataProvider
+                .of(context)
+                .user
+                .getImage() == null
                 ? Container(
               width: 50,
               height: 50,
@@ -175,7 +203,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: FadeInImage.memoryNetwork(
                       fit: BoxFit.fitWidth,
                       placeholder: kTransparentImage,
-                      image: DataProvider.of(context).user.getImage(),
+                      image: DataProvider
+                          .of(context)
+                          .user
+                          .getImage(),
                     ),
                   ),
                 ),
@@ -185,19 +216,28 @@ class _ProfilePageState extends State<ProfilePage> {
           ListTile(
             title: Text("Din Profil"),
             onTap: () async {
-              DataProvider.of(context).routing.routeProfilePage(context);
+              DataProvider
+                  .of(context)
+                  .routing
+                  .routeProfilePage(context);
             },
           ),
           ListTile(
             title: Text("Skapa Annons"),
             onTap: () async {
-              DataProvider.of(context).routing.routeCreationPage(context);
+              DataProvider
+                  .of(context)
+                  .routing
+                  .routeCreationPage(context);
             },
           ),
           ListTile(
               title: Text("Dina Chattar"),
               onTap: () async {
-                DataProvider.of(context).routing.routeChatPage(context);
+                DataProvider
+                    .of(context)
+                    .routing
+                    .routeChatPage(context);
               }),
           ListTile(
             title: Text("Inställningar"),
@@ -206,7 +246,10 @@ class _ProfilePageState extends State<ProfilePage> {
           ListTile(
               title: Text("Logga ut"),
               onTap: () {
-                DataProvider.of(context).user.logout();
+                DataProvider
+                    .of(context)
+                    .user
+                    .logout();
                 setState(() {});
                 Navigator.of(context, rootNavigator: true).pop(null);
               }),
@@ -226,16 +269,21 @@ class _ProfilePageState extends State<ProfilePage> {
               title: Text('The Enchanted Nightingale'),
               subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
             ),
-            ButtonTheme.bar( // make buttons use the appropriate styles for cards
+            ButtonTheme
+                .bar( // make buttons use the appropriate styles for cards
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
                     child: const Text('BUY TICKETS'),
-                    onPressed: () { /* ... */ },
+                    onPressed: () {
+                      /* ... */
+                    },
                   ),
                   FlatButton(
                     child: const Text('LISTEN'),
-                    onPressed: () { /* ... */ },
+                    onPressed: () {
+                      /* ... */
+                    },
                   ),
                 ],
               ),
