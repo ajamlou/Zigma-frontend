@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:zigma2/src/DataProvider.dart';
+import 'package:zigma2/src/advert.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -37,7 +38,6 @@ class _ProfilePageState extends State<ProfilePage> {
             elevation: 0.0,
             backgroundColor: Colors.transparent,
           ),
-          endDrawer: showDrawer(context),
           body: ListView(
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
@@ -45,6 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _profilePictureStyled(),
               _profileNameStyled(),
               _profileRatingStyled(),
+              cardBuilder(),
               _profileInfoStyled(),
               //_profileMenusStyled(),
             ],
@@ -57,6 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void showLargerPicture() {}
 
   Widget _profilePictureStyled() {
+    String userImageURI = DataProvider.of(context).user.getImage();
     return GestureDetector(
       onTap: showLargerPicture,
       child: Center(
@@ -65,10 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: Color(0xFF95453),
             radius: 75,
             backgroundImage: NetworkImage(
-              DataProvider
-                  .of(context)
-                  .user
-                  .getImage(),
+              userImageURI,
             ),
           ),
         ),
@@ -80,18 +79,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return Center(
       child: RichText(
         text: TextSpan(
-          // set the default style for the children TextSpans
-            style: Theme
-                .of(context)
-                .textTheme
-                .body1
-                .copyWith(fontSize: 30),
+            // set the default style for the children TextSpans
+            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
             children: [
               TextSpan(
-                text: DataProvider
-                    .of(context)
-                    .user
-                    .getUsername(),
+                text: DataProvider.of(context).user.getUsername(),
                 style: TextStyle(
                   color: Color(0xFFE36B1B),
                 ),
@@ -105,18 +97,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return Center(
       child: RichText(
         text: TextSpan(
-          // set the default style for the children TextSpans
-            style: Theme
-                .of(context)
-                .textTheme
-                .body1
-                .copyWith(fontSize: 20),
+            // set the default style for the children TextSpans
+            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
             children: [
               TextSpan(
-                text: DataProvider
-                    .of(context)
-                    .user
-                    .getEmail(),
+                text: DataProvider.of(context).user.getEmail(),
                 // Email tills vidare
                 style: TextStyle(
                   color: Colors.black,
@@ -160,135 +145,42 @@ class _ProfilePageState extends State<ProfilePage> {
 //    );
 //  }
 
-  Widget showDrawer(context) {
-    return Drawer(
-      child: ListView(
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text(DataProvider
-                .of(context)
-                .user
-                .user
-                .username),
-            decoration: BoxDecoration(
-              color: const Color(0xff96070a),
-            ),
-            accountEmail: Text(DataProvider
-                .of(context)
-                .user
-                .user
-                .email),
-            currentAccountPicture: DataProvider
-                .of(context)
-                .user
-                .getImage() == null
-                ? Container(
-              width: 50,
-              height: 50,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Icon(Icons.account_circle, color: Color(0xFFece9df),),
-              ),
-            )
-                : Stack(
-              alignment: Alignment(0, 0),
-              children: <Widget>[
-                Center(child: CircularProgressIndicator()),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: Container(
+  Widget cardBuilder() {
+    List<String> yo = [DataProvider.of(context).user.getImage()];
+    Advert newAdvert = Advert("Den stora boken", 911, "Bok Larsson",
+        "9876-1234", "026-164590", yo, "Good condition", "best edition");
 
-                    width: 80,
-                    height: 80,
-                    child: FadeInImage.memoryNetwork(
-                      fit: BoxFit.fitWidth,
-                      placeholder: kTransparentImage,
-                      image: DataProvider
-                          .of(context)
-                          .user
-                          .getImage(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            title: Text("Din Profil"),
-            onTap: () async {
-              DataProvider
-                  .of(context)
-                  .routing
-                  .routeProfilePage(context);
-            },
-          ),
-          ListTile(
-            title: Text("Skapa Annons"),
-            onTap: () async {
-              DataProvider
-                  .of(context)
-                  .routing
-                  .routeCreationPage(context);
-            },
-          ),
-          ListTile(
-              title: Text("Dina Chattar"),
-              onTap: () async {
-                DataProvider
-                    .of(context)
-                    .routing
-                    .routeChatPage(context);
-              }),
-          ListTile(
-            title: Text("Inställningar"),
-            onTap: () {},
-          ),
-          ListTile(
-              title: Text("Logga ut"),
-              onTap: () {
-                DataProvider
-                    .of(context)
-                    .user
-                    .logout();
-                setState(() {});
-                Navigator.of(context, rootNavigator: true).pop(null);
-              }),
-        ],
-      ),
-    );
-  }
-
-  Widget cardBuilder(String identifier) {
-    return Center(
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+    final makeListTile = ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        leading: Container(
+            padding: EdgeInsets.only(right: 12.0),
+            decoration: new BoxDecoration(
+                border: new Border(
+                    right: new BorderSide(width: 1.0, color: Colors.white24))),
+            height: 140.0,
+            width: 110.0,
+            child: FittedBox(fit: BoxFit.cover, child: Image.network(yo[0]))),
+        title: Column(
           children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.album),
-              title: Text('The Enchanted Nightingale'),
-              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-            ),
-            ButtonTheme
-                .bar( // make buttons use the appropriate styles for cards
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text('BUY TICKETS'),
-                    onPressed: () {
-                      /* ... */
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('LISTEN'),
-                    onPressed: () {
-                      /* ... */
-                    },
-                  ),
-                ],
-              ),
-            ),
+            Text(newAdvert.bookTitle, style: TextStyle()),
+            Text(newAdvert.authors, style: TextStyle()),
+            Text(newAdvert.edition, style: TextStyle())
           ],
+        ),
+        // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+        trailing:
+            Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0));
+
+    return SizedBox(
+      height: 150,
+      child: Center(
+        child: Card(
+          elevation: 8.0,
+          margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          child: Container(
+            decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
+            child: makeListTile,
+          ),
         ),
       ),
     );
