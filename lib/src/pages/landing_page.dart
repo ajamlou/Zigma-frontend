@@ -201,15 +201,18 @@ class _LandingPageState extends State<LandingPage> {
               title: Text("Logga ut"),
               onTap: () async {
                 showLoadingAlertDialog();
-                await DataProvider.of(context).user.logout();
-                setState(() {});
-                Navigator.of(context, rootNavigator: true).pop(null);
-                Navigator.of(context, rootNavigator: true).pop(null);
+                Future.delayed(Duration(milliseconds: 1500), () async {
+                  await DataProvider.of(context).user.logout();
+                  setState(() {});
+                  Navigator.of(context, rootNavigator: true).pop(null);
+                  Navigator.of(context, rootNavigator: true).pop(null);
+                });
               }),
         ],
       ),
     );
   }
+
   void showLoadingAlertDialog() {
     AlertDialog dialog = AlertDialog(
       backgroundColor: Color(0xFFECE9DF),
@@ -230,23 +233,20 @@ class _LandingPageState extends State<LandingPage> {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Vill du verkligen stänga appen?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Nej"),
-              onPressed: () => Navigator.pop(context, false),
-            ),
-            FlatButton(
-              child: Text("Ja"),
-              onPressed: () => Navigator.pop(context, true),
-            ),
-          ],
-        ));
+              title: Text("Vill du verkligen stänga appen?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Nej"),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+                FlatButton(
+                  child: Text("Ja"),
+                  onPressed: () => Navigator.pop(context, true),
+                ),
+              ],
+            ));
   }
-
 }
-
-
 
 class LoginButton extends StatelessWidget {
   @override
