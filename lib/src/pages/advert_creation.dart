@@ -8,7 +8,6 @@ import 'package:zigma2/src/DataProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:math' as Math;
 import 'package:image/image.dart' as Im;
-import 'package:flutter/foundation.dart';
 
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
@@ -230,9 +229,10 @@ class AdvertCreationState extends State<AdvertCreation> {
                       var a = await DataProvider.of(context)
                           .advertList
                           .getAdvertById(responseList[1]);
+                      Navigator.of(context, rootNavigator: true).pop(null);
                       DataProvider.of(context)
                           .routing
-                          .routeAdvertPage(context, a);
+                          .routeAdvertPage(context, a, true);
                     } else {
                       Navigator.of(context, rootNavigator: true).pop(null);
                       showAdvertCreationAlertDialog(stsCode);
@@ -266,7 +266,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   }
 
   void showAdvertCreationAlertDialog(int value) {
-    String message;
+    String message = "";
     if (value == 400) {
       message = "Bad Request";
     } else if (value == 500) {
@@ -338,12 +338,11 @@ class AdvertCreationState extends State<AdvertCreation> {
               height: 250,
               width: 150,
               decoration: BoxDecoration(
-                  border: Border(
-                top: BorderSide(width: 3.0, color: Color(0xFF008000)),
-                left: BorderSide(width: 3.0, color: Color(0xFF008000)),
-                right: BorderSide(width: 3.0, color: Color(0xFF008000)),
-                bottom: BorderSide(width: 3.0, color: Color(0xFF008000)),
-              )),
+                border: Border.all(
+                  color: Color(0xFF008000),
+                  width: 5,
+                ),
+              ),
               margin: EdgeInsets.symmetric(horizontal: 2.5),
               child: FittedBox(
                 fit: BoxFit.cover,

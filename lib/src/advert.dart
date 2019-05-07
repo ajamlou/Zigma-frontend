@@ -32,7 +32,7 @@ class Advert {
         images = map["image"],
         condition = map["condition"],
         edition = map["edition"],
-        owner = map["owner "];
+        owner = map["owner"];
 
   Map<String, dynamic> toJson() => {
         'book_title': bookTitle,

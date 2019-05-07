@@ -9,24 +9,6 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  Future<bool> _onBackPressed() {
-    return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text("Vill du verkligen stänga appen?"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Nej"),
-                  onPressed: () => Navigator.pop(context, false),
-                ),
-                FlatButton(
-                  child: Text("Ja"),
-                  onPressed: () => Navigator.pop(context, true),
-                ),
-              ],
-            ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -208,6 +190,7 @@ class _LandingPageState extends State<LandingPage> {
           ListTile(
               title: Text("Dina Chattar"),
               onTap: () async {
+                Navigator.of(context, rootNavigator: true).pop(null);
                 DataProvider.of(context).routing.routeChatPage(context, false);
               }),
           ListTile(
@@ -216,16 +199,54 @@ class _LandingPageState extends State<LandingPage> {
           ),
           ListTile(
               title: Text("Logga ut"),
-              onTap: () {
-                DataProvider.of(context).user.logout();
+              onTap: () async {
+                showLoadingAlertDialog();
+                await DataProvider.of(context).user.logout();
                 setState(() {});
-                Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                Navigator.of(context, rootNavigator: true).pop(null);
+                Navigator.of(context, rootNavigator: true).pop(null);
               }),
         ],
       ),
     );
   }
+  void showLoadingAlertDialog() {
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      title: Text(
+        "Laddar...",
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xff96070a),
+        ),
+        textAlign: TextAlign.center,
+      ),
+      content: DataProvider.of(context).loadingScreen,
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Vill du verkligen stänga appen?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Nej"),
+              onPressed: () => Navigator.pop(context, false),
+            ),
+            FlatButton(
+              child: Text("Ja"),
+              onPressed: () => Navigator.pop(context, true),
+            ),
+          ],
+        ));
+  }
+
 }
+
+
 
 class LoginButton extends StatelessWidget {
   @override

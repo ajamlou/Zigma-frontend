@@ -73,7 +73,7 @@ class SearchPage extends SearchDelegate<void> {
           onTap: () async {
             DataProvider.of(context)
                 .routing
-                .routeAdvertPage(context, data[index]);
+                .routeAdvertPage(context, data[index], false);
           },
         );
       },
