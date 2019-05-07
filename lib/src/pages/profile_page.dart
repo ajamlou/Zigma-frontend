@@ -9,10 +9,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool _displayAds = true;
-
   @override
   Widget build(BuildContext context) {
+    List<Advert> data = DataProvider.of(context).advertList.getAdvertList();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -38,17 +37,65 @@ class _ProfilePageState extends State<ProfilePage> {
             elevation: 0.0,
             backgroundColor: Colors.transparent,
           ),
-          body: ListView(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               _profilePictureStyled(),
               _profileNameStyled(),
               _profileRatingStyled(),
-              cardBuilder(),
-              _profileInfoStyled(),
-              //_profileMenusStyled(),
+              Expanded(
+                flex: 2,
+                child: Container(),
+              ),
+              Expanded(
+                flex: 4,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return cardBuilder(data[index]);
+                  },
+                ),
+              ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget cardBuilder(Advert a) {
+    return MaterialButton(
+      onPressed: () {},
+      child: Card(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(64, 75, 96, .9),
+          ),
+          child: ListTile(
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            leading: Container(
+              height: 90.0,
+              width: 80.0,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: a.images.length == 0
+                    ? Image.asset('images/placeholder_book.png')
+                    : Image.network(a.images[0]),
+              ),
+            ),
+            title: Column(
+              children: <Widget>[
+                Text(a.bookTitle, style: TextStyle()),
+                Text(a.authors, style: TextStyle()),
+                Text(a.edition, style: TextStyle())
+              ],
+            ),
+            // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+            trailing: Icon(Icons.keyboard_arrow_right,
+                color: Colors.white, size: 30.0),
           ),
         ),
       ),
@@ -111,10 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  Widget _profileInfoStyled() {
-    return Scaffold();
-  }
+}
 
 //  Widget _profileMenusStyled() {
 //    return Column(
@@ -144,45 +188,3 @@ class _ProfilePageState extends State<ProfilePage> {
 //    ]
 //    );
 //  }
-
-  Widget cardBuilder() {
-    List<String> yo = [DataProvider.of(context).user.getImage()];
-    Advert newAdvert = Advert("Den stora boken", 911, "Bok Larsson",
-        "9876-1234", "026-164590", yo, "Good condition", "best edition",9);
-
-    final makeListTile = ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        leading: Container(
-            padding: EdgeInsets.only(right: 12.0),
-            decoration: new BoxDecoration(
-                border: new Border(
-                    right: new BorderSide(width: 1.0, color: Colors.white24))),
-            height: 140.0,
-            width: 110.0,
-            child: FittedBox(fit: BoxFit.cover, child: Image.network(yo[0]))),
-        title: Column(
-          children: <Widget>[
-            Text(newAdvert.bookTitle, style: TextStyle()),
-            Text(newAdvert.authors, style: TextStyle()),
-            Text(newAdvert.edition, style: TextStyle())
-          ],
-        ),
-        // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-        trailing:
-            Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0));
-
-    return SizedBox(
-      height: 150,
-      child: Center(
-        child: Card(
-          elevation: 8.0,
-          margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-          child: Container(
-            decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
-            child: makeListTile,
-          ),
-        ),
-      ),
-    );
-  }
-}
