@@ -25,6 +25,8 @@ class AdvertCreationState extends State<AdvertCreation> {
   String _author; //Sent
   String _isbn; //Sent
   String _contactInfo;
+  String edition;
+  String transaction_type;
   String condition;
   List<Image> compressedImageList = [];
   List<String> encodedImageList = [];
@@ -73,18 +75,50 @@ class AdvertCreationState extends State<AdvertCreation> {
             actions: <Widget>[],
           ),
         ),
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            padding: EdgeInsets.all(15.0),
-            children: <Widget>[
-              Column(
+        body: transaction_type == null
+            ? Center(
+                child: Container(
+                    child: Column(
                 children: <Widget>[
-                  compressedImageList.length == 0
-                      ? Text('')
-                      : Container(
+                  Text('Vill du köpa eller sälja en bok?', style: TextStyle()),
+                  Divider(),
+                  Container(
+                    child: MaterialButton(
+                      color: Color(0xff96070a),
+                      onPressed: () {
+                        setState(() {
+                          transaction_type = 'S';
+                        });
+                      },
+                      child: Text('Sälja bror',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  Divider(),
+                  Container(
+                    child: MaterialButton(
+                      color: Color(0xff96070a),
+                      onPressed: () {
+                        setState(() {
+                          transaction_type = 'B';
+                        });
+                      },
+                      child: Text('Köpa fam',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              )))
+            : Container(
+                width: MediaQuery.of(context).size.width,
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(15.0),
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Container(
                           height: 150.0,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -93,158 +127,150 @@ class AdvertCreationState extends State<AdvertCreation> {
                             itemBuilder: buildGallery,
                           ),
                         ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        FloatingActionButton(
-                          onPressed: () {
-                            showImageAlertDialog();
-                          },
-                          tooltip: 'Pick Image',
-                          child: Icon(Icons.add_a_photo),
-                        ),
                         Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: compressedImageList.length == 0
-                              ? Text('')
-                              : RaisedButton(
-                                  color: Colors.red,
-                                  child: const Text(
-                                    'Ta bort markerade bilder',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  onPressed: _remove,
-                                ),
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: compressedImageList.length == 1
+                                    ? Text('')
+                                    : RaisedButton(
+                                        color: Colors.red,
+                                        child: const Text(
+                                          'Ta bort markerade bilder',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        onPressed: _remove,
+                                      ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 30.0, right: 30.0, bottom: 10.0),
-                child: Form(
-                  key: _advertKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        maxLines: 1,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          hintText: 'Titel',
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
-                        onSaved: (value) => _title = value,
-                      ),
-                      TextFormField(
-                        maxLines: 1,
-                        keyboardType: TextInputType.number,
-                        autofocus: false,
-                        // maxLength: 4,
-                        decoration: InputDecoration(
-                          hintText: 'Pris',
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
-                        onSaved: (value) => _price = stringToInt(value),
-                      ),
-                      TextFormField(
-                        maxLines: 1,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          hintText: 'Författare',
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
-                        onSaved: (value) => _author = value,
-                      ),
-                      TextFormField(
-                        maxLines: 1,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          hintText: 'ISBN',
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
-                        onSaved: (value) => _isbn = value,
-                      ),
-                      TextFormField(
-                        maxLines: 1,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          hintText: 'Kontaktinformation',
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
-                        onSaved: (value) => _contactInfo = value,
-                      ),
-                      Container(
-                        width: 150,
-                        child: Row(
-                          children: <Widget> [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('Skick: '),
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 30.0, right: 30.0, bottom: 10.0),
+                      child: Form(
+                        key: _advertKey,
+                        child: Column(
+                          children: <Widget>[
+                            TextFormField(
+                              maxLines: 1,
+                              keyboardType: TextInputType.text,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'Titel',
+                              ),
+                              validator: (value) =>
+                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              onSaved: (value) => _title = value,
                             ),
-                            Divider(),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: dropdownMenu(),
+                            TextFormField(
+                              maxLines: 1,
+                              keyboardType: TextInputType.number,
+                              autofocus: false,
+                              // maxLength: 4,
+                              decoration: InputDecoration(
+                                hintText: 'Pris',
+                              ),
+                              validator: (value) =>
+                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              onSaved: (value) => _price = stringToInt(value),
                             ),
-                          ]
-                        )
-                      )
-
-                    ],
-                  ),
+                            TextFormField(
+                              maxLines: 1,
+                              keyboardType: TextInputType.text,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'Författare',
+                              ),
+                              validator: (value) =>
+                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              onSaved: (value) => _author = value,
+                            ),
+                            TextFormField(
+                              maxLines: 1,
+                              keyboardType: TextInputType.text,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'ISBN',
+                              ),
+                              validator: (value) =>
+                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              onSaved: (value) => _isbn = value,
+                            ),
+                            TextFormField(
+                              maxLines: 1,
+                              keyboardType: TextInputType.text,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'Kontaktinformation',
+                              ),
+                              validator: (value) =>
+                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              onSaved: (value) => _contactInfo = value,
+                            ),
+                            Container(
+                                width: 300,
+                                child: Row(children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Skick: '),
+                                  ),
+                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: dropdownMenu(),
+                                  ),
+                                ]))
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 60),
+                      child: MaterialButton(
+                        color: Color(0xFF008000),
+                        onPressed: () async {
+                          int stsCode;
+                          if (_advertKey.currentState.validate()) {
+                            showLoadingAlertDialog();
+                            _advertKey.currentState.save();
+                            responseList = await DataProvider.of(context)
+                                .advertList
+                                .uploadNewAdvert(_title, _price, _author, _isbn,
+                                    _contactInfo, encodedImageList, context);
+                            setState(() {
+                              stsCode = responseList[0];
+                            });
+                          }
+                          if (stsCode == 201) {
+                            var a = await DataProvider.of(context)
+                                .advertList
+                                .getAdvertById(responseList[1]);
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(null);
+                            DataProvider.of(context)
+                                .routing
+                                .routeAdvertPage(context, a, true);
+                          } else {
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(null);
+                            showAdvertCreationAlertDialog(stsCode);
+                          }
+                        },
+                        child: Text("Ladda upp",
+                            style: TextStyle(color: Color(0xFFFFFFFF))),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 60),
-                child: MaterialButton(
-                  color: Color(0xFF008000),
-                  onPressed: () async {
-                    int stsCode;
-                    if (_advertKey.currentState.validate()) {
-                      showLoadingAlertDialog();
-                      _advertKey.currentState.save();
-                      responseList = await DataProvider.of(context)
-                          .advertList
-                          .uploadNewAdvert(_title, _price, _author, _isbn,
-                              _contactInfo, encodedImageList, context);
-                      setState(() {
-                        stsCode = responseList[0];
-                      });
-                    }
-                    if (stsCode == 201) {
-                      var a = await DataProvider.of(context)
-                          .advertList
-                          .getAdvertById(responseList[1]);
-                      Navigator.of(context, rootNavigator: true).pop(null);
-                      DataProvider.of(context)
-                          .routing
-                          .routeAdvertPage(context, a, true);
-                    } else {
-                      Navigator.of(context, rootNavigator: true).pop(null);
-                      showAdvertCreationAlertDialog(stsCode);
-                    }
-                  },
-                  child: Text("Ladda upp",
-                      style: TextStyle(color: Color(0xFFFFFFFF))),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -372,7 +398,7 @@ class AdvertCreationState extends State<AdvertCreation> {
       for (int index = compressedImageList.length; index >= 0; index--) {
         if (_selectedItemsIndex.contains(index)) {
           compressedImageList.removeAt(index);
-          encodedImageList.removeAt(index);
+          encodedImageList.removeAt(index-1);
         }
         print(compressedImageList);
         print(encodedImageList);
