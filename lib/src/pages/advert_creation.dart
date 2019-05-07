@@ -25,13 +25,21 @@ class AdvertCreationState extends State<AdvertCreation> {
   String _author; //Sent
   String _isbn; //Sent
   String _contactInfo;
-  List<File> compressedImageList = [];
+  String condition;
+  List<Image> compressedImageList = [];
   List<String> encodedImageList = [];
+  Image placeholderImage = Image.asset('images/placeholderBook.png');
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
     assert(priceInt is int);
     return priceInt;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    compressedImageList.add(placeholderImage);
   }
 
   @override
@@ -179,6 +187,23 @@ class AdvertCreationState extends State<AdvertCreation> {
                             value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _contactInfo = value,
                       ),
+                      Container(
+                        width: 150,
+                        child: Row(
+                          children: <Widget> [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Skick: '),
+                            ),
+                            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: dropdownMenu(),
+                            ),
+                          ]
+                        )
+                      )
+
                     ],
                   ),
                 ),
@@ -294,17 +319,19 @@ class AdvertCreationState extends State<AdvertCreation> {
   }
 
   Widget buildGallery(BuildContext context, int index) {
-    Image _galleryImage = Image.file(compressedImageList[index]);
+    Image _galleryImage = compressedImageList[index];
     return GestureDetector(
       onTap: () {
-        setState(() {
-          print('im in setState of gesturedetector');
-          _selectedItemsIndex.contains(index)
-              ? _selectedItemsIndex.remove(index)
-              : _selectedItemsIndex.add(index);
-          print(index);
-          print(_selectedItemsIndex);
-        });
+        compressedImageList[index] == placeholderImage
+            ? showImageAlertDialog()
+            : setState(() {
+                print('im in setState of gesturedetector');
+                _selectedItemsIndex.contains(index)
+                    ? _selectedItemsIndex.remove(index)
+                    : _selectedItemsIndex.add(index);
+                print(index);
+                print(_selectedItemsIndex);
+              });
       },
       child: _selectedItemsIndex.contains(index)
           ? Container(
@@ -334,7 +361,7 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   // Insert the new item to the lists
   void _insert(File _nextItem) {
-    compressedImageList.add(_nextItem);
+    compressedImageList.add(Image.file(_nextItem));
     encodedImageList.add(Ih.imageFileToString(_nextItem));
     setState(() {});
   }
@@ -381,5 +408,30 @@ class AdvertCreationState extends State<AdvertCreation> {
         quality: 90,
       ));
     return compressedImage;
+  }
+
+  Widget dropdownMenu() {
+    return Center(
+      child: DropdownButton<String>(
+        value: condition,
+        onChanged: (String newValue) {
+          setState(() {
+            condition = newValue;
+          });
+        },
+        items: <String>[
+          'Nyskick',
+          'Mycket gott skick',
+          'Gott skick',
+          'Hyggligt skick',
+          'Dåligt skick'
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+    );
   }
 }
