@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
   String email;
@@ -9,9 +10,10 @@ class User {
   String image;
   List adverts;
   int soldBooks;
+  int boughtBooks;
 
   User(this.email, this.id, this.username, this.token, this.image, this.adverts,
-      this.soldBooks);
+      this.soldBooks, this.boughtBooks);
 
   User.fromJson(Map<String, dynamic> json)
       : email = json['email'],
@@ -20,7 +22,8 @@ class User {
         token = json['token'],
         image = json['img_link'],
         adverts = json['adverts'],
-        soldBooks = json['sold_books'];
+        soldBooks = json['sold_books'],
+        boughtBooks = json['bought_books'];
 }
 
 class UserCreation {
@@ -44,23 +47,11 @@ class UserCreation {
           'password': password,
           'email': email,
         };
-}
 
-class UserAdvert {
-  String username;
-  int id;
-  String image;
-  List<int> adverts;
-  int soldBooks;
-
-  UserAdvert(this.username, this.id, this.image, this.adverts, this.soldBooks);
-
-  UserAdvert.fromJson(Map<String, dynamic> json)
-      : username = json['owner_username'],
-        id = json['owner_id'],
-        image = json['img_link'],
-        adverts = json['adverts'],
-        soldBooks = json['sold_books'];
+  UserCreation.fromJson(Map<String, dynamic> json)
+      : email = json['email'],
+        username = json['username'],
+        password = json['password'];
 }
 
 class UserLogin {
@@ -82,7 +73,7 @@ class UserMethodBody {
 
   void iniUser(
       String email, int id, String username, String token, String image) {
-    user = User(email, id, username, token, image, [], 0);
+    user = User(email, id, username, token, image, [], 0, 0);
   }
 
   String getToken() {
@@ -119,8 +110,9 @@ class UserMethodBody {
     }
   }
 
-  void logout() {
+  Future<void> logout() async {
     user = null;
+    await clearPrefs();
   }
 
   User getUser() {
@@ -135,8 +127,39 @@ class UserMethodBody {
     }
   }
 
-  Future<int> register(String email, String username, String password,
+  Future<bool> setUserPreferences(
+      String token, String image, String username, String email, int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("token", token);
+    prefs.setString("image", image);
+    prefs.setString("username", username);
+    prefs.setString("email", email);
+    prefs.setInt("id", id);
+    return prefs.commit();
+  }
+
+  Future<bool> clearPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    return prefs.commit();
+  }
+
+  Future<void> automaticLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("token") == null) {
+    } else {
+      iniUser(
+          prefs.getString("email"),
+          prefs.getInt("id"),
+          prefs.getString("username"),
+          prefs.getString("token"),
+          prefs.getString("image"));
+    }
+  }
+
+  Future<List> register(String email, String username, String password,
       String imageAsBytes) async {
+    List<dynamic> returnList = [];
     UserCreation _newUser =
         UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
@@ -152,10 +175,20 @@ class UserMethodBody {
     print(json.decode(res));
     Map parsed = json.decode(res);
     print(parsed.toString());
-    User localUser = User.fromJson(parsed);
-    iniUser(localUser.email, localUser.id, localUser.username, localUser.token,
-        localUser.image);
-    return response.statusCode;
+    var localUser;
+    if (response.statusCode == 201) {
+      localUser = User.fromJson(parsed);
+      await setUserPreferences(localUser.token, localUser.image,
+          localUser.username, localUser.email, localUser.id);
+      await automaticLogin();
+    } else if (response.statusCode == 400) {
+      localUser = UserCreation.fromJson(parsed);
+    } else if (response.statusCode == 500) {
+      localUser = "";
+    }
+    returnList.add(response.statusCode);
+    returnList.add(localUser);
+    return returnList;
   }
 
   Future<int> signIn(String username, String password) async {
@@ -172,8 +205,11 @@ class UserMethodBody {
     Map parsed = json.decode(res);
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
-    iniUser(localUser.email, localUser.id, localUser.username, localUser.token,
-        localUser.image);
+    if (response.statusCode == 200) {
+      await setUserPreferences(localUser.token, localUser.image, localUser.username,
+          localUser.email, localUser.id);
+      await automaticLogin();
+    }
     return response.statusCode;
   }
 }

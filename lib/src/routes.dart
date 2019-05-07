@@ -43,13 +43,18 @@ class Routing {
         .push(MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
   }
 
-  void routeAdvertPage(context, data) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AdvertPage(data: data),
-      ),
-    );
+  void routeAdvertPage(context, data, bool replace) {
+    if (replace) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => AdvertPage(data:data)));
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AdvertPage(data: data),
+        ),
+      );
+    }
   }
 
   void routeProfilePage(context) {

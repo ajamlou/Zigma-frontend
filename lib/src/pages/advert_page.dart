@@ -65,7 +65,7 @@ class _AdvertPageState extends State<AdvertPage> {
             widget.data.images.length == 0
                 ? Container(
                     height: 300,
-                    child: Image.asset('images/calc_book.png'),
+                    child: Image.asset('images/placeholder_book.png'),
                   )
                 : Container(
                     decoration: BoxDecoration(

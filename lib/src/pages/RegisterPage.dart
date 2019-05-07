@@ -10,7 +10,7 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _userKey = GlobalKey<FormState>();
-  int _success;
+  List _success;
   String _userEmail;
   String _password;
   Color same;
@@ -25,8 +25,8 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController usernameController = TextEditingController();
   File _image;
 
-void showImageAlertDialog() async {
-  File tempImage;
+  void showImageAlertDialog() async {
+    File tempImage;
     AlertDialog dialog = AlertDialog(
         backgroundColor: Color(0xFFECE9DF),
         title: Text(
@@ -41,7 +41,10 @@ void showImageAlertDialog() async {
           children: <Widget>[
             RaisedButton(
               color: Color(0xff96070a),
-              child: Icon(Icons.image),
+              child: Icon(
+                Icons.image,
+                color: Colors.white,
+              ),
               onPressed: () async {
                 tempImage = await Ih.getImage("gallery");
                 setState(() {
@@ -52,7 +55,10 @@ void showImageAlertDialog() async {
             ),
             RaisedButton(
               color: Color(0xff96070a),
-              child: Icon(Icons.camera_alt),
+              child: Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+              ),
               onPressed: () async {
                 tempImage = await Ih.getImage("camera");
                 setState(() {
@@ -66,12 +72,11 @@ void showImageAlertDialog() async {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-
   @override
   void initState() {
     super.initState();
-    usernameController.addListener(_listenerMethod);
-    emailController.addListener(_listenerMethod);
+    usernameController.addListener(_usernameListenerMethod);
+    emailController.addListener(_emailListener);
     validatePasswordController.addListener(_listenerMethod);
     passwordController.addListener(_listenerMethod);
     same = Colors.grey;
@@ -81,7 +86,21 @@ void showImageAlertDialog() async {
   void dispose() {
     passwordController.dispose();
     validatePasswordController.dispose();
+    emailController.dispose();
+    usernameController.dispose();
     super.dispose();
+  }
+
+  void _usernameListenerMethod() {
+    setState(() {});
+  }
+
+  bool _emailListener() {
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(p);
+    setState(() {});
+    return regExp.hasMatch(emailController.text);
   }
 
   void _listenerMethod() {
@@ -98,15 +117,6 @@ void showImageAlertDialog() async {
       return Colors.green;
     } else {
       return Colors.red;
-    }
-  }
-
-  bool passwordValidator() {
-    if (passwordController.text.compareTo(validatePasswordController.text) ==
-        0) {
-      return validatedPwd = true;
-    } else {
-      return validatedPwd = false;
     }
   }
 
@@ -170,24 +180,12 @@ void showImageAlertDialog() async {
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
-                                  color: Colors.grey,
-                                  boxShadow: [
-                                    BoxShadow(),
-                                  ],
+                                  image: DecorationImage(
+                                    image: AssetImage('images/profile_pic.png'),
+                                  ),
                                 ),
                                 child: MaterialButton(
                                   onPressed: showImageAlertDialog,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        "Lägg till en profilbild",
-                                        textAlign: TextAlign.center,
-                                        style:
-                                            TextStyle(color: Color(0xff96070a)),
-                                      ),
-                                      Icon(Icons.add_a_photo),
-                                    ],
-                                  ),
                                 ),
                               )
                             : Container(
@@ -227,7 +225,8 @@ void showImageAlertDialog() async {
                             color: Colors.grey,
                           ),
                           suffixIcon: usernameController.text == ""
-                              ? Icon(Icons.star, color: Color(0xff96070a))
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xff96070a))
                               : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
@@ -246,14 +245,27 @@ void showImageAlertDialog() async {
                             Icons.mail,
                             color: Colors.grey,
                           ),
-                          suffixIcon: emailController.text == ""
-                              ? Icon(Icons.star, color: Color(0xff96070a))
+                          suffixIcon: !_emailListener()
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xff96070a))
                               : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
                             value.isEmpty ? 'Obligatoriskt Fält' : null,
                         onSaved: (value) => _userEmail = value,
                       ),
+                      emailController.text.length == 0
+                          ? SizedBox(
+                              width: 0,
+                              height: 0,
+                            )
+                          : _emailListener()
+                              ? Text(
+                                  "Mejladressen är giltig!",
+                                  style: TextStyle(color: Colors.lightGreen),
+                                )
+                              : Text("Det måste vara en giltig mejladress",
+                                  style: TextStyle(color: Colors.redAccent)),
                       TextFormField(
                         maxLines: 1,
                         controller: passwordController,
@@ -266,8 +278,9 @@ void showImageAlertDialog() async {
                             Icons.lock,
                             color: Colors.grey,
                           ),
-                          suffixIcon: passwordController.text == ""
-                              ? Icon(Icons.star, color: Color(0xff96070a))
+                          suffixIcon: passwordController.text.length < 8
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xff96070a))
                               : Icon(Icons.check, color: Colors.green),
                         ),
                         validator: (value) =>
@@ -290,7 +303,8 @@ void showImageAlertDialog() async {
                             suffixIcon: passwordController.text == "" ||
                                     validatePasswordController.text !=
                                         passwordController.text
-                                ? Icon(Icons.star, color: Color(0xff96070a))
+                                ? Icon(Icons.star,
+                                    size: 10, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
                           validator: (value) => value.isEmpty
@@ -345,13 +359,21 @@ void showImageAlertDialog() async {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  void showRegisterAlertDialog(value) {
-    String message;
-    if (value == 400) {
-      message = "Användarnamn eller lösenord är upptaget";
-    } else if (value == 500) {
+  void showRegisterAlertDialog(List value) {
+    String message = "";
+    if (value[0] == 400) {
+      if (value[1].username != null) {
+        message = message + value[1].username + "\n";
+      }
+      if (value[1].password != null) {
+        message = message + value[1].password + "\n";
+      }
+      if (value[1].email != null) {
+        message = message + value[1].email;
+      }
+    } else if (value[0] == 500) {
       message = "Serverfel, testa igen";
-    } else if (value == 201) {
+    } else if (value[0] == 201) {
       message = "Du är nu registerad!";
     }
     AlertDialog dialog = AlertDialog(
@@ -364,11 +386,13 @@ void showImageAlertDialog() async {
         ),
         textAlign: TextAlign.center,
       ),
-      content: value == 201
+      content: value[0] == 201
           ? RaisedButton(
               child: Text("Gå vidare"),
               onPressed: () {
-                DataProvider.of(context).routing.routeLandingPage(context, true);
+                DataProvider.of(context)
+                    .routing
+                    .routeLandingPage(context, true);
               },
             )
           : RaisedButton(

@@ -179,7 +179,6 @@ class ChatMessage extends StatelessWidget {
   }
 }
 
-const String _name = "Your Name";
 
 final ThemeData kIOSTheme = ThemeData(
   primarySwatch: Colors.orange,
