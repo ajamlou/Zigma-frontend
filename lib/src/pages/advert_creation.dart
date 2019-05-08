@@ -32,6 +32,13 @@ class AdvertCreationState extends State<AdvertCreation> {
   List<String> encodedImageList = [];
   Image placeholderImage = Image.asset('images/placeholderBook.png');
 
+  TextEditingController titleController = TextEditingController();
+  TextEditingController authorController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController isbnController = TextEditingController();
+  TextEditingController contactInfoController = TextEditingController();
+
+
   int stringToInt(price) {
     var priceInt = int.parse(price);
     assert(priceInt is int);
@@ -164,10 +171,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                           children: <Widget>[
                             TextFormField(
                               maxLines: 1,
+                              controller: titleController,
+                              cursorColor: Color(0xff96070a),
                               keyboardType: TextInputType.text,
                               autofocus: false,
                               decoration: InputDecoration(
                                 hintText: 'Titel',
+                                suffixIcon: titleController.text.length < 5
+                                    ? Icon(Icons.star,
+                                    size: 10, color: Color(0xff96070a))
+                                    : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
                                   value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -175,11 +188,17 @@ class AdvertCreationState extends State<AdvertCreation> {
                             ),
                             TextFormField(
                               maxLines: 1,
+                              controller: priceController,
+                              cursorColor: Color(0xff96070a),
                               keyboardType: TextInputType.number,
                               autofocus: false,
                               // maxLength: 4,
                               decoration: InputDecoration(
                                 hintText: 'Pris',
+                                suffixIcon: priceController.text == ""
+                                    ? Icon(Icons.star,
+                                    size: 10, color: Color(0xff96070a))
+                                    : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
                                   value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -187,10 +206,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                             ),
                             TextFormField(
                               maxLines: 1,
+                              controller: authorController,
+                              cursorColor: Color(0xff96070a),
                               keyboardType: TextInputType.text,
                               autofocus: false,
                               decoration: InputDecoration(
                                 hintText: 'Författare',
+                                suffixIcon: authorController.text.length < 5 || !authorController.text.contains(" ")
+                                    ? Icon(Icons.star,
+                                    size: 10, color: Color(0xff96070a))
+                                    : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
                                   value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -198,10 +223,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                             ),
                             TextFormField(
                               maxLines: 1,
+                              controller: isbnController,
+                              cursorColor: Color(0xff96070a),
                               keyboardType: TextInputType.text,
                               autofocus: false,
                               decoration: InputDecoration(
                                 hintText: 'ISBN',
+                                suffixIcon: isbnController.text.length < 8
+                                    ? Icon(Icons.star,
+                                    size: 10, color: Color(0xff96070a))
+                                    : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
                                   value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -209,10 +240,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                             ),
                             TextFormField(
                               maxLines: 1,
+                              controller: contactInfoController,
+                              cursorColor: Color(0xff96070a),
                               keyboardType: TextInputType.text,
                               autofocus: false,
                               decoration: InputDecoration(
                                 hintText: 'Kontaktinformation',
+                                suffixIcon: contactInfoController.text.length < 8
+                                    ? Icon(Icons.star,
+                                    size: 10, color: Color(0xff96070a))
+                                    : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
                                   value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -247,7 +284,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                             responseList = await DataProvider.of(context)
                                 .advertList
                                 .uploadNewAdvert(_title, _price, _author, _isbn,
-                                    _contactInfo, encodedImageList, context);
+                                    _contactInfo, encodedImageList, condition, transaction_type, context);
                             setState(() {
                               stsCode = responseList[0];
                             });
