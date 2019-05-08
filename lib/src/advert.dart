@@ -13,12 +13,21 @@ class Advert {
   final int price;
   final String authors;
   String state = "A";
-  String transactionType = "S";
+  final String transaction_type;
   final String contactInfo;
   List<dynamic> images;
 
-  Advert(this.bookTitle, this.price, this.authors, this.isbn, this.contactInfo,
-      this.images, this.condition, this.edition, this.owner);
+  Advert(
+      this.bookTitle,
+      this.price,
+      this.authors,
+      this.isbn,
+      this.contactInfo,
+      this.condition,
+      this.images,
+      this.transaction_type,
+      this.edition,
+      this.owner);
 
   Advert.fromJson(Map map)
       : bookTitle = map['book_title'],
@@ -27,7 +36,7 @@ class Advert {
         price = map["price"],
         authors = map["authors"],
         state = map["state"],
-        transactionType = map["transaction_type"],
+        transaction_type = map["transaction_type"],
         contactInfo = map["contact_info"],
         images = map["image"],
         condition = map["condition"],
@@ -40,11 +49,11 @@ class Advert {
         'authors': authors,
         'ISBN': isbn,
         'state': state,
-        'transaction_type': transactionType,
+        'transaction_type': transaction_type,
+        'condition': condition,
         'contact_info': contactInfo,
         'owner': owner,
         'image': images,
-        'condition': condition,
         'edition': edition
       };
 }
@@ -87,7 +96,7 @@ class AdvertList {
     return list;
   }
 
-  List<Advert> getUserAdvertList(){
+  List<Advert> getUserAdvertList() {
     return userList;
   }
 
@@ -107,10 +116,25 @@ class AdvertList {
       String isbn,
       String contactInfo,
       List<String> encodedImageList,
+      String condition,
+      String transaction_type,
       context) async {
+    if (condition == 'Nyskick') {
+      condition = '1';
+    } else if (condition == 'Mycket gott skick') {
+      condition = '2';
+    } else if (condition == 'Gott skick') {
+      condition = '3';
+    } else if (condition == 'Hyggligt skick') {
+      condition = '4';
+    } else if (condition == 'Dåligt skick') {
+      condition = '5';
+    } else {
+      condition = '6';
+    }
     List<int> l = [];
-    Advert _newAd = Advert(title, price, author, isbn, contactInfo,
-        encodedImageList, "1", "Kinda fucked", 8);
+    Advert _newAd = Advert(title, price, author, isbn, contactInfo, condition,
+        encodedImageList, transaction_type, '8', 1);
     var data = json.encode(_newAd);
     print(data);
     final String postURL =
