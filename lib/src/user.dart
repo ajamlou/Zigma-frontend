@@ -71,9 +71,9 @@ class UserMethodBody {
 
   UserMethodBody(this.user);
 
-  void iniUser(
-      String email, int id, String username, String token, String image) {
-    user = User(email, id, username, token, image, [], 0, 0);
+  void iniUser(String email, int id, String username, String token,
+      String image, List adverts) {
+    user = User(email, id, username, token, image, adverts, 0, 0);
   }
 
   String getToken() {
@@ -90,7 +90,7 @@ class UserMethodBody {
 
   Future<User> getUserById(int id) async {
     final String url =
-        "https://9548fc36.ngrok.io/users/user/" + id.toString() + "/";
+        "https://9548fc36.ngrok.io/users/users/" + id.toString() + "/";
     print("IM IN getUserById wihooo");
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
@@ -119,6 +119,10 @@ class UserMethodBody {
     return user;
   }
 
+  List<int> getAdvertIds() {
+    return user.adverts;
+  }
+
   bool checkUser() {
     if (user == null) {
       return false;
@@ -127,14 +131,15 @@ class UserMethodBody {
     }
   }
 
-  Future<bool> setUserPreferences(
-      String token, String image, String username, String email, int id) async {
+  Future<bool> setUserPreferences(String token, String image, String username,
+      String email, int id, List adverts) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", token);
     prefs.setString("image", image);
     prefs.setString("username", username);
     prefs.setString("email", email);
     prefs.setInt("id", id);
+    prefs.setStringList("adverts", adverts.map((i) => i.toString()).toList());
     return prefs.commit();
   }
 
@@ -153,7 +158,8 @@ class UserMethodBody {
           prefs.getInt("id"),
           prefs.getString("username"),
           prefs.getString("token"),
-          prefs.getString("image"));
+          prefs.getString("image"),
+          prefs.getStringList("adverts").map((i) => int.parse(i)).toList());
     }
   }
 
@@ -164,7 +170,7 @@ class UserMethodBody {
         UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
-    String postURL = "https://9548fc36.ngrok.io/users/create-user/?format=json";
+    String postURL = "https://9548fc36.ngrok.io/users/users/";
     var response = await http.post(Uri.encodeFull(postURL),
         body: data,
         headers: {
@@ -179,7 +185,7 @@ class UserMethodBody {
     if (response.statusCode == 201) {
       localUser = User.fromJson(parsed);
       await setUserPreferences(localUser.token, localUser.image,
-          localUser.username, localUser.email, localUser.id);
+          localUser.username, localUser.email, localUser.id, localUser.adverts);
       await automaticLogin();
     } else if (response.statusCode == 400) {
       localUser = UserCreation.fromJson(parsed);
@@ -194,7 +200,7 @@ class UserMethodBody {
   Future<int> signIn(String username, String password) async {
     UserLogin _loginUser = new UserLogin(username, password);
     var data = json.encode(_loginUser);
-    String postURL = "https://9548fc36.ngrok.io/users/get-token/?format=json";
+    String postURL = "https://9548fc36.ngrok.io/users/login/";
     var response = await http.post(Uri.encodeFull(postURL),
         body: data,
         headers: {
@@ -206,8 +212,8 @@ class UserMethodBody {
     print(parsed.toString());
     User localUser = User.fromJson(parsed);
     if (response.statusCode == 200) {
-      await setUserPreferences(localUser.token, localUser.image, localUser.username,
-          localUser.email, localUser.id);
+      await setUserPreferences(localUser.token, localUser.image,
+          localUser.username, localUser.email, localUser.id, localUser.adverts);
       await automaticLogin();
     }
     return response.statusCode;
