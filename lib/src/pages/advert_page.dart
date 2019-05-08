@@ -80,7 +80,7 @@ class _AdvertPageState extends State<AdvertPage> {
             ),
             getText("Författare: ", widget.data.authors),
             getText("Upplaga: ", widget.data.edition),
-            getText("Skick: ", widget.data.condition),
+            getText("Skick: ", DataProvider.of(context).advertList.convertCondition(widget.data.condition)),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
@@ -169,12 +169,12 @@ class _AdvertPageState extends State<AdvertPage> {
                       if (snapshot.hasData) {
                         return Text(
                           snapshot.data.username +
-                              " har sålt 0 böcker och köpt 3 böcker.",
+                              " har sålt "+snapshot.data.soldBooks.toString()+" böcker och köpt "+snapshot.data.boughtBooks.toString()+" böcker.",
                           textAlign: TextAlign.center,
                         );
                       } else {
                         return Text(
-                            "Laddar... har sålt 0 böcker och köpt 3 böcker.");
+                            "Laddar... har sålt ... böcker och köpt ... böcker.");
                       }
                     },
                   ),

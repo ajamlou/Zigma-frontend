@@ -76,12 +76,20 @@ class AdvertList {
     print("The Request body is: " + list.toString());
   }
 
+  void clearUserAdvertList() {
+    userList.clear();
+  }
+
   Future<List<Advert>> getAdvertsFromIds(context) async {
     List<int> ids = DataProvider.of(context).user.getAdvertIds();
     print("IM IN GET ADVERTS FROM IDS");
     String url = "https://9548fc36.ngrok.io/adverts/adverts/?ids=";
-    for (int i = 0; i > ids.length; i++) {
-      url = url + "," + ids[i].toString();
+    for (int i = 0; i < ids.length; i++) {
+      if (i == 0) {
+        url = url + ids[i].toString();
+      } else {
+        url = url + "," + ids[i].toString();
+      }
     }
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
@@ -109,6 +117,42 @@ class AdvertList {
     return Advert.fromJson(resBody);
   }
 
+  String convertCondition(String condition){
+    String number;
+    if (condition == '1') {
+      number = 'Nyskick';
+    } else if (condition == '2') {
+      number = 'Mycket gott skick';
+    } else if (condition == '3') {
+      number = 'Gott skick';
+    } else if (condition == '4') {
+      number = 'Hyggligt skick';
+    } else if (condition == '5') {
+      number = 'Dåligt skick';
+    } else {
+      number = 'Skick ej angivet';
+    }
+    return number;
+  }
+
+  String checkCondition(String condition) {
+    String number;
+    if (condition == 'Nyskick') {
+      number = '1';
+    } else if (condition == 'Mycket gott skick') {
+      number = '2';
+    } else if (condition == 'Gott skick') {
+      number = '3';
+    } else if (condition == 'Hyggligt skick') {
+      number = '4';
+    } else if (condition == 'Dåligt skick') {
+      number = '5';
+    } else {
+      number = '6';
+    }
+    return number;
+  }
+
   Future<List> uploadNewAdvert(
       String title,
       int price,
@@ -117,29 +161,15 @@ class AdvertList {
       String contactInfo,
       List<String> encodedImageList,
       String condition,
-      String transaction_type,
+      String transactionType,
       context) async {
-    if (condition == 'Nyskick') {
-      condition = '1';
-    } else if (condition == 'Mycket gott skick') {
-      condition = '2';
-    } else if (condition == 'Gott skick') {
-      condition = '3';
-    } else if (condition == 'Hyggligt skick') {
-      condition = '4';
-    } else if (condition == 'Dåligt skick') {
-      condition = '5';
-    } else {
-      condition = '6';
-    }
+    condition = checkCondition(condition);
     List<int> l = [];
     Advert _newAd = Advert(title, price, author, isbn, contactInfo, condition,
-        encodedImageList, transaction_type, '8', 1);
+        encodedImageList, transactionType, '8', 1);
     var data = json.encode(_newAd);
-    print(data);
     final String postURL =
         "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
-    print("token " + DataProvider.of(context).user.getToken());
     final response =
         await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",

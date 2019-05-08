@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
+import 'dart:math';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -10,6 +10,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   List<Advert> returnList;
+  final controller = PageController(
+    initialPage: 0,
+  );
 
   Future<dynamic> getUserAdverts(context) async {
     if (DataProvider.of(context).advertList.getUserAdvertList().length != 0) {
@@ -40,8 +43,8 @@ class _ProfilePageState extends State<ProfilePage> {
           appBar: AppBar(
             actions: <Widget>[
               IconButton(
-                icon:Icon(Icons.edit),
-                onPressed: (){},
+                icon: Icon(Icons.edit),
+                onPressed: () {},
               ),
             ],
             leading: IconButton(
@@ -65,34 +68,52 @@ class _ProfilePageState extends State<ProfilePage> {
                 flex: 1,
                 child: Container(),
               ),
-              Text(
-                "Dina annonser:", style: TextStyle(fontSize: 25),
-              ),
               Expanded(
                 flex: 4,
-                child: FutureBuilder(
-                  future: getUserAdverts(context),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount:
-                            snapshot.data is List ? snapshot.data.length : 1,
-                        itemBuilder: (context, index) {
-                          if (snapshot.data is List) {
-                            return cardBuilder(snapshot.data[index]);
-                          } else {
-                            return snapshot.data;
-                          }
-                        },
-                      );
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
+                child: PageView(
+                  controller: controller,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          "Dina annonser:",
+                          style: TextStyle(fontSize: 25),
+                        ),
+                        FutureBuilder(
+                          future: getUserAdverts(context),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return SingleChildScrollView(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: MediaQuery.of(context).size.height/2.1,
+                                  ),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data is List
+                                        ? snapshot.data.length
+                                        : 1,
+                                    itemBuilder: (context, index) {
+                                      if (snapshot.data is List) {
+                                        return cardBuilder(snapshot.data[index]);
+                                      } else {
+                                        return snapshot.data;
+                                      }
+                                    },
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    Container(),
+                  ],
                 ),
               ),
             ],
@@ -109,33 +130,42 @@ class _ProfilePageState extends State<ProfilePage> {
       },
       child: Card(
         child: Container(
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(64, 75, 96, .9),
-          ),
-          child: ListTile(
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            leading: Container(
-              height: 90.0,
-              width: 80.0,
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: a.images.length == 0
-                    ? Image.asset('images/placeholder_book.png')
-                    : Image.network(a.images[0]),
+          color: Color.fromRGBO(64, 75, 96, .9),
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: Row(children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: a.images.length == 0
+                      ? Image.asset('images/placeholder_book.png')
+                      : Image.network(a.images[0]),
+                ),
               ),
             ),
-            title: Column(
-              children: <Widget>[
-                Text("Titel: "+ a.bookTitle, style: TextStyle(color: Colors.white)),
-                Text("Författare: "+a.authors, style: TextStyle(color: Colors.white)),
-                Text("Upplaga: "+a.edition, style: TextStyle(color: Colors.white))
-              ],
+            Expanded(
+              flex: 6,
+              child: Column(
+                children: <Widget>[
+                  Text("Titel: " + a.bookTitle,
+                      style: TextStyle(color: Colors.white)),
+                  Text("Författare: " + a.authors,
+                      style: TextStyle(color: Colors.white)),
+                  Text("Upplaga: " + a.edition,
+                      style: TextStyle(color: Colors.white))
+                ],
+              ),
             ),
             // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-            trailing: Icon(Icons.keyboard_arrow_right,
-                color: Colors.white, size: 30.0),
-          ),
+            Expanded(
+                flex: 2,
+                child: Text(
+                  a.price.toString() + ":-",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                )),
+          ]),
         ),
       ),
     );
