@@ -185,7 +185,7 @@ class UserMethodBody {
     if (response.statusCode == 201) {
       localUser = User.fromJson(parsed);
       await setUserPreferences(localUser.token, localUser.image,
-          localUser.username, localUser.email, localUser.id, localUser.adverts);
+          localUser.username, localUser.email, localUser.id, []);
       await automaticLogin();
     } else if (response.statusCode == 400) {
       localUser = UserCreation.fromJson(parsed);
