@@ -80,7 +80,10 @@ class AdvertCreationState extends State<AdvertCreation> {
                 child: Container(
                     child: Column(
                 children: <Widget>[
-                  Text('Vill du köpa eller sälja en bok?', style: TextStyle()),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 100.0),
+                    child: Text('Vill du köpa eller sälja en bok?', style: TextStyle()),
+                  ),
                   Divider(),
                   Container(
                     child: MaterialButton(
