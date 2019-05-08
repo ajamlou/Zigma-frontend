@@ -51,10 +51,12 @@ class Advert {
 
 class AdvertList {
   final List<Advert> list = [];
+  final List<Advert> userList = [];
 
   Future<void> loadAdvertList() async {
     list.clear();
-    String url = "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
+    final String url =
+        "https://9548fc36.ngrok.io/adverts/adverts/recent_adverts/?format=json";
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     print("im in load method now");
@@ -65,8 +67,28 @@ class AdvertList {
     print("The Request body is: " + list.toString());
   }
 
+  Future<List<Advert>> getAdvertsFromIds(context) async {
+    List<int> ids = DataProvider.of(context).user.getAdvertIds();
+    print("IM IN GET ADVERTS FROM IDS");
+    String url = "https://9548fc36.ngrok.io/adverts/adverts/?ids=";
+    for (int i = 0; i > ids.length; i++) {
+      url = url + "," + ids[i].toString();
+    }
+    var req = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    final List resBody = json.decode(utf8.decode(req.bodyBytes));
+    for (int i = 0; i < resBody.length; i++) {
+      userList.add(Advert.fromJson(resBody[i]));
+    }
+    return userList;
+  }
+
   List<Advert> getAdvertList() {
     return list;
+  }
+
+  List<Advert> getUserAdvertList(){
+    return userList;
   }
 
   Future<Advert> getAdvertById(int id) async {

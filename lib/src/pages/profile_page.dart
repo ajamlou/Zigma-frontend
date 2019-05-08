@@ -9,9 +9,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  List<Advert> returnList;
+  Future<List<Advert>> getUserAdverts(context) async {
+    if(DataProvider.of(context).advertList.getUserAdvertList().length != 0){
+      returnList = DataProvider.of(context).advertList.getUserAdvertList();
+    }
+    else{
+     returnList = await DataProvider.of(context).advertList.getAdvertsFromIds(context);
+    }
+    print("IM IN GET USER ADVERTS");
+    return returnList;
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Advert> data = DataProvider.of(context).advertList.getAdvertList();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -49,12 +60,23 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Expanded(
                 flex: 4,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return cardBuilder(data[index]);
+                child: FutureBuilder(
+                  future: getUserAdverts(context),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index) {
+                          return cardBuilder(snapshot.data[index]);
+                        },
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                   },
                 ),
               ),
@@ -67,7 +89,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget cardBuilder(Advert a) {
     return MaterialButton(
-      onPressed: () {},
+      onPressed: () {
+        DataProvider.of(context).routing.routeAdvertPage(context, a, false);
+      },
       child: Card(
         child: Container(
           decoration: BoxDecoration(
