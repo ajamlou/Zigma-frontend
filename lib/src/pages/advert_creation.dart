@@ -38,7 +38,6 @@ class AdvertCreationState extends State<AdvertCreation> {
   TextEditingController isbnController = TextEditingController();
   TextEditingController contactInfoController = TextEditingController();
 
-
   int stringToInt(price) {
     var priceInt = int.parse(price);
     assert(priceInt is int);
@@ -54,7 +53,12 @@ class AdvertCreationState extends State<AdvertCreation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFECE9DF),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("images/advertCreationPicture.png"),
+          fit: BoxFit.fill,
+        ),
+      ),
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         backgroundColor: Colors.transparent,
@@ -63,7 +67,9 @@ class AdvertCreationState extends State<AdvertCreation> {
           child: AppBar(
             iconTheme: IconThemeData(color: Color(0xff96070a)),
             elevation: 0.0,
-            backgroundColor: Color(0xff96070a),
+            backgroundColor: transaction_type == null
+                ? Colors.transparent
+                : Color(0xff96070a),
             title: Text('Lägg till en ny annons',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -84,15 +90,36 @@ class AdvertCreationState extends State<AdvertCreation> {
         ),
         body: transaction_type == null
             ? Center(
-                child: Container(
-                    child: Column(
+                child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 100.0),
-                    child: Text('Vill du köpa eller sälja en bok?', style: TextStyle()),
+                    padding: const EdgeInsets.only(top: 100.0, bottom: 50),
+                    child: Text(
+                      'Vill du köpa eller sälja en bok?',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(1.5, 1.5),
+                            blurRadius: 2.0,
+                            color: Colors.amber,
+                          ),
+                          Shadow(
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 3.0,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  Divider(),
+                  Divider(
+                    color: Colors.white,
+                    height: 10,
+                  ),
                   Container(
+                    width: 100,
                     child: MaterialButton(
                       color: Color(0xff96070a),
                       onPressed: () {
@@ -104,8 +131,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                           style: TextStyle(color: Colors.white)),
                     ),
                   ),
-                  Divider(),
                   Container(
+                    width: 100,
                     child: MaterialButton(
                       color: Color(0xff96070a),
                       onPressed: () {
@@ -117,8 +144,9 @@ class AdvertCreationState extends State<AdvertCreation> {
                           style: TextStyle(color: Colors.white)),
                     ),
                   ),
+                  Divider(color: Colors.white, height: 5),
                 ],
-              )))
+              ))
             : Container(
                 width: MediaQuery.of(context).size.width,
                 child: ListView(
@@ -130,6 +158,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                       children: <Widget>[
                         Container(
                           height: 150.0,
+                          color: Colors.white70,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
@@ -143,7 +172,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.all(6.0),
+                                padding: const EdgeInsets.all(2.0),
                                 child: compressedImageList.length == 1
                                     ? Text('')
                                     : RaisedButton(
@@ -163,8 +192,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                       ],
                     ),
                     Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.0),
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 3,
+                        ),
+                      ),
                       padding: EdgeInsets.only(
-                          left: 30.0, right: 30.0, bottom: 10.0),
+                          left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
                       child: Form(
                         key: _advertKey,
                         child: Column(
@@ -179,7 +216,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 hintText: 'Titel',
                                 suffixIcon: titleController.text.length < 5
                                     ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
+                                        size: 10, color: Color(0xff96070a))
                                     : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
@@ -197,7 +234,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 hintText: 'Pris',
                                 suffixIcon: priceController.text == ""
                                     ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
+                                        size: 10, color: Color(0xff96070a))
                                     : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
@@ -212,9 +249,10 @@ class AdvertCreationState extends State<AdvertCreation> {
                               autofocus: false,
                               decoration: InputDecoration(
                                 hintText: 'Författare',
-                                suffixIcon: authorController.text.length < 5 || !authorController.text.contains(" ")
+                                suffixIcon: authorController.text.length < 5 ||
+                                        !authorController.text.contains(" ")
                                     ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
+                                        size: 10, color: Color(0xff96070a))
                                     : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
@@ -231,7 +269,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 hintText: 'ISBN',
                                 suffixIcon: isbnController.text.length < 8
                                     ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
+                                        size: 10, color: Color(0xff96070a))
                                     : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
@@ -246,9 +284,10 @@ class AdvertCreationState extends State<AdvertCreation> {
                               autofocus: false,
                               decoration: InputDecoration(
                                 hintText: 'Kontaktinformation',
-                                suffixIcon: contactInfoController.text.length < 8
+                                suffixIcon: contactInfoController.text.length <
+                                        8
                                     ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
+                                        size: 10, color: Color(0xff96070a))
                                     : Icon(Icons.check, color: Colors.green),
                               ),
                               validator: (value) =>
@@ -256,15 +295,15 @@ class AdvertCreationState extends State<AdvertCreation> {
                               onSaved: (value) => _contactInfo = value,
                             ),
                             Container(
-                                width: 300,
+                                width: 600,
                                 child: Row(children: <Widget>[
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('Skick: '),
+                                    padding: const EdgeInsets.all(1.0),
+                                    child: Text('Skick: ', style: TextStyle(fontSize: 17)),
                                   ),
                                   Divider(),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(1.0),
                                     child: dropdownMenu(),
                                   ),
                                 ]))
@@ -283,8 +322,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                             _advertKey.currentState.save();
                             responseList = await DataProvider.of(context)
                                 .advertList
-                                .uploadNewAdvert(_title, _price, _author, _isbn,
-                                    _contactInfo, encodedImageList, condition, transaction_type, context);
+                                .uploadNewAdvert(
+                                    _title,
+                                    _price,
+                                    _author,
+                                    _isbn,
+                                    _contactInfo,
+                                    encodedImageList,
+                                    condition,
+                                    transaction_type,
+                                    context);
                             setState(() {
                               stsCode = responseList[0];
                             });
@@ -438,10 +485,10 @@ class AdvertCreationState extends State<AdvertCreation> {
       for (int index = compressedImageList.length; index >= 0; index--) {
         if (_selectedItemsIndex.contains(index)) {
           compressedImageList.removeAt(index);
-          encodedImageList.removeAt(index-1);
+          encodedImageList.removeAt(index - 1);
         }
         print(compressedImageList);
-        print(encodedImageList);
+    //    print(encodedImageList);
       }
       setState(() {
         _selectedItemsIndex = [];
@@ -456,7 +503,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     var compressedImage = await compressImageFile(image);
     setState(() {
       _insert(compressedImage);
-      print(encodedImageList.toString());
+      print(compressedImageList);
     });
     Navigator.of(context, rootNavigator: true).pop(null);
   }
@@ -478,25 +525,29 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   Widget dropdownMenu() {
     return Center(
-      child: DropdownButton<String>(
-        value: condition,
-        onChanged: (String newValue) {
-          setState(() {
-            condition = newValue;
-          });
-        },
-        items: <String>[
-          'Nyskick',
-          'Mycket gott skick',
-          'Gott skick',
-          'Hyggligt skick',
-          'Dåligt skick'
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
+      child: Container(
+        width: 215,
+        child: DropdownButton<String>(
+          isExpanded: true,
+          value: condition,
+          onChanged: (String newValue) {
+            setState(() {
+              condition = newValue;
+            });
+          },
+          items: <String>[
+            'Nyskick',
+            'Mycket gott skick',
+            'Gott skick',
+            'Hyggligt skick',
+            'Dåligt skick'
+          ].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
