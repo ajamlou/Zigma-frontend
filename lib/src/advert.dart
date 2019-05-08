@@ -69,11 +69,17 @@ class AdvertList {
 
   Future<List<Advert>> getAdvertsFromIds(context) async {
     List<int> ids = DataProvider.of(context).user.getAdvertIds();
+    print(ids.toString());
     print("IM IN GET ADVERTS FROM IDS");
     String url = "https://9548fc36.ngrok.io/adverts/adverts/?ids=";
-    for (int i = 0; i > ids.length; i++) {
-      url = url + "," + ids[i].toString();
+    for (int i = 0; i < ids.length; i++) {
+      if (i == 0) {
+        url = url + ids[i].toString();
+      } else {
+        url = url + "," + ids[i].toString();
+      }
     }
+    print(url);
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
@@ -87,7 +93,11 @@ class AdvertList {
     return list;
   }
 
-  List<Advert> getUserAdvertList(){
+  void clearUserAdvertList() {
+    userList.clear();
+  }
+
+  List<Advert> getUserAdvertList() {
     return userList;
   }
 

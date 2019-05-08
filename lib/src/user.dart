@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zigma2/src/DataProvider.dart';
 
 class User {
   String email;
@@ -110,8 +111,9 @@ class UserMethodBody {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(context) async {
     user = null;
+    DataProvider.of(context).advertList.clearUserAdvertList();
     await clearPrefs();
   }
 

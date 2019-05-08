@@ -10,14 +10,17 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   List<Advert> returnList;
-  Future<List<Advert>> getUserAdverts(context) async {
-    if(DataProvider.of(context).advertList.getUserAdvertList().length != 0){
+
+  Future<dynamic> getUserAdverts(context) async {
+    if (DataProvider.of(context).advertList.getUserAdvertList().length != 0) {
       returnList = DataProvider.of(context).advertList.getUserAdvertList();
+    } else {
+      returnList =
+          await DataProvider.of(context).advertList.getAdvertsFromIds(context);
+      if (returnList.length == 0) {
+        return noAdverts(context);
+      }
     }
-    else{
-     returnList = await DataProvider.of(context).advertList.getAdvertsFromIds(context);
-    }
-    print("IM IN GET USER ADVERTS");
     return returnList;
   }
 
@@ -35,14 +38,18 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            leading: Container(
-              child: IconButton(
-                color: Color(0xFFFFFFFF),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back),
+            actions: <Widget>[
+              IconButton(
+                icon:Icon(Icons.edit),
+                onPressed: (){},
               ),
+            ],
+            leading: IconButton(
+              color: Color(0xFFFFFFFF),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back),
             ),
             iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
             elevation: 0.0,
@@ -55,8 +62,11 @@ class _ProfilePageState extends State<ProfilePage> {
               _profileNameStyled(),
               _profileRatingStyled(),
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Container(),
+              ),
+              Text(
+                "Dina annonser:", style: TextStyle(fontSize: 25),
               ),
               Expanded(
                 flex: 4,
@@ -67,9 +77,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       return ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
-                        itemCount: snapshot.data.length,
+                        itemCount:
+                            snapshot.data is List ? snapshot.data.length : 1,
                         itemBuilder: (context, index) {
-                          return cardBuilder(snapshot.data[index]);
+                          if (snapshot.data is List) {
+                            return cardBuilder(snapshot.data[index]);
+                          } else {
+                            return snapshot.data;
+                          }
                         },
                       );
                     } else {
@@ -112,9 +127,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             title: Column(
               children: <Widget>[
-                Text(a.bookTitle, style: TextStyle()),
-                Text(a.authors, style: TextStyle()),
-                Text(a.edition, style: TextStyle())
+                Text("Titel: "+ a.bookTitle, style: TextStyle(color: Colors.white)),
+                Text("Författare: "+a.authors, style: TextStyle(color: Colors.white)),
+                Text("Upplaga: "+a.edition, style: TextStyle(color: Colors.white))
               ],
             ),
             // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
@@ -126,12 +141,33 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void showLargerPicture() {}
+  Container noAdverts(context) {
+    Container returner = Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Text(
+              "Wooops! Verkar som du inte lagt upp några annonser än! (synd!)",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 35),
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {
+              DataProvider.of(context).routing.routeCreationPage(context);
+            },
+            child: Text("Lägg till en annons"),
+          ),
+        ],
+      ),
+    );
+    return returner;
+  }
 
   Widget _profilePictureStyled() {
     String userImageURI = DataProvider.of(context).user.getImage();
     return GestureDetector(
-      onTap: showLargerPicture,
+      onTap: () {},
       child: Center(
         child: Container(
           child: CircleAvatar(

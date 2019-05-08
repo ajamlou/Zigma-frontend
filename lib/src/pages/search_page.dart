@@ -43,40 +43,56 @@ class SearchPage extends SearchDelegate<void> {
     final data = DataProvider.of(context).advertList.getAdvertList();
     final suggestionList = query.isEmpty
         ? data
-        : data.where((a) => a.bookTitle.toLowerCase().startsWith(query.toLowerCase())).toList();
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: RichText(
-            text: TextSpan(
-              text: suggestionList[index].bookTitle.substring(0, query.length),
-              style: TextStyle(
-                color: Color(0xff96070a),
-                fontWeight: FontWeight.bold,
-                fontSize: 17
-              ),
-              children: [
-                TextSpan(
-                  text: suggestionList[index].bookTitle.substring(query.length),
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15
+        : data
+            .where((a) =>
+                a.bookTitle.toLowerCase().startsWith(query.toLowerCase()))
+            .toList();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(5),
+          child: Text("De 20 senast uppglagda annonserna"),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: suggestionList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: RichText(
+                  text: TextSpan(
+                    text: suggestionList[index]
+                        .bookTitle
+                        .substring(0, query.length),
+                    style: TextStyle(
+                        color: Color(0xff96070a),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17),
+                    children: [
+                      TextSpan(
+                        text: suggestionList[index]
+                            .bookTitle
+                            .substring(query.length),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+                leading: Icon(Icons.book),
+                trailing: Text(suggestionList[index].authors ?? ""),
+                onTap: () async {
+                  DataProvider.of(context)
+                      .routing
+                      .routeAdvertPage(context, data[index], false);
+                },
+              );
+            },
           ),
-          leading: Icon(Icons.book),
-          trailing: Text(suggestionList[index].authors ?? ""),
-          onTap: () async {
-            DataProvider.of(context)
-                .routing
-                .routeAdvertPage(context, data[index], false);
-          },
-        );
-      },
+        ),
+      ],
     );
   }
 }

@@ -202,7 +202,7 @@ class _LandingPageState extends State<LandingPage> {
               onTap: () async {
                 showLoadingAlertDialog();
                 Future.delayed(Duration(milliseconds: 1500), () async {
-                  await DataProvider.of(context).user.logout();
+                  await DataProvider.of(context).user.logout(context);
                   setState(() {});
                   Navigator.of(context, rootNavigator: true).pop(null);
                   Navigator.of(context, rootNavigator: true).pop(null);
