@@ -179,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Text(
               "Wooops! Verkar som du inte lagt upp några annonser än! (synd!)",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 35),
+              style: TextStyle(fontSize: 25),
             ),
           ),
           RaisedButton(
