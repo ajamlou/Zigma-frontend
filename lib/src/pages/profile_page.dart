@@ -28,94 +28,100 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("images/advertPageBackground.jpg"),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {},
-              ),
-            ],
-            leading: IconButton(
-              color: Color(0xFFFFFFFF),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back),
-            ),
-            iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
+    return Hero(
+      tag: 'expanded image',
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/advertPageBackground.jpg"),
+            fit: BoxFit.cover,
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              _profilePictureStyled(),
-              _profileNameStyled(),
-              _profileRatingStyled(),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 4,
-                child: PageView(
-                  controller: controller,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "Dina annonser:",
-                          style: TextStyle(fontSize: 25),
-                        ),
-                        FutureBuilder(
-                          future: getUserAdverts(context),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return SingleChildScrollView(
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxHeight: MediaQuery.of(context).size.height/2.1,
-                                  ),
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: snapshot.data is List
-                                        ? snapshot.data.length
-                                        : 1,
-                                    itemBuilder: (context, index) {
-                                      if (snapshot.data is List) {
-                                        return cardBuilder(snapshot.data[index]);
-                                      } else {
-                                        return snapshot.data;
-                                      }
-                                    },
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    Container(),
-                  ],
+        ),
+        child: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {},
                 ),
+              ],
+              leading: IconButton(
+                color: Color(0xFFFFFFFF),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back),
               ),
-            ],
+              iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                _profilePictureStyled(),
+                _profileNameStyled(),
+                _profileRatingStyled(),
+                Expanded(
+                  flex: 1,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: PageView(
+                    controller: controller,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            "Dina annonser:",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          FutureBuilder(
+                            future: getUserAdverts(context),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return SingleChildScrollView(
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxHeight:
+                                          MediaQuery.of(context).size.height /
+                                              2.1,
+                                    ),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data is List
+                                          ? snapshot.data.length
+                                          : 1,
+                                      itemBuilder: (context, index) {
+                                        if (snapshot.data is List) {
+                                          return cardBuilder(
+                                              snapshot.data[index]);
+                                        } else {
+                                          return snapshot.data;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      Container(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -196,7 +202,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _profilePictureStyled() {
     String userImageURI = DataProvider.of(context).user.getImage();
     return GestureDetector(
-      onTap: () {},
+      onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return expandedImage();
+              },
+            ),
+          ),
       child: Center(
         child: Container(
           child: CircleAvatar(
@@ -247,6 +260,26 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+  Widget expandedImage() => Hero(
+      tag: 'expand image',
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: Colors.black54,
+            child: Container(
+                width: 250,
+                height: 350,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child:
+                      Image.network(DataProvider.of(context).user.getImage()),
+                ))),
+      ));
 }
 
 //  Widget _profileMenusStyled() {
