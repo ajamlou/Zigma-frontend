@@ -35,7 +35,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    channel = IOWebSocketChannel.connect('ws://3502f4a2.ngrok.io/ws/chat/olle/');
+    channel =
+        IOWebSocketChannel.connect('ws://3502f4a2.ngrok.io/ws/chat/olle/');
     _textController = TextEditingController();
     channel.stream.listen((data) {
       Message receivedMessage = Message.fromJson(json.decode(data));
@@ -62,7 +63,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void sendData() {
     if (_textController.text.isNotEmpty) {
       Message newMessage = Message(
-        text:_textController.text,
+        text: _textController.text,
       );
       var data = json.encode(newMessage);
       channel.sink.add(data);
@@ -149,10 +150,7 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final AnimationController animationController;
 
-
-
-
-@override
+  @override
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor:
@@ -198,18 +196,14 @@ class ChatMessage extends StatelessWidget {
 
 class Message {
   Message({this.text});
+
   String text;
 
   Map<String, dynamic> toJson() => {
-    'message': text,
-  };
+        'message': text,
+      };
 
-  Message.fromJson(Map map)
-      : text = map['message']
-
-  ;
-
-
+  Message.fromJson(Map map) : text = map['message'];
 }
 
 final ThemeData kIOSTheme = ThemeData(

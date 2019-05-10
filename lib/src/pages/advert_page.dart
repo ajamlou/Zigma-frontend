@@ -15,13 +15,8 @@ class AdvertPage extends StatefulWidget {
 }
 
 class _AdvertPageState extends State<AdvertPage> {
-  Future<dynamic> getUser() async {
-    print(widget.data.owner.toString());
-    var userData =
-        await DataProvider.of(context).user.getUserById(widget.data.owner);
-    return userData;
-  }
 
+  //Build method
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,7 +70,7 @@ class _AdvertPageState extends State<AdvertPage> {
                     height: 300,
                     child: GestureDetector(
                       onTap: () {
-                        carouselDialog(widget.data.images);
+                        carouselDialog();
                       },
                       child: Carousel(images: widget.data.images),
                     ),
@@ -253,19 +248,22 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-  void carouselDialog(List data) {
+  Future<dynamic> getUser() async {
+    print(widget.data.owner.toString());
+    var userData =
+    await DataProvider.of(context).user.getUserById(widget.data.owner);
+    return userData;
+  }
+
+
+  void carouselDialog() {
     print("Im in carousel alertDialog");
     Dialog dialog = Dialog(
-      insetAnimationCurve: Curves.decelerate,
-      insetAnimationDuration: Duration(milliseconds: 500),
-      backgroundColor: Color(0xFFECE9DF),
       child: Container(
-        child: FittedBox(
-          fit: BoxFit.contain,
-          child: Carousel(images: data),
+        height: MediaQuery.of(context).size.height/2,
+        child: Carousel(images: widget.data.images),
         ),
-      ),
-    );
+      );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 

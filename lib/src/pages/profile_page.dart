@@ -272,23 +272,6 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  Widget expandedImage() => Hero(
-      tag: 'expand image',
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: Colors.black54,
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child:
-              Image.network(DataProvider.of(context).user.getImage()),
-            )),
-      ));
-
 
 }
 

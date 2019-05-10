@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'package:flutter/material.dart';
-import 'package:zigma2/src/user.dart';
 import 'package:zigma2/src/DataProvider.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -13,16 +12,15 @@ class RegisterPageState extends State<RegisterPage> {
   List _success;
   String _userEmail;
   String _password;
-  Color same;
   String _userName;
-  Map parsed;
-  User user;
-  bool isLoading = false;
-  bool validatedPwd = false;
   TextEditingController validatePasswordController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
+  RegExp passwordRegExp = RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+  RegExp emailRegExp = RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
   File _image;
 
   void showImageAlertDialog() async {
@@ -75,11 +73,10 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    usernameController.addListener(_usernameListenerMethod);
+    usernameController.addListener(_usernameListener);
     emailController.addListener(_emailListener);
-    validatePasswordController.addListener(_listenerMethod);
-    passwordController.addListener(_listenerMethod);
-    same = Colors.grey;
+    validatePasswordController.addListener(_passwordListener);
+    passwordController.addListener(_passwordListener);
   }
 
   @override
@@ -91,33 +88,18 @@ class RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void _usernameListenerMethod() {
+  void _usernameListener() {
     setState(() {});
   }
 
   bool _emailListener() {
-    String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(p);
     setState(() {});
-    return regExp.hasMatch(emailController.text);
+    return emailRegExp.hasMatch(emailController.text);
   }
 
-  void _listenerMethod() {
-    same = passwordChecker();
+  bool _passwordListener() {
     setState(() {});
-  }
-
-  Color passwordChecker() {
-    if (validatePasswordController.text == "") {
-      return Colors.grey;
-    }
-    if (passwordController.text.compareTo(validatePasswordController.text) ==
-        0) {
-      return Colors.green;
-    } else {
-      return Colors.red;
-    }
+    return passwordRegExp.hasMatch(passwordController.text);
   }
 
   @override
@@ -278,38 +260,56 @@ class RegisterPageState extends State<RegisterPage> {
                             Icons.lock,
                             color: Colors.grey,
                           ),
-                          suffixIcon: passwordController.text.length < 8
+                          suffixIcon: passwordController.text.length < 8 ||
+                                  validatePasswordController.text !=
+                                      passwordController.text
                               ? Icon(Icons.star,
                                   size: 10, color: Color(0xff96070a))
                               : Icon(Icons.check, color: Colors.green),
                         ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Obligatoriskt Fält';
+                          } else if (!passwordRegExp
+                              .hasMatch(passwordController.text)) {
+                            return 'lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
+                          } else {
+                            return null;
+                          }
+                        },
                         onSaved: (value) => _password = value,
                       ),
                       //color: same,
                       TextFormField(
-                          maxLines: 1,
-                          controller: validatePasswordController,
-                          obscureText: true,
-                          autofocus: false,
-                          cursorColor: Color(0xff96070a),
-                          decoration: InputDecoration(
-                            hintText: 'Repetera lösenord',
-                            icon: Icon(
-                              Icons.lock,
-                              color: same,
-                            ),
-                            suffixIcon: passwordController.text == "" ||
-                                    validatePasswordController.text !=
-                                        passwordController.text
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
-                                : Icon(Icons.check, color: Colors.green),
+                        maxLines: 1,
+                        controller: validatePasswordController,
+                        obscureText: true,
+                        autofocus: false,
+                        cursorColor: Color(0xff96070a),
+                        decoration: InputDecoration(
+                          hintText: 'Repetera lösenord',
+                          icon: Icon(
+                            Icons.lock,
+                            color: Colors.grey,
                           ),
-                          validator: (value) => value.isEmpty
-                              ? 'Detta fält kan inte vara tomt'
-                              : null),
+                          suffixIcon: passwordController.text == "" ||
+                                  validatePasswordController.text !=
+                                      passwordController.text
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xff96070a))
+                              : Icon(Icons.check, color: Colors.green),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Obligatoriskt Fält';
+                          } else if (validatePasswordController.text !=
+                              passwordController.text) {
+                            return 'lösenorden måste vara likadana';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -322,7 +322,9 @@ class RegisterPageState extends State<RegisterPage> {
                   child: Text('Skapa nytt konto',
                       style: TextStyle(color: Color(0xFFFFFFFF))),
                   onPressed: () async {
-                    if (_userKey.currentState.validate()) {
+                    if (_userKey.currentState.validate() &&
+                        passwordController.text ==
+                            validatePasswordController.text) {
                       showLoadingAlertDialog();
                       _userKey.currentState.save();
                       _success = await DataProvider.of(context).user.register(
