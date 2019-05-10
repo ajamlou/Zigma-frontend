@@ -65,9 +65,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 _profilePictureStyled(),
                 _profileNameStyled(),
                 _profileRatingStyled(),
-                Expanded(
-                  flex: 1,
-                  child: Container(),
+                SizedBox(
+                  height: 15,
                 ),
                 Expanded(
                   flex: 4,
@@ -202,14 +201,9 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _profilePictureStyled() {
     String userImageURI = DataProvider.of(context).user.getImage();
     return GestureDetector(
-      onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return expandedImage();
-              },
-            ),
-          ),
+      onTap: (){
+        profilePicDialog();
+      },
       child: Center(
         child: Container(
           child: CircleAvatar(
@@ -259,6 +253,23 @@ class _ProfilePageState extends State<ProfilePage> {
             ]),
       ),
     );
+  }
+
+
+  void profilePicDialog() {
+    print("Im in show alertDialog");
+    Dialog dialog = Dialog(
+      insetAnimationCurve: Curves.decelerate,
+      insetAnimationDuration: Duration(milliseconds: 500),
+      backgroundColor: Color(0xFFECE9DF),
+      child: Container(
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Image.network(DataProvider.of(context).user.getImage()),
+        ),
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
   Widget expandedImage() => Hero(
