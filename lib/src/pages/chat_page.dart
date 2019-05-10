@@ -33,7 +33,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    channel = IOWebSocketChannel.connect('ws://echo.websocket.org');
+    channel = IOWebSocketChannel.connect('ws://3502f4a2.ngrok.io/chat/olle/');
     _textController = TextEditingController();
     channel.stream.listen((data) {
       ChatMessage message = ChatMessage(
@@ -58,6 +58,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void sendData() {
     if (_textController.text.isNotEmpty) {
       channel.sink.add(_textController.text);
+      print('message sink');
       _textController.clear();
     }
   }
