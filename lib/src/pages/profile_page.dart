@@ -271,15 +271,14 @@ class _ProfilePageState extends State<ProfilePage> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             color: Colors.black54,
-            child: Container(
-                width: 250,
-                height: 350,
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child:
-                      Image.network(DataProvider.of(context).user.getImage()),
-                ))),
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child:
+              Image.network(DataProvider.of(context).user.getImage()),
+            )),
       ));
+
+
 }
 
 //  Widget _profileMenusStyled() {
