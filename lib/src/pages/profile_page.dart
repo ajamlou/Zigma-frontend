@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
-import 'dart:math';
 
 class ProfilePage extends StatefulWidget {
   @override

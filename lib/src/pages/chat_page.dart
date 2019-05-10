@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class FriendlyChatApp extends StatelessWidget {
   @override
@@ -24,8 +26,41 @@ class ChatScreen extends StatefulWidget {
 
 class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final List<ChatMessage> _messages = <ChatMessage>[];
-  final TextEditingController _textController = TextEditingController();
+  WebSocketChannel channel;
+  TextEditingController _textController;
   bool _isComposing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    channel = IOWebSocketChannel.connect('ws://echo.websocket.org');
+    _textController = TextEditingController();
+    channel.stream.listen((data) {
+      ChatMessage message = ChatMessage(
+        text: data,
+        animationController: AnimationController(
+          duration: Duration(milliseconds: 500),
+          vsync: this,
+        ),
+      );
+      setState(() => _messages.insert(0, message));
+      message.animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    for (ChatMessage message in _messages)
+      message.animationController.dispose();
+    super.dispose();
+  }
+
+  void sendData() {
+    if (_textController.text.isNotEmpty) {
+      channel.sink.add(_textController.text);
+      _textController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +112,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     _isComposing = text.length > 0;
                   });
                 },
-                onSubmitted: _handleSubmitted,
                 decoration:
                     InputDecoration.collapsed(hintText: "Send a message"),
               ),
@@ -88,13 +122,13 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     ? CupertinoButton(
                         child: Text("Send"),
                         onPressed: _isComposing
-                            ? () => _handleSubmitted(_textController.text)
+                            ? () => sendData()
                             : null,
                       )
                     : IconButton(
                         icon: Icon(Icons.send),
                         onPressed: _isComposing
-                            ? () => _handleSubmitted(_textController.text)
+                            ? () => sendData()
                             : null,
                       )),
           ],
@@ -103,30 +137,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     );
   }
 
-  void _handleSubmitted(String text) {
-    _textController.clear();
-    setState(() {
-      _isComposing = false;
-    });
-    ChatMessage message = ChatMessage(
-      text: text,
-      animationController: AnimationController(
-        duration: Duration(milliseconds: 500),
-        vsync: this,
-      ),
-    );
-    setState(() {
-      _messages.insert(0, message);
-    });
-    message.animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    for (ChatMessage message in _messages)
-      message.animationController.dispose();
-    super.dispose();
-  }
 }
 
 class ChatMessage extends StatelessWidget {
@@ -178,7 +188,6 @@ class ChatMessage extends StatelessWidget {
     );
   }
 }
-
 
 final ThemeData kIOSTheme = ThemeData(
   primarySwatch: Colors.orange,

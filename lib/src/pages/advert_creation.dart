@@ -89,7 +89,7 @@ class AdvertCreationState extends State<AdvertCreation> {
           ),
         ),
         body: AnimatedCrossFade(
-          duration: Duration(seconds: 1),
+          duration: Duration(milliseconds: 500),
           firstChild: Center(
               child: Column(
             children: <Widget>[
@@ -333,18 +333,18 @@ class AdvertCreationState extends State<AdvertCreation> {
                         setState(() {
                           stsCode = responseList[0];
                         });
-                      }
-                      if (stsCode == 201) {
-                        var a = await DataProvider.of(context)
-                            .advertList
-                            .getAdvertById(responseList[1]);
-                        Navigator.of(context, rootNavigator: true).pop(null);
-                        DataProvider.of(context)
-                            .routing
-                            .routeAdvertPage(context, a, true);
-                      } else {
-                        Navigator.of(context, rootNavigator: true).pop(null);
-                        showAdvertCreationAlertDialog(stsCode);
+                        if (stsCode == 201) {
+                          var a = await DataProvider.of(context)
+                              .advertList
+                              .getAdvertById(responseList[1]);
+                          Navigator.of(context, rootNavigator: true).pop(null);
+                          DataProvider.of(context)
+                              .routing
+                              .routeAdvertPage(context, a, true);
+                        } else {
+                          Navigator.of(context, rootNavigator: true).pop(null);
+                          showAdvertCreationAlertDialog(stsCode);
+                        }
                       }
                     },
                     child: Text("Ladda upp",
@@ -362,7 +362,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     );
   }
 
-  Future showLoadingAlertDialog() async {
+  void showLoadingAlertDialog() {
     AlertDialog dialog = AlertDialog(
       backgroundColor: Color(0xFFECE9DF),
       title: Text(
@@ -378,7 +378,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  Future showAdvertCreationAlertDialog(int value) async {
+  void showAdvertCreationAlertDialog(int value) {
     String message = "";
     if (value == 400) {
       message = "Bad Request";
@@ -399,7 +399,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  Future showImageAlertDialog() async {
+  void showImageAlertDialog() {
     AlertDialog dialog = AlertDialog(
         backgroundColor: Color(0xFFECE9DF),
         title: Text(
@@ -473,14 +473,14 @@ class AdvertCreationState extends State<AdvertCreation> {
   }
 
   // Insert the new item to the lists
-  Future _insert(File _nextItem) async {
+  void _insert(File _nextItem) {
     compressedImageList.add(Image.file(_nextItem));
     encodedImageList.add(Ih.imageFileToString(_nextItem));
     setState(() {});
   }
 
 // Remove the selected items from the lists
-  Future _remove() async {
+  void _remove(){
     if (_selectedItemsIndex.length != 0) {
       for (int index = compressedImageList.length; index >= 0; index--) {
         if (_selectedItemsIndex.contains(index)) {
@@ -496,11 +496,13 @@ class AdvertCreationState extends State<AdvertCreation> {
     }
   }
 
-  Future getImage(String inputSource) async {
+  Future<void> getImage(String inputSource) async {
     var image = inputSource == "camera"
         ? await ImagePicker.pickImage(source: ImageSource.camera)
         : await ImagePicker.pickImage(source: ImageSource.gallery);
+    showLoadingAlertDialog();
     var compressedImage = await compressImageFile(image);
+    Navigator.of(context, rootNavigator: true).pop(null);
     setState(() {
       _insert(compressedImage);
       print(compressedImageList);
