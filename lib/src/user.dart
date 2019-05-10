@@ -133,7 +133,7 @@ class UserMethodBody {
     }
   }
 
-  Future<bool> setUserPreferences(String token, String image, String username,
+  Future<void> setUserPreferences(String token, String image, String username,
       String email, int id, List adverts) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", token);
@@ -142,13 +142,11 @@ class UserMethodBody {
     prefs.setString("email", email);
     prefs.setInt("id", id);
     prefs.setStringList("adverts", adverts.map((i) => i.toString()).toList());
-    return prefs.commit();
   }
 
-  Future<bool> clearPrefs() async {
+  Future<void> clearPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    return prefs.commit();
   }
 
   Future<void> automaticLogin() async {
