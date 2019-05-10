@@ -37,6 +37,11 @@ class AdvertCreationState extends State<AdvertCreation> {
   TextEditingController priceController = TextEditingController();
   TextEditingController isbnController = TextEditingController();
   TextEditingController contactInfoController = TextEditingController();
+  TextEditingController editionController = TextEditingController();
+
+  void _listener() {
+    setState(() {});
+  }
 
   int stringToInt(price) {
     var priceInt = int.parse(price);
@@ -48,6 +53,12 @@ class AdvertCreationState extends State<AdvertCreation> {
   void initState() {
     super.initState();
     compressedImageList.add(placeholderImage);
+    titleController.addListener(_listener);
+    authorController.addListener(_listener);
+    priceController.addListener(_listener);
+    isbnController.addListener(_listener);
+    contactInfoController.addListener(_listener);
+    editionController.addListener(_listener);
   }
 
   @override
@@ -96,7 +107,8 @@ class AdvertCreationState extends State<AdvertCreation> {
               Padding(
                 padding: const EdgeInsets.only(top: 100.0, bottom: 50),
                 child: Text(
-                  'Vill du köpa eller sälja en bok?',
+                  'Söker du efter en bok eller vill du sälja en bok?',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 25,
                     color: Colors.white,
@@ -115,37 +127,39 @@ class AdvertCreationState extends State<AdvertCreation> {
                   ),
                 ),
               ),
-              Divider(
-                color: Colors.white,
-                height: 10,
-              ),
               Container(
-                width: 100,
-                child: MaterialButton(
+                height: 100,
+                width: 180,
+                child: RaisedButton(
+                  elevation: 5,
                   color: Color(0xff96070a),
                   onPressed: () {
                     setState(() {
                       transaction_type = 'S';
                     });
                   },
-                  child:
-                      Text('Sälja bror', style: TextStyle(color: Colors.white)),
+                  child: Text('Sälja',
+                      style: TextStyle(color: Colors.white, fontSize: 50)),
                 ),
               ),
+              SizedBox(
+                height: 15,
+              ),
               Container(
-                width: 100,
-                child: MaterialButton(
+                height: 100,
+                width: 180,
+                child: RaisedButton(
+                  elevation: 5,
                   color: Color(0xff96070a),
                   onPressed: () {
                     setState(() {
                       transaction_type = 'B';
                     });
                   },
-                  child:
-                      Text('Köpa fam', style: TextStyle(color: Colors.white)),
+                  child: Text('Söker',
+                      style: TextStyle(color: Colors.white, fontSize: 50)),
                 ),
               ),
-              Divider(color: Colors.white, height: 5),
             ],
           )),
           secondChild: Container(
@@ -212,7 +226,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Titel',
-                            suffixIcon: titleController.text.length < 5
+                            suffixIcon: titleController.text == ""
                                 ? Icon(Icons.star,
                                     size: 10, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
@@ -230,13 +244,21 @@ class AdvertCreationState extends State<AdvertCreation> {
                           // maxLength: 4,
                           decoration: InputDecoration(
                             hintText: 'Pris',
-                            suffixIcon: priceController.text == ""
+                            suffixIcon: priceController.text.length > 4 ||
+                                    priceController.text == ""
                                 ? Icon(Icons.star,
                                     size: 10, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
-                          validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Obligatoriskt Fält';
+                            } else if (value.length > 4) {
+                              return 'Priset får inte överstiga 9999kr';
+                            } else {
+                              return null;
+                            }
+                          },
                           onSaved: (value) => _price = stringToInt(value),
                         ),
                         TextFormField(
@@ -253,8 +275,15 @@ class AdvertCreationState extends State<AdvertCreation> {
                                     size: 10, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
-                          validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Obligatoriskt Fält';
+                            } else if (!value.contains(" ")) {
+                              return 'Författaren måste ha både förnamn och efternamn';
+                            } else {
+                              return null;
+                            }
+                          },
                           onSaved: (value) => _author = value,
                         ),
                         TextFormField(
@@ -270,8 +299,15 @@ class AdvertCreationState extends State<AdvertCreation> {
                                     size: 10, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
-                          validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Obligatoriskt Fält';
+                            } else if (value.length < 8) {
+                              return 'isbn måste vara längre än 8 karaktärer';
+                            } else {
+                              return null;
+                            }
+                          },
                           onSaved: (value) => _isbn = value,
                         ),
                         TextFormField(
@@ -282,14 +318,30 @@ class AdvertCreationState extends State<AdvertCreation> {
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Kontaktinformation',
-                            suffixIcon: contactInfoController.text.length < 8
+                            suffixIcon: contactInfoController.text == ""
                                 ? Icon(Icons.star,
                                     size: 10, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
-                          validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Obligatoriskt Fält';
+                            } else {
+                              return null;
+                            }
+                          },
                           onSaved: (value) => _contactInfo = value,
+                        ),
+                        TextFormField(
+                          maxLines: 1,
+                          controller: editionController,
+                          cursorColor: Color(0xff96070a),
+                          keyboardType: TextInputType.text,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            hintText: 'Upplaga',
+                          ),
+                          onSaved: (value) => edition = value,
                         ),
                         Container(
                             width: 600,
@@ -304,7 +356,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 padding: const EdgeInsets.all(1.0),
                                 child: dropdownMenu(),
                               ),
-                            ]))
+                            ])),
                       ],
                     ),
                   ),
@@ -329,6 +381,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 encodedImageList,
                                 condition,
                                 transaction_type,
+                                edition,
                                 context);
                         setState(() {
                           stsCode = responseList[0];
@@ -480,7 +533,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   }
 
 // Remove the selected items from the lists
-  void _remove(){
+  void _remove() {
     if (_selectedItemsIndex.length != 0) {
       for (int index = compressedImageList.length; index >= 0; index--) {
         if (_selectedItemsIndex.contains(index)) {

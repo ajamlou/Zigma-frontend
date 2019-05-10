@@ -31,30 +31,30 @@ class Advert {
 
   Advert.fromJson(Map map)
       : bookTitle = map['book_title'],
-        isbn = map['ISBN'],
-        id = map["id"],
         price = map["price"],
         authors = map["authors"],
-        state = map["state"],
-        transaction_type = map["transaction_type"],
+        isbn = map['ISBN'],
         contactInfo = map["contact_info"],
-        images = map["image"],
         condition = map["condition"],
+        images = map["image"],
+        transaction_type = map["transaction_type"],
         edition = map["edition"],
-        owner = map["owner"];
+        owner = map["owner"],
+        id = map["id"],
+        state = map["state"];
 
   Map<String, dynamic> toJson() => {
         'book_title': bookTitle,
         'price': price,
         'authors': authors,
         'ISBN': isbn,
-        'state': state,
-        'transaction_type': transaction_type,
-        'condition': condition,
         'contact_info': contactInfo,
-        'owner': owner,
+        'condition': condition,
         'image': images,
-        'edition': edition
+        'transaction_type': transaction_type,
+        'edition': edition,
+        'owner': owner,
+        'state': state
       };
 }
 
@@ -117,7 +117,7 @@ class AdvertList {
     return Advert.fromJson(resBody);
   }
 
-  String convertCondition(String condition){
+  String convertCondition(String condition) {
     String number;
     if (condition == '1') {
       number = 'Nyskick';
@@ -162,11 +162,12 @@ class AdvertList {
       List<String> encodedImageList,
       String condition,
       String transactionType,
+      String edition,
       context) async {
     condition = checkCondition(condition);
     List<int> l = [];
     Advert _newAd = Advert(title, price, author, isbn, contactInfo, condition,
-        encodedImageList, transactionType, '8', 1);
+        encodedImageList, transactionType, edition, 1);
     var data = json.encode(_newAd);
     final String postURL =
         "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
