@@ -46,7 +46,7 @@ class Routing {
   void routeAdvertPage(context, data, bool replace) {
     if (replace) {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute<void>(builder: (_) => AdvertPage(data:data)));
+          MaterialPageRoute<void>(builder: (_) => AdvertPage(data: data)));
     } else {
       Navigator.push(
         context,

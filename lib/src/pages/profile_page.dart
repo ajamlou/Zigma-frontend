@@ -28,83 +28,73 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'expanded image',
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/advertPageBackground.jpg"),
-            fit: BoxFit.cover,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("images/advertPageBackground.jpg"),
+          fit: BoxFit.cover,
         ),
-        child: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {},
-                ),
-              ],
-              leading: IconButton(
-                color: Color(0xFFFFFFFF),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back),
+      ),
+      child: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {},
               ),
-              iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
+            ],
+            leading: IconButton(
+              color: Color(0xFFFFFFFF),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back),
             ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _profilePictureStyled(),
-                _profileNameStyled(),
-                _profileRatingStyled(),
-                SizedBox(
-                  height: 15,
-                ),
-                Expanded(
-                  flex: 4,
-                  child: PageView(
-                    controller: controller,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Text(
+            iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _profilePictureStyled(),
+              _profileNameStyled(),
+              _profileRatingStyled(),
+              SizedBox(
+                height: 15,
+              ),
+              Flexible(
+                child: PageView(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Text(
                             "Dina annonser:",
                             style: TextStyle(fontSize: 25),
                           ),
-                          FutureBuilder(
+                        ),
+                        Expanded(
+                          flex: 9,
+                          child: FutureBuilder(
                             future: getUserAdverts(context),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                return SingleChildScrollView(
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxHeight:
-                                          MediaQuery.of(context).size.height /
-                                              2.1,
-                                    ),
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data is List
-                                          ? snapshot.data.length
-                                          : 1,
-                                      itemBuilder: (context, index) {
-                                        if (snapshot.data is List) {
-                                          return cardBuilder(
-                                              snapshot.data[index]);
-                                        } else {
-                                          return snapshot.data;
-                                        }
-                                      },
-                                    ),
-                                  ),
+                                return ListView.builder(
+                                  itemCount: snapshot.data is List
+                                      ? snapshot.data.length
+                                      : 1,
+                                  itemBuilder: (context, index) {
+                                    if (snapshot.data is List) {
+                                      return cardBuilder(snapshot.data[index]);
+                                    } else {
+                                      return snapshot.data;
+                                    }
+                                  },
                                 );
                               } else {
                                 return Center(
@@ -113,14 +103,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               }
                             },
                           ),
-                        ],
-                      ),
-                      Container(),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    Container(),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -134,12 +124,14 @@ class _ProfilePageState extends State<ProfilePage> {
       },
       child: Card(
         child: Container(
-          color: Color.fromRGBO(64, 75, 96, .9),
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           child: Row(children: <Widget>[
             Expanded(
               flex: 2,
               child: Container(
+                padding: EdgeInsets.only(right: 8),
+                height: 100,
+                width: 70,
                 child: FittedBox(
                   fit: BoxFit.cover,
                   child: a.images.length == 0
@@ -151,13 +143,16 @@ class _ProfilePageState extends State<ProfilePage> {
             Expanded(
               flex: 6,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("Titel: " + a.bookTitle,
-                      style: TextStyle(color: Colors.white)),
-                  Text("Författare: " + a.authors,
-                      style: TextStyle(color: Colors.white)),
-                  Text("Upplaga: " + a.edition,
-                      style: TextStyle(color: Colors.white))
+                  Text(
+                    a.bookTitle,
+                    style: TextStyle(
+                        color: Color(0xff96070a), fontWeight: FontWeight.bold),
+                  ),
+                  Text(a.authors,
+                      style: TextStyle(color: Colors.black87, fontSize: 12)),
+                  Text("Upplaga: " + a.edition, style: TextStyle())
                 ],
               ),
             ),
@@ -167,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Text(
                   a.price.toString() + ":-",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: TextStyle(fontSize: 20, color: Color(0xff96070a)),
                 )),
           ]),
         ),
@@ -201,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _profilePictureStyled() {
     String userImageURI = DataProvider.of(context).user.getImage();
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         profilePicDialog();
       },
       child: Center(
@@ -255,7 +250,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-
   void profilePicDialog() {
     print("Im in show alertDialog");
     Dialog dialog = Dialog(
@@ -271,8 +265,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
-
-
 }
 
 //  Widget _profileMenusStyled() {

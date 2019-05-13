@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 
 class SearchPage extends SearchDelegate<void> {
-  String s = "hej Mamma";
+  bool haveSearched = false;
+  List savedSearch;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -26,16 +27,82 @@ class SearchPage extends SearchDelegate<void> {
     );
   }
 
-  @override
   //Method that fetches the requested data from the database when you have
   //searched for a book
-  void showResults(BuildContext context) async {
-    super.showResults(context);
+  Future<List> fetchResults(context) async {
+    List returnList =
+        await DataProvider.of(context).advertList.searchAdverts(query);
+    print(returnList.toString());
+    return returnList;
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container();
+    return Container(
+      child: Scaffold(
+        body: FutureBuilder(
+          future: fetchResults(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data.length == 0) {
+              return Text("Inga resultat hittade :(");
+            } else if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      leading: Container(
+                        width: 70,
+                        height: 70,
+                        child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: snapshot.data[index].images.length == 0
+                                ? Image.asset("images/placeholder_book.png")
+                                : Image.network(
+                                    snapshot.data[index].images[0])),
+                      ),
+                      onTap: () {
+                        haveSearched = true;
+                        DataProvider.of(context).routing.routeAdvertPage(
+                            context, snapshot.data[index], false);
+                      },
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            snapshot.data[index].bookTitle,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff96070a),
+                            ),
+                          ),
+                          Text(
+                            snapshot.data[index].authors,
+                            style: TextStyle(color: Colors.black87),
+                          ),
+                          Text("Upplaga: " + snapshot.data[index].edition)
+                        ],
+                      ),
+                      trailing: Text(
+                        snapshot.data[index].price.toString() + ":-",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 
   @override

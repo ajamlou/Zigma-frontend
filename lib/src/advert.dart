@@ -62,6 +62,7 @@ class AdvertList {
   final List<Advert> list = [];
   final List<Advert> userList = [];
 
+
   Future<void> loadAdvertList() async {
     list.clear();
     final String url =
@@ -78,6 +79,22 @@ class AdvertList {
 
   void clearUserAdvertList() {
     userList.clear();
+  }
+
+
+  Future<List<Advert>> searchAdverts(String query) async {
+    List<Advert> returnList = [];
+    String url =
+        "https://9548fc36.ngrok.io/adverts/adverts/?fields=book_title,price,authors,edition,image&search="+query;
+    print(url);
+    var req = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    final resBody = json.decode(utf8.decode(req.bodyBytes));
+    print(resBody.toString());
+    for (int i = 0; i < resBody.length; i++) {
+      returnList.add(Advert.fromJson(resBody[i]));
+    }
+    return returnList;
   }
 
   Future<List<Advert>> getAdvertsFromIds(context) async {
@@ -182,6 +199,8 @@ class AdvertList {
     l.add(decoded["id"]);
     if (response.statusCode == 201) {
       await loadAdvertList();
+      Advert a = await getAdvertById(l[1]);
+      userList.add(a);
     }
     return l;
   }

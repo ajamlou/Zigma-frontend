@@ -18,7 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
     "Hämtar databasen...",
     "Bränner lite katter...",
     "Lägger ihop komponenterna...",
-    "Letar upp din mamma...",
+    "Ser till alla kugghjul...",
     "Kevvakå fixar käk...",
     "Pillar med korven..."
   ];
@@ -32,10 +32,6 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
     super.dispose();
   }
 
-  void disposeTimer(){
-    timer.cancel();
-    timer = null;
-  }
 
 
   @override

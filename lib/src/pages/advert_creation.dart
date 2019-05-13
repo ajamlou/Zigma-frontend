@@ -386,7 +386,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         setState(() {
                           stsCode = responseList[0];
                         });
-                        if (stsCode == 201) {
+                        if (stsCode == 201) { //Confirmed response
                           var a = await DataProvider.of(context)
                               .advertList
                               .getAdvertById(responseList[1]);
@@ -394,7 +394,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                           DataProvider.of(context)
                               .routing
                               .routeAdvertPage(context, a, true);
-                        } else {
+                        } else { //Unsuccessful response
                           Navigator.of(context, rootNavigator: true).pop(null);
                           showAdvertCreationAlertDialog(stsCode);
                         }

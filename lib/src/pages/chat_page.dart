@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -39,10 +38,9 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         IOWebSocketChannel.connect('ws://3502f4a2.ngrok.io/ws/chat/olle/');
     _textController = TextEditingController();
     channel.stream.listen((data) {
-      Message receivedMessage = Message.fromJson(json.decode(data));
-      print(data);
+      Message messageText = Message.fromJson(json.decode(data));
       ChatMessage message = ChatMessage(
-        text: receivedMessage.text,
+        text: messageText.text,
         animationController: AnimationController(
           duration: Duration(milliseconds: 500),
           vsync: this,
@@ -65,8 +63,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       Message newMessage = Message(
         text: _textController.text,
       );
-      var data = json.encode(newMessage);
-      channel.sink.add(data);
+      channel.sink.add(json.encode(newMessage));
       print('message sink');
       _textController.clear();
     }
