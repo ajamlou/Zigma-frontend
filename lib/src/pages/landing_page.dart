@@ -100,27 +100,30 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                   ),
                   margin: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: MaterialButton(
-                    onPressed: () {
-                      //DataProvider.of(context).advertList.loadAdvertList();
-                      showSearch(
-                        context: context,
-                        delegate: SearchPage(),
-                      );
-                    },
-                    child: Container(
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Icon(Icons.search),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 25.0),
-                            child: Text('Sök efter din litteratur...'),
-                          ),
-                        ],
+                  child: Hero(
+                    tag: 'search page',
+                    child: MaterialButton(
+                      onPressed: () {
+                        //DataProvider.of(context).advertList.loadAdvertList();
+                        showSearch(
+                          context: context,
+                          delegate: SearchPage(),
+                        );
+                      },
+                      child: Container(
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Icon(Icons.search),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 25.0),
+                              child: Text('Sök efter din litteratur...'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
