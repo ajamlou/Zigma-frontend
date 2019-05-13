@@ -82,6 +82,11 @@ class AdvertList {
     userListBuying.clear();
   }
 
+  Future<List> getCombinedUserLists() async {
+    List newList = [userListBuying, userListSelling].expand((x) => x).toList();
+    return newList;
+  }
+
   Future<List<Advert>> searchAdverts(String query) async {
     List<Advert> returnList = [];
     String url =

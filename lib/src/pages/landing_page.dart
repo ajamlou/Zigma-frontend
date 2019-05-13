@@ -145,7 +145,9 @@ class _LandingPageState extends State<LandingPage> {
             decoration: BoxDecoration(
               color: const Color(0xff96070a),
             ),
-            accountEmail: Text(DataProvider.of(context).user.user.email),
+            accountEmail: DataProvider.of(context).user.user.soldBooks > 5
+                ? Text("Intermediate Book Seller")
+                : Text("Novice Book Seller"),
             currentAccountPicture:
                 DataProvider.of(context).user.user.image == null
                     ? Container(

@@ -6,6 +6,7 @@ import 'package:zigma2/src/pages/chat_page.dart';
 import 'package:zigma2/src/pages/landing_page.dart';
 import 'package:zigma2/src/pages/login_page.dart';
 import 'package:zigma2/src/pages/profile_page.dart';
+import 'package:zigma2/src/pages/user_advert_page.dart';
 
 class Routing {
   void routeChatPage(context, bool replace) {
@@ -52,6 +53,20 @@ class Routing {
         context,
         MaterialPageRoute(
           builder: (context) => AdvertPage(data: data),
+        ),
+      );
+    }
+  }
+
+  void routeUserAdvertPage(context, advert, bool replace) {
+    if (replace) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+          builder: (_) => UserAdvertPage(advert: advert)));
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserAdvertPage(advert: advert),
         ),
       );
     }

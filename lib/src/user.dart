@@ -91,13 +91,11 @@ class UserMethodBody {
     return user;
   }
 
-
   Future<void> logout(context) async {
     user = null;
     DataProvider.of(context).advertList.clearUserAdvertList();
     await clearPrefs();
   }
-
 
   bool checkUser() {
     if (user == null) {
