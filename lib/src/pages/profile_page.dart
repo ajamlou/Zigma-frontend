@@ -8,17 +8,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  static final int initialPage = 0;
   List<dynamic> returnList;
+  int stateButtonIndex = initialPage;
   final controller = PageController(
-    initialPage: 0,
+    initialPage: initialPage,
   );
 
   Future<dynamic> getUserBuyingAdverts(context) async {
     if (DataProvider.of(context).advertList.userListBuying.length != 0) {
       returnList = DataProvider.of(context).advertList.userListBuying;
     } else {
-      returnList =
-      await DataProvider.of(context).advertList.getSpecificAdverts("B",DataProvider.of(context).user.user.id,"A");
+      returnList = await DataProvider.of(context)
+          .advertList
+          .getSpecificAdverts("B", DataProvider.of(context).user.user.id, "A");
       if (returnList.length == 0) {
         return noAdverts(context);
       }
@@ -30,13 +33,25 @@ class _ProfilePageState extends State<ProfilePage> {
     if (DataProvider.of(context).advertList.userListSelling.length != 0) {
       returnList = DataProvider.of(context).advertList.userListSelling;
     } else {
-      returnList =
-          await DataProvider.of(context).advertList.getSpecificAdverts("S",DataProvider.of(context).user.user.id,"A");
+      returnList = await DataProvider.of(context)
+          .advertList
+          .getSpecificAdverts("S", DataProvider.of(context).user.user.id, "A");
       if (returnList.length == 0) {
         return noAdverts(context);
       }
     }
     return returnList;
+  }
+
+  void pageChanged(int index) {
+    setState(() {
+      stateButtonIndex = index;
+    });
+  }
+
+  void buttonChangePage(int index) {
+    controller.animateToPage(index,
+        duration: Duration(milliseconds: 600), curve: Curves.ease);
   }
 
   @override
@@ -79,12 +94,25 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 height: 15,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  stateButtons("Säljer", 0),
+                  stateButtons("Köper", 1),
+                  stateButtons("Alla", 2)
+                ],
+              ),
               Flexible(
                 child: PageView(
+                  controller: controller,
+                  onPageChanged: (index) {
+                    pageChanged(index);
+                  },
                   children: <Widget>[
-                    getAdverts(getUserSellingAdverts(context), "Böcker som du säljer"),
-                    getAdverts(getUserBuyingAdverts(context), "Böcker som du vill köpa"),
-                    Container(),
+                    getAdverts(
+                        getUserSellingAdverts(context)),
+                    getAdverts(getUserBuyingAdverts(context)),
+                    getAdverts(DataProvider.of(context).advertList.getCombinedUserLists()),
                   ],
                 ),
               ),
@@ -95,50 +123,52 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget getAdverts(Future adverts, String title){
-    return Column(
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: Text(
-            title,
-            style: TextStyle(fontSize: 25),
-          ),
-        ),
-        Expanded(
-          flex: 9,
-          child: FutureBuilder(
-            future: adverts,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data is List
-                      ? snapshot.data.length
-                      : 1,
-                  itemBuilder: (context, index) {
-                    if (snapshot.data is List) {
-                      return cardBuilder(snapshot.data[index]);
-                    } else {
-                      return snapshot.data;
-                    }
-                  },
-                );
+  Widget stateButtons(String text, int index) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      alignment: Alignment(0, 0),
+      width: 100,
+      height: 35,
+      decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.red),
+          color: index == stateButtonIndex ? Colors.red : Colors.white),
+      child: GestureDetector(
+        onTap: () {
+          buttonChangePage(index);
+        },
+        child: Text(text),
+      ),
+    );
+  }
+
+  Widget getAdverts(Future adverts) {
+    return FutureBuilder(
+      future: adverts,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data is List ? snapshot.data.length : 1,
+            itemBuilder: (context, index) {
+              if (snapshot.data is List) {
+                return cardBuilder(snapshot.data[index]);
               } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return snapshot.data;
               }
             },
-          ),
-        ),
-      ],
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
   Widget cardBuilder(Advert a) {
     return MaterialButton(
       onPressed: () {
-        DataProvider.of(context).routing.routeAdvertPage(context, a, false);
+        DataProvider.of(context).routing.routeUserAdvertPage(context, a, false);
       },
       child: Card(
         child: Container(
@@ -257,7 +287,9 @@ class _ProfilePageState extends State<ProfilePage> {
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.user.email,
+                text: DataProvider.of(context).user.user.soldBooks > 5
+                    ? "Mellanliggande Bokförsäljare"
+                    : "Novis Bokförsäljare",
                 // Email tills vidare
                 style: TextStyle(
                   color: Colors.black,
