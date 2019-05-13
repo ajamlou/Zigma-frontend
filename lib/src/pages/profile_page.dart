@@ -8,17 +8,30 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  List<Advert> returnList;
+  List<dynamic> returnList;
   final controller = PageController(
     initialPage: 0,
   );
 
-  Future<dynamic> getUserAdverts(context) async {
-    if (DataProvider.of(context).advertList.getUserAdvertList().length != 0) {
-      returnList = DataProvider.of(context).advertList.getUserAdvertList();
+  Future<dynamic> getUserBuyingAdverts(context) async {
+    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
+      returnList = DataProvider.of(context).advertList.userListBuying;
     } else {
       returnList =
-          await DataProvider.of(context).advertList.getAdvertsFromIds(context);
+      await DataProvider.of(context).advertList.getSpecificAdverts("B",DataProvider.of(context).user.user.id,"A");
+      if (returnList.length == 0) {
+        return noAdverts(context);
+      }
+    }
+    return returnList;
+  }
+
+  Future<dynamic> getUserSellingAdverts(context) async {
+    if (DataProvider.of(context).advertList.userListSelling.length != 0) {
+      returnList = DataProvider.of(context).advertList.userListSelling;
+    } else {
+      returnList =
+          await DataProvider.of(context).advertList.getSpecificAdverts("S",DataProvider.of(context).user.user.id,"A");
       if (returnList.length == 0) {
         return noAdverts(context);
       }
@@ -69,43 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
               Flexible(
                 child: PageView(
                   children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "Dina annonser:",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 9,
-                          child: FutureBuilder(
-                            future: getUserAdverts(context),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ListView.builder(
-                                  itemCount: snapshot.data is List
-                                      ? snapshot.data.length
-                                      : 1,
-                                  itemBuilder: (context, index) {
-                                    if (snapshot.data is List) {
-                                      return cardBuilder(snapshot.data[index]);
-                                    } else {
-                                      return snapshot.data;
-                                    }
-                                  },
-                                );
-                              } else {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                    getAdverts(getUserSellingAdverts(context), "Böcker som du säljer"),
+                    getAdverts(getUserBuyingAdverts(context), "Böcker som du vill köpa"),
                     Container(),
                   ],
                 ),
@@ -114,6 +92,46 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getAdverts(Future adverts, String title){
+    return Column(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 25),
+          ),
+        ),
+        Expanded(
+          flex: 9,
+          child: FutureBuilder(
+            future: adverts,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data is List
+                      ? snapshot.data.length
+                      : 1,
+                  itemBuilder: (context, index) {
+                    if (snapshot.data is List) {
+                      return cardBuilder(snapshot.data[index]);
+                    } else {
+                      return snapshot.data;
+                    }
+                  },
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -194,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _profilePictureStyled() {
-    String userImageURI = DataProvider.of(context).user.getImage();
+    String userImageURI = DataProvider.of(context).user.user.image;
     return GestureDetector(
       onTap: () {
         profilePicDialog();
@@ -221,7 +239,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.getUsername(),
+                text: DataProvider.of(context).user.user.username,
                 style: TextStyle(
                   color: Color(0xFFE36B1B),
                 ),
@@ -239,7 +257,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.getEmail(),
+                text: DataProvider.of(context).user.user.email,
                 // Email tills vidare
                 style: TextStyle(
                   color: Colors.black,
@@ -259,7 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.getImage()),
+          child: Image.network(DataProvider.of(context).user.user.image),
         ),
       ),
     );

@@ -144,7 +144,7 @@ class _LandingPageState extends State<LandingPage> {
             ),
             accountEmail: Text(DataProvider.of(context).user.user.email),
             currentAccountPicture:
-                DataProvider.of(context).user.getImage() == null
+                DataProvider.of(context).user.user.image == null
                     ? Container(
                         width: 50,
                         height: 50,
@@ -168,7 +168,7 @@ class _LandingPageState extends State<LandingPage> {
                               child: FadeInImage.memoryNetwork(
                                 fit: BoxFit.fitWidth,
                                 placeholder: kTransparentImage,
-                                image: DataProvider.of(context).user.getImage(),
+                                image: DataProvider.of(context).user.user.image,
                               ),
                             ),
                           ),

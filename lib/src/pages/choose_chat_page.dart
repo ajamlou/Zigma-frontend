@@ -6,18 +6,14 @@ class ChooseChatPage extends StatefulWidget {
 }
 
 class _ChooseChatPageState extends State<ChooseChatPage> {
-  List placeholder= [
-
-  ];
+  List placeholder = [];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
         body: ListView.builder(
-          itemBuilder: (context, index) {
-
-          },
+          itemBuilder: (context, index) {},
         ),
       ),
     );

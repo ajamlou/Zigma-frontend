@@ -166,7 +166,7 @@ class ChatMessage extends StatelessWidget {
                 child: FadeInImage.memoryNetwork(
                   fit: BoxFit.fitWidth,
                   placeholder: kTransparentImage,
-                  image: DataProvider.of(context).user.getImage(),
+                  image: DataProvider.of(context).user.user.image,
                 ),
               ),
             ),
@@ -175,7 +175,7 @@ class ChatMessage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(DataProvider.of(context).user.getUsername(),
+                  Text(DataProvider.of(context).user.user.username,
                       style: Theme.of(context).textTheme.subhead),
                   Container(
                     margin: const EdgeInsets.only(top: 5.0),

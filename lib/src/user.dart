@@ -77,18 +77,6 @@ class UserMethodBody {
     user = User(email, id, username, token, image, adverts, 0, 0);
   }
 
-  String getToken() {
-    return user.token;
-  }
-
-  String getEmail() {
-    return user.email;
-  }
-
-  String getUsername() {
-    return user.username;
-  }
-
   Future<User> getUserById(int id) async {
     final String url =
         "https://9548fc36.ngrok.io/users/users/" + id.toString() + "/";
@@ -103,13 +91,6 @@ class UserMethodBody {
     return user;
   }
 
-  String getImage() {
-    if (user == null) {
-      return null;
-    } else {
-      return user.image;
-    }
-  }
 
   Future<void> logout(context) async {
     user = null;
@@ -117,13 +98,6 @@ class UserMethodBody {
     await clearPrefs();
   }
 
-  User getUser() {
-    return user;
-  }
-
-  List<int> getAdvertIds() {
-    return user.adverts;
-  }
 
   bool checkUser() {
     if (user == null) {

@@ -107,7 +107,7 @@ class SearchPage extends SearchDelegate<void> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final data = DataProvider.of(context).advertList.getAdvertList();
+    final data = DataProvider.of(context).advertList.list;
     final suggestionList = query.isEmpty
         ? data
         : data

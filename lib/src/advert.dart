@@ -60,8 +60,8 @@ class Advert {
 
 class AdvertList {
   final List<Advert> list = [];
-  final List<Advert> userList = [];
-
+  final List<Advert> userListSelling = [];
+  final List<Advert> userListBuying = [];
 
   Future<void> loadAdvertList() async {
     list.clear();
@@ -78,14 +78,15 @@ class AdvertList {
   }
 
   void clearUserAdvertList() {
-    userList.clear();
+    userListSelling.clear();
+    userListBuying.clear();
   }
-
 
   Future<List<Advert>> searchAdverts(String query) async {
     List<Advert> returnList = [];
     String url =
-        "https://9548fc36.ngrok.io/adverts/adverts/?fields=book_title,price,authors,edition,image&search="+query;
+        "https://9548fc36.ngrok.io/adverts/adverts/?fields=book_title,price,authors,edition,image,owner&search=" +
+            query;
     print(url);
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
@@ -97,8 +98,32 @@ class AdvertList {
     return returnList;
   }
 
-  Future<List<Advert>> getAdvertsFromIds(context) async {
-    List<int> ids = DataProvider.of(context).user.getAdvertIds();
+  Future<List<Advert>> getSpecificAdverts(
+      String transactionType, int owner, String state) async {
+    String url =
+        "https://9548fc36.ngrok.io/adverts/adverts/?transaction_type=" +
+            transactionType +
+            "&owner=" +
+            owner.toString() +
+            "&state=" +
+            state;
+    var req = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    final List resBody = json.decode(utf8.decode(req.bodyBytes));
+    for (int i = 0; i < resBody.length; i++) {
+      if (transactionType == "B") {
+        userListBuying.add(Advert.fromJson(resBody[i]));
+      } else {
+        userListSelling.add(Advert.fromJson(resBody[i]));
+      }
+    }
+    if (transactionType == "B") {
+      return userListBuying;
+    }
+    return userListSelling;
+  }
+
+  Future<List<Advert>> getAdvertsFromIds(List<int> ids) async {
     print("IM IN GET ADVERTS FROM IDS");
     String url = "https://9548fc36.ngrok.io/adverts/adverts/?ids=";
     for (int i = 0; i < ids.length; i++) {
@@ -111,18 +136,11 @@ class AdvertList {
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
+    List returnList = [];
     for (int i = 0; i < resBody.length; i++) {
-      userList.add(Advert.fromJson(resBody[i]));
+      returnList.add(Advert.fromJson(resBody[i]));
     }
-    return userList;
-  }
-
-  List<Advert> getAdvertList() {
-    return list;
-  }
-
-  List<Advert> getUserAdvertList() {
-    return userList;
+    return returnList;
   }
 
   Future<Advert> getAdvertById(int id) async {
@@ -182,7 +200,6 @@ class AdvertList {
       String edition,
       context) async {
     condition = checkCondition(condition);
-    List<int> l = [];
     Advert _newAd = Advert(title, price, author, isbn, contactInfo, condition,
         encodedImageList, transactionType, edition, 1);
     var data = json.encode(_newAd);
@@ -192,16 +209,14 @@ class AdvertList {
         await http.post(Uri.encodeFull(postURL), body: data, headers: {
       "Accept": "application/json",
       "content-type": "application/json",
-      "Authorization": "Token " + DataProvider.of(context).user.getToken()
+      "Authorization": "Token " + DataProvider.of(context).user.user.token
     });
     Map decoded = json.decode(response.body);
-    l.add(response.statusCode);
-    l.add(decoded["id"]);
     if (response.statusCode == 201) {
       await loadAdvertList();
-      Advert a = await getAdvertById(l[1]);
-      userList.add(a);
+      Advert a = await getAdvertById(decoded["id"]);
+      userListSelling.add(a);
     }
-    return l;
+    return [response.statusCode, decoded["id"]];
   }
 }
