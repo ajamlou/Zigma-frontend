@@ -105,7 +105,7 @@ class AdvertCreationState extends State<AdvertCreation> {
               child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 100.0, bottom: 50),
+                padding: const EdgeInsets.only(top: 100.0, left: 20, right: 20, bottom: 50),
                 child: Text(
                   'Söker du efter en bok eller vill du sälja en bok?',
                   textAlign: TextAlign.center,
@@ -120,7 +120,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                       ),
                       Shadow(
                         offset: Offset(2.0, 2.0),
-                        blurRadius: 3.0,
+                        blurRadius: 4.0,
                         color: Colors.black,
                       ),
                     ],
@@ -128,8 +128,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                 ),
               ),
               Container(
-                height: 100,
-                width: 180,
+                height: 50,
+                width: 220,
                 child: RaisedButton(
                   elevation: 5,
                   color: Color(0xff96070a),
@@ -139,15 +139,15 @@ class AdvertCreationState extends State<AdvertCreation> {
                     });
                   },
                   child: Text('Sälja',
-                      style: TextStyle(color: Colors.white, fontSize: 50)),
+                      style: TextStyle(color: Colors.white, fontSize: 30)),
                 ),
               ),
               SizedBox(
-                height: 15,
+                height: 35,
               ),
               Container(
-                height: 100,
-                width: 180,
+                height: 50,
+                width: 220,
                 child: RaisedButton(
                   elevation: 5,
                   color: Color(0xff96070a),
@@ -157,7 +157,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                     });
                   },
                   child: Text('Söker',
-                      style: TextStyle(color: Colors.white, fontSize: 50)),
+                      style: TextStyle(color: Colors.white, fontSize: 30)),
                 ),
               ),
             ],
@@ -453,6 +453,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   }
 
   void showImageAlertDialog() {
+    File tempImage;
     AlertDialog dialog = AlertDialog(
         backgroundColor: Color(0xFFECE9DF),
         title: Text(
@@ -468,15 +469,17 @@ class AdvertCreationState extends State<AdvertCreation> {
             RaisedButton(
               color: Color(0xff96070a),
               child: Icon(Icons.image),
-              onPressed: () {
-                getImage("gallery");
+              onPressed: () async {
+                tempImage = await Ih.getImage("gallery");
+                _insert(tempImage);
               },
             ),
             RaisedButton(
               color: Color(0xff96070a),
               child: Icon(Icons.camera_alt),
-              onPressed: () {
-                getImage("camera");
+              onPressed: () async {
+                tempImage = await Ih.getImage("camera");
+                _insert(tempImage);
               },
             ),
           ],
@@ -547,35 +550,6 @@ class AdvertCreationState extends State<AdvertCreation> {
         _selectedItemsIndex = [];
       });
     }
-  }
-
-  Future<void> getImage(String inputSource) async {
-    var image = inputSource == "camera"
-        ? await ImagePicker.pickImage(source: ImageSource.camera)
-        : await ImagePicker.pickImage(source: ImageSource.gallery);
-    showLoadingAlertDialog();
-    var compressedImage = await compressImageFile(image);
-    Navigator.of(context, rootNavigator: true).pop(null);
-    setState(() {
-      _insert(compressedImage);
-      print(compressedImageList);
-    });
-    Navigator.of(context, rootNavigator: true).pop(null);
-  }
-
-  Future<File> compressImageFile(File _uploadedImage) async {
-    final tempDir = await getTemporaryDirectory();
-    final path = tempDir.path;
-    final int rand = new Math.Random().nextInt(10000);
-
-    Im.Image image = Im.decodeImage(_uploadedImage.readAsBytesSync());
-    Im.Image smallerImage = Im.copyResize(image, 400);
-    File compressedImage = new File('$path/img_$rand.jpg')
-      ..writeAsBytesSync(Im.encodeJpg(
-        smallerImage,
-        quality: 90,
-      ));
-    return compressedImage;
   }
 
   Widget dropdownMenu() {

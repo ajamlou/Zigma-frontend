@@ -28,6 +28,7 @@ class _MyAppState extends State<MyApp> {
       loadingScreen: loadingScreen,
       child: MaterialApp(
         title: 'Zigma App',
+        theme: ThemeData(fontFamily: 'GlacialIndifference'),
         home: SplashScreen(),
         color: Color(0xFFECE9DF),
       ),

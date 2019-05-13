@@ -151,17 +151,17 @@ class RegisterPageState extends State<RegisterPage> {
                 key: _userKey,
                 child: Container(
                   margin:
-                      const EdgeInsets.only(top: 50.0, right: 40.0, left: 40.0),
+                      const EdgeInsets.only(top: 10.0, right: 40.0, left: 40.0),
                   child: Column(
                     children: <Widget>[
                       Container(
                         child: _image == null
                             ? Container(
-                                width: 150,
-                                height: 150,
+                                height: 190,
+                                width: 170,
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                                      BorderRadius.all(Radius.circular(30.0)),
                                   image: DecorationImage(
                                     image: AssetImage('images/profile_pic.png'),
                                   ),
@@ -171,14 +171,17 @@ class RegisterPageState extends State<RegisterPage> {
                                 ),
                               )
                             : Container(
-                                height: 200,
                                 child: Column(
                                   children: <Widget>[
                                     Container(
-                                      width: 150,
-                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(35.0)),
+                                      ),
+                                      height: 190,
+                                      width: 170,
                                       child: FittedBox(
-                                        fit: BoxFit.contain,
+                                        fit: BoxFit.cover,
                                         child: Image.file(_image),
                                       ),
                                     ),
