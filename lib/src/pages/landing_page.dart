@@ -25,7 +25,7 @@ class _LandingPageState extends State<LandingPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Color(0xff96070a)),
+            iconTheme: IconThemeData(color: Color(0xffDE5D5D)),
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             actions: <Widget>[
@@ -58,7 +58,7 @@ class _LandingPageState extends State<LandingPage> {
                 Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Color(0xFFECE9DF),
+                    color: Colors.white,
                     borderRadius: BorderRadius.all(
                       Radius.circular(5.0),
                     ),
@@ -84,7 +84,8 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 20.0),
-                              child: Text('Sök efter din litteratur...', style: TextStyle( fontSize:  18)),
+                              child: Text('Sök efter din litteratur...',
+                                  style: TextStyle(fontSize: 18)),
                             ),
                           ],
                         ),
@@ -102,82 +103,159 @@ class _LandingPageState extends State<LandingPage> {
 
   Widget showDrawer(context) {
     return Drawer(
-      child: ListView(
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text(DataProvider.of(context).user.user.username),
-            decoration: BoxDecoration(
-              color: const Color(0xff96070a),
-            ),
-            accountEmail: DataProvider.of(context).user.user.soldBooks > 5
-                ? Text("Intermediate Book Seller")
-                : Text("Novice Book Seller"),
-            currentAccountPicture:
-                DataProvider.of(context).user.user.image == null
-                    ? Container(
-                        width: 50,
-                        height: 50,
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Icon(
-                            Icons.account_circle,
-                            color: Color(0xFFece9df),
-                          ),
-                        ),
-                      )
-                    : Stack(
-                        alignment: Alignment(0, 0),
-                        children: <Widget>[
-                          Center(child: CircularProgressIndicator()),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(40),
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              child: FadeInImage.memoryNetwork(
-                                fit: BoxFit.fitWidth,
-                                placeholder: kTransparentImage,
-                                image: DataProvider.of(context).user.user.image,
+      child: Container(
+        color: Color(0xFF93DED0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    child: DataProvider.of(context).user.user.image == null
+                        ? Container(
+                            width: 50,
+                            height: 50,
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Icon(
+                                Icons.account_circle,
+                                color: Color(0xFFece9df),
                               ),
                             ),
+                          )
+                        : Stack(
+                            alignment: Alignment(0, 0),
+                            children: <Widget>[
+                              Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(40),
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  child: FadeInImage.memoryNetwork(
+                                    fit: BoxFit.fitWidth,
+                                    placeholder: kTransparentImage,
+                                    image: DataProvider.of(context)
+                                        .user
+                                        .user
+                                        .image,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                  ),
+                  Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          DataProvider.of(context).user.user.username,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+                        ),
+                        DataProvider.of(context).user.user.soldBooks > 5
+                            ? Text(
+                                "Ganska Bra Boksäljare",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              )
+                            : Text(
+                                "Novis Boksäljare",
+                                style: TextStyle(
+                                    color: Colors.black),
+                              ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 8,
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text(
+                "Din Profil",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+              ),
+              onTap: () async {
+                DataProvider.of(context).routing.routeProfilePage(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                "Skapa Annons",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+              ),
+              onTap: () async {
+                DataProvider.of(context).routing.routeCreationPage(context);
+              },
+            ),
+            ListTile(
+                title: Text(
+                  "Dina Chattar",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+                ),
+                onTap: () async {
+                  Navigator.of(context, rootNavigator: true).pop(null);
+                  DataProvider.of(context)
+                      .routing
+                      .routeChatPage(context, false);
+                }),
+            ListTile(
+              title: Text(
+                "Inställningar",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+              ),
+              onTap: () {},
+            ),
+            Expanded(
+              flex: 8,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  width: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Color(0xFFDE5D5D)),
+                  child: FlatButton(
+                      child: Text(
+                        "Logga ut",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
                       ),
-          ),
-          ListTile(
-            title: Text("Din Profil"),
-            onTap: () async {
-              DataProvider.of(context).routing.routeProfilePage(context);
-            },
-          ),
-          ListTile(
-            title: Text("Skapa Annons"),
-            onTap: () async {
-              DataProvider.of(context).routing.routeCreationPage(context);
-            },
-          ),
-          ListTile(
-              title: Text("Dina Chattar"),
-              onTap: () async {
-                Navigator.of(context, rootNavigator: true).pop(null);
-                DataProvider.of(context).routing.routeChatPage(context, false);
-              }),
-          ListTile(
-            title: Text("Inställningar"),
-            onTap: () {},
-          ),
-          ListTile(
-              title: Text("Logga ut"),
-              onTap: () async {
-                DataProvider.of(context).loadingScreen.showLoadingDialog(context);
-                Future.delayed(Duration(milliseconds: 1500), () async {
-                  await DataProvider.of(context).user.logout(context);
-                  setState(() {});
-                  Navigator.of(context, rootNavigator: true).pop(null);
-                  Navigator.of(context, rootNavigator: true).pop(null);
-                });
-              }),
-        ],
+                      onPressed: () async {
+                        DataProvider.of(context)
+                            .loadingScreen
+                            .showLoadingDialog(context);
+                        Future.delayed(Duration(milliseconds: 1500), () async {
+                          await DataProvider.of(context).user.logout(context);
+                          setState(() {});
+                          Navigator.of(context, rootNavigator: true).pop(null);
+                          Navigator.of(context, rootNavigator: true).pop(null);
+                        });
+                      }),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

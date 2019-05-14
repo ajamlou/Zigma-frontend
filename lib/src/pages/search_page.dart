@@ -154,7 +154,7 @@ class SearchPage extends SearchDelegate<void> {
                     ],
                   ),
                 ),
-                leading: Icon(Icons.book),
+                leading: Icon(Icons.book, color: Color(0xFF93DED0),),
                 trailing: Text(suggestionList[index].authors ?? ""),
                 onTap: () async {
                   DataProvider.of(context)

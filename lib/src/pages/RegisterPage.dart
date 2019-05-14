@@ -20,7 +20,7 @@ class RegisterPageState extends State<RegisterPage> {
   RegExp passwordRegExp = RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
   RegExp emailRegExp = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-
+  Color registerColor = Color(0xFFDE5D5D);
   File _image;
 
   void showImageAlertDialog() async {
@@ -109,7 +109,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _showRegisterPage() {
     return Container(
-      color: Color(0xFFECE9DF),
+      color: Color(0xFF93DED0),
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         backgroundColor: Colors.transparent,
@@ -122,7 +122,7 @@ class RegisterPageState extends State<RegisterPage> {
                 children: <Widget>[
                   Container(
                     child: IconButton(
-                      color: Color(0xff96070a),
+                      color: Colors.white,
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -140,7 +140,7 @@ class RegisterPageState extends State<RegisterPage> {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
-                    color: Color(0xff96070a)),
+                    color: Colors.white),
                 textAlign: TextAlign.center,
               ),
               Form(
@@ -203,7 +203,7 @@ class RegisterPageState extends State<RegisterPage> {
                           hintText: 'Användarnamn',
                           icon: Icon(
                             Icons.person_add,
-                            color: Colors.grey,
+                            color: registerColor,
                           ),
                           suffixIcon: usernameController.text == ""
                               ? Icon(Icons.star,
@@ -224,7 +224,7 @@ class RegisterPageState extends State<RegisterPage> {
                           hintText: 'Email',
                           icon: Icon(
                             Icons.mail,
-                            color: Colors.grey,
+                            color: registerColor,
                           ),
                           suffixIcon: !_emailListener()
                               ? Icon(Icons.star,
@@ -257,7 +257,7 @@ class RegisterPageState extends State<RegisterPage> {
                           hintText: 'Lösenord',
                           icon: Icon(
                             Icons.lock,
-                            color: Colors.grey,
+                            color: registerColor,
                           ),
                           suffixIcon: passwordController.text.length < 8 ||
                                   validatePasswordController.text !=
@@ -289,7 +289,7 @@ class RegisterPageState extends State<RegisterPage> {
                           hintText: 'Repetera lösenord',
                           icon: Icon(
                             Icons.lock,
-                            color: Colors.grey,
+                            color: registerColor,
                           ),
                           suffixIcon: passwordController.text == "" ||
                                   validatePasswordController.text !=
@@ -317,14 +317,16 @@ class RegisterPageState extends State<RegisterPage> {
                 margin:
                     const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
                 child: MaterialButton(
-                  color: Color(0xFF6C6CDF),
+                  color: Color(0xFFECA72C),
                   child: Text('Skapa nytt konto',
                       style: TextStyle(color: Color(0xFFFFFFFF))),
                   onPressed: () async {
                     if (_userKey.currentState.validate() &&
                         passwordController.text ==
                             validatePasswordController.text) {
-                      DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+                      DataProvider.of(context)
+                          .loadingScreen
+                          .showLoadingDialog(context);
                       _userKey.currentState.save();
                       _success = await DataProvider.of(context).user.register(
                           _userEmail,
@@ -343,7 +345,6 @@ class RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
 
   void showRegisterAlertDialog(List value) {
     String message = "";

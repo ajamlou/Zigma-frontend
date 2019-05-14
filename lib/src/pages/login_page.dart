@@ -18,7 +18,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFECE9DF),
+      color: Color(0xFF93DED0),
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         backgroundColor: Colors.transparent,
@@ -41,7 +41,6 @@ class LoginPageState extends State<LoginPage> {
           ),
         ),
         body: Container(
-          color: Color(0xFFECE9DF),
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
@@ -50,9 +49,13 @@ class LoginPageState extends State<LoginPage> {
                 child: Image.asset('images/logo_frontpage.png'),
               ),
               Center(
-                child: Text('Logga In',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
+                child: Text(
+                  'Logga In',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Colors.white),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -68,10 +71,11 @@ class LoginPageState extends State<LoginPage> {
                           keyboardType: TextInputType.emailAddress,
                           autofocus: false,
                           decoration: InputDecoration(
+                            hintStyle: TextStyle(color: Colors.white),
                             hintText: 'Username',
                             icon: Icon(
                               Icons.person,
-                              color: Colors.grey,
+                              color: Color(0xFFDE5D5D),
                             ),
                           ),
                           validator: (value) =>
@@ -83,10 +87,11 @@ class LoginPageState extends State<LoginPage> {
                           obscureText: true,
                           autofocus: false,
                           decoration: InputDecoration(
+                              hintStyle: TextStyle(color: Colors.white),
                               hintText: 'Password',
                               icon: Icon(
                                 Icons.lock,
-                                color: Colors.grey,
+                                color: Color(0xFFDE5D5D),
                               )),
                           validator: (value) =>
                               value.isEmpty ? 'Password can\'t be empty' : null,
@@ -106,7 +111,9 @@ class LoginPageState extends State<LoginPage> {
                       color: Color(0xFF008000),
                       onPressed: () async {
                         if (_userKey.currentState.validate()) {
-                          DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+                          DataProvider.of(context)
+                              .loadingScreen
+                              .showLoadingDialog(context);
                           _userKey.currentState.save();
                           _success = await DataProvider.of(context)
                               .user
@@ -122,7 +129,8 @@ class LoginPageState extends State<LoginPage> {
                         }
                       },
                       child: Text('Logga in',
-                          style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 16)),
+                          style: TextStyle(
+                              color: Color(0xFFFFFFFF), fontSize: 16)),
                     ),
                   ),
                   Container(
@@ -138,7 +146,8 @@ class LoginPageState extends State<LoginPage> {
                     child: MaterialButton(
                       color: Color(0xFF6C6CDF),
                       child: Text('Skapa nytt konto',
-                          style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 16)),
+                          style: TextStyle(
+                              color: Color(0xFFFFFFFF), fontSize: 16)),
                       onPressed: () async => DataProvider.of(context)
                           .routing
                           .routeRegisterPage(context),

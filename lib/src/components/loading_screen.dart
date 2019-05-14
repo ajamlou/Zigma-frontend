@@ -63,7 +63,7 @@ class _LoadingScreenState extends State<LoadingScreen>
       width: 100,
       child: Scaffold(
         body: Container(
-          color: Color(0xFFECE9DF),
+          color: Color(0xFF93DED0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,7 +100,7 @@ class _LoadingScreenState extends State<LoadingScreen>
 class LoadingDialog {
   void showLoadingDialog(context) {
     AlertDialog dialog = AlertDialog(
-        backgroundColor: Color(0xFFECE9DF),
+        backgroundColor: Color(0xFF93DED0),
         title: Text(
           "Laddar...",
           style: TextStyle(
