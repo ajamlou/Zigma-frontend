@@ -68,12 +68,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {},
-              ),
-            ],
             leading: IconButton(
               color: Color(0xFFFFFFFF),
               onPressed: () {
@@ -132,8 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: Colors.red),
           color: index == stateButtonIndex ? Colors.red : Colors.white),
-      child: GestureDetector(
-        onTap: () {
+      child: MaterialButton(
+        onPressed: () {
           buttonChangePage(index);
         },
         child: Text(text),

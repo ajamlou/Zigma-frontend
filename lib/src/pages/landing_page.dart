@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zigma2/src/components/login_prompt.dart';
 import 'package:zigma2/src/pages/search_page.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -28,7 +29,7 @@ class _LandingPageState extends State<LandingPage> {
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             actions: <Widget>[
-              DataProvider.of(context).user.checkUser()
+              DataProvider.of(context).user.user != null
                   ? SizedBox(
                       width: 0,
                       height: 0,
@@ -36,51 +37,12 @@ class _LandingPageState extends State<LandingPage> {
                   : LoginButton()
             ],
           ),
-          drawer: DataProvider.of(context).user.checkUser()
+          drawer: DataProvider.of(context).user.user != null
               ? showDrawer(context)
               : Center(
                   child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFECE9DF),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5.0),
-                      ),
-                    ),
                     height: 190,
-                    margin: EdgeInsets.symmetric(horizontal: 25),
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            "Du behöver ett konto för att fortsätta.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 20, color: Color(0xff96070a)),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        RaisedButton(
-                          color: Colors.greenAccent,
-                          child: Text("Logga in",
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: () async => DataProvider.of(context)
-                              .routing
-                              .routeLoginPage(context),
-                        ),
-                        Text("eller"),
-                        RaisedButton(
-                          color: Colors.lightBlueAccent,
-                          child: Text("Skapa ett Zigma konto",
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: () async => DataProvider.of(context)
-                              .routing
-                              .routeRegisterPage(context),
-                        ),
-                      ],
-                    ),
+                    child: LoginPrompt(),
                   ),
                 ),
           body: Container(
@@ -231,7 +193,10 @@ class _LandingPageState extends State<LandingPage> {
       ),
       content: DataProvider.of(context).loadingScreen,
     );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => dialog);
   }
 
   Future<bool> _onBackPressed() {

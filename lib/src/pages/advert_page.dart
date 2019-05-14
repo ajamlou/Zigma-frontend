@@ -5,6 +5,8 @@ import 'package:zigma2/src/advert.dart';
 import 'package:zigma2/src/components/carousel.dart';
 import 'dart:async';
 
+import 'package:zigma2/src/components/login_prompt.dart';
+
 class AdvertPage extends StatefulWidget {
   final Advert data;
 
@@ -51,18 +53,15 @@ class _AdvertPageState extends State<AdvertPage> {
               ),
               getText("Författare: ", widget.data.authors),
               getText("Upplaga: ", widget.data.edition),
-              getText(
-                  "Skick: ",
-                  DataProvider.of(context)
-                      .advertList
-                      .convertCondition(widget.data.condition)),
+              getText("Skick: ", widget.data.condition),
+              getText("ISBN: ", widget.data.isbn),
               getAdvertPrice(),
               getOwnerName(),
               Row(
                 children: <Widget>[
                   Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-              ),
+                    padding: EdgeInsets.only(top: 10.0),
+                  ),
                   getOwnerImage(),
                   getOwnerInformation(),
                 ],
@@ -132,7 +131,7 @@ class _AdvertPageState extends State<AdvertPage> {
       child: Container(
         padding: EdgeInsets.only(top: 8, left: 10),
         child: FutureBuilder(
-          future: getUser(),
+          future: getUser("username"),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(
@@ -153,7 +152,7 @@ class _AdvertPageState extends State<AdvertPage> {
 
   Widget getOwnerImage() {
     return FutureBuilder(
-      future: getUser(),
+      future: getUser("img_link"),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return snapshot.data.image == null
@@ -205,7 +204,7 @@ class _AdvertPageState extends State<AdvertPage> {
     return Expanded(
       flex: 8,
       child: FutureBuilder(
-        future: getUser(),
+        future: getUser("username,sold_books,bought_books"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(
@@ -237,7 +236,9 @@ class _AdvertPageState extends State<AdvertPage> {
           flex: 6,
           child: RaisedButton(
             color: Colors.blueGrey,
-            onPressed: () {},
+            onPressed: () {
+              developerDialog();
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -251,7 +252,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 ),
                 Expanded(
                   child: FutureBuilder(
-                    future: getUser(),
+                    future: getUser("username"),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Text(
@@ -281,15 +282,33 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-  Future<dynamic> getUser() async {
-    print(widget.data.owner.toString());
-    var userData =
-        await DataProvider.of(context).user.getUserById(widget.data.owner);
+  Future<dynamic> getUser(String fields) async {
+    var userData = await DataProvider.of(context)
+        .user
+        .getUserById(widget.data.owner, fields);
     return userData;
   }
 
+  void developerDialog() {
+    Dialog dialog = Dialog(
+      backgroundColor: Colors.transparent,
+      child: Container(
+        height: MediaQuery.of(context).size.height / 3,
+        child: Center(
+          child: DataProvider.of(context).user.user == null
+              ? LoginPrompt()
+              : Text(
+                  "Denna knapp är ej implementerad :(",
+                  style: TextStyle(fontSize: 45),
+                  textAlign: TextAlign.center,
+                ),
+        ),
+      ),
+    );
+    showDialog(context: context, builder: (context) => dialog);
+  }
+
   void carouselDialog() {
-    print("Im in carousel alertDialog");
     Dialog dialog = Dialog(
       child: Container(
         height: MediaQuery.of(context).size.height / 2,

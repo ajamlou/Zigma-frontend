@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:zigma2/src/image_handler.dart' as Ih;
-import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:math' as Math;
-import 'package:image/image.dart' as Im;
 
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
@@ -50,15 +45,22 @@ class AdvertCreationState extends State<AdvertCreation> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    authorController.dispose();
+    priceController.dispose();
+    contactInfoController.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     compressedImageList.add(placeholderImage);
     titleController.addListener(_listener);
     authorController.addListener(_listener);
     priceController.addListener(_listener);
-    isbnController.addListener(_listener);
     contactInfoController.addListener(_listener);
-    editionController.addListener(_listener);
   }
 
   @override
@@ -288,26 +290,12 @@ class AdvertCreationState extends State<AdvertCreation> {
                         ),
                         TextFormField(
                           maxLines: 1,
-                          controller: isbnController,
                           cursorColor: Color(0xff96070a),
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'ISBN',
-                            suffixIcon: isbnController.text.length < 8
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
-                                : Icon(Icons.check, color: Colors.green),
                           ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Obligatoriskt Fält';
-                            } else if (value.length < 8) {
-                              return 'isbn måste vara längre än 8 karaktärer';
-                            } else {
-                              return null;
-                            }
-                          },
                           onSaved: (value) => _isbn = value,
                         ),
                         TextFormField(
@@ -334,7 +322,6 @@ class AdvertCreationState extends State<AdvertCreation> {
                         ),
                         TextFormField(
                           maxLines: 1,
-                          controller: editionController,
                           cursorColor: Color(0xff96070a),
                           keyboardType: TextInputType.text,
                           autofocus: false,
@@ -428,7 +415,7 @@ class AdvertCreationState extends State<AdvertCreation> {
       ),
       content: DataProvider.of(context).loadingScreen,
     );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
+    showDialog(barrierDismissible: false,context: context, builder: (BuildContext context) => dialog);
   }
 
   void showAdvertCreationAlertDialog(int value) {

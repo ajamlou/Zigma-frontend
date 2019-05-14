@@ -77,9 +77,9 @@ class UserMethodBody {
     user = User(email, id, username, token, image, adverts, 0, 0);
   }
 
-  Future<User> getUserById(int id) async {
+  Future<User> getUserById(int id, String fields) async {
     final String url =
-        "https://9548fc36.ngrok.io/users/users/" + id.toString() + "/";
+        "https://9548fc36.ngrok.io/users/users/" + id.toString() + "/?fields="+fields;
     print("IM IN getUserById wihooo");
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
@@ -95,14 +95,6 @@ class UserMethodBody {
     user = null;
     DataProvider.of(context).advertList.clearUserAdvertList();
     await clearPrefs();
-  }
-
-  bool checkUser() {
-    if (user == null) {
-      return false;
-    } else {
-      return true;
-    }
   }
 
   Future<void> setUserPreferences(String token, String image, String username,
