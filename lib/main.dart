@@ -8,6 +8,8 @@ import './src/user.dart';
 
 void main() => runApp(MyApp());
 
+Color zigmaBlue = Color(0xFF93DED0);
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -28,7 +30,7 @@ class _MyAppState extends State<MyApp> {
       loadingScreen: loadingScreen,
       child: MaterialApp(
         title: 'Zigma App',
-        theme: ThemeData(fontFamily: 'GlacialIndifference'),
+        theme: ThemeData(fontFamily: 'GlacialIndifference', scaffoldBackgroundColor: Colors.white),
         home: SplashScreen(),
         color: Color(0xFFECE9DF),
       ),

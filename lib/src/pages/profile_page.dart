@@ -56,81 +56,91 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("images/advertPageBackground.jpg"),
-          fit: BoxFit.cover,
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          color: Color(0xFFFFFFFF),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
         ),
+        iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
+        elevation: 0.0,
+        backgroundColor: Color(0xFF93DED0),
       ),
-      child: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            leading: IconButton(
-              color: Color(0xFFFFFFFF),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back),
-            ),
-            iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              _profilePictureStyled(),
-              _profileNameStyled(),
-              _profileRatingStyled(),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  stateButtons("Säljer", 0),
-                  stateButtons("Köper", 1),
-                  stateButtons("Alla", 2)
-                ],
-              ),
-              Flexible(
-                child: PageView(
-                  controller: controller,
-                  onPageChanged: (index) {
-                    pageChanged(index);
-                  },
-                  children: <Widget>[
-                    getAdverts(
-                        getUserSellingAdverts(context)),
-                    getAdverts(getUserBuyingAdverts(context)),
-                    getAdverts(DataProvider.of(context).advertList.getCombinedUserLists()),
-                  ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            color: Color(0xFF93DED0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Flexible(
+                  child: Column(
+                    children: <Widget>[
+                      _profileNameStyled(),
+                      _profileRatingStyled(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 25.0, top: 10, bottom: 25),
+                  child: _profilePictureStyled(),
+                ),
+              ],
+            ),
           ),
-        ),
+          Container(
+            margin: EdgeInsets.only(top: 8, bottom: 8, right: 15,left: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                stateButtons("Säljer", 0),
+                stateButtons("Köper", 1),
+                stateButtons("Alla", 2)
+              ],
+            ),
+          ),
+          Flexible(
+            child: PageView(
+              controller: controller,
+              onPageChanged: (index) {
+                pageChanged(index);
+              },
+              children: <Widget>[
+                getAdverts(getUserSellingAdverts(context)),
+                getAdverts(getUserBuyingAdverts(context)),
+                getAdverts(DataProvider.of(context)
+                    .advertList
+                    .getCombinedUserLists()),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget stateButtons(String text, int index) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
       alignment: Alignment(0, 0),
-      width: 100,
+      width: MediaQuery.of(context).size.width / 3.3,
       height: 35,
       decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.red),
-          color: index == stateButtonIndex ? Colors.red : Colors.white),
+          border: Border.all(width: 1, color: Color(0xFFECA72C)),
+          color: index == stateButtonIndex ? Color(0xFFECA72C) : Colors.white),
       child: MaterialButton(
         onPressed: () {
           buttonChangePage(index);
         },
-        child: Text(text),
+        child: Text(
+          text,
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: index == stateButtonIndex ? Colors.white : Color(0xFFECA72C)),
+        ),
       ),
     );
   }
@@ -190,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text(
                     a.bookTitle,
                     style: TextStyle(
-                        color: Color(0xff96070a), fontWeight: FontWeight.bold),
+                        color: Color(0xff373F51), fontWeight: FontWeight.bold),
                   ),
                   Text(a.authors,
                       style: TextStyle(color: Colors.black87, fontSize: 12)),
@@ -204,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Text(
                   a.price.toString() + ":-",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, color: Color(0xff96070a)),
+                  style: TextStyle(fontSize: 20, color: Color(0xffDE5D5D),fontWeight: FontWeight.bold),
                 )),
           ]),
         ),
@@ -236,19 +246,26 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _profilePictureStyled() {
-    String userImageURI = DataProvider.of(context).user.user.image;
     return GestureDetector(
       onTap: () {
         profilePicDialog();
       },
-      child: Center(
-        child: Container(
-          child: CircleAvatar(
-            backgroundColor: Color(0xFF95453),
-            radius: 75,
-            backgroundImage: NetworkImage(
-              userImageURI,
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: Colors.transparent,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.black87, offset: Offset(0, 5), blurRadius: 10),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: Image.network(
+            DataProvider.of(context).user.user.image,
+            fit: BoxFit.cover,
+            width: 150,
+            height: 150,
           ),
         ),
       ),
@@ -265,7 +282,8 @@ class _ProfilePageState extends State<ProfilePage> {
               TextSpan(
                 text: DataProvider.of(context).user.user.username,
                 style: TextStyle(
-                  color: Color(0xFFE36B1B),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ]),
