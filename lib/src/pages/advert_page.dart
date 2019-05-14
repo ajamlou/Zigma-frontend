@@ -234,14 +234,6 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-  List<int> stringIdListToInt(List ids) {
-    final List<int> intIds = [];
-    for (var id in ids) {
-      assert(id is int);
-      intIds.add(id);
-    }
-    return intIds;
-  }
 
   Future<List> getOwnerAdvertLists() async {
     final List<Advert> buyingAdvertList = [];
@@ -249,7 +241,7 @@ class _AdvertPageState extends State<AdvertPage> {
     User tempUser = await getUser("adverts");
     List<Advert> ownerAdvertList = await DataProvider.of(context)
         .advertList
-        .getAdvertsFromIds(stringIdListToInt(tempUser.adverts));
+        .getAdvertsFromIds(tempUser.adverts);
     for (Advert ad in ownerAdvertList) {
       if (ad.transaction_type=="B") {
         buyingAdvertList.add(ad);

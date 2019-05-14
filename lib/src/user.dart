@@ -9,7 +9,7 @@ class User {
   String username;
   String token;
   String image;
-  List adverts;
+  List<int> adverts;
   int soldBooks;
   int boughtBooks;
 
@@ -22,7 +22,7 @@ class User {
         id = json['id'],
         token = json['token'],
         image = json['img_link'],
-        adverts = json['adverts'],
+        adverts = List<int>.from(json['adverts']),
         soldBooks = json['sold_books'],
         boughtBooks = json['bought_books'];
 }

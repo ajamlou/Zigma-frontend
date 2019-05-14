@@ -141,7 +141,7 @@ class AdvertList {
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
-    List returnList = [];
+    List<Advert> returnList = [];
     for (int i = 0; i < resBody.length; i++) {
       returnList.add(Advert.fromJson(resBody[i]));
     }

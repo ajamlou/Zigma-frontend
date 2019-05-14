@@ -59,13 +59,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          color: Color(0xFFFFFFFF),
           onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back),
         ),
-        iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
         elevation: 0.0,
         backgroundColor: Color(0xFF93DED0),
       ),
@@ -148,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget getAdverts(Future adverts) {
     return FutureBuilder(
       future: adverts,
-      builder: (context, snapshot) {
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
             itemCount: snapshot.data is List ? snapshot.data.length : 1,
