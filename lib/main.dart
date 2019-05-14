@@ -9,6 +9,9 @@ import './src/user.dart';
 void main() => runApp(MyApp());
 
 Color zigmaBlue = Color(0xFF93DED0);
+Color marigoldYellow = Color(0xFFECA72C);
+Color lunarRed = Color(0xFFDE5D5D);
+Color charcoalBlue = Color(0xFF373F51);
 
 class MyApp extends StatefulWidget {
   @override
