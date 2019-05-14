@@ -113,28 +113,24 @@ class RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         backgroundColor: Colors.transparent,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          child: AppBar(
-            iconTheme: IconThemeData(color: Color(0xff96070a)),
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            leading: Container(
-              child: IconButton(
-                color: Color(0xff96070a),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-            ),
-            actions: <Widget>[],
-          ),
-        ),
         body: Container(
           child: ListView(
+            physics: ScrollPhysics(),
             shrinkWrap: true,
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    child: IconButton(
+                      color: Color(0xff96070a),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.arrow_back),
+                    ),
+                  ),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.only(right: 100.0, left: 100.0),
                 child: Image.asset('images/logo_frontpage.png'),
@@ -143,7 +139,7 @@ class RegisterPageState extends State<RegisterPage> {
                 'Skapa konto',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 30.0,
+                    fontSize: 20.0,
                     color: Color(0xff96070a)),
                 textAlign: TextAlign.center,
               ),
@@ -175,8 +171,8 @@ class RegisterPageState extends State<RegisterPage> {
                                   children: <Widget>[
                                     Container(
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(35.0)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(35.0)),
                                       ),
                                       height: 190,
                                       width: 170,

@@ -83,8 +83,8 @@ class _LandingPageState extends State<LandingPage> {
                               child: Icon(Icons.search),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 25.0),
-                              child: Text('Sök efter din litteratur...'),
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Text('Sök efter din litteratur...', style: TextStyle( fontSize:  18)),
                             ),
                           ],
                         ),

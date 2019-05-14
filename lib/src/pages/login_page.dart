@@ -60,7 +60,7 @@ class LoginPageState extends State<LoginPage> {
                   key: _userKey,
                   child: Container(
                     margin: const EdgeInsets.only(
-                        top: 50.0, right: 40.0, left: 40.0),
+                        top: 40.0, right: 40.0, left: 40.0, bottom: 20),
                     child: Column(
                       children: <Widget>[
                         TextFormField(
@@ -100,7 +100,7 @@ class LoginPageState extends State<LoginPage> {
               Column(
                 children: <Widget>[
                   Container(
-                    width: 99.9,
+                    width: 109.9,
                     margin: const EdgeInsets.only(right: 35.0, left: 35.0),
                     child: MaterialButton(
                       color: Color(0xFF008000),
@@ -122,7 +122,7 @@ class LoginPageState extends State<LoginPage> {
                         }
                       },
                       child: Text('Logga in',
-                          style: TextStyle(color: Color(0xFFFFFFFF))),
+                          style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 16)),
                     ),
                   ),
                   Container(
@@ -134,11 +134,11 @@ class LoginPageState extends State<LoginPage> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(
-                        top: 20.0, right: 55.0, left: 55.0),
+                        top: 30.0, right: 55.0, left: 55.0),
                     child: MaterialButton(
                       color: Color(0xFF6C6CDF),
                       child: Text('Skapa nytt konto',
-                          style: TextStyle(color: Color(0xFFFFFFFF))),
+                          style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 16)),
                       onPressed: () async => DataProvider.of(context)
                           .routing
                           .routeRegisterPage(context),
