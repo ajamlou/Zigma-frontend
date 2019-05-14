@@ -5,7 +5,10 @@ class LoginPrompt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFECE9DF),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(13),
+        color: Color(0xFFECE9DF),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

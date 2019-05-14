@@ -291,6 +291,7 @@ class _AdvertPageState extends State<AdvertPage> {
 
   void developerDialog() {
     Dialog dialog = Dialog(
+      backgroundColor: Colors.transparent,
       child: Container(
         height: MediaQuery.of(context).size.height / 3,
         child: Center(
