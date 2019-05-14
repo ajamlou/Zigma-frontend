@@ -47,12 +47,12 @@ class Advert {
         'book_title': bookTitle,
         'price': price,
         'authors': authors,
-        'ISBN': isbn,
+        'ISBN': isbn == "" ? "Ej angett" : isbn,
         'contact_info': contactInfo,
         'condition': condition,
         'image': images,
         'transaction_type': transaction_type,
-        'edition': edition,
+        'edition': edition == "" ? "Ej angett" : edition,
         'owner': owner,
         'state': state
       };
@@ -157,24 +157,6 @@ class AdvertList {
     return Advert.fromJson(resBody);
   }
 
-  String convertCondition(String condition) {
-    String number;
-    if (condition == '1') {
-      number = 'Nyskick';
-    } else if (condition == '2') {
-      number = 'Mycket gott skick';
-    } else if (condition == '3') {
-      number = 'Gott skick';
-    } else if (condition == '4') {
-      number = 'Hyggligt skick';
-    } else if (condition == '5') {
-      number = 'Dåligt skick';
-    } else {
-      number = 'Skick ej angivet';
-    }
-    return number;
-  }
-
   String checkCondition(String condition) {
     String number;
     if (condition == 'Nyskick') {
@@ -208,6 +190,7 @@ class AdvertList {
     Advert _newAd = Advert(title, price, author, isbn, contactInfo, condition,
         encodedImageList, transactionType, edition, 1);
     var data = json.encode(_newAd);
+    print(data);
     final String postURL =
         "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
     final response =

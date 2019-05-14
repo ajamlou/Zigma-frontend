@@ -299,15 +299,15 @@ class AdvertCreationState extends State<AdvertCreation> {
                                     size: 10, color: Color(0xff96070a))
                                 : Icon(Icons.check, color: Colors.green),
                           ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Obligatoriskt Fält';
-                            } else if (value.length < 8) {
-                              return 'isbn måste vara längre än 8 karaktärer';
-                            } else {
-                              return null;
-                            }
-                          },
+//                          validator: (value) {
+//                            if (value.isEmpty) {
+//                              return 'Obligatoriskt Fält';
+//                            } else if (value.length < 8) {
+//                              return 'isbn måste vara längre än 8 karaktärer';
+//                            } else {
+//                              return null;
+//                            }
+//                          },
                           onSaved: (value) => _isbn = value,
                         ),
                         TextFormField(
@@ -428,7 +428,7 @@ class AdvertCreationState extends State<AdvertCreation> {
       ),
       content: DataProvider.of(context).loadingScreen,
     );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
+    showDialog(barrierDismissible: false,context: context, builder: (BuildContext context) => dialog);
   }
 
   void showAdvertCreationAlertDialog(int value) {
