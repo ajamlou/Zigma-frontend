@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:zigma2/src/DataProvider.dart';
@@ -6,6 +8,8 @@ import 'package:zigma2/src/components/carousel.dart';
 import 'dart:async';
 
 import 'package:zigma2/src/components/login_prompt.dart';
+import 'package:zigma2/src/user.dart';
+import 'package:zigma2/src/pages/profile_page.dart';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;
@@ -160,9 +164,12 @@ class _AdvertPageState extends State<AdvertPage> {
                   flex: 2,
                   child: FittedBox(
                     fit: BoxFit.contain,
-                    child: Icon(
-                      Icons.account_circle,
-                      color: Colors.grey,
+                    child: GestureDetector(
+                      onTap: () => getOwnerAdvertLists(),
+                      child: Icon(
+                        Icons.account_circle,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 )
@@ -174,13 +181,16 @@ class _AdvertPageState extends State<AdvertPage> {
                       Center(child: CircularProgressIndicator()),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          child: FadeInImage.memoryNetwork(
-                            fit: BoxFit.fitWidth,
-                            placeholder: kTransparentImage,
-                            image: snapshot.data.image,
+                        child: GestureDetector(
+                          onTap: () => getOwnerAdvertLists(),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            child: FadeInImage.memoryNetwork(
+                              fit: BoxFit.fitWidth,
+                              placeholder: kTransparentImage,
+                              image: snapshot.data.image,
+                            ),
                           ),
                         ),
                       ),
@@ -222,6 +232,121 @@ class _AdvertPageState extends State<AdvertPage> {
         },
       ),
     );
+  }
+
+  List<int> stringIdListToInt(List ids) {
+    final List<int> intIds = [];
+    for (var id in ids) {
+      assert(id is int);
+      intIds.add(id);
+    }
+    return intIds;
+  }
+
+  Future<List> getOwnerAdvertLists() async {
+    final List<Advert> buyingAdvertList = [];
+    final List<Advert> sellingAdvertList = [];
+    User tempUser = await getUser("adverts");
+    List<Advert> ownerAdvertList = await DataProvider.of(context)
+        .advertList
+        .getAdvertsFromIds(stringIdListToInt(tempUser.adverts));
+    for (Advert ad in ownerAdvertList) {
+      if (ad.transaction_type=="B") {
+        buyingAdvertList.add(ad);
+      }
+      else {
+        sellingAdvertList.add(ad);
+      }
+    }
+    return ownerAdvertList;
+  }
+  Future<Widget> _profilePictureStyled()  async {
+    String userPictureURI = await getUser("image");
+    return Hero(
+      tag: 'advertProfile',
+      child: GestureDetector(
+        onTap: () {
+          profilePicDialog();
+        },
+        child: Center(
+          child: Container(
+            child: CircleAvatar(
+              backgroundColor: Color(0xFF95453),
+              radius: 75,
+              backgroundImage: NetworkImage(userPictureURI),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget _profileRatingStyled() {
+    return Center(
+      child: RichText(
+        text: TextSpan(
+          // set the default style for the children TextSpans
+            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
+            children: [
+              TextSpan(
+                text: DataProvider.of(context).user.user.soldBooks > 5
+                    ? "Mellanliggande Bokförsäljare"
+                    : "Novis Bokförsäljare",
+                // Email tills vidare
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ]),
+      ),
+    );
+  }
+
+
+  void profilePicDialog() {
+    print("Im in show alertDialog");
+    Dialog dialog = Dialog(
+      insetAnimationCurve: Curves.decelerate,
+      insetAnimationDuration: Duration(milliseconds: 500),
+      backgroundColor: Color(0xFFECE9DF),
+      child: Container(
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Image.network(DataProvider.of(context).user.user.image),
+        ),
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+
+  void getOwnerProfile() async {
+    final List<Advert> buyingAdvertList = [];
+    final List<Advert> sellingAdvertList = [];
+    final List<Advert> userAdverts = await getOwnerAdvertLists();
+    for (Advert ad in userAdverts) {
+      if (ad.transaction_type=="B") {
+        buyingAdvertList.add(ad);
+      }
+      else {
+        sellingAdvertList.add(ad);
+      }
+    }
+
+    userAdverts.clear;
+    int initialPage = 0;
+    List<dynamic> returnList;
+    int stateButtonIndex = initialPage;
+    final controller = PageController(
+      initialPage: initialPage,
+    );
+    Dialog dialog = Dialog(
+      backgroundColor: Colors.transparent,
+      child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: ListView(children: <Widget>[])),
+    );
+    showDialog(context: context, builder: (context) => dialog);
   }
 
   Widget getMessageButton() {
