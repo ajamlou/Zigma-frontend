@@ -24,55 +24,52 @@ class _AdvertPageState extends State<AdvertPage> {
   //Build method
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'advert page',
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/advertPageBackground.jpg"),
-            fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("images/advertPageBackground.jpg"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(30),
+          child: AppBar(
+            iconTheme: IconThemeData(color: Color(0xffECE9DF)),
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
           ),
         ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: AppBar(
-              iconTheme: IconThemeData(color: Color(0xffECE9DF)),
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
+        body: ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          children: <Widget>[
+            getAdvertTitle(),
+            SizedBox(
+              height: 25,
             ),
-          ),
-          body: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            children: <Widget>[
-              getAdvertTitle(),
-              SizedBox(
-                height: 25,
-              ),
-              getAdvertPictures(),
-              SizedBox(
-                height: 30,
-              ),
-              getText("Författare: ", widget.data.authors),
-              getText("Upplaga: ", widget.data.edition),
-              getText("Skick: ", widget.data.condition),
-              getText("ISBN: ", widget.data.isbn),
-              getAdvertPrice(),
-              getOwnerName(),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                  ),
-                  getOwnerImage(),
-                  getOwnerInformation(),
-                ],
-              ),
-              getMessageButton(),
-            ],
-          ),
+            getAdvertPictures(),
+            SizedBox(
+              height: 30,
+            ),
+            getText("Författare: ", widget.data.authors),
+            getText("Upplaga: ", widget.data.edition),
+            getText("Skick: ", widget.data.condition),
+            getText("ISBN: ", widget.data.isbn),
+            getAdvertPrice(),
+            getOwnerName(),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                ),
+                getOwnerImage(),
+                getOwnerInformation(),
+              ],
+            ),
+            getMessageButton(),
+          ],
         ),
       ),
     );
@@ -165,7 +162,7 @@ class _AdvertPageState extends State<AdvertPage> {
                   child: FittedBox(
                     fit: BoxFit.contain,
                     child: GestureDetector(
-                      onTap: () => getOwnerAdvertLists(),
+                      onTap: () => getOwnerProfile(),
                       child: Icon(
                         Icons.account_circle,
                         color: Colors.grey,
@@ -182,7 +179,7 @@ class _AdvertPageState extends State<AdvertPage> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: GestureDetector(
-                          onTap: () => getOwnerAdvertLists(),
+                          onTap: () => getOwnerProfile(),
                           child: Container(
                             width: 50,
                             height: 50,
@@ -234,66 +231,6 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-
-  Future<List> getOwnerAdvertLists() async {
-    final List<Advert> buyingAdvertList = [];
-    final List<Advert> sellingAdvertList = [];
-    User tempUser = await getUser("adverts");
-    List<Advert> ownerAdvertList = await DataProvider.of(context)
-        .advertList
-        .getAdvertsFromIds(tempUser.adverts);
-    for (Advert ad in ownerAdvertList) {
-      if (ad.transaction_type=="B") {
-        buyingAdvertList.add(ad);
-      }
-      else {
-        sellingAdvertList.add(ad);
-      }
-    }
-    return ownerAdvertList;
-  }
-  Future<Widget> _profilePictureStyled()  async {
-    String userPictureURI = await getUser("image");
-    return Hero(
-      tag: 'advertProfile',
-      child: GestureDetector(
-        onTap: () {
-          profilePicDialog();
-        },
-        child: Center(
-          child: Container(
-            child: CircleAvatar(
-              backgroundColor: Color(0xFF95453),
-              radius: 75,
-              backgroundImage: NetworkImage(userPictureURI),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  Widget _profileRatingStyled() {
-    return Center(
-      child: RichText(
-        text: TextSpan(
-          // set the default style for the children TextSpans
-            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
-            children: [
-              TextSpan(
-                text: DataProvider.of(context).user.user.soldBooks > 5
-                    ? "Mellanliggande Bokförsäljare"
-                    : "Novis Bokförsäljare",
-                // Email tills vidare
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-            ]),
-      ),
-    );
-  }
-
-
   void profilePicDialog() {
     print("Im in show alertDialog");
     Dialog dialog = Dialog(
@@ -308,37 +245,6 @@ class _AdvertPageState extends State<AdvertPage> {
       ),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
-
-
-  void getOwnerProfile() async {
-    final List<Advert> buyingAdvertList = [];
-    final List<Advert> sellingAdvertList = [];
-    final List<Advert> userAdverts = await getOwnerAdvertLists();
-    for (Advert ad in userAdverts) {
-      if (ad.transaction_type=="B") {
-        buyingAdvertList.add(ad);
-      }
-      else {
-        sellingAdvertList.add(ad);
-      }
-    }
-
-    userAdverts.clear;
-    int initialPage = 0;
-    List<dynamic> returnList;
-    int stateButtonIndex = initialPage;
-    final controller = PageController(
-      initialPage: initialPage,
-    );
-    Dialog dialog = Dialog(
-      backgroundColor: Colors.transparent,
-      child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: ListView(children: <Widget>[])),
-    );
-    showDialog(context: context, builder: (context) => dialog);
   }
 
   Widget getMessageButton() {
@@ -463,5 +369,89 @@ class _AdvertPageState extends State<AdvertPage> {
         ),
       );
     }
+  }
+
+  Future<List> getOwnerAdvertLists() async {
+    User tempUser = await getUser("adverts");
+    List<Advert> ownerAdvertList = await DataProvider.of(context)
+        .advertList
+        .getAdvertsFromIds(List<int>.from(tempUser.adverts));
+    return ownerAdvertList;
+  }
+
+  void getOwnerProfile() async {
+    final List<Advert> buyingAdvertList = [];
+    final List<Advert> sellingAdvertList = [];
+    final List<Advert> userAdverts = await getOwnerAdvertLists();
+    for (Advert ad in userAdverts) {
+      if (ad.transaction_type == "B") {
+        buyingAdvertList.add(ad);
+      } else {
+        sellingAdvertList.add(ad);
+      }
+    }
+    userAdverts.clear;
+    int initialPage = 0;
+    List<dynamic> returnList;
+    int stateButtonIndex = initialPage;
+    final controller = PageController(
+      initialPage: initialPage,
+    );
+    Dialog dialog = Dialog(
+      backgroundColor: Colors.transparent,
+      child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: ListView(shrinkWrap: true, children: <Widget>[
+            Container(
+              color: Color(0xFF93DED0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Flexible(
+                    child: Column(
+                      children: <Widget>[
+                        //FutureBuilder1
+
+                        FutureBuilder(
+                          future: getUser("image"),
+                          builder: (context, snapshot) {
+                            Stack(
+                              alignment: Alignment(0, 0),
+                              children: <Widget>[
+                                Center(child: CircularProgressIndicator()),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: GestureDetector(
+                                    onTap: () => getOwnerProfile(),
+                                    child: Container(
+                                      width: 50,
+                                      height: 50,
+                                      child: FadeInImage.memoryNetwork(
+                                        fit: BoxFit.fitWidth,
+                                        placeholder: kTransparentImage,
+                                        image: snapshot.data.image,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        //getOwnerName(),
+                        //FutureBuilder2
+                        // getOwnerInformation(),
+                      ],
+                    ),
+                  ),
+                  //FutureBuilder3
+                  // getOwnerImage(),
+                ],
+              ),
+            ),
+          ])),
+    );
+    showDialog(context: context, builder: (context) => dialog);
   }
 }
