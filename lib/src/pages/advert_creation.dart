@@ -355,7 +355,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                     onPressed: () async {
                       int stsCode;
                       if (_advertKey.currentState.validate()) {
-                        showLoadingAlertDialog();
+                        DataProvider.of(context).loadingScreen.showLoadingDialog(context);
                         _advertKey.currentState.save();
                         responseList = await DataProvider.of(context)
                             .advertList
@@ -400,22 +400,6 @@ class AdvertCreationState extends State<AdvertCreation> {
         ),
       ),
     );
-  }
-
-  void showLoadingAlertDialog() {
-    AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
-      title: Text(
-        "Laddar...",
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xff96070a),
-        ),
-        textAlign: TextAlign.center,
-      ),
-      content: DataProvider.of(context).loadingScreen,
-    );
-    showDialog(barrierDismissible: false,context: context, builder: (BuildContext context) => dialog);
   }
 
   void showAdvertCreationAlertDialog(int value) {

@@ -15,7 +15,7 @@ class LoginPrompt extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              "Du behöver ett konto för att fortsätta.",
+              "Du behöver ett konto för att fortsätta",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, color: Color(0xff96070a)),
             ),

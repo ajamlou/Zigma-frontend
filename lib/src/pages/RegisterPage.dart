@@ -328,7 +328,7 @@ class RegisterPageState extends State<RegisterPage> {
                     if (_userKey.currentState.validate() &&
                         passwordController.text ==
                             validatePasswordController.text) {
-                      showLoadingAlertDialog();
+                      DataProvider.of(context).loadingScreen.showLoadingDialog(context);
                       _userKey.currentState.save();
                       _success = await DataProvider.of(context).user.register(
                           _userEmail,
@@ -348,21 +348,6 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void showLoadingAlertDialog() {
-    AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
-      title: Text(
-        "Laddar...",
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xff96070a),
-        ),
-        textAlign: TextAlign.center,
-      ),
-      content: DataProvider.of(context).loadingScreen,
-    );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
 
   void showRegisterAlertDialog(List value) {
     String message = "";

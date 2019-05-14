@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'dart:async';
 
+import 'package:zigma2/src/components/loading_screen.dart';
+
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -23,6 +25,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DataProvider.of(context).loadingScreen;
+    return LoadingScreen();
   }
 }

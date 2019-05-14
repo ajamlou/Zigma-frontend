@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-
-
 class LoadingScreen extends StatefulWidget {
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
-
 }
-class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProviderStateMixin {
+
+class _LoadingScreenState extends State<LoadingScreen>
+    with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> rotation;
   Animation<double> text;
@@ -31,8 +30,6 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
     controller = null;
     super.dispose();
   }
-
-
 
   @override
   void initState() {
@@ -89,13 +86,33 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
               ),
               Container(
                   child: Text(
-                    loadingMessages[i],
-                    style: TextStyle(fontSize: 15),
-                  ))
+                loadingMessages[i],
+                style: TextStyle(fontSize: 15),
+              ))
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class LoadingDialog {
+  void showLoadingDialog(context) {
+    AlertDialog dialog = AlertDialog(
+        backgroundColor: Color(0xFFECE9DF),
+        title: Text(
+          "Laddar...",
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xff96070a),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: LoadingScreen());
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => dialog);
   }
 }

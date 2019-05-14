@@ -41,6 +41,8 @@ class _LandingPageState extends State<LandingPage> {
               ? showDrawer(context)
               : Center(
                   child: Container(
+                    color: Colors.transparent,
+                    width: 300,
                     height: 190,
                     child: LoginPrompt(),
                   ),
@@ -167,7 +169,7 @@ class _LandingPageState extends State<LandingPage> {
           ListTile(
               title: Text("Logga ut"),
               onTap: () async {
-                showLoadingAlertDialog();
+                DataProvider.of(context).loadingScreen.showLoadingDialog(context);
                 Future.delayed(Duration(milliseconds: 1500), () async {
                   await DataProvider.of(context).user.logout(context);
                   setState(() {});
@@ -178,25 +180,6 @@ class _LandingPageState extends State<LandingPage> {
         ],
       ),
     );
-  }
-
-  void showLoadingAlertDialog() {
-    AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
-      title: Text(
-        "Laddar...",
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xff96070a),
-        ),
-        textAlign: TextAlign.center,
-      ),
-      content: DataProvider.of(context).loadingScreen,
-    );
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => dialog);
   }
 
   Future<bool> _onBackPressed() {
