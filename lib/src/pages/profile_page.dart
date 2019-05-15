@@ -19,36 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
   List<Advert> buyingAdvertList;
   List<Advert> sellingAdvertList;
 
-//  Future<dynamic> getUserBuyingAdverts(context) async {
-//    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
-//      returnList = DataProvider.of(context).advertList.userListBuying;
-//    } else {
-//      returnList = await DataProvider.of(context)
-//          .advertList
-//          .getSpecificAdverts("B", DataProvider.of(context).user.user.id, "A");
-//      if (returnList.length == 0) {
-//        return noAdverts(context);
-//      }
-//    }
-//    return returnList;
-//  }
-//
-//  Future<dynamic> getUserSellingAdverts(context) async {
-//    if (DataProvider.of(context).advertList.userListSelling.length != 0) {
-//      returnList = DataProvider.of(context).advertList.userListSelling;
-//    } else {
-//      returnList = await DataProvider.of(context)
-//          .advertList
-//          .getSpecificAdverts("S", DataProvider.of(context).user.user.id, "A");
-//      if (returnList.length == 0) {
-//        return noAdverts(context);
-//      }
-//    }
-//    return returnList;
-//  }
-
   Future<List> getCombinedUserLists() async {
-    if(buyingAdvertList == null && sellingAdvertList == null){
+    if (buyingAdvertList == null && sellingAdvertList == null) {
       return [];
     }
     List newList =
@@ -117,10 +89,17 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0.0,
         backgroundColor: Color(0xFF93DED0),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {},
-          )
+          identical(DataProvider.of(context).user.user, widget.user)
+              ? IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    DataProvider.of(context).routing.routeUserEditPage(context);
+                  },
+                )
+              : SizedBox(
+                  height: 0,
+                  width: 0,
+                )
         ],
       ),
       body: Column(
@@ -313,8 +292,12 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(100),
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
-            widget.user.image == null ? BoxShadow(color: Colors.transparent) : BoxShadow(
-                color: Colors.black87, offset: Offset(0, 5), blurRadius: 10),
+            widget.user.image == null
+                ? BoxShadow(color: Colors.transparent)
+                : BoxShadow(
+                    color: Colors.black87,
+                    offset: Offset(0, 5),
+                    blurRadius: 10),
           ],
         ),
         child: ClipRRect(
@@ -325,7 +308,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 150,
                   child: FittedBox(
                     fit: BoxFit.cover,
-                    child: Icon(Icons.person, color: Colors.white,),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
                   ))
               : Image.network(
                   widget.user.image,

@@ -7,6 +7,7 @@ import 'package:zigma2/src/pages/landing_page.dart';
 import 'package:zigma2/src/pages/login_page.dart';
 import 'package:zigma2/src/pages/profile_page.dart';
 import 'package:zigma2/src/pages/user_advert_page.dart';
+import 'package:zigma2/src/pages/user_edit_page.dart';
 
 class Routing {
   void routeChatPage(context, bool replace) {
@@ -76,4 +77,10 @@ class Routing {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ProfilePage(user: user)));
   }
+
+  void routeUserEditPage(context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => UserEditPage()));
+  }
+
 }
