@@ -44,7 +44,7 @@ class LoginPageState extends State<LoginPage> {
             )),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 50.0),
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Text(
                   'Logga In',
                   style: TextStyle(
@@ -59,6 +59,16 @@ class LoginPageState extends State<LoginPage> {
               child: Form(
                 key: _userKey,
                 child: Container(
+                  height: 105,
+                  width: 350,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 3,
+                    ),
+                  ),
                   margin: const EdgeInsets.only(
                       top: 40.0, right: 40.0, left: 40.0, bottom: 20),
                   child: Column(

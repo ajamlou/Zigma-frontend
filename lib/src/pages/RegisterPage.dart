@@ -138,179 +138,199 @@ class RegisterPageState extends State<RegisterPage> {
                   ),
                 )),
             Container(
-              padding: const EdgeInsets.only(top: 50.0, bottom: 10),
+              padding: const EdgeInsets.only(top: 20.0, bottom: 10),
               child: Text(
                 'Skapa konto',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 35.0,
+                    fontSize: 32.0,
                     color: Color(0xFF373F51)),
                 textAlign: TextAlign.center,
               ),
             ),
-            Form(
-              key: _userKey,
-              child: Container(
-                margin:
-                    const EdgeInsets.only(top: 10.0, right: 40.0, left: 40.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: _image == null
-                          ? Container(
-                              height: 190,
-                              width: 170,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30.0)),
-                                image: DecorationImage(
-                                  image: AssetImage('images/profile_pic.png'),
+
+            Container(
+              child: Form(
+                key: _userKey,
+                child: Container(
+                  margin:
+                      const EdgeInsets.only(top: 10.0, right: 40.0, left: 40.0),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: _image == null
+                            ? Container(
+                                height: 190,
+                                width: 170,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.0)),
+                                  image: DecorationImage(
+                                    image: AssetImage('images/profile_pic.png'),
+                                  ),
+                                ),
+                                child: MaterialButton(
+                                  onPressed: showImageAlertDialog,
+                                ),
+                              )
+                            : Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(35.0)),
+                                      ),
+                                      height: 190,
+                                      width: 170,
+                                      child: FittedBox(
+                                        fit: BoxFit.cover,
+                                        child: Image.file(_image),
+                                      ),
+                                    ),
+                                    RaisedButton(
+                                      child: Text("Ta en ny bild"),
+                                      onPressed: () {
+                                        showImageAlertDialog();
+                                        setState(() {
+                                          _image = null;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
-                              child: MaterialButton(
-                                onPressed: showImageAlertDialog,
-                              ),
-                            )
-                          : Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(35.0)),
-                                    ),
-                                    height: 190,
-                                    width: 170,
-                                    child: FittedBox(
-                                      fit: BoxFit.cover,
-                                      child: Image.file(_image),
-                                    ),
-                                  ),
-                                  RaisedButton(
-                                    child: Text("Ta en ny bild"),
-                                    onPressed: () {
-                                      showImageAlertDialog();
-                                      setState(() {
-                                        _image = null;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
+                      ),
+                      Container(
+                        width: 350,
+                        height: 210,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.0),
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 3,
+                          ),
+                        ),
+                        child: ListView(
+                          shrinkWrap: true,
+                        children: <Widget>[
+                        TextFormField(
+                          maxLines: 1,
+                          controller: usernameController,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            hintText: 'Användarnamn',
+                            icon: Icon(
+                              Icons.person_add,
+                              color: registerColor,
                             ),
-                    ),
-                    TextFormField(
-                      maxLines: 1,
-                      controller: usernameController,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: 'Användarnamn',
-                        icon: Icon(
-                          Icons.person_add,
-                          color: registerColor,
+                            suffixIcon: usernameController.text == ""
+                                ? Icon(Icons.star,
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                          ),
+                          validator: (value) =>
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          onSaved: (value) => _userName = value,
                         ),
-                        suffixIcon: usernameController.text == ""
-                            ? Icon(Icons.star,
-                                size: 10, color: Color(0xFF373F51))
-                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                      ),
-                      validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
-                      onSaved: (value) => _userName = value,
-                    ),
-                    TextFormField(
-                      maxLines: 1,
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        icon: Icon(
-                          Icons.mail,
-                          color: registerColor,
+                        TextFormField(
+                          maxLines: 1,
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            icon: Icon(
+                              Icons.mail,
+                              color: registerColor,
+                            ),
+                            suffixIcon: !_emailListener()
+                                ? Icon(Icons.star,
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                          ),
+                          validator: (value) =>
+                              value.isEmpty ? 'Obligatoriskt Fält' : null,
+                          onSaved: (value) => _userEmail = value,
                         ),
-                        suffixIcon: !_emailListener()
-                            ? Icon(Icons.star,
-                                size: 10, color: Color(0xFF373F51))
-                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                      ),
-                      validator: (value) =>
-                          value.isEmpty ? 'Obligatoriskt Fält' : null,
-                      onSaved: (value) => _userEmail = value,
-                    ),
-                    emailController.text.length == 0
-                        ? SizedBox(
-                            width: 0,
-                            height: 0,
-                          )
-                        : _emailListener()
-                            ? Text(
-                                "Mejladressen är giltig!",
-                                style: TextStyle(color: Colors.lightGreen),
+                        emailController.text.length == 0
+                            ? SizedBox(
+                                width: 0,
+                                height: 0,
                               )
-                            : Text("Det måste vara en giltig mejladress",
-                                style: TextStyle(color: Color(0xFFDE5D5D))),
-                    TextFormField(
-                      maxLines: 1,
-                      controller: passwordController,
-                      obscureText: true,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: 'Lösenord',
-                        icon: Icon(
-                          Icons.lock,
-                          color: registerColor,
+                            : _emailListener()
+                                ? Text(
+                                    "Mejladressen är giltig!",
+                                    style: TextStyle(color: Colors.lightGreen),
+                                  )
+                                : Text("Det måste vara en giltig mejladress",
+                                    style: TextStyle(color: Color(0xFFDE5D5D))),
+                        TextFormField(
+                          maxLines: 1,
+                          controller: passwordController,
+                          obscureText: true,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            hintText: 'Lösenord',
+                            icon: Icon(
+                              Icons.lock,
+                              color: registerColor,
+                            ),
+                            suffixIcon: passwordController.text.length < 8 ||
+                                    validatePasswordController.text !=
+                                        passwordController.text
+                                ? Icon(Icons.star,
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                          ),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Obligatoriskt Fält';
+                            } else if (!passwordRegExp
+                                .hasMatch(passwordController.text)) {
+                              return 'lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
+                            } else {
+                              return null;
+                            }
+                          },
+                          onSaved: (value) => _password = value,
                         ),
-                        suffixIcon: passwordController.text.length < 8 ||
-                                validatePasswordController.text !=
-                                    passwordController.text
-                            ? Icon(Icons.star,
-                                size: 10, color: Color(0xFF373F51))
-                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                      ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Obligatoriskt Fält';
-                        } else if (!passwordRegExp
-                            .hasMatch(passwordController.text)) {
-                          return 'lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onSaved: (value) => _password = value,
-                    ),
-                    //color: same,
-                    TextFormField(
-                      maxLines: 1,
-                      controller: validatePasswordController,
-                      obscureText: true,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: 'Repetera lösenord',
-                        icon: Icon(
-                          Icons.lock,
-                          color: registerColor,
+                        //color: same,
+                        TextFormField(
+                          maxLines: 1,
+                          controller: validatePasswordController,
+                          obscureText: true,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            hintText: 'Repetera lösenord',
+                            icon: Icon(
+                              Icons.lock,
+                              color: registerColor,
+                            ),
+                            suffixIcon: passwordController.text == "" ||
+                                    validatePasswordController.text !=
+                                        passwordController.text
+                                ? Icon(Icons.star,
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                          ),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Obligatoriskt Fält';
+                            } else if (validatePasswordController.text !=
+                                passwordController.text) {
+                              return 'lösenorden måste vara likadana';
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
-                        suffixIcon: passwordController.text == "" ||
-                                validatePasswordController.text !=
-                                    passwordController.text
-                            ? Icon(Icons.star,
-                                size: 10, color: Color(0xFF373F51))
-                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                        ],
+                        ),
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Obligatoriskt Fält';
-                        } else if (validatePasswordController.text !=
-                            passwordController.text) {
-                          return 'lösenorden måste vara likadana';
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
