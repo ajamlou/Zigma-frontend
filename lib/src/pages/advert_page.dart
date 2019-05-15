@@ -395,7 +395,7 @@ class _AdvertPageState extends State<AdvertPage> {
   }
 
   void getOwnerProfile() async {
-    User owner = await getUser("username,sold_books,bought_books,img_link,adverts");
+    User owner = await getUser("id,username,sold_books,bought_books,img_link,adverts");
     DataProvider
         .of(context)
         .routing

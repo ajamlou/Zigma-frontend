@@ -16,8 +16,8 @@ class _ProfilePageState extends State<ProfilePage> {
   static final int initialPage = 0;
   int stateButtonIndex = initialPage;
   final controller = PageController(initialPage: initialPage);
-  final List<Advert> buyingAdvertList = [];
-  final List<Advert> sellingAdvertList = [];
+  List<Advert> buyingAdvertList = [];
+  List<Advert> sellingAdvertList = [];
 
 //  Future<dynamic> getUserBuyingAdverts(context) async {
 //    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
@@ -53,25 +53,42 @@ class _ProfilePageState extends State<ProfilePage> {
     return newList;
   }
 
-  Future<List<Advert>> getUserAdverts(String choice) async {
-    if (buyingAdvertList.length == 0 || sellingAdvertList.length == 0) {
-      List<Advert> returnList = await DataProvider.of(context)
-          .advertList
-          .getAdvertsFromIds(widget.user.adverts);
-      for (Advert ad in returnList) {
-        if (ad.transactionType == "B") {
-          buyingAdvertList.add(ad);
-        } else {
-          sellingAdvertList.add(ad);
-        }
-      }
-    }
-    if (choice == "S") {
+  Future<List<Advert>> getUserAds(String choice) async {
+    if (sellingAdvertList.length != 0 && choice == "S") {
       return sellingAdvertList;
-    } else {
+    } else if (buyingAdvertList.length != 0 && choice == "B") {
       return buyingAdvertList;
     }
+    List<Advert> returnList = await DataProvider.of(context)
+        .advertList
+        .getSpecificAdverts(choice, widget.user.id, "A");
+    if (choice == "S") {
+      sellingAdvertList = returnList;
+    } else {
+      buyingAdvertList = returnList;
+    }
+    return returnList;
   }
+
+//  Future<List<Advert>> getUserAdverts(String choice) async {
+//    if (buyingAdvertList.length == 0 && sellingAdvertList.length == 0) {
+//      List<Advert> returnList = await DataProvider.of(context)
+//          .advertList
+//          .getAdvertsFromIds(widget.user.adverts);
+//      for (Advert ad in returnList) {
+//        if (ad.transactionType == "B") {
+//          buyingAdvertList.add(ad);
+//        } else {
+//          sellingAdvertList.add(ad);
+//        }
+//      }
+//    }
+//    if (choice == "S") {
+//      return sellingAdvertList;
+//    } else {
+//      return buyingAdvertList;
+//    }
+//  }
 
   void pageChanged(int index) {
     setState(() {
@@ -145,8 +162,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 pageChanged(index);
               },
               children: <Widget>[
-                getAdverts(getUserAdverts("S")),
-                getAdverts(getUserAdverts("B")),
+                getAdverts(getUserAds("S")),
+                getAdverts(getUserAds("B")),
                 getAdverts(getCombinedUserLists())
               ],
             ),

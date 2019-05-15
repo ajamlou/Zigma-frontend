@@ -99,17 +99,11 @@ class AdvertList {
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
+    final List<Advert> returnList = [];
     for (int i = 0; i < resBody.length; i++) {
-      if (transactionType == "B") {
-        userListBuying.add(Advert.fromJson(resBody[i]));
-      } else {
-        userListSelling.add(Advert.fromJson(resBody[i]));
-      }
+        returnList.add(Advert.fromJson(resBody[i]));
     }
-    if (transactionType == "B") {
-      return userListBuying;
-    }
-    return userListSelling;
+    return returnList;
   }
 
   Future<List<Advert>> getAdvertsFromIds(List<int> ids) async {
