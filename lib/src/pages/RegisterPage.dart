@@ -386,17 +386,18 @@ class RegisterPageState extends State<RegisterPage> {
       message = "Du är nu registerad!";
     }
     AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
+      backgroundColor: Colors.white,
       title: Text(
         message,
         style: TextStyle(
           fontSize: 20,
-          color: Color(0xFFDE5D5D),
+          color: Color(0xFF373F51),
         ),
         textAlign: TextAlign.center,
       ),
       content: value[0] == 201
           ? RaisedButton(
+              color: Color(0xFF3FBE7E),
               child: Text("Gå vidare"),
               onPressed: () {
                 DataProvider.of(context)
@@ -405,6 +406,7 @@ class RegisterPageState extends State<RegisterPage> {
               },
             )
           : RaisedButton(
+              color: Color(0xFFECA72C),
               child: Text("Tillbaka"),
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop(null);
