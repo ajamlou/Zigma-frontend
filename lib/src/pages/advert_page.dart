@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
 import 'package:zigma2/src/components/carousel.dart';
 import 'dart:async';
-
 import 'package:zigma2/src/components/login_prompt.dart';
 import 'package:zigma2/src/user.dart';
-import 'package:zigma2/src/pages/profile_page.dart';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;
@@ -22,6 +18,7 @@ class AdvertPage extends StatefulWidget {
 
 class _AdvertPageState extends State<AdvertPage> {
   //Build method
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -330,8 +327,8 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-  Future<dynamic> getUser(String fields) async {
-    var userData = await DataProvider.of(context)
+  Future<User> getUser(String fields) async {
+    User userData = await DataProvider.of(context)
         .user
         .getUserById(widget.data.owner, fields);
     return userData;
@@ -408,8 +405,10 @@ class _AdvertPageState extends State<AdvertPage> {
   }
 
   void getOwnerProfile() async {
+    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
     User owner =
         await getUser("id,username,sold_books,bought_books,img_link,adverts");
+    Navigator.of(context, rootNavigator: true).pop(null);
     DataProvider.of(context).routing.routeProfilePage(context, owner);
   }
 }

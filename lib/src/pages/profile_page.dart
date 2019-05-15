@@ -16,47 +16,22 @@ class _ProfilePageState extends State<ProfilePage> {
   static final int initialPage = 0;
   int stateButtonIndex = initialPage;
   final controller = PageController(initialPage: initialPage);
-  List<Advert> buyingAdvertList = [];
-  List<Advert> sellingAdvertList = [];
-
-//  Future<dynamic> getUserBuyingAdverts(context) async {
-//    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
-//      returnList = DataProvider.of(context).advertList.userListBuying;
-//    } else {
-//      returnList = await DataProvider.of(context)
-//          .advertList
-//          .getSpecificAdverts("B", DataProvider.of(context).user.user.id, "A");
-//      if (returnList.length == 0) {
-//        return noAdverts(context);
-//      }
-//    }
-//    return returnList;
-//  }
-//
-//  Future<dynamic> getUserSellingAdverts(context) async {
-//    if (DataProvider.of(context).advertList.userListSelling.length != 0) {
-//      returnList = DataProvider.of(context).advertList.userListSelling;
-//    } else {
-//      returnList = await DataProvider.of(context)
-//          .advertList
-//          .getSpecificAdverts("S", DataProvider.of(context).user.user.id, "A");
-//      if (returnList.length == 0) {
-//        return noAdverts(context);
-//      }
-//    }
-//    return returnList;
-//  }
+  List<Advert> buyingAdvertList;
+  List<Advert> sellingAdvertList;
 
   Future<List> getCombinedUserLists() async {
+    if (buyingAdvertList == null && sellingAdvertList == null) {
+      return [];
+    }
     List newList =
         [buyingAdvertList, sellingAdvertList].expand((x) => x).toList();
     return newList;
   }
 
   Future<List<Advert>> getUserAds(String choice) async {
-    if (sellingAdvertList.length != 0 && choice == "S") {
+    if (sellingAdvertList != null && choice == "S") {
       return sellingAdvertList;
-    } else if (buyingAdvertList.length != 0 && choice == "B") {
+    } else if (buyingAdvertList != null && choice == "B") {
       return buyingAdvertList;
     }
     List<Advert> returnList = await DataProvider.of(context)
@@ -114,10 +89,17 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0.0,
         backgroundColor: Color(0xFF93DED0),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {},
-          )
+          identical(DataProvider.of(context).user.user, widget.user)
+              ? IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    DataProvider.of(context).routing.routeUserEditPage(context);
+                  },
+                )
+              : SizedBox(
+                  height: 0,
+                  width: 0,
+                )
         ],
       ),
       body: Column(
@@ -310,18 +292,33 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(100),
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.black87, offset: Offset(0, 5), blurRadius: 10),
+            widget.user.image == null
+                ? BoxShadow(color: Colors.transparent)
+                : BoxShadow(
+                    color: Colors.black87,
+                    offset: Offset(0, 5),
+                    blurRadius: 10),
           ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: Image.network(
-            widget.user.image,
-            fit: BoxFit.cover,
-            width: 150,
-            height: 150,
-          ),
+          child: widget.user.image == null
+              ? Container(
+                  width: 150,
+                  height: 150,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ))
+              : Image.network(
+                  widget.user.image,
+                  fit: BoxFit.cover,
+                  width: 150,
+                  height: 150,
+                ),
         ),
       ),
     );

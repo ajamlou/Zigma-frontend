@@ -58,6 +58,7 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
               onPressed: (){},
               child: Text("Markera annons som såld!"),
             ),
+            Image.network("https://9548fc36.ngrok.io/adverts/advertimages/2"),
           ],
         ),
       ),

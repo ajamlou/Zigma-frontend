@@ -39,7 +39,7 @@ class Advert {
 
   factory Advert.fromJson(Map<String, dynamic> json) => _$AdvertFromJson(json);
 
-  Map<String, dynamic> toJson(Advert json) => _$AdvertToJson(json);
+  Map<String, dynamic> toJson(Advert advert) => _$AdvertToJson(advert);
 
 }
 
@@ -169,7 +169,7 @@ class AdvertList {
     condition = checkCondition(condition);
     Advert _newAd = Advert(title, price, author, isbn, contactInfo, condition,
         encodedImageList, transactionType, edition, 1);
-    var data = json.encode(_newAd);
+    var data = json.encode(_newAd.toJson(_newAd));
     print(data);
     final String postURL =
         "https://9548fc36.ngrok.io/adverts/adverts/?format=json";
