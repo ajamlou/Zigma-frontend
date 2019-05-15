@@ -16,6 +16,8 @@ class _ProfilePageState extends State<ProfilePage> {
   static final int initialPage = 0;
   int stateButtonIndex = initialPage;
   final controller = PageController(initialPage: initialPage);
+  final List<Advert> buyingAdvertList = [];
+  final List<Advert> sellingAdvertList = [];
 
 //  Future<dynamic> getUserBuyingAdverts(context) async {
 //    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
@@ -45,12 +47,24 @@ class _ProfilePageState extends State<ProfilePage> {
 //    return returnList;
 //  }
 
-  Future<List<Advert>> getUserAdverts() async {
-    List<Advert> returnList;
-    returnList = await DataProvider.of(context)
-        .advertList
-        .getAdvertsFromIds(widget.user.adverts);
-    return returnList;
+  Future<List<Advert>> getUserAdverts(String choice) async {
+    if (buyingAdvertList.length == 0 || sellingAdvertList.length == 0) {
+      List<Advert> returnList = await DataProvider.of(context)
+          .advertList
+          .getAdvertsFromIds(widget.user.adverts);
+      for (Advert ad in returnList) {
+        if (ad.transactionType == "B") {
+          buyingAdvertList.add(ad);
+        } else {
+          sellingAdvertList.add(ad);
+        }
+      }
+    }
+    if (choice == "S") {
+      return sellingAdvertList;
+    } else {
+      return buyingAdvertList;
+    }
   }
 
   void pageChanged(int index) {
@@ -125,8 +139,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 pageChanged(index);
               },
               children: <Widget>[
-                getAdverts(getUserAdverts()),
-                getAdverts(getUserAdverts()),
+                getAdverts(getUserAdverts("S")),
+                getAdverts(getUserAdverts("B")),
               ],
             ),
           ),
