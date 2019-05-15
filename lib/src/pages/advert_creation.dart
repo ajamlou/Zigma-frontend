@@ -162,7 +162,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   children: <Widget>[
                     Container(
                       height: 150.0,
-                      color: Colors.white70,
+                      color: Colors.transparent,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
@@ -176,7 +176,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Container(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            padding: EdgeInsets.only(top: 10, bottom: 20),
                             width: 300,
                             child: compressedImageList.length == 1
                                 ? Text('')
@@ -202,7 +202,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.0),
                     border: Border.all(
-                      color: Colors.black,
+                      color: Colors.white,
                       width: 3,
                     ),
                   ),
@@ -343,7 +343,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 60),
                   child: Container(
-                    padding: EdgeInsets.only(top: 25),
+                    padding: EdgeInsets.only(top: 35),
                     width: 300,
                     child: MaterialButton(
                       color: Color(0xFF3FBE7E),
@@ -437,7 +437,7 @@ class AdvertCreationState extends State<AdvertCreation> {
             children: <Widget>[
               RaisedButton(
                 color: Color(0xFFECA72C),
-                child: Icon(Icons.image),
+                child: Icon(Icons.image, color: Colors.white),
                 onPressed: () async {
                   tempImage = await Ih.getImage("gallery");
                   _insert(tempImage);
@@ -445,7 +445,7 @@ class AdvertCreationState extends State<AdvertCreation> {
               ),
               RaisedButton(
                 color: Color(0xFFECA72C),
-                child: Icon(Icons.camera_alt),
+                child: Icon(Icons.camera_alt, color: Colors.white),
                 onPressed: () async {
                   tempImage = await Ih.getImage("camera");
                   _insert(tempImage);
