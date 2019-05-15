@@ -48,7 +48,8 @@ class _ProfilePageState extends State<ProfilePage> {
 //  }
 
   Future<List> getCombinedUserLists() async {
-    List newList = [buyingAdvertList, sellingAdvertList].expand((x) => x).toList();
+    List newList =
+        [buyingAdvertList, sellingAdvertList].expand((x) => x).toList();
     return newList;
   }
 
@@ -208,6 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
         DataProvider.of(context).routing.routeUserAdvertPage(context, a, false);
       },
       child: Card(
+        color: a.transactionType == "S" ? Color(0xFFe2f1af) : Color(0xFFC1AE9F),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           child: Row(children: <Widget>[
