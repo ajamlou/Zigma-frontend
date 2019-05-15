@@ -7,7 +7,7 @@ class LoginPrompt extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(11),
-        color: Color(0xFFECE9DF),
+        color: Colors.white,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

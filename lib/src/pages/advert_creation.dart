@@ -67,26 +67,24 @@ class AdvertCreationState extends State<AdvertCreation> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("images/advertCreationPicture.jpg"),
-          fit: BoxFit.fill,
-        ),
+
       ),
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xFFAEDBD3),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
           child: AppBar(
-            iconTheme: IconThemeData(color: Color(0xff96070a)),
+            iconTheme: IconThemeData(color: Colors.transparent),
             elevation: 0.0,
             backgroundColor: transaction_type == null
                 ? Colors.transparent
-                : Color(0xff96070a),
+                : Colors.transparent,
             title: Text('Lägg till en ny annons',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFFFFFFFF),
+                  color: Color(0xFF373F51),
+                  fontSize: 25,
                 )),
             centerTitle: true,
             leading: Container(
@@ -114,34 +112,23 @@ class AdvertCreationState extends State<AdvertCreation> {
                   style: TextStyle(
                     fontSize: 25,
                     color: Colors.white,
-                    shadows: <Shadow>[
-                      Shadow(
-                        offset: Offset(1.5, 1.5),
-                        blurRadius: 2.0,
-                        color: Colors.amber,
-                      ),
-                      Shadow(
-                        offset: Offset(2.0, 2.0),
-                        blurRadius: 4.0,
-                        color: Colors.black,
-                      ),
-                    ],
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               Container(
                 height: 50,
-                width: 220,
+                width: 300,
                 child: RaisedButton(
                   elevation: 5,
-                  color: Color(0xff96070a),
+                  color: Color(0xFFECA72C),
                   onPressed: () {
                     setState(() {
                       transaction_type = 'S';
                     });
                   },
                   child: Text('Sälja',
-                      style: TextStyle(color: Colors.white, fontSize: 30)),
+                      style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
                 ),
               ),
               SizedBox(
@@ -149,17 +136,17 @@ class AdvertCreationState extends State<AdvertCreation> {
               ),
               Container(
                 height: 50,
-                width: 220,
+                width: 300,
                 child: RaisedButton(
                   elevation: 5,
-                  color: Color(0xff96070a),
+                  color: Color(0xFFECA72C),
                   onPressed: () {
                     setState(() {
                       transaction_type = 'B';
                     });
                   },
                   child: Text('Söker',
-                      style: TextStyle(color: Colors.white, fontSize: 30)),
+                      style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -188,18 +175,23 @@ class AdvertCreationState extends State<AdvertCreation> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(2.0),
-                          child: compressedImageList.length == 1
-                              ? Text('')
-                              : RaisedButton(
-                                  color: Colors.red,
-                                  child: const Text(
-                                    'Ta bort markerade bilder',
-                                    style: TextStyle(
-                                      color: Colors.white,
+                          child: Container(
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            width: 300,
+                            child: compressedImageList.length == 1
+                                ? Text('')
+                                : RaisedButton(
+                                    color: Color(0xFFDE5D5D),
+                                    child: const Text(
+                                      'Ta bort markerade bilder',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
+                                    onPressed: _remove,
                                   ),
-                                  onPressed: _remove,
-                                ),
+                          ),
                         ),
                       ],
                     ),
@@ -223,15 +215,15 @@ class AdvertCreationState extends State<AdvertCreation> {
                         TextFormField(
                           maxLines: 1,
                           controller: titleController,
-                          cursorColor: Color(0xff96070a),
+                          cursorColor: Color(0xFF373F51),
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Titel',
                             suffixIcon: titleController.text == ""
                                 ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
-                                : Icon(Icons.check, color: Colors.green),
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                           ),
                           validator: (value) =>
                               value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -240,7 +232,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         TextFormField(
                           maxLines: 1,
                           controller: priceController,
-                          cursorColor: Color(0xff96070a),
+                          cursorColor: Color(0xFFDE5D5D),
                           keyboardType: TextInputType.number,
                           autofocus: false,
                           // maxLength: 4,
@@ -249,8 +241,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                             suffixIcon: priceController.text.length > 4 ||
                                     priceController.text == ""
                                 ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
-                                : Icon(Icons.check, color: Colors.green),
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -266,7 +258,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         TextFormField(
                           maxLines: 1,
                           controller: authorController,
-                          cursorColor: Color(0xff96070a),
+                          cursorColor: Color(0xFFDE5D5D),
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -274,8 +266,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                             suffixIcon: authorController.text.length < 5 ||
                                     !authorController.text.contains(" ")
                                 ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
-                                : Icon(Icons.check, color: Colors.green),
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -290,7 +282,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         ),
                         TextFormField(
                           maxLines: 1,
-                          cursorColor: Color(0xff96070a),
+                          cursorColor: Color(0xFFDE5D5D),
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -301,15 +293,15 @@ class AdvertCreationState extends State<AdvertCreation> {
                         TextFormField(
                           maxLines: 1,
                           controller: contactInfoController,
-                          cursorColor: Color(0xff96070a),
+                          cursorColor: Color(0xFFDE5D5D),
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Kontaktinformation',
                             suffixIcon: contactInfoController.text == ""
                                 ? Icon(Icons.star,
-                                    size: 10, color: Color(0xff96070a))
-                                : Icon(Icons.check, color: Colors.green),
+                                    size: 10, color: Color(0xFF373F51))
+                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -322,7 +314,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         ),
                         TextFormField(
                           maxLines: 1,
-                          cursorColor: Color(0xff96070a),
+                          cursorColor: Color(0xFFDE5D5D),
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -350,45 +342,49 @@ class AdvertCreationState extends State<AdvertCreation> {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 60),
-                  child: MaterialButton(
-                    color: Color(0xFF008000),
-                    onPressed: () async {
-                      int stsCode;
-                      if (_advertKey.currentState.validate()) {
-                        DataProvider.of(context).loadingScreen.showLoadingDialog(context);
-                        _advertKey.currentState.save();
-                        responseList = await DataProvider.of(context)
-                            .advertList
-                            .uploadNewAdvert(
-                                _title,
-                                _price,
-                                _author,
-                                _isbn,
-                                _contactInfo,
-                                encodedImageList,
-                                condition,
-                                transaction_type,
-                                edition,
-                                context);
-                        setState(() {
-                          stsCode = responseList[0];
-                        });
-                        if (stsCode == 201) { //Confirmed response
-                          var a = await DataProvider.of(context)
+                  child: Container(
+                    padding: EdgeInsets.only(top: 25),
+                    width: 300,
+                    child: MaterialButton(
+                      color: Color(0xFF3FBE7E),
+                      onPressed: () async {
+                        int stsCode;
+                        if (_advertKey.currentState.validate()) {
+                          DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+                          _advertKey.currentState.save();
+                          responseList = await DataProvider.of(context)
                               .advertList
-                              .getAdvertById(responseList[1]);
-                          Navigator.of(context, rootNavigator: true).pop(null);
-                          DataProvider.of(context)
-                              .routing
-                              .routeAdvertPage(context, a, true);
-                        } else { //Unsuccessful response
-                          Navigator.of(context, rootNavigator: true).pop(null);
-                          showAdvertCreationAlertDialog(stsCode);
+                              .uploadNewAdvert(
+                                  _title,
+                                  _price,
+                                  _author,
+                                  _isbn,
+                                  _contactInfo,
+                                  encodedImageList,
+                                  condition,
+                                  transaction_type,
+                                  edition,
+                                  context);
+                          setState(() {
+                            stsCode = responseList[0];
+                          });
+                          if (stsCode == 201) { //Confirmed response
+                            var a = await DataProvider.of(context)
+                                .advertList
+                                .getAdvertById(responseList[1]);
+                            Navigator.of(context, rootNavigator: true).pop(null);
+                            DataProvider.of(context)
+                                .routing
+                                .routeAdvertPage(context, a, true);
+                          } else { //Unsuccessful response
+                            Navigator.of(context, rootNavigator: true).pop(null);
+                            showAdvertCreationAlertDialog(stsCode);
+                          }
                         }
-                      }
-                    },
-                    child: Text("Ladda upp",
-                        style: TextStyle(color: Color(0xFFFFFFFF))),
+                      },
+                      child: Text("Ladda upp",
+                          style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold)),
+                    ),
                   ),
                 ),
               ],
@@ -415,7 +411,7 @@ class AdvertCreationState extends State<AdvertCreation> {
         message,
         style: TextStyle(
           fontSize: 20,
-          color: Color(0xff96070a),
+          color: Color(0xFFDE5D5D),
         ),
         textAlign: TextAlign.center,
       ),
@@ -426,34 +422,37 @@ class AdvertCreationState extends State<AdvertCreation> {
   void showImageAlertDialog() {
     File tempImage;
     AlertDialog dialog = AlertDialog(
-        backgroundColor: Color(0xFFECE9DF),
+        backgroundColor: Colors.white,
         title: Text(
-          "Kamera eller Galleri?",
+          "Välj från galleri eller fota med kameran.",
           style: TextStyle(
             fontSize: 20,
-            color: Color(0xff96070a),
+            color: Color(0xFF373F51),
           ),
           textAlign: TextAlign.center,
         ),
-        content: ButtonBar(
-          children: <Widget>[
-            RaisedButton(
-              color: Color(0xff96070a),
-              child: Icon(Icons.image),
-              onPressed: () async {
-                tempImage = await Ih.getImage("gallery");
-                _insert(tempImage);
-              },
-            ),
-            RaisedButton(
-              color: Color(0xff96070a),
-              child: Icon(Icons.camera_alt),
-              onPressed: () async {
-                tempImage = await Ih.getImage("camera");
-                _insert(tempImage);
-              },
-            ),
-          ],
+        content: Container(
+          margin: EdgeInsets.only(left: 25, right: 25),
+          child: ButtonBar(
+            children: <Widget>[
+              RaisedButton(
+                color: Color(0xFFECA72C),
+                child: Icon(Icons.image),
+                onPressed: () async {
+                  tempImage = await Ih.getImage("gallery");
+                  _insert(tempImage);
+                },
+              ),
+              RaisedButton(
+                color: Color(0xFFECA72C),
+                child: Icon(Icons.camera_alt),
+                onPressed: () async {
+                  tempImage = await Ih.getImage("camera");
+                  _insert(tempImage);
+                },
+              ),
+            ],
+          ),
         ));
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
@@ -479,7 +478,7 @@ class AdvertCreationState extends State<AdvertCreation> {
               width: 150,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Color(0xFF008000),
+                  color: Color(0xFF3FBE7E),
                   width: 5,
                 ),
               ),

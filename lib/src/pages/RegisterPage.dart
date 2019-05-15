@@ -20,25 +20,25 @@ class RegisterPageState extends State<RegisterPage> {
   RegExp passwordRegExp = RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
   RegExp emailRegExp = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-  Color registerColor = Color(0xFFDE5D5D);
+  Color registerColor = Color(0xFF373F51);
   File _image;
 
   void showImageAlertDialog() async {
     File tempImage;
     AlertDialog dialog = AlertDialog(
-        backgroundColor: Color(0xFFECE9DF),
+        backgroundColor: Colors.white,
         title: Text(
           "Kamera eller Galleri?",
           style: TextStyle(
             fontSize: 20,
-            color: Color(0xff96070a),
+            color: Color(0xFF373F51),
           ),
           textAlign: TextAlign.center,
         ),
         content: ButtonBar(
           children: <Widget>[
             RaisedButton(
-              color: Color(0xff96070a),
+              color: Color(0xFFAEDBD3),
               child: Icon(
                 Icons.image,
                 color: Colors.white,
@@ -52,7 +52,7 @@ class RegisterPageState extends State<RegisterPage> {
               },
             ),
             RaisedButton(
-              color: Color(0xff96070a),
+              color: Color(0xFFAEDBD3),
               child: Icon(
                 Icons.camera_alt,
                 color: Colors.white,
@@ -109,6 +109,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _showRegisterPage() {
     return Scaffold(
+      backgroundColor: Color(0xFFAEDBD3),
       resizeToAvoidBottomPadding: true,
       body: Container(
         child: ListView(
@@ -122,22 +123,30 @@ class RegisterPageState extends State<RegisterPage> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.arrow_back),
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
                   ),
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 100.0, left: 100.0),
-              child: Image.asset('images/logo_frontpage.png'),
-            ),
-            Text(
-              'Skapa konto',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                  color: Colors.white),
-              textAlign: TextAlign.center,
+            Center(
+                child: Text(
+                  'ZIGMA',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 60.0,
+                    color: Colors.white,
+                  ),
+                )),
+            Container(
+              padding: const EdgeInsets.only(top: 50.0, bottom: 10),
+              child: Text(
+                'Skapa konto',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35.0,
+                    color: Color(0xFF373F51)),
+                textAlign: TextAlign.center,
+              ),
             ),
             Form(
               key: _userKey,
@@ -306,12 +315,14 @@ class RegisterPageState extends State<RegisterPage> {
               ),
             ),
             Container(
+              padding: EdgeInsets.only(top: 10),
+              width: 300,
               margin:
                   const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
               child: MaterialButton(
                 color: Color(0xFFECA72C),
                 child: Text('Skapa nytt konto',
-                    style: TextStyle(color: Color(0xFFFFFFFF))),
+                    style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   if (_userKey.currentState.validate() &&
                       passwordController.text ==
