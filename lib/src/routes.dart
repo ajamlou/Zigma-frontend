@@ -72,8 +72,8 @@ class Routing {
     }
   }
 
-  void routeProfilePage(context) {
+  void routeProfilePage(context, user) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        context, MaterialPageRoute(builder: (context) => ProfilePage(user: user)));
   }
 }

@@ -375,7 +375,7 @@ class _AdvertPageState extends State<AdvertPage> {
     User tempUser = await getUser("adverts");
     List<Advert> ownerAdvertList = await DataProvider.of(context)
         .advertList
-        .getAdvertsFromIds(List<int>.from(tempUser.adverts));
+        .getAdvertsFromIds(tempUser.adverts);
     return ownerAdvertList;
   }
 
@@ -384,7 +384,7 @@ class _AdvertPageState extends State<AdvertPage> {
     final List<Advert> sellingAdvertList = [];
     final List<Advert> userAdverts = await getOwnerAdvertLists();
     for (Advert ad in userAdverts) {
-      if (ad.transaction_type == "B") {
+      if (ad.transactionType == "B") {
         buyingAdvertList.add(ad);
       } else {
         sellingAdvertList.add(ad);

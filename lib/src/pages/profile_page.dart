@@ -1,45 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/advert.dart';
+import 'package:zigma2/src/user.dart';
 
 class ProfilePage extends StatefulWidget {
+  final User user;
+
+  ProfilePage({this.user});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
   static final int initialPage = 0;
-  List<dynamic> returnList;
   int stateButtonIndex = initialPage;
-  final controller = PageController(
-    initialPage: initialPage,
-  );
+  final controller = PageController(initialPage: initialPage);
 
-  Future<dynamic> getUserBuyingAdverts(context) async {
-    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
-      returnList = DataProvider.of(context).advertList.userListBuying;
-    } else {
-      returnList = await DataProvider.of(context)
-          .advertList
-          .getSpecificAdverts("B", DataProvider.of(context).user.user.id, "A");
-      if (returnList.length == 0) {
-        return noAdverts(context);
-      }
-    }
-    return returnList;
-  }
+//  Future<dynamic> getUserBuyingAdverts(context) async {
+//    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
+//      returnList = DataProvider.of(context).advertList.userListBuying;
+//    } else {
+//      returnList = await DataProvider.of(context)
+//          .advertList
+//          .getSpecificAdverts("B", DataProvider.of(context).user.user.id, "A");
+//      if (returnList.length == 0) {
+//        return noAdverts(context);
+//      }
+//    }
+//    return returnList;
+//  }
+//
+//  Future<dynamic> getUserSellingAdverts(context) async {
+//    if (DataProvider.of(context).advertList.userListSelling.length != 0) {
+//      returnList = DataProvider.of(context).advertList.userListSelling;
+//    } else {
+//      returnList = await DataProvider.of(context)
+//          .advertList
+//          .getSpecificAdverts("S", DataProvider.of(context).user.user.id, "A");
+//      if (returnList.length == 0) {
+//        return noAdverts(context);
+//      }
+//    }
+//    return returnList;
+//  }
 
-  Future<dynamic> getUserSellingAdverts(context) async {
-    if (DataProvider.of(context).advertList.userListSelling.length != 0) {
-      returnList = DataProvider.of(context).advertList.userListSelling;
-    } else {
-      returnList = await DataProvider.of(context)
-          .advertList
-          .getSpecificAdverts("S", DataProvider.of(context).user.user.id, "A");
-      if (returnList.length == 0) {
-        return noAdverts(context);
-      }
-    }
+  Future<List<Advert>> getUserAdverts() async {
+    List<Advert> returnList;
+    returnList = await DataProvider.of(context)
+        .advertList
+        .getAdvertsFromIds(widget.user.adverts);
     return returnList;
   }
 
@@ -66,6 +76,12 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         elevation: 0.0,
         backgroundColor: Color(0xFF93DED0),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {},
+          )
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,14 +100,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 25.0, top: 10, bottom: 25),
+                  padding:
+                      const EdgeInsets.only(right: 25.0, top: 10, bottom: 25),
                   child: _profilePictureStyled(),
                 ),
               ],
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 8, bottom: 8, right: 15,left: 15),
+            margin: EdgeInsets.only(top: 8, bottom: 8, right: 15, left: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -108,11 +125,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 pageChanged(index);
               },
               children: <Widget>[
-                getAdverts(getUserSellingAdverts(context)),
-                getAdverts(getUserBuyingAdverts(context)),
-                getAdverts(DataProvider.of(context)
-                    .advertList
-                    .getCombinedUserLists()),
+                getAdverts(getUserAdverts()),
+                getAdverts(getUserAdverts()),
               ],
             ),
           ),
@@ -137,7 +151,8 @@ class _ProfilePageState extends State<ProfilePage> {
           text,
           style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: index == stateButtonIndex ? Colors.white : Color(0xFFECA72C)),
+              color:
+                  index == stateButtonIndex ? Colors.white : Color(0xFFECA72C)),
         ),
       ),
     );
@@ -212,7 +227,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Text(
                   a.price.toString() + ":-",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, color: Color(0xffDE5D5D),fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Color(0xffDE5D5D),
+                      fontWeight: FontWeight.bold),
                 )),
           ]),
         ),
@@ -279,10 +297,8 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               TextSpan(
                 text: DataProvider.of(context).user.user.username,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold
-                ),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ]),
       ),

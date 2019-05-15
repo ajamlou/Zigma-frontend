@@ -2,10 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'DataProvider.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'advert.g.dart';
 
+@JsonSerializable()
 class Advert {
+  @JsonKey(name: 'book_title')
   final String bookTitle;
   final int owner;
+  @JsonKey(name: 'ISBN')
   final String isbn;
   final String condition;
   final String edition;
@@ -13,9 +18,12 @@ class Advert {
   final int price;
   final String authors;
   String state = "A";
-  final String transaction_type;
+  @JsonKey(name: 'transaction_type')
+  final String transactionType;
+  @JsonKey(name: 'contact_info')
   final String contactInfo;
-  List<dynamic> images;
+  @JsonKey(name: 'image')
+  List<String> images;
 
   Advert(
       this.bookTitle,
@@ -25,37 +33,14 @@ class Advert {
       this.contactInfo,
       this.condition,
       this.images,
-      this.transaction_type,
+      this.transactionType,
       this.edition,
       this.owner);
 
-  Advert.fromJson(Map map)
-      : bookTitle = map['book_title'],
-        price = map["price"],
-        authors = map["authors"],
-        isbn = map['ISBN'],
-        contactInfo = map["contact_info"],
-        condition = map["condition"],
-        images = map["image"],
-        transaction_type = map["transaction_type"],
-        edition = map["edition"],
-        owner = map["owner"],
-        id = map["id"],
-        state = map["state"];
+  factory Advert.fromJson(Map<String, dynamic> json) => _$AdvertFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        'book_title': bookTitle,
-        'price': price,
-        'authors': authors,
-        'ISBN': isbn == "" ? "Ej angett" : isbn,
-        'contact_info': contactInfo,
-        'condition': condition,
-        'image': images,
-        'transaction_type': transaction_type,
-        'edition': edition == "" ? "Ej angett" : edition,
-        'owner': owner,
-        'state': state
-      };
+  Map<String, dynamic> toJson(Advert json) => _$AdvertToJson(json);
+
 }
 
 class AdvertList {
@@ -69,7 +54,6 @@ class AdvertList {
         "https://9548fc36.ngrok.io/adverts/adverts/recent_adverts/?format=json";
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
-    print("im in load method now");
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
     for (int i = 0; i < resBody.length; i++) {
       list.add(Advert.fromJson(resBody[i]));
@@ -138,6 +122,7 @@ class AdvertList {
         url = url + "," + ids[i].toString();
       }
     }
+    print(url);
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
@@ -145,6 +130,7 @@ class AdvertList {
     for (int i = 0; i < resBody.length; i++) {
       returnList.add(Advert.fromJson(resBody[i]));
     }
+    print(returnList);
     return returnList;
   }
 

@@ -31,10 +31,14 @@ dependencies:
   path_provider: ^0.5.0+1
   image: ^2.0.7
   transparent_image: ^1.0.0
+  json_annotation:
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  json_serializable:
+  build_runner:
 
 
 # For information on the generic Dart part of this file, see the

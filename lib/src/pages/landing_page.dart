@@ -42,8 +42,8 @@ class _LandingPageState extends State<LandingPage> {
               : Center(
                   child: Container(
                     color: Colors.transparent,
-                    width: 300,
-                    height: 190,
+                    width: MediaQuery.of(context).size.width/1.2,
+                    height: MediaQuery.of(context).size.height/4,
                     child: LoginPrompt(),
                   ),
                 ),
@@ -191,7 +191,7 @@ class _LandingPageState extends State<LandingPage> {
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
               ),
               onTap: () async {
-                DataProvider.of(context).routing.routeProfilePage(context);
+                DataProvider.of(context).routing.routeProfilePage(context, DataProvider.of(context).user.user);
               },
             ),
             ListTile(

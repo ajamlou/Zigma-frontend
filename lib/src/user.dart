@@ -2,29 +2,30 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zigma2/src/DataProvider.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'user.g.dart';
+
+@JsonSerializable()
 class User {
   String email;
   int id;
   String username;
   String token;
+  @JsonKey(name: 'img_link')
   String image;
-  List adverts;
+  List<int> adverts;
+  @JsonKey(name: 'sold_books')
   int soldBooks;
+  @JsonKey(name: 'bought_books')
   int boughtBooks;
 
   User(this.email, this.id, this.username, this.token, this.image, this.adverts,
       this.soldBooks, this.boughtBooks);
 
-  User.fromJson(Map<String, dynamic> json)
-      : email = json['email'],
-        username = json['username'],
-        id = json['id'],
-        token = json['token'],
-        image = json['img_link'],
-        adverts = (json['adverts']),
-        soldBooks = json['sold_books'],
-        boughtBooks = json['bought_books'];
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson(User json) => _$UserToJson(json);
 }
 
 class UserCreation {
@@ -73,20 +74,22 @@ class UserMethodBody {
   UserMethodBody(this.user);
 
   void iniUser(String email, int id, String username, String token,
-      String image, List adverts) {
+      String image, List<int> adverts) {
     user = User(email, id, username, token, image, adverts, 0, 0);
   }
 
   Future<User> getUserById(int id, String fields) async {
-    final String url =
-        "https://9548fc36.ngrok.io/users/users/" + id.toString() + "/?fields="+fields;
+    final String url = "https://9548fc36.ngrok.io/users/users/" +
+        id.toString() +
+        "/?fields=" +
+        fields;
     print("IM IN getUserById wihooo");
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     print("Im finished with the http request");
     var resBody = json.decode(utf8.decode(req.bodyBytes));
     print(resBody.toString());
-    User user = User.fromJson(resBody);
+    var user = User.fromJson(resBody);
     print(user.username);
     return user;
   }
@@ -171,10 +174,9 @@ class UserMethodBody {
           "Accept": "application/json",
           "content-type": "application/json"
         });
-    final String res = response.body;
-    Map parsed = json.decode(res);
+    var parsed = json.decode(utf8.decode(response.bodyBytes));
     print(parsed.toString());
-    User localUser = User.fromJson(parsed);
+    var localUser = User.fromJson(parsed);
     if (response.statusCode == 200) {
       await setUserPreferences(localUser.token, localUser.image,
           localUser.username, localUser.email, localUser.id, localUser.adverts);
