@@ -16,6 +16,8 @@ class _ProfilePageState extends State<ProfilePage> {
   static final int initialPage = 0;
   int stateButtonIndex = initialPage;
   final controller = PageController(initialPage: initialPage);
+  final List<Advert> buyingAdvertList = [];
+  final List<Advert> sellingAdvertList = [];
 
 //  Future<dynamic> getUserBuyingAdverts(context) async {
 //    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
@@ -45,12 +47,29 @@ class _ProfilePageState extends State<ProfilePage> {
 //    return returnList;
 //  }
 
-  Future<List<Advert>> getUserAdverts() async {
-    List<Advert> returnList;
-    returnList = await DataProvider.of(context)
-        .advertList
-        .getAdvertsFromIds(widget.user.adverts);
-    return returnList;
+  Future<List> getCombinedUserLists() async {
+    List newList = [buyingAdvertList, sellingAdvertList].expand((x) => x).toList();
+    return newList;
+  }
+
+  Future<List<Advert>> getUserAdverts(String choice) async {
+    if (buyingAdvertList.length == 0 || sellingAdvertList.length == 0) {
+      List<Advert> returnList = await DataProvider.of(context)
+          .advertList
+          .getAdvertsFromIds(widget.user.adverts);
+      for (Advert ad in returnList) {
+        if (ad.transactionType == "B") {
+          buyingAdvertList.add(ad);
+        } else {
+          sellingAdvertList.add(ad);
+        }
+      }
+    }
+    if (choice == "S") {
+      return sellingAdvertList;
+    } else {
+      return buyingAdvertList;
+    }
   }
 
   void pageChanged(int index) {
@@ -125,8 +144,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 pageChanged(index);
               },
               children: <Widget>[
-                getAdverts(getUserAdverts()),
-                getAdverts(getUserAdverts()),
+                getAdverts(getUserAdverts("S")),
+                getAdverts(getUserAdverts("B")),
+                getAdverts(getCombinedUserLists())
               ],
             ),
           ),
@@ -278,7 +298,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: Image.network(
-            DataProvider.of(context).user.user.image,
+            widget.user.image,
             fit: BoxFit.cover,
             width: 150,
             height: 150,
@@ -296,7 +316,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.user.username,
+                text: widget.user.username,
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -313,7 +333,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.user.soldBooks > 5
+                text: widget.user.soldBooks > 5
                     ? "Mellanliggande Bokförsäljare"
                     : "Novis Bokförsäljare",
                 // Email tills vidare
@@ -335,7 +355,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.user.image),
+          child: Image.network(widget.user.image),
         ),
       ),
     );
