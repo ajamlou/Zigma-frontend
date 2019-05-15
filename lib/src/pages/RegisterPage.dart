@@ -202,8 +202,8 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                         suffixIcon: usernameController.text == ""
                             ? Icon(Icons.star,
-                                size: 10, color: Color(0xff96070a))
-                            : Icon(Icons.check, color: Colors.green),
+                                size: 10, color: Color(0xFF373F51))
+                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                       ),
                       validator: (value) =>
                           value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -222,8 +222,8 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                         suffixIcon: !_emailListener()
                             ? Icon(Icons.star,
-                                size: 10, color: Color(0xff96070a))
-                            : Icon(Icons.check, color: Colors.green),
+                                size: 10, color: Color(0xFF373F51))
+                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                       ),
                       validator: (value) =>
                           value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -240,7 +240,7 @@ class RegisterPageState extends State<RegisterPage> {
                                 style: TextStyle(color: Colors.lightGreen),
                               )
                             : Text("Det måste vara en giltig mejladress",
-                                style: TextStyle(color: Colors.redAccent)),
+                                style: TextStyle(color: Color(0xFFDE5D5D))),
                     TextFormField(
                       maxLines: 1,
                       controller: passwordController,
@@ -256,8 +256,8 @@ class RegisterPageState extends State<RegisterPage> {
                                 validatePasswordController.text !=
                                     passwordController.text
                             ? Icon(Icons.star,
-                                size: 10, color: Color(0xff96070a))
-                            : Icon(Icons.check, color: Colors.green),
+                                size: 10, color: Color(0xFF373F51))
+                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
@@ -287,8 +287,8 @@ class RegisterPageState extends State<RegisterPage> {
                                 validatePasswordController.text !=
                                     passwordController.text
                             ? Icon(Icons.star,
-                                size: 10, color: Color(0xff96070a))
-                            : Icon(Icons.check, color: Colors.green),
+                                size: 10, color: Color(0xFF373F51))
+                            : Icon(Icons.check, color: Color(0xFF3FBE7E)),
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
@@ -360,7 +360,7 @@ class RegisterPageState extends State<RegisterPage> {
         message,
         style: TextStyle(
           fontSize: 20,
-          color: Color(0xff96070a),
+          color: Color(0xFFDE5D5D),
         ),
         textAlign: TextAlign.center,
       ),

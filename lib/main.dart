@@ -12,6 +12,7 @@ Color zigmaBlue = Color(0xFFAEDBD3);
 Color marigoldYellow = Color(0xFFECA72C);
 Color lunarRed = Color(0xFFDE5D5D);
 Color charcoalBlue = Color(0xFF373F51);
+Color swedishGreen = Color(0xFF3FBE7E);
 
 class MyApp extends StatefulWidget {
   @override
@@ -39,13 +40,13 @@ class _MyAppState extends State<MyApp> {
           cursorColor: Color(0xFFDE5D5D),
           dialogBackgroundColor: Colors.white,
           iconTheme: IconThemeData(
-            color: Color(0xFFDE5D5D),
+            color: Color(0xFF373F51),
           ),
           primaryIconTheme: IconThemeData(
-            color: Color(0xFFDE5D5D),
+            color: Color(0xFF373F51),
           ),
           accentIconTheme: IconThemeData(
-            color: Color(0xFFDE5D5D),
+            color: Color(0xFF373F51),
           )
         ),
         home: SplashScreen(),

@@ -18,9 +18,10 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFAEDBD3),
       appBar: AppBar(
-        elevation: 0.0,
         backgroundColor: Colors.transparent,
+        elevation: 0.0,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -32,21 +33,29 @@ class LoginPageState extends State<LoginPage> {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 100.0, left: 100.0),
-              child: Image.asset('images/logo_frontpage.png'),
-            ),
             Center(
-              child: Text(
-                'Logga In',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.white),
+                child: Text(
+              'ZIGMA',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 60.0,
+                color: Colors.white,
+              ),
+            )),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 50.0),
+                child: Text(
+                  'Logga In',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35.0,
+                      color: Color(0xFF373F51)),
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(top: 5, bottom: 15),
               child: Form(
                 key: _userKey,
                 child: Container(
@@ -59,14 +68,14 @@ class LoginPageState extends State<LoginPage> {
                         keyboardType: TextInputType.emailAddress,
                         autofocus: false,
                         decoration: InputDecoration(
-                          hintText: 'Username',
+                          hintText: 'Användarnamn',
                           icon: Icon(
                             Icons.person,
-                            color: Color(0xFFDE5D5D),
+                            color: Color(0xFF373F51),
                           ),
                         ),
                         validator: (value) =>
-                            value.isEmpty ? 'Username can\'t be empty' : null,
+                            value.isEmpty ? 'Användarnamn kan ej vara tomt' : null,
                         onSaved: (value) => _userName = value,
                       ),
                       TextFormField(
@@ -74,13 +83,13 @@ class LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         autofocus: false,
                         decoration: InputDecoration(
-                            hintText: 'Password',
+                            hintText: 'Lösenord',
                             icon: Icon(
                               Icons.lock,
-                              color: Color(0xFFDE5D5D),
+                              color: Color(0xFF373F51),
                             )),
                         validator: (value) =>
-                            value.isEmpty ? 'Password can\'t be empty' : null,
+                            value.isEmpty ? 'Lösenord kan ej vara tomt' : null,
                         onSaved: (value) => _password = value,
                       ),
                     ],
@@ -91,10 +100,10 @@ class LoginPageState extends State<LoginPage> {
             Column(
               children: <Widget>[
                 Container(
-                  width: 109.9,
+                  width: 300,
                   margin: const EdgeInsets.only(right: 35.0, left: 35.0),
                   child: MaterialButton(
-                    color: Color(0xFF008000),
+                    color: Color(0xFF3FBE7E),
                     onPressed: () async {
                       if (_userKey.currentState.validate()) {
                         DataProvider.of(context)
@@ -116,10 +125,13 @@ class LoginPageState extends State<LoginPage> {
                     },
                     child: Text('Logga in',
                         style: TextStyle(
-                            color: Color(0xFFFFFFFF), fontSize: 16)),
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 16)),
                   ),
                 ),
                 Container(
+                  padding: EdgeInsets.only(top: 10),
                   height: 15,
                   child: MaterialButton(
                     child: Text('Glömt ditt lösenord?'),
@@ -127,13 +139,15 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(
-                      top: 30.0, right: 55.0, left: 55.0),
+                  width: 300,
+                  padding: EdgeInsets.only(top: 40),
                   child: MaterialButton(
-                    color: Color(0xFF6C6CDF),
+                    color: Color(0xFFECA72C),
                     child: Text('Skapa nytt konto',
                         style: TextStyle(
-                            color: Color(0xFFFFFFFF), fontSize: 16)),
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 16)),
                     onPressed: () async => DataProvider.of(context)
                         .routing
                         .routeRegisterPage(context),
