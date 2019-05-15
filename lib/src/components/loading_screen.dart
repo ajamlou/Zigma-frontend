@@ -62,35 +62,32 @@ class _LoadingScreenState extends State<LoadingScreen>
       height: 100,
       width: 100,
       child: Scaffold(
-        body: Container(
-          color: Color(0xFF93DED0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: RotationTransition(
-                  turns: rotation,
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Image.asset('images/logo.png'),
-                    ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: RotationTransition(
+                turns: rotation,
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Image.asset('images/logo.png'),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 5,
-              ),
-              Container(
-                  child: Text(
-                loadingMessages[i],
-                style: TextStyle(fontSize: 15),
-              ))
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+                child: Text(
+              loadingMessages[i],
+              style: TextStyle(fontSize: 15),
+            ))
+          ],
         ),
       ),
     );
@@ -100,7 +97,6 @@ class _LoadingScreenState extends State<LoadingScreen>
 class LoadingDialog {
   void showLoadingDialog(context) {
     AlertDialog dialog = AlertDialog(
-        backgroundColor: Color(0xFF93DED0),
         title: Text(
           "Laddar...",
           style: TextStyle(

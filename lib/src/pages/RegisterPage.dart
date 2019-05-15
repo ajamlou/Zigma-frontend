@@ -108,239 +108,230 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _showRegisterPage() {
-    return Container(
-      color: Color(0xFF93DED0),
-      child: Scaffold(
-        resizeToAvoidBottomPadding: true,
-        backgroundColor: Colors.transparent,
-        body: Container(
-          child: ListView(
-            physics: ScrollPhysics(),
-            shrinkWrap: true,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    child: IconButton(
-                      color: Colors.white,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back),
-                    ),
+    return Scaffold(
+      resizeToAvoidBottomPadding: true,
+      body: Container(
+        child: ListView(
+          physics: ScrollPhysics(),
+          shrinkWrap: true,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back),
                   ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 100.0, left: 100.0),
-                child: Image.asset('images/logo_frontpage.png'),
-              ),
-              Text(
-                'Skapa konto',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-              Form(
-                key: _userKey,
-                child: Container(
-                  margin:
-                      const EdgeInsets.only(top: 10.0, right: 40.0, left: 40.0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: _image == null
-                            ? Container(
-                                height: 190,
-                                width: 170,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30.0)),
-                                  image: DecorationImage(
-                                    image: AssetImage('images/profile_pic.png'),
-                                  ),
-                                ),
-                                child: MaterialButton(
-                                  onPressed: showImageAlertDialog,
-                                ),
-                              )
-                            : Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(35.0)),
-                                      ),
-                                      height: 190,
-                                      width: 170,
-                                      child: FittedBox(
-                                        fit: BoxFit.cover,
-                                        child: Image.file(_image),
-                                      ),
-                                    ),
-                                    RaisedButton(
-                                      child: Text("Ta en ny bild"),
-                                      onPressed: () {
-                                        showImageAlertDialog();
-                                        setState(() {
-                                          _image = null;
-                                        });
-                                      },
-                                    ),
-                                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 100.0, left: 100.0),
+              child: Image.asset('images/logo_frontpage.png'),
+            ),
+            Text(
+              'Skapa konto',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+            Form(
+              key: _userKey,
+              child: Container(
+                margin:
+                    const EdgeInsets.only(top: 10.0, right: 40.0, left: 40.0),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: _image == null
+                          ? Container(
+                              height: 190,
+                              width: 170,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30.0)),
+                                image: DecorationImage(
+                                  image: AssetImage('images/profile_pic.png'),
                                 ),
                               ),
-                      ),
-                      TextFormField(
-                        maxLines: 1,
-                        controller: usernameController,
-                        autofocus: false,
-                        cursorColor: Color(0xff96070a),
-                        decoration: InputDecoration(
-                          hintText: 'Användarnamn',
-                          icon: Icon(
-                            Icons.person_add,
-                            color: registerColor,
-                          ),
-                          suffixIcon: usernameController.text == ""
-                              ? Icon(Icons.star,
-                                  size: 10, color: Color(0xff96070a))
-                              : Icon(Icons.check, color: Colors.green),
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
-                        onSaved: (value) => _userName = value,
-                      ),
-                      TextFormField(
-                        maxLines: 1,
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        autofocus: false,
-                        cursorColor: Color(0xff96070a),
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          icon: Icon(
-                            Icons.mail,
-                            color: registerColor,
-                          ),
-                          suffixIcon: !_emailListener()
-                              ? Icon(Icons.star,
-                                  size: 10, color: Color(0xff96070a))
-                              : Icon(Icons.check, color: Colors.green),
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Obligatoriskt Fält' : null,
-                        onSaved: (value) => _userEmail = value,
-                      ),
-                      emailController.text.length == 0
-                          ? SizedBox(
-                              width: 0,
-                              height: 0,
+                              child: MaterialButton(
+                                onPressed: showImageAlertDialog,
+                              ),
                             )
-                          : _emailListener()
-                              ? Text(
-                                  "Mejladressen är giltig!",
-                                  style: TextStyle(color: Colors.lightGreen),
-                                )
-                              : Text("Det måste vara en giltig mejladress",
-                                  style: TextStyle(color: Colors.redAccent)),
-                      TextFormField(
-                        maxLines: 1,
-                        controller: passwordController,
-                        obscureText: true,
-                        autofocus: false,
-                        cursorColor: Color(0xff96070a),
-                        decoration: InputDecoration(
-                          hintText: 'Lösenord',
-                          icon: Icon(
-                            Icons.lock,
-                            color: registerColor,
-                          ),
-                          suffixIcon: passwordController.text.length < 8 ||
-                                  validatePasswordController.text !=
-                                      passwordController.text
-                              ? Icon(Icons.star,
-                                  size: 10, color: Color(0xff96070a))
-                              : Icon(Icons.check, color: Colors.green),
+                          : Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(35.0)),
+                                    ),
+                                    height: 190,
+                                    width: 170,
+                                    child: FittedBox(
+                                      fit: BoxFit.cover,
+                                      child: Image.file(_image),
+                                    ),
+                                  ),
+                                  RaisedButton(
+                                    child: Text("Ta en ny bild"),
+                                    onPressed: () {
+                                      showImageAlertDialog();
+                                      setState(() {
+                                        _image = null;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                    TextFormField(
+                      maxLines: 1,
+                      controller: usernameController,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        hintText: 'Användarnamn',
+                        icon: Icon(
+                          Icons.person_add,
+                          color: registerColor,
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Obligatoriskt Fält';
-                          } else if (!passwordRegExp
-                              .hasMatch(passwordController.text)) {
-                            return 'lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (value) => _password = value,
+                        suffixIcon: usernameController.text == ""
+                            ? Icon(Icons.star,
+                                size: 10, color: Color(0xff96070a))
+                            : Icon(Icons.check, color: Colors.green),
                       ),
-                      //color: same,
-                      TextFormField(
-                        maxLines: 1,
-                        controller: validatePasswordController,
-                        obscureText: true,
-                        autofocus: false,
-                        cursorColor: Color(0xff96070a),
-                        decoration: InputDecoration(
-                          hintText: 'Repetera lösenord',
-                          icon: Icon(
-                            Icons.lock,
-                            color: registerColor,
-                          ),
-                          suffixIcon: passwordController.text == "" ||
-                                  validatePasswordController.text !=
-                                      passwordController.text
-                              ? Icon(Icons.star,
-                                  size: 10, color: Color(0xff96070a))
-                              : Icon(Icons.check, color: Colors.green),
+                      validator: (value) =>
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
+                      onSaved: (value) => _userName = value,
+                    ),
+                    TextFormField(
+                      maxLines: 1,
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        icon: Icon(
+                          Icons.mail,
+                          color: registerColor,
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Obligatoriskt Fält';
-                          } else if (validatePasswordController.text !=
-                              passwordController.text) {
-                            return 'lösenorden måste vara likadana';
-                          } else {
-                            return null;
-                          }
-                        },
+                        suffixIcon: !_emailListener()
+                            ? Icon(Icons.star,
+                                size: 10, color: Color(0xff96070a))
+                            : Icon(Icons.check, color: Colors.green),
                       ),
-                    ],
-                  ),
+                      validator: (value) =>
+                          value.isEmpty ? 'Obligatoriskt Fält' : null,
+                      onSaved: (value) => _userEmail = value,
+                    ),
+                    emailController.text.length == 0
+                        ? SizedBox(
+                            width: 0,
+                            height: 0,
+                          )
+                        : _emailListener()
+                            ? Text(
+                                "Mejladressen är giltig!",
+                                style: TextStyle(color: Colors.lightGreen),
+                              )
+                            : Text("Det måste vara en giltig mejladress",
+                                style: TextStyle(color: Colors.redAccent)),
+                    TextFormField(
+                      maxLines: 1,
+                      controller: passwordController,
+                      obscureText: true,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        hintText: 'Lösenord',
+                        icon: Icon(
+                          Icons.lock,
+                          color: registerColor,
+                        ),
+                        suffixIcon: passwordController.text.length < 8 ||
+                                validatePasswordController.text !=
+                                    passwordController.text
+                            ? Icon(Icons.star,
+                                size: 10, color: Color(0xff96070a))
+                            : Icon(Icons.check, color: Colors.green),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Obligatoriskt Fält';
+                        } else if (!passwordRegExp
+                            .hasMatch(passwordController.text)) {
+                          return 'lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onSaved: (value) => _password = value,
+                    ),
+                    //color: same,
+                    TextFormField(
+                      maxLines: 1,
+                      controller: validatePasswordController,
+                      obscureText: true,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        hintText: 'Repetera lösenord',
+                        icon: Icon(
+                          Icons.lock,
+                          color: registerColor,
+                        ),
+                        suffixIcon: passwordController.text == "" ||
+                                validatePasswordController.text !=
+                                    passwordController.text
+                            ? Icon(Icons.star,
+                                size: 10, color: Color(0xff96070a))
+                            : Icon(Icons.check, color: Colors.green),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Obligatoriskt Fält';
+                        } else if (validatePasswordController.text !=
+                            passwordController.text) {
+                          return 'lösenorden måste vara likadana';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                margin:
-                    const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
-                child: MaterialButton(
-                  color: Color(0xFFECA72C),
-                  child: Text('Skapa nytt konto',
-                      style: TextStyle(color: Color(0xFFFFFFFF))),
-                  onPressed: () async {
-                    if (_userKey.currentState.validate() &&
-                        passwordController.text ==
-                            validatePasswordController.text) {
-                      DataProvider.of(context)
-                          .loadingScreen
-                          .showLoadingDialog(context);
-                      _userKey.currentState.save();
-                      _success = await DataProvider.of(context).user.register(
-                          _userEmail,
-                          _userName,
-                          _password,
-                          Ih.imageFileToString(_image));
-                      Navigator.of(context, rootNavigator: true).pop(null);
-                      showRegisterAlertDialog(_success);
-                    }
-                  },
-                ),
+            ),
+            Container(
+              margin:
+                  const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
+              child: MaterialButton(
+                color: Color(0xFFECA72C),
+                child: Text('Skapa nytt konto',
+                    style: TextStyle(color: Color(0xFFFFFFFF))),
+                onPressed: () async {
+                  if (_userKey.currentState.validate() &&
+                      passwordController.text ==
+                          validatePasswordController.text) {
+                    DataProvider.of(context)
+                        .loadingScreen
+                        .showLoadingDialog(context);
+                    _userKey.currentState.save();
+                    _success = await DataProvider.of(context).user.register(
+                        _userEmail,
+                        _userName,
+                        _password,
+                        Ih.imageFileToString(_image));
+                    Navigator.of(context, rootNavigator: true).pop(null);
+                    showRegisterAlertDialog(_success);
+                  }
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

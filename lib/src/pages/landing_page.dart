@@ -34,7 +34,7 @@ class _LandingPageState extends State<LandingPage> {
                       width: 0,
                       height: 0,
                     )
-                  : LoginButton()
+                  : loginButton()
             ],
           ),
           drawer: DataProvider.of(context).user.user != null
@@ -104,7 +104,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget showDrawer(context) {
     return Drawer(
       child: Container(
-        color: Color(0xFF93DED0),
+        color: Color(0xFFAEDBD3),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -277,11 +277,7 @@ class _LandingPageState extends State<LandingPage> {
               ],
             ));
   }
-}
-
-class LoginButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget loginButton(){
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: MaterialButton(
@@ -297,3 +293,4 @@ class LoginButton extends StatelessWidget {
     );
   }
 }
+
