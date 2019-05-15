@@ -275,7 +275,7 @@ class _LandingPageState extends State<LandingPage> {
               actions: <Widget>[
                 Container(
                   child: FlatButton(
-                    color: Color(0xFF3FBE7E),
+                     color: Color(0xFF3FBE7E),
                     child: Text("Nej",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
