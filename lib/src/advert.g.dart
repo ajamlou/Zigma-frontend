@@ -25,10 +25,9 @@ Advert _$AdvertFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$AdvertToJson(Advert instance) => <String, dynamic>{
       'book_title': instance.bookTitle,
       'owner': instance.owner,
-      'ISBN': instance.isbn,
+      'ISBN': instance.isbn == "" ? "Ej Angett" : instance.isbn,
       'condition': instance.condition,
-      'edition': instance.edition,
-      'id': instance.id,
+      'edition': instance.edition == "" ? "Ej Angett" : instance.edition,
       'price': instance.price,
       'authors': instance.authors,
       'state': instance.state,

@@ -16,8 +16,8 @@ class _ProfilePageState extends State<ProfilePage> {
   static final int initialPage = 0;
   int stateButtonIndex = initialPage;
   final controller = PageController(initialPage: initialPage);
-  List<Advert> buyingAdvertList = [];
-  List<Advert> sellingAdvertList = [];
+  List<Advert> buyingAdvertList;
+  List<Advert> sellingAdvertList;
 
 //  Future<dynamic> getUserBuyingAdverts(context) async {
 //    if (DataProvider.of(context).advertList.userListBuying.length != 0) {
@@ -48,15 +48,18 @@ class _ProfilePageState extends State<ProfilePage> {
 //  }
 
   Future<List> getCombinedUserLists() async {
+    if(buyingAdvertList == null && sellingAdvertList == null){
+      return [];
+    }
     List newList =
         [buyingAdvertList, sellingAdvertList].expand((x) => x).toList();
     return newList;
   }
 
   Future<List<Advert>> getUserAds(String choice) async {
-    if (sellingAdvertList.length != 0 && choice == "S") {
+    if (sellingAdvertList != null && choice == "S") {
       return sellingAdvertList;
-    } else if (buyingAdvertList.length != 0 && choice == "B") {
+    } else if (buyingAdvertList != null && choice == "B") {
       return buyingAdvertList;
     }
     List<Advert> returnList = await DataProvider.of(context)
@@ -310,18 +313,26 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(100),
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
-            BoxShadow(
+            widget.user.image == null ? BoxShadow(color: Colors.transparent) : BoxShadow(
                 color: Colors.black87, offset: Offset(0, 5), blurRadius: 10),
           ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: Image.network(
-            widget.user.image,
-            fit: BoxFit.cover,
-            width: 150,
-            height: 150,
-          ),
+          child: widget.user.image == null
+              ? Container(
+                  width: 150,
+                  height: 150,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Icon(Icons.person, color: Colors.white,),
+                  ))
+              : Image.network(
+                  widget.user.image,
+                  fit: BoxFit.cover,
+                  width: 150,
+                  height: 150,
+                ),
         ),
       ),
     );
