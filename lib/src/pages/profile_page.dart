@@ -47,6 +47,11 @@ class _ProfilePageState extends State<ProfilePage> {
 //    return returnList;
 //  }
 
+  Future<List> getCombinedUserLists() async {
+    List newList = [buyingAdvertList, sellingAdvertList].expand((x) => x).toList();
+    return newList;
+  }
+
   Future<List<Advert>> getUserAdverts(String choice) async {
     if (buyingAdvertList.length == 0 || sellingAdvertList.length == 0) {
       List<Advert> returnList = await DataProvider.of(context)
@@ -141,6 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 getAdverts(getUserAdverts("S")),
                 getAdverts(getUserAdverts("B")),
+                getAdverts(getCombinedUserLists())
               ],
             ),
           ),
