@@ -25,7 +25,8 @@ class _LandingPageState extends State<LandingPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: IconThemeData(
+                color: Color(0xFFAEDBD3)),
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             actions: <Widget>[
@@ -58,7 +59,7 @@ class _LandingPageState extends State<LandingPage> {
                         style: TextStyle(
                           color: Color(0xFFECA72C),
                           fontWeight: FontWeight.bold,
-                          fontSize: 70,
+                          fontSize: 80,
                         ))),
 //                    Image.asset('images/logo_frontpage.png')),
                 Container(

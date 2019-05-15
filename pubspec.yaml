@@ -62,6 +62,7 @@ flutter:
   - images/placeholderBook.png
   - images/profile_pic.png
   - images/advertCreationPicture.jpg
+  - images/profile_pic2.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
