@@ -278,7 +278,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: Image.network(
-            DataProvider.of(context).user.user.image,
+            widget.user.image,
             fit: BoxFit.cover,
             width: 150,
             height: 150,
@@ -296,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.user.username,
+                text: widget.user.username,
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -313,7 +313,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20),
             children: [
               TextSpan(
-                text: DataProvider.of(context).user.user.soldBooks > 5
+                text: widget.user.soldBooks > 5
                     ? "Mellanliggande Bokförsäljare"
                     : "Novis Bokförsäljare",
                 // Email tills vidare
@@ -335,7 +335,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.user.image),
+          child: Image.network(widget.user.image),
         ),
       ),
     );
