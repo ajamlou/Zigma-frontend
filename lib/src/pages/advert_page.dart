@@ -173,7 +173,7 @@ class _AdvertPageState extends State<AdvertPage> {
                       onTap: () => getOwnerProfile(),
                       child: Icon(
                         Icons.account_circle,
-                        color: Colors.grey,
+                        color: Colors.transparent,
                       ),
                     ),
                   ),
@@ -280,14 +280,14 @@ class _AdvertPageState extends State<AdvertPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(
-                    child: Icon(
-                      Icons.chat_bubble,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                    flex: 2,
-                  ),
+//                  Expanded(
+//                    child: Icon(
+//                      Icons.chat_bubble,
+//                      size: 30,
+//                      color: Colors.white,
+//                    ),
+//                    flex: 2,
+//                  ),
                   Expanded(
                     child: FutureBuilder(
                       future: getUser("username"),
