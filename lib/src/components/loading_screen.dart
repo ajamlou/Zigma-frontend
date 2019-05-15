@@ -59,6 +59,7 @@ class _LoadingScreenState extends State<LoadingScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: 15),
       height: 100,
       width: 100,
       child: Scaffold(
@@ -101,7 +102,7 @@ class LoadingDialog {
           "Laddar...",
           style: TextStyle(
             fontSize: 20,
-            color: Color(0xff96070a),
+            color: Color(0xFF373F51),
           ),
           textAlign: TextAlign.center,
         ),
