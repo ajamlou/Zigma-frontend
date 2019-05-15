@@ -95,21 +95,21 @@ class _AdvertPageState extends State<AdvertPage> {
   Widget getAdvertPictures() {
     return widget.data.images.length == 0
         ? Container(
-            height: 300,
-            child: Image.asset('images/placeholder_book.png'),
-          )
+      height: 300,
+      child: Image.asset('images/placeholder_book.png'),
+    )
         : Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.lightBlueAccent, width: 5)),
-            margin: EdgeInsets.symmetric(horizontal: 75),
-            height: 300,
-            child: GestureDetector(
-              onTap: () {
-                carouselDialog();
-              },
-              child: Carousel(images: widget.data.images),
-            ),
-          );
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.lightBlueAccent, width: 5)),
+      margin: EdgeInsets.symmetric(horizontal: 75),
+      height: 300,
+      child: GestureDetector(
+        onTap: () {
+          carouselDialog();
+        },
+        child: Carousel(images: widget.data.images),
+      ),
+    );
   }
 
   Widget getAdvertPrice() {
@@ -158,42 +158,42 @@ class _AdvertPageState extends State<AdvertPage> {
         if (snapshot.hasData) {
           return snapshot.data.image == null
               ? Expanded(
-                  flex: 2,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: GestureDetector(
-                      onTap: () => getOwnerProfile(),
-                      child: Icon(
-                        Icons.account_circle,
-                        color: Colors.grey,
+            flex: 2,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: GestureDetector(
+                onTap: () => getOwnerProfile(),
+                child: Icon(
+                  Icons.account_circle,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          )
+              : Expanded(
+            flex: 2,
+            child: Stack(
+              alignment: Alignment(0, 0),
+              children: <Widget>[
+                Center(child: CircularProgressIndicator()),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: GestureDetector(
+                    onTap: () => getOwnerProfile(),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      child: FadeInImage.memoryNetwork(
+                        fit: BoxFit.fitWidth,
+                        placeholder: kTransparentImage,
+                        image: snapshot.data.image,
                       ),
                     ),
                   ),
-                )
-              : Expanded(
-                  flex: 2,
-                  child: Stack(
-                    alignment: Alignment(0, 0),
-                    children: <Widget>[
-                      Center(child: CircularProgressIndicator()),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: GestureDetector(
-                          onTap: () => getOwnerProfile(),
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            child: FadeInImage.memoryNetwork(
-                              fit: BoxFit.fitWidth,
-                              placeholder: kTransparentImage,
-                              image: snapshot.data.image,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                ),
+              ],
+            ),
+          );
         } else {
           return Expanded(
             flex: 2,
@@ -240,7 +240,11 @@ class _AdvertPageState extends State<AdvertPage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.user.image),
+          child: Image.network(DataProvider
+              .of(context)
+              .user
+              .user
+              .image),
         ),
       ),
     );
@@ -306,7 +310,8 @@ class _AdvertPageState extends State<AdvertPage> {
   }
 
   Future<dynamic> getUser(String fields) async {
-    var userData = await DataProvider.of(context)
+    var userData = await DataProvider
+        .of(context)
         .user
         .getUserById(widget.data.owner, fields);
     return userData;
@@ -316,15 +321,21 @@ class _AdvertPageState extends State<AdvertPage> {
     Dialog dialog = Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
-        height: MediaQuery.of(context).size.height / 3,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height / 3,
         child: Center(
-          child: DataProvider.of(context).user.user == null
+          child: DataProvider
+              .of(context)
+              .user
+              .user == null
               ? LoginPrompt()
               : Text(
-                  "Denna knapp är ej implementerad :(",
-                  style: TextStyle(fontSize: 45),
-                  textAlign: TextAlign.center,
-                ),
+            "Denna knapp är ej implementerad :(",
+            style: TextStyle(fontSize: 45),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
@@ -334,7 +345,10 @@ class _AdvertPageState extends State<AdvertPage> {
   void carouselDialog() {
     Dialog dialog = Dialog(
       child: Container(
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height / 2,
         child: Carousel(images: widget.data.images),
       ),
     );
@@ -373,85 +387,19 @@ class _AdvertPageState extends State<AdvertPage> {
 
   Future<List> getOwnerAdvertLists() async {
     User tempUser = await getUser("adverts");
-    List<Advert> ownerAdvertList = await DataProvider.of(context)
+    List<Advert> ownerAdvertList = await DataProvider
+        .of(context)
         .advertList
         .getAdvertsFromIds(tempUser.adverts);
     return ownerAdvertList;
   }
 
   void getOwnerProfile() async {
-    final List<Advert> buyingAdvertList = [];
-    final List<Advert> sellingAdvertList = [];
-    final List<Advert> userAdverts = await getOwnerAdvertLists();
-    for (Advert ad in userAdverts) {
-      if (ad.transactionType == "B") {
-        buyingAdvertList.add(ad);
-      } else {
-        sellingAdvertList.add(ad);
-      }
-    }
-    userAdverts.clear;
-    int initialPage = 0;
-    List<dynamic> returnList;
-    int stateButtonIndex = initialPage;
-    final controller = PageController(
-      initialPage: initialPage,
-    );
-    Dialog dialog = Dialog(
-      backgroundColor: Colors.transparent,
-      child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: ListView(shrinkWrap: true, children: <Widget>[
-            Container(
-              color: Color(0xFF93DED0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Flexible(
-                    child: Column(
-                      children: <Widget>[
-                        //FutureBuilder1
-
-                        FutureBuilder(
-                          future: getUser("image"),
-                          builder: (context, snapshot) {
-                            Stack(
-                              alignment: Alignment(0, 0),
-                              children: <Widget>[
-                                Center(child: CircularProgressIndicator()),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: GestureDetector(
-                                    onTap: () => getOwnerProfile(),
-                                    child: Container(
-                                      width: 50,
-                                      height: 50,
-                                      child: FadeInImage.memoryNetwork(
-                                        fit: BoxFit.fitWidth,
-                                        placeholder: kTransparentImage,
-                                        image: snapshot.data.image,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        //getOwnerName(),
-                        //FutureBuilder2
-                        // getOwnerInformation(),
-                      ],
-                    ),
-                  ),
-                  //FutureBuilder3
-                  // getOwnerImage(),
-                ],
-              ),
-            ),
-          ])),
-    );
-    showDialog(context: context, builder: (context) => dialog);
+    User owner = await getUser("username,sold_books,bought_books,img_link");
+    DataProvider
+        .of(context)
+        .routing
+        .routeProfilePage(context, owner);
   }
+
 }
