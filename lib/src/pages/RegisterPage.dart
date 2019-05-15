@@ -160,13 +160,13 @@ class RegisterPageState extends State<RegisterPage> {
                       Container(
                         child: _image == null
                             ? Container(
-                                height: 190,
-                                width: 170,
+                                height: 130,
+                                width: 120,
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(30.0)),
                                   image: DecorationImage(
-                                    image: AssetImage('images/profile_pic.png'),
+                                    image: AssetImage('images/profile_pic2.png'),
                                   ),
                                 ),
                                 child: MaterialButton(
@@ -188,20 +188,30 @@ class RegisterPageState extends State<RegisterPage> {
                                         child: Image.file(_image),
                                       ),
                                     ),
-                                    RaisedButton(
-                                      child: Text("Ta en ny bild"),
-                                      onPressed: () {
-                                        showImageAlertDialog();
-                                        setState(() {
-                                          _image = null;
-                                        });
-                                      },
+                                    Container(
+                                      width: 300,
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: RaisedButton(
+                                        color: Color(0xFFDE5D5D),
+                                        child: Text("Ta en ny bild",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            )),
+                                        onPressed: () {
+                                          showImageAlertDialog();
+                                          setState(() {
+                                            _image = null;
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                       ),
                       Container(
+                        margin: EdgeInsets.only(top: 15),
                         width: 350,
                         height: 210,
                         decoration: BoxDecoration(
@@ -289,7 +299,7 @@ class RegisterPageState extends State<RegisterPage> {
                               return 'Obligatoriskt Fält';
                             } else if (!passwordRegExp
                                 .hasMatch(passwordController.text)) {
-                              return 'lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
+                              return 'Lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
                             } else {
                               return null;
                             }
