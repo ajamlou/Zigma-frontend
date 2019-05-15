@@ -25,7 +25,7 @@ class _LandingPageState extends State<LandingPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Color(0xffDE5D5D)),
+            iconTheme: IconThemeData(color: Colors.white),
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             actions: <Widget>[
@@ -54,7 +54,13 @@ class _LandingPageState extends State<LandingPage> {
                 Container(
                     padding: const EdgeInsets.only(
                         top: 100.0, left: 50, right: 50, bottom: 100),
-                    child: Image.asset('images/logo_frontpage.png')),
+                    child: Text('ZIGMA',
+                        style: TextStyle(
+                          color: Color(0xFFECA72C),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 70,
+                        ))),
+//                    Image.asset('images/logo_frontpage.png')),
                 Container(
                   height: 50,
                   decoration: BoxDecoration(
@@ -230,7 +236,7 @@ class _LandingPageState extends State<LandingPage> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   margin: EdgeInsets.only(bottom: 10),
-                  width: 200,
+                  width: 250,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
                       color: Color(0xFFDE5D5D)),
@@ -266,12 +272,24 @@ class _LandingPageState extends State<LandingPage> {
         builder: (context) => AlertDialog(
               title: Text("Vill du verkligen stänga appen?"),
               actions: <Widget>[
-                FlatButton(
-                  child: Text("Nej"),
-                  onPressed: () => Navigator.pop(context, false),
+                Container(
+                  child: FlatButton(
+                    color: Color(0xFF3FBE7E),
+                    child: Text("Nej",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white
+                    )),
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
                 ),
                 FlatButton(
-                  child: Text("Ja"),
+                  color: Color(0xFFDE5D5D),
+                  child: Text("Ja",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white
+                  )),
                   onPressed: () => Navigator.pop(context, true),
                 ),
               ],
