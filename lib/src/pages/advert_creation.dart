@@ -66,9 +66,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-
-      ),
+      decoration: BoxDecoration(),
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         backgroundColor: Color(0xFFAEDBD3),
@@ -105,7 +103,8 @@ class AdvertCreationState extends State<AdvertCreation> {
               child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 100.0, left: 20, right: 20, bottom: 50),
+                padding: const EdgeInsets.only(
+                    top: 100.0, left: 20, right: 20, bottom: 50),
                 child: Text(
                   'Söker du efter en bok eller vill du sälja en bok?',
                   textAlign: TextAlign.center,
@@ -128,7 +127,10 @@ class AdvertCreationState extends State<AdvertCreation> {
                     });
                   },
                   child: Text('Sälja',
-                      style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold)),
                 ),
               ),
               SizedBox(
@@ -146,7 +148,10 @@ class AdvertCreationState extends State<AdvertCreation> {
                     });
                   },
                   child: Text('Söker',
-                      style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -350,7 +355,9 @@ class AdvertCreationState extends State<AdvertCreation> {
                       onPressed: () async {
                         int stsCode;
                         if (_advertKey.currentState.validate()) {
-                          DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+                          DataProvider.of(context)
+                              .loadingScreen
+                              .showLoadingDialog(context);
                           _advertKey.currentState.save();
                           responseList = await DataProvider.of(context)
                               .advertList
@@ -368,22 +375,28 @@ class AdvertCreationState extends State<AdvertCreation> {
                           setState(() {
                             stsCode = responseList[0];
                           });
-                          if (stsCode == 201) { //Confirmed response
+                          if (stsCode == 201) {
+                            //Confirmed response
                             var a = await DataProvider.of(context)
                                 .advertList
                                 .getAdvertById(responseList[1]);
-                            Navigator.of(context, rootNavigator: true).pop(null);
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(null);
                             DataProvider.of(context)
                                 .routing
                                 .routeAdvertPage(context, a, true);
-                          } else { //Unsuccessful response
-                            Navigator.of(context, rootNavigator: true).pop(null);
+                          } else {
+                            //Unsuccessful response
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(null);
                             showAdvertCreationAlertDialog(stsCode);
                           }
                         }
                       },
                       child: Text("Ladda upp",
-                          style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),
