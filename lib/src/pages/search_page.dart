@@ -77,12 +77,12 @@ class SearchPage extends SearchDelegate<void> {
                                 snapshot.data[index].bookTitle,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xff96070a),
+                                  color: Color(0xFFECA72C),
                                 ),
                               ),
                               Text(
                                 snapshot.data[index].authors,
-                                style: TextStyle(color: Colors.black87),
+                                style: TextStyle(color: Color(0xFF373F51)),
                               ),
                               Text("Upplaga: " + snapshot.data[index].edition)
                             ],
@@ -91,7 +91,7 @@ class SearchPage extends SearchDelegate<void> {
                             snapshot.data[index].price.toString() + ":-",
                             style: TextStyle(
                                 fontSize: 15,
-                                color: Colors.black87,
+                                color: Color(0xFF3FBE7E),
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -138,7 +138,7 @@ class SearchPage extends SearchDelegate<void> {
                         .bookTitle
                         .substring(0, query.length),
                     style: TextStyle(
-                        color: Color(0xff96070a),
+                        color: Color(0xFFECA72C),
                         fontWeight: FontWeight.bold,
                         fontSize: 17),
                     children: [
@@ -147,14 +147,14 @@ class SearchPage extends SearchDelegate<void> {
                             .bookTitle
                             .substring(query.length),
                         style: TextStyle(
-                            color: Colors.black,
+                            color: Color(0xFF373F51),
                             fontWeight: FontWeight.normal,
                             fontSize: 15),
                       ),
                     ],
                   ),
                 ),
-                leading: Icon(Icons.book, color: Color(0xFF93DED0),),
+                leading: Icon(Icons.book, color: Color(0xFFECA72C),),
                 trailing: Text(suggestionList[index].authors ?? ""),
                 onTap: () async {
                   DataProvider.of(context)
