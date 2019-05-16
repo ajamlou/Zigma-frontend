@@ -17,7 +17,7 @@ class _LandingPageState extends State<LandingPage> {
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/backgroundImage.jpg"),
+            image: AssetImage("images/background.jpg"),
             fit: BoxFit.fitHeight,
           ),
         ),
@@ -26,7 +26,7 @@ class _LandingPageState extends State<LandingPage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             iconTheme: IconThemeData(
-                color: Color(0xFFAEDBD3)),
+                color: Colors.white),
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             actions: <Widget>[
@@ -55,13 +55,15 @@ class _LandingPageState extends State<LandingPage> {
                 Container(
                     padding: const EdgeInsets.only(
                         top: 100.0, left: 50, right: 50, bottom: 100),
-                    child: Text('ZIGMA',
-                        style: TextStyle(
-                          color: Color(0xFFECA72C),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 80,
-                        ))),
-//                    Image.asset('images/logo_frontpage.png')),
+                    child: Image.asset('images/ZigmaLogo.png')),
+//                    child: Text('ZIGMA',
+//                        style: TextStyle(
+//                          color: Color(0xFFECA72C),
+//                          fontWeight: FontWeight.bold,
+//                          fontSize: 80,
+//                        ))
+//                ),
+//
                 Container(
                   height: 50,
                   decoration: BoxDecoration(

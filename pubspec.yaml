@@ -63,6 +63,8 @@ flutter:
   - images/profile_pic.png
   - images/advertCreationPicture.jpg
   - images/profile_pic2.png
+  - images/ZigmaLogo.png
+  - images/background.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
