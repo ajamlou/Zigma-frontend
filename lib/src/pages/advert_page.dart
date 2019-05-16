@@ -160,7 +160,7 @@ class _AdvertPageState extends State<AdvertPage> {
 
   Widget getOwnerImage() {
     return FutureBuilder(
-      future: getUser("img_link"),
+      future: getUser("image"),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return snapshot.data.image == null
@@ -193,7 +193,7 @@ class _AdvertPageState extends State<AdvertPage> {
                             child: FadeInImage.memoryNetwork(
                               fit: BoxFit.fitWidth,
                               placeholder: kTransparentImage,
-                              image: snapshot.data.image,
+                              image: DataProvider.of(context).user.picUrl(snapshot.data.image),
                             ),
                           ),
                         ),
@@ -251,7 +251,7 @@ class _AdvertPageState extends State<AdvertPage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.user.image),
+          child: Image.network(DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.image)),
         ),
       ),
     );

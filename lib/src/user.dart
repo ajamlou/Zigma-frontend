@@ -13,7 +13,7 @@ class User {
   String username;
   String token;
   @JsonKey(name: 'img_link')
-  String image;
+  int image;
   List<int> adverts;
   @JsonKey(name: 'sold_books')
   int soldBooks;
@@ -75,7 +75,7 @@ class UserMethodBody {
   UserMethodBody(this.user);
 
   void iniUser(String email, int id, String username, String token,
-      String image, List<int> adverts) {
+      int image, List<int> adverts) {
     user = User(email, id, username, token, image, adverts, 0, 0);
   }
 
@@ -93,17 +93,24 @@ class UserMethodBody {
     return user;
   }
 
+  String picUrl(int id){
+    print("IM IN PICURL");
+    String url = urlBody+"/users/profile_pic/"+id.toString();
+    print(url);
+    return url;
+  }
+
   Future<void> logout(context) async {
     user = null;
     DataProvider.of(context).advertList.clearUserAdvertList();
     await clearPrefs();
   }
 
-  Future<void> setUserPreferences(String token, String image, String username,
+  Future<void> setUserPreferences(String token, int image, String username,
       String email, int id, List adverts) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", token);
-    prefs.setString("image", image);
+    prefs.setInt("image", image);
     prefs.setString("username", username);
     prefs.setString("email", email);
     prefs.setInt("id", id);
@@ -124,7 +131,7 @@ class UserMethodBody {
           prefs.getInt("id"),
           prefs.getString("username"),
           prefs.getString("token"),
-          prefs.getString("image"),
+          prefs.getInt("image"),
           prefs.getStringList("adverts").map((i) => int.parse(i)).toList());
     }
   }
@@ -161,6 +168,11 @@ class UserMethodBody {
     returnList.add(response.statusCode);
     returnList.add(localUser);
     return returnList;
+  }
+
+  Future<void> editUser(){
+
+
   }
 
   Future<int> signIn(String username, String password) async {
