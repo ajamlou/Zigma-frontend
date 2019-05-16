@@ -27,7 +27,7 @@ class _UserEditPageState extends State<UserEditPage> {
                       fit: BoxFit.cover,
                     )
                   : Image.network(
-                      DataProvider.of(context).user.user.image,
+                      DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.image),
                       fit: BoxFit.cover,
                     ),
             ),
@@ -38,15 +38,75 @@ class _UserEditPageState extends State<UserEditPage> {
           ),
           MaterialButton(
             child: Text("Ändra Användarnamn"),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Edit(
+                      title: "Användarnamn",
+                      edit: DataProvider.of(context).user.user.username),
+                ),
+              );
+            },
           ),
-          Text("Privat information",),
+          Text(
+            "Privat information",
+          ),
           Card(
             color: Colors.grey[100],
             child: ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Edit(
+                      title: "MejlAdress",
+                        edit: DataProvider.of(context).user.user.email),
+                  ),
+                );
+              },
               leading: Text("Email"),
-              trailing: Text(DataProvider.of(context).user.user.email),
+              trailing: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(DataProvider.of(context).user.user.email),
+                  Icon(Icons.arrow_forward_ios),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Edit extends StatelessWidget {
+  final String title;
+  final String edit;
+
+  Edit({this.edit,this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController(text: edit);
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 50,
+          ),
+          Text(
+            title,
+            style: TextStyle(fontSize: 25),
+          ),
+          Card(
+            elevation: 5,
+            margin: EdgeInsets.only(top: 20, right: 20, left: 20),
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(),
             ),
           ),
         ],

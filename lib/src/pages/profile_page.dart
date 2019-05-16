@@ -45,25 +45,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return returnList;
   }
 
-//  Future<List<Advert>> getUserAdverts(String choice) async {
-//    if (buyingAdvertList.length == 0 && sellingAdvertList.length == 0) {
-//      List<Advert> returnList = await DataProvider.of(context)
-//          .advertList
-//          .getAdvertsFromIds(widget.user.adverts);
-//      for (Advert ad in returnList) {
-//        if (ad.transactionType == "B") {
-//          buyingAdvertList.add(ad);
-//        } else {
-//          sellingAdvertList.add(ad);
-//        }
-//      }
-//    }
-//    if (choice == "S") {
-//      return sellingAdvertList;
-//    } else {
-//      return buyingAdvertList;
-//    }
-//  }
 
   void pageChanged(int index) {
     setState(() {
@@ -314,7 +295,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ))
               : Image.network(
-                  widget.user.image,
+            DataProvider.of(context).user.picUrl(widget.user.image),
                   fit: BoxFit.cover,
                   width: 150,
                   height: 150,
@@ -371,7 +352,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(widget.user.image),
+          child: Image.network(DataProvider.of(context).user.picUrl(widget.user.image)),
         ),
       ),
     );

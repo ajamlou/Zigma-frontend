@@ -61,6 +61,11 @@ class AdvertList {
     print("The Request body is: " + list.toString());
   }
 
+  String picUrl(int id){
+    String url = urlBody+"/adverts/advertimages/"+id.toString()+"/";
+    return url;
+  }
+
   void clearUserAdvertList() {
     userListSelling.clear();
     userListBuying.clear();
