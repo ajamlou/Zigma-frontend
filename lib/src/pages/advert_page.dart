@@ -428,7 +428,7 @@ class _AdvertPageState extends State<AdvertPage> {
   void getOwnerProfile() async {
     DataProvider.of(context).loadingScreen.showLoadingDialog(context);
     User owner =
-        await getUser("id,username,sold_books,bought_books,img_link,adverts");
+        await getUser("id,username,sold_books,bought_books,profile,has_picture,adverts");
     Navigator.of(context, rootNavigator: true).pop(null);
     DataProvider.of(context).routing.routeProfilePage(context, owner);
   }

@@ -73,7 +73,7 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
-  String urlBody = "https://9a32e5c7.ngrok.io";
+  String urlBody = "https://ecf116e6.eu.ngrok.io";
 
   UserMethodBody(this.user);
 
@@ -108,7 +108,7 @@ class UserMethodBody {
 
   String picUrl(int id) {
     print("IM IN PICURL");
-    String url = urlBody + "/users/profile_pic/" + id.toString();
+    String url = urlBody + "/users/profile_pic/" + id.toString()+"/";
     print(url);
     return url;
   }
