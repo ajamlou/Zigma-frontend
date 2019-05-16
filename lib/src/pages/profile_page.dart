@@ -273,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(100),
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
-            widget.user.image == null
+            widget.user.hasPicture
                 ? BoxShadow(color: Colors.transparent)
                 : BoxShadow(
                     color: Colors.black87,
@@ -283,7 +283,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: widget.user.image == null
+          child: widget.user.hasPicture
               ? Container(
                   width: 150,
                   height: 150,
@@ -295,7 +295,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ))
               : Image.network(
-            DataProvider.of(context).user.picUrl(widget.user.image),
+            DataProvider.of(context).user.picUrl(widget.user.profile),
                   fit: BoxFit.cover,
                   width: 150,
                   height: 150,
@@ -352,7 +352,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.picUrl(widget.user.image)),
+          child: Image.network(DataProvider.of(context).user.picUrl(widget.user.profile)),
         ),
       ),
     );

@@ -113,7 +113,7 @@ class _LandingPageState extends State<LandingPage> {
               child: Row(
                 children: <Widget>[
                   Flexible(
-                    child: DataProvider.of(context).user.user.image == null
+                    child: DataProvider.of(context).user.user.hasPicture
                         ? Container(
                             width: 50,
                             height: 50,
@@ -143,7 +143,7 @@ class _LandingPageState extends State<LandingPage> {
                                         DataProvider.of(context)
                                             .user
                                             .user
-                                            .image),
+                                            .profile),
                                   ),
                                 ),
                               ),

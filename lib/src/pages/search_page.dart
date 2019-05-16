@@ -92,7 +92,6 @@ class SearchPage extends SearchDelegate<void> {
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Color(0xFF3FBE7E),
-                                color: Color(0xFF3FBE7E),
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
