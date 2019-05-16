@@ -63,7 +63,7 @@ class LoginPageState extends State<LoginPage> {
                   width: 350,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
                       color: Colors.white,
                       width: 3,
@@ -71,7 +71,8 @@ class LoginPageState extends State<LoginPage> {
                   ),
                   margin: const EdgeInsets.only(
                       top: 40.0, right: 40.0, left: 40.0, bottom: 20),
-                  child: Column(
+                  child: ListView(
+                    shrinkWrap: true,
                     children: <Widget>[
                       TextFormField(
                         maxLines: 1,
@@ -79,9 +80,12 @@ class LoginPageState extends State<LoginPage> {
                         autofocus: false,
                         decoration: InputDecoration(
                           hintText: 'Användarnamn',
-                          icon: Icon(
-                            Icons.person,
-                            color: Color(0xFF373F51),
+                          icon: Container(
+                            margin: EdgeInsets.only(left: 5),
+                            child: Icon(
+                              Icons.person,
+                              color: Color(0xFF373F51),
+                            ),
                           ),
                         ),
                         validator: (value) =>
@@ -94,9 +98,12 @@ class LoginPageState extends State<LoginPage> {
                         autofocus: false,
                         decoration: InputDecoration(
                             hintText: 'Lösenord',
-                            icon: Icon(
-                              Icons.lock,
-                              color: Color(0xFF373F51),
+                            icon: Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Icon(
+                                Icons.lock,
+                                color: Color(0xFF373F51),
+                              ),
                             )),
                         validator: (value) =>
                             value.isEmpty ? 'Lösenord kan ej vara tomt' : null,

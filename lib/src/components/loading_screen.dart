@@ -15,11 +15,10 @@ class _LoadingScreenState extends State<LoadingScreen>
   Timer timer;
   List<String> loadingMessages = [
     "Hämtar databasen...",
-    "Bränner lite katter...",
     "Lägger ihop komponenterna...",
-    "Ser till alla kugghjul...",
-    "Kevvakå fixar käk...",
-    "Pillar med korven..."
+    "Smörjer alla kugghjul...",
+    "Läser lite böcker...",
+    "Bränner lite katter...",
   ];
 
   @override
