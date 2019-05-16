@@ -167,10 +167,10 @@ class CarouselState extends State<Carousel> {
                               : new BorderRadius.only(
                                   bottomLeft: widget.radius != null
                                       ? widget.radius
-                                      : new Radius.circular(8.0),
+                                      : new Radius.circular(20.0),
                                   bottomRight: widget.radius != null
                                       ? widget.radius
-                                      : new Radius.circular(8.0)))
+                                      : new Radius.circular(20.0)))
                           : null,
                     ),
                     padding: new EdgeInsets.all(widget.indicatorBgPadding),
