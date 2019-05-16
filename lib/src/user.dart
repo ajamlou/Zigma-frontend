@@ -70,6 +70,7 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
+  String urlBody = "https://9a32e5c7.ngrok.io";
 
   UserMethodBody(this.user);
 
@@ -79,10 +80,8 @@ class UserMethodBody {
   }
 
   Future<User> getUserById(int id, String fields) async {
-    final String url = "https://9548fc36.ngrok.io/users/users/" +
-        id.toString() +
-        "/?fields=" +
-        fields;
+    final String url =
+        urlBody + "/users/users/" + id.toString() + "/?fields=" + fields;
     print("IM IN getUserById wihooo");
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
@@ -137,7 +136,7 @@ class UserMethodBody {
         UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
-    String postURL = "https://9548fc36.ngrok.io/users/users/";
+    String postURL = urlBody + "/users/users/";
     var response = await http.post(Uri.encodeFull(postURL),
         body: data,
         headers: {
@@ -167,7 +166,7 @@ class UserMethodBody {
   Future<int> signIn(String username, String password) async {
     UserLogin _loginUser = new UserLogin(username, password);
     var data = json.encode(_loginUser);
-    String postURL = "https://9548fc36.ngrok.io/users/login/";
+    String postURL = urlBody + "/users/login/";
     var response = await http.post(Uri.encodeFull(postURL),
         body: data,
         headers: {
