@@ -238,10 +238,13 @@ class RegisterPageState extends State<RegisterPage> {
                                 color: registerColor,
                               ),
                             ),
-                            suffixIcon: usernameController.text == ""
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            suffixIcon: Container(
+                              padding: EdgeInsets.only(left: 20),
+                              child: usernameController.text == ""
+                                  ? Icon(Icons.star,
+                                      size: 10, color: Color(0xFF373F51))
+                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            ),
                           ),
                           validator: (value) =>
                               value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -261,10 +264,13 @@ class RegisterPageState extends State<RegisterPage> {
                                 color: registerColor,
                               ),
                             ),
-                            suffixIcon: !_emailListener()
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            suffixIcon: Container(
+                              padding: EdgeInsets.only(left: 20),
+                              child: !_emailListener()
+                                  ? Icon(Icons.star,
+                                      size: 10, color: Color(0xFF373F51))
+                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            ),
                           ),
                           validator: (value) =>
                               value.isEmpty ? 'Obligatoriskt Fält' : null,
@@ -296,12 +302,15 @@ class RegisterPageState extends State<RegisterPage> {
                                 color: registerColor,
                               ),
                             ),
-                            suffixIcon: passwordController.text.length < 8 ||
-                                    validatePasswordController.text !=
-                                        passwordController.text
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            suffixIcon: Container(
+                              padding: EdgeInsets.only(left: 20),
+                              child: passwordController.text.length < 8 ||
+                                      validatePasswordController.text !=
+                                          passwordController.text
+                                  ? Icon(Icons.star,
+                                      size: 10, color: Color(0xFF373F51))
+                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            ),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
@@ -330,12 +339,15 @@ class RegisterPageState extends State<RegisterPage> {
                                 color: registerColor,
                               ),
                             ),
-                            suffixIcon: passwordController.text == "" ||
-                                    validatePasswordController.text !=
-                                        passwordController.text
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            suffixIcon: Container(
+                              padding: EdgeInsets.only(left: 20),
+                              child: passwordController.text == "" ||
+                                      validatePasswordController.text !=
+                                          passwordController.text
+                                  ? Icon(Icons.star,
+                                      size: 10, color: Color(0xFF373F51))
+                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                            ),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
