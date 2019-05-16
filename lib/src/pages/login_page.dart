@@ -57,6 +57,7 @@ class LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.only(top: 5, bottom: 15),
               child: Container(
+                padding: EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),

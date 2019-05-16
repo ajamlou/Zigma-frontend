@@ -98,9 +98,9 @@ class AdvertCreationState extends State<AdvertCreation> {
           ),
         ),
         body: AnimatedCrossFade(
-          firstCurve: Curves.easeOutExpo,
-          secondCurve: Curves.easeInExpo,
-          duration: Duration(milliseconds: 800),
+          firstCurve: Curves.easeOutCubic,
+          secondCurve: Curves.easeInCubic,
+          duration: Duration(milliseconds: 300),
           firstChild: Center(
               child: Column(
                 children: <Widget>[

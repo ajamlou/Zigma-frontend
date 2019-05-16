@@ -212,8 +212,7 @@ class RegisterPageState extends State<RegisterPage> {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 15),
-                        width: 350,
-                        height: 210,
+                        padding: EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),

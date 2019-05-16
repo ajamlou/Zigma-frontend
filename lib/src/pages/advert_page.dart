@@ -96,16 +96,18 @@ class _AdvertPageState extends State<AdvertPage> {
             child: Image.asset('images/placeholder_book.png'),
           )
         : Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFFAEDBD3), width: 5),
-                borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.symmetric(horizontal: 75),
-            height: 300,
-            child: GestureDetector(
-              onTap: () {
-                carouselDialog();
-              },
-              child: Carousel(images: widget.data.images),
+            margin: EdgeInsets.symmetric(horizontal: 65),
+            child: SizedBox(
+              height: 300,
+              width: 100,
+              child: GestureDetector(
+                onTap: () {
+                  carouselDialog();
+                },
+                child: Carousel(images: widget.data.images,
+                  borderRadius: true,
+                  noRadiusForIndicator: false),
+              ),
             ),
           );
   }
@@ -360,7 +362,9 @@ class _AdvertPageState extends State<AdvertPage> {
     Dialog dialog = Dialog(
       child: Container(
         height: MediaQuery.of(context).size.height / 2,
-        child: Carousel(images: widget.data.images),
+        child: Carousel(images: widget.data.images,
+            borderRadius: true,
+            noRadiusForIndicator: false),
       ),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
