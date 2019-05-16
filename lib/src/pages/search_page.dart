@@ -92,6 +92,7 @@ class SearchPage extends SearchDelegate<void> {
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Color(0xFF3FBE7E),
+                                color: Color(0xFF3FBE7E),
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -125,7 +126,12 @@ class SearchPage extends SearchDelegate<void> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(5),
-          child: Text("De 20 senast upplagda annonserna"),
+          child: Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text("Här syns de 20 senast upplagda annonserna:",
+                  style: TextStyle(
+                      color: Color(0xFF373F51),
+                      fontWeight: FontWeight.bold))),
         ),
         Expanded(
           child: ListView.builder(
