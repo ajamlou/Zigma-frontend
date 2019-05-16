@@ -216,7 +216,7 @@ class RegisterPageState extends State<RegisterPage> {
                         height: 210,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           border: Border.all(
                             color: Colors.white,
                             width: 3,
@@ -231,9 +231,12 @@ class RegisterPageState extends State<RegisterPage> {
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Användarnamn',
-                            icon: Icon(
-                              Icons.person_add,
-                              color: registerColor,
+                            icon: Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Icon(
+                                Icons.person_add,
+                                color: registerColor,
+                              ),
                             ),
                             suffixIcon: usernameController.text == ""
                                 ? Icon(Icons.star,
@@ -251,9 +254,12 @@ class RegisterPageState extends State<RegisterPage> {
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Email',
-                            icon: Icon(
-                              Icons.mail,
-                              color: registerColor,
+                            icon: Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Icon(
+                                Icons.mail,
+                                color: registerColor,
+                              ),
                             ),
                             suffixIcon: !_emailListener()
                                 ? Icon(Icons.star,
@@ -283,9 +289,12 @@ class RegisterPageState extends State<RegisterPage> {
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Lösenord',
-                            icon: Icon(
-                              Icons.lock,
-                              color: registerColor,
+                            icon: Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Icon(
+                                Icons.lock,
+                                color: registerColor,
+                              ),
                             ),
                             suffixIcon: passwordController.text.length < 8 ||
                                     validatePasswordController.text !=
@@ -314,9 +323,12 @@ class RegisterPageState extends State<RegisterPage> {
                           autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'Repetera lösenord',
-                            icon: Icon(
-                              Icons.lock,
-                              color: registerColor,
+                            icon: Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Icon(
+                                Icons.lock,
+                                color: registerColor,
+                              ),
                             ),
                             suffixIcon: passwordController.text == "" ||
                                     validatePasswordController.text !=

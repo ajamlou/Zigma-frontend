@@ -205,7 +205,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
                       color: Colors.white,
                       width: 3,
