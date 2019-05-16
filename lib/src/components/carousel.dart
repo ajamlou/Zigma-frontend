@@ -134,10 +134,13 @@ class CarouselState extends State<Carousel> {
                 fit: StackFit.expand,
                 children: <Widget>[
                   Center(child: CircularProgressIndicator()),
-                  FadeInImage.memoryNetwork(
-                    fit: BoxFit.cover,
-                    placeholder: kTransparentImage,
-                    image: netImage,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: FadeInImage.memoryNetwork(
+                      fit: BoxFit.cover,
+                      placeholder: kTransparentImage,
+                      image: netImage,
+                    ),
                   ),
                 ],
               ),
@@ -145,6 +148,7 @@ class CarouselState extends State<Carousel> {
         .toList();
 
     return new Scaffold(
+      backgroundColor: Colors.transparent,
       body: new Stack(
         children: <Widget>[
           new Container(

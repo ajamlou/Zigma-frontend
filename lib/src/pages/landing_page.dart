@@ -18,12 +18,13 @@ class _LandingPageState extends State<LandingPage> {
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("images/background.png"),
-            fit: BoxFit.fitHeight,
+            fit: BoxFit.fill,
           ),
         ),
         //color: Color(0xFFFFFFFF),
         child: Scaffold(
           backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.white),
             elevation: 0.0,
