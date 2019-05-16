@@ -105,7 +105,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget showDrawer(context) {
     return Drawer(
       child: Container(
-        color: Color(0xFFAEDBD3),
+        color: Color(0xFF373F51),
         child: Column(
           children: <Widget>[
             Expanded(
