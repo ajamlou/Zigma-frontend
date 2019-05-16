@@ -105,7 +105,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget showDrawer(context) {
     return Drawer(
       child: Container(
-        color: Color(0xFF373F51),
+        color: Color(0xFFAEDBD3),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -159,18 +159,22 @@ class _LandingPageState extends State<LandingPage> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 20),
+                              fontSize: 35),
                         ),
                         DataProvider.of(context).user.user.soldBooks > 5
                             ? Text(
                                 "Ganska Bra Boksäljare",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              )
+                                    fontSize: 18,
+                                    color: Color(0xFF373F51),
+                              ))
                             : Text(
                                 "Novis Boksäljare",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(
+                                    color: Color(0xFF373F51),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
                               ),
                       ],
                     ),
