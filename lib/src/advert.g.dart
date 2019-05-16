@@ -7,6 +7,7 @@ part of 'advert.dart';
 // **************************************************************************
 
 Advert _$AdvertFromJson(Map<String, dynamic> json) {
+  String url = "https://9a32e5c7.ngrok.io/adverts/advertimages/";
   return Advert(
       json['book_title'] as String,
       json['price'] as int,
@@ -14,7 +15,9 @@ Advert _$AdvertFromJson(Map<String, dynamic> json) {
       json['ISBN'] as String,
       json['contact_info'] as String,
       json['condition'] as String,
-      (json['image'] as List)?.map((e) => e as String)?.toList(),
+      (json['image'] as List)
+          ?.map((id) => url + id.toString() + "/" as String)
+          ?.toList(),
       json['transaction_type'] as String,
       json['edition'] as String,
       json['owner'] as int)

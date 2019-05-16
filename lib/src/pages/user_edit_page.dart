@@ -22,19 +22,25 @@ class _UserEditPageState extends State<UserEditPage> {
               width: 200,
               height: 200,
               child: DataProvider.of(context).user.user.image == null
-                  ? FittedBox(child: Icon(Icons.person), fit: BoxFit.cover)
+                  ? FittedBox(
+                      child: Icon(Icons.person),
+                      fit: BoxFit.cover,
+                    )
                   : Image.network(
                       DataProvider.of(context).user.user.image,
                       fit: BoxFit.cover,
                     ),
             ),
           ),
-          Text(DataProvider.of(context).user.user.username),
+          Text(
+            DataProvider.of(context).user.user.username,
+            style: TextStyle(fontSize: 45),
+          ),
           MaterialButton(
             child: Text("Ändra Användarnamn"),
             onPressed: () {},
           ),
-          Text("Privat information"),
+          Text("Privat information",),
           Card(
             color: Colors.grey[100],
             child: ListTile(

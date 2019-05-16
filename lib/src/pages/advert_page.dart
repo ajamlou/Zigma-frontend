@@ -342,10 +342,13 @@ class _AdvertPageState extends State<AdvertPage> {
         child: Center(
           child: DataProvider.of(context).user.user == null
               ? LoginPrompt()
-              : Text(
-                  "Denna knapp är ej implementerad :(",
-                  style: TextStyle(fontSize: 45),
-                  textAlign: TextAlign.center,
+              : Container(
+                  color: Colors.white,
+                  child: Text(
+                    "Denna knapp är ej implementerad :(",
+                    style: TextStyle(fontSize: 45),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
         ),
       ),
