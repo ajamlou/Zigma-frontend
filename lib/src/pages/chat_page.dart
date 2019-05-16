@@ -166,7 +166,7 @@ class ChatMessage extends StatelessWidget {
                 child: FadeInImage.memoryNetwork(
                   fit: BoxFit.fitWidth,
                   placeholder: kTransparentImage,
-                  image: DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.image),
+                  image: DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.profile),
                 ),
               ),
             ),

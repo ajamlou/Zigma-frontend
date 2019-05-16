@@ -251,7 +251,7 @@ class _AdvertPageState extends State<AdvertPage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.image)),
+          child: Image.network(DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.profile)),
         ),
       ),
     );

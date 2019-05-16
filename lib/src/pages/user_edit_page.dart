@@ -21,13 +21,15 @@ class _UserEditPageState extends State<UserEditPage> {
             child: Container(
               width: 200,
               height: 200,
-              child: DataProvider.of(context).user.user.image == null
+              child: DataProvider.of(context).user.user.hasPicture
                   ? FittedBox(
                       child: Icon(Icons.person),
                       fit: BoxFit.cover,
                     )
                   : Image.network(
-                      DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.image),
+                      DataProvider.of(context)
+                          .user
+                          .picUrl(DataProvider.of(context).user.user.profile),
                       fit: BoxFit.cover,
                     ),
             ),
@@ -55,12 +57,12 @@ class _UserEditPageState extends State<UserEditPage> {
           Card(
             color: Colors.grey[100],
             child: ListTile(
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                String newEmail = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Edit(
-                      title: "MejlAdress",
+                        title: "MejlAdress",
                         edit: DataProvider.of(context).user.user.email),
                   ),
                 );
@@ -85,13 +87,30 @@ class Edit extends StatelessWidget {
   final String title;
   final String edit;
 
-  Edit({this.edit,this.title});
+  Edit({this.edit, this.title});
 
   @override
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController(text: edit);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height/3),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 35),
+          child: Row(
+            children: <Widget>[
+              MaterialButton(
+                onPressed: () => Navigator.pop(context, controller.text),
+                child: Container(
+                  child: Row(
+                    children: <Widget>[Icon(Icons.arrow_left), Text("Ändra!")],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: Column(
         children: <Widget>[
           SizedBox(
