@@ -154,12 +154,15 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          DataProvider.of(context).user.user.username,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 35),
+                        Container(
+                          padding: EdgeInsets.only(right: 30),
+                          child: Text(
+                            DataProvider.of(context).user.user.username,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 35),
+                          ),
                         ),
                         DataProvider.of(context).user.user.soldBooks > 5
                             ? Text(
