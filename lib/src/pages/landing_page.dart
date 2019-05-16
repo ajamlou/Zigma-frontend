@@ -25,8 +25,7 @@ class _LandingPageState extends State<LandingPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            iconTheme: IconThemeData(
-                color: Colors.white),
+            iconTheme: IconThemeData(color: Colors.white),
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             actions: <Widget>[
@@ -43,8 +42,8 @@ class _LandingPageState extends State<LandingPage> {
               : Center(
                   child: Container(
                     color: Colors.transparent,
-                    width: MediaQuery.of(context).size.width/1.2,
-                    height: MediaQuery.of(context).size.height/4,
+                    width: MediaQuery.of(context).size.width / 1.2,
+                    height: MediaQuery.of(context).size.height / 4,
                     child: LoginPrompt(),
                   ),
                 ),
@@ -56,13 +55,6 @@ class _LandingPageState extends State<LandingPage> {
                     padding: const EdgeInsets.only(
                         top: 100.0, left: 50, right: 50, bottom: 100),
                     child: Image.asset('images/ZigmaLogo4.png')),
-//                    child: Text('ZIGMA',
-//                        style: TextStyle(
-//                          color: Color(0xFFECA72C),
-//                          fontWeight: FontWeight.bold,
-//                          fontSize: 80,
-//                        ))
-//                ),
 //
                 Container(
                   height: 50,
@@ -147,7 +139,11 @@ class _LandingPageState extends State<LandingPage> {
                                   child: FadeInImage.memoryNetwork(
                                     fit: BoxFit.fitWidth,
                                     placeholder: kTransparentImage,
-                                    image: DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.image),
+                                    image: DataProvider.of(context).user.picUrl(
+                                        DataProvider.of(context)
+                                            .user
+                                            .user
+                                            .image),
                                   ),
                                 ),
                               ),
@@ -161,7 +157,9 @@ class _LandingPageState extends State<LandingPage> {
                         Text(
                           DataProvider.of(context).user.user.username,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 20),
                         ),
                         DataProvider.of(context).user.user.soldBooks > 5
                             ? Text(
@@ -172,8 +170,7 @@ class _LandingPageState extends State<LandingPage> {
                               )
                             : Text(
                                 "Novis Boksäljare",
-                                style: TextStyle(
-                                    color: Colors.black),
+                                style: TextStyle(color: Colors.black),
                               ),
                       ],
                     ),
@@ -191,30 +188,46 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             ListTile(
-              title: Text(
-                "Din Profil",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+              title: Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "Din Profil",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20),
+                ),
               ),
               onTap: () async {
-                DataProvider.of(context).routing.routeProfilePage(context, DataProvider.of(context).user.user);
+                DataProvider.of(context).routing.routeProfilePage(
+                    context, DataProvider.of(context).user.user);
               },
             ),
             ListTile(
-              title: Text(
-                "Skapa Annons",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+              title: Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "Skapa Annons",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20),
+                ),
               ),
               onTap: () async {
                 DataProvider.of(context).routing.routeCreationPage(context);
               },
             ),
             ListTile(
-                title: Text(
-                  "Dina Chattar",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+                title: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    "Dina Chattar",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20),
+                  ),
                 ),
                 onTap: () async {
                   Navigator.of(context, rootNavigator: true).pop(null);
@@ -223,10 +236,15 @@ class _LandingPageState extends State<LandingPage> {
                       .routeChatPage(context, false);
                 }),
             ListTile(
-              title: Text(
-                "Inställningar",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
+              title: Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "Inställningar",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20),
+                ),
               ),
               onTap: () {},
             ),
@@ -274,28 +292,25 @@ class _LandingPageState extends State<LandingPage> {
               actions: <Widget>[
                 Container(
                   child: FlatButton(
-                     color: Color(0xFF3FBE7E),
+                    color: Color(0xFF3FBE7E),
                     child: Text("Nej",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white
-                    )),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white)),
                     onPressed: () => Navigator.pop(context, false),
                   ),
                 ),
                 FlatButton(
                   color: Color(0xFFDE5D5D),
                   child: Text("Ja",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white
-                  )),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white)),
                   onPressed: () => Navigator.pop(context, true),
                 ),
               ],
             ));
   }
-  Widget loginButton(){
+
+  Widget loginButton() {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: MaterialButton(
@@ -303,12 +318,12 @@ class _LandingPageState extends State<LandingPage> {
             DataProvider.of(context).routing.routeLoginPage(context),
         child: Column(
           children: <Widget>[
-            Icon(Icons.contacts),
-            Text('Logga In'),
+            Container(
+                child: Icon(Icons.contacts, color: Color(0xFF373F51))),
+            Text('Logga In', style: TextStyle(color: Color(0xFF373F51))),
           ],
         ),
       ),
     );
   }
 }
-
