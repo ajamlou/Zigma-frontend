@@ -273,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(100),
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
-            widget.user.hasPicture
+            !widget.user.hasPicture
                 ? BoxShadow(color: Colors.transparent)
                 : BoxShadow(
                     color: Colors.black87,
@@ -283,7 +283,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: widget.user.hasPicture
+          child: !widget.user.hasPicture
               ? Container(
                   width: 150,
                   height: 150,
