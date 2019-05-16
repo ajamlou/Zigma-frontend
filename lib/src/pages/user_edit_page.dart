@@ -21,7 +21,7 @@ class _UserEditPageState extends State<UserEditPage> {
             child: Container(
               width: 200,
               height: 200,
-              child: DataProvider.of(context).user.user.hasPicture
+              child: !DataProvider.of(context).user.user.hasPicture
                   ? FittedBox(
                       child: Icon(Icons.person),
                       fit: BoxFit.cover,

@@ -160,10 +160,10 @@ class _AdvertPageState extends State<AdvertPage> {
 
   Widget getOwnerImage() {
     return FutureBuilder(
-      future: getUser("image"),
+      future: getUser("has_picture,profile"),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return snapshot.data.image == null
+          return !snapshot.data.hasPicture
               ? Expanded(
                   flex: 2,
                   child: FittedBox(
@@ -193,7 +193,7 @@ class _AdvertPageState extends State<AdvertPage> {
                             child: FadeInImage.memoryNetwork(
                               fit: BoxFit.fitWidth,
                               placeholder: kTransparentImage,
-                              image: DataProvider.of(context).user.picUrl(snapshot.data.image),
+                              image: DataProvider.of(context).user.picUrl(snapshot.data.profile),
                             ),
                           ),
                         ),
@@ -414,7 +414,7 @@ class _AdvertPageState extends State<AdvertPage> {
   void getOwnerProfile() async {
     DataProvider.of(context).loadingScreen.showLoadingDialog(context);
     User owner =
-        await getUser("id,username,sold_books,bought_books,img_link,adverts");
+        await getUser("id,username,sold_books,bought_books,profile,has_picture,adverts");
     Navigator.of(context, rootNavigator: true).pop(null);
     DataProvider.of(context).routing.routeProfilePage(context, owner);
   }
