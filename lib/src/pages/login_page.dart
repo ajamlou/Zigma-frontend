@@ -56,23 +56,20 @@ class LoginPageState extends State<LoginPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5, bottom: 15),
-              child: Form(
-                key: _userKey,
-                child: Container(
-                  height: 105,
-                  width: 350,
-                  decoration: BoxDecoration(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 3,
-                    ),
+                    width: 3,
                   ),
-                  margin: const EdgeInsets.only(
-                      top: 40.0, right: 40.0, left: 40.0, bottom: 20),
-                  child: ListView(
-                    shrinkWrap: true,
+                ),
+                margin: const EdgeInsets.only(
+                    top: 40.0, right: 40.0, left: 40.0, bottom: 20),
+                child: Form(
+                  key: _userKey,
+                  child: Column(
                     children: <Widget>[
                       TextFormField(
                         maxLines: 1,

@@ -125,7 +125,7 @@ class SearchPage extends SearchDelegate<void> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(5),
-          child: Text("De 20 senast uppglagda annonserna"),
+          child: Text("De 20 senast upplagda annonserna"),
         ),
         Expanded(
           child: ListView.builder(
@@ -159,7 +159,7 @@ class SearchPage extends SearchDelegate<void> {
                 onTap: () async {
                   DataProvider.of(context)
                       .routing
-                      .routeAdvertPage(context, data[index], false);
+                      .routeAdvertPage(context, suggestionList[index], false);
                 },
               );
             },
