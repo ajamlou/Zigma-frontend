@@ -44,7 +44,7 @@ class Advert {
 }
 
 class AdvertList {
-  final String urlBody = "https://9a32e5c7.ngrok.io";
+  final String urlBody = "https://ecf116e6.eu.ngrok.io";
   final List<Advert> list = [];
   final List<Advert> userListSelling = [];
   final List<Advert> userListBuying = [];
