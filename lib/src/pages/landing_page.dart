@@ -17,7 +17,7 @@ class _LandingPageState extends State<LandingPage> {
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/background.jpg"),
+            image: AssetImage("images/background.png"),
             fit: BoxFit.fitHeight,
           ),
         ),
@@ -55,7 +55,7 @@ class _LandingPageState extends State<LandingPage> {
                 Container(
                     padding: const EdgeInsets.only(
                         top: 100.0, left: 50, right: 50, bottom: 100),
-                    child: Image.asset('images/ZigmaLogo.png')),
+                    child: Image.asset('images/ZigmaLogo4.png')),
 //                    child: Text('ZIGMA',
 //                        style: TextStyle(
 //                          color: Color(0xFFECA72C),
