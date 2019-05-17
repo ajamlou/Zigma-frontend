@@ -38,19 +38,18 @@ class UserCreation {
   UserCreation(this.email, this.username, this.password, this.imageAsBytes);
 
   // om imageAsBytes är null, encode utan den parametern
-  Map<String, dynamic> toJson() =>
-      imageAsBytes != null
-          ? {
-        'username': username,
-        'password': password,
-        'email': email,
-        'profile_picture': imageAsBytes,
-      }
-          : {
-        'username': username,
-        'password': password,
-        'email': email,
-      };
+  Map<String, dynamic> toJson() => imageAsBytes != null
+      ? {
+          'username': username,
+          'password': password,
+          'email': email,
+          'profile_picture': imageAsBytes,
+        }
+      : {
+          'username': username,
+          'password': password,
+          'email': email,
+        };
 
   UserCreation.fromJson(Map<String, dynamic> json)
       : email = json['email'],
@@ -64,8 +63,7 @@ class UserLogin {
 
   UserLogin(this.username, this.password);
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'username': username,
         'password': password,
       };
@@ -78,18 +76,8 @@ class UserMethodBody {
   UserMethodBody(this.user);
 
   void iniUser(String email, int id, String username, String token, int profile,
-      bool hasPicture,
-      List<int> adverts) {
-    user = User(
-        email,
-        id,
-        username,
-        token,
-        profile,
-        hasPicture,
-        adverts,
-        0,
-        0);
+      bool hasPicture, List<int> adverts) {
+    user = User(email, id, username, token, profile, hasPicture, adverts, 0, 0);
   }
 
   Future<User> getUserById(int id, String fields) async {
@@ -108,23 +96,19 @@ class UserMethodBody {
 
   String picUrl(int id) {
     print("IM IN PICURL");
-    String url = urlBody + "/users/profile_pic/" + id.toString()+"/";
+    String url = urlBody + "/users/profile_pic/" + id.toString() + "/";
     print(url);
     return url;
   }
 
   Future<void> logout(context) async {
     user = null;
-    DataProvider
-        .of(context)
-        .advertList
-        .clearUserAdvertList();
+    DataProvider.of(context).advertList.clearUserAdvertList();
     await clearPrefs();
   }
 
   Future<void> setUserPreferences(String token, int profile, bool hasPicture,
-      String username,
-      String email, int id, List adverts) async {
+      String username, String email, int id, List adverts) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", token);
     prefs.setInt("profile", profile);
@@ -142,7 +126,8 @@ class UserMethodBody {
 
   Future<void> automaticLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("token") == null) {} else {
+    if (prefs.getString("token") == null) {
+    } else {
       iniUser(
           prefs.getString("email"),
           prefs.getInt("id"),
@@ -158,7 +143,7 @@ class UserMethodBody {
       String imageAsBytes) async {
     List<dynamic> returnList = [];
     UserCreation _newUser =
-    UserCreation(email, username, password, imageAsBytes);
+        UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = urlBody + "/users/users/";
@@ -170,7 +155,7 @@ class UserMethodBody {
         });
     final String res = response.body;
     print(json.decode(res));
-    Map parsed = json.decode(res);
+    Map parsed = json.decode(utf8.decode(response.bodyBytes));
     print(parsed.toString());
     var localUser;
     if (response.statusCode == 201) {
@@ -181,8 +166,7 @@ class UserMethodBody {
           localUser.hasPicture,
           localUser.username,
           localUser.email,
-          localUser.id,
-          []);
+          localUser.id, []);
       await automaticLogin();
     } else if (response.statusCode == 400) {
       localUser = UserCreation.fromJson(parsed);
@@ -194,7 +178,28 @@ class UserMethodBody {
     return returnList;
   }
 
-  Future<void> editUser() {}
+  Future<Map> editUser(String header, String edit) async {
+    print("IM IN EDIT USER");
+    String url = urlBody + "/users/users/" + user.id.toString() + "/";
+    print(url);
+    Map changes = {header: edit};
+    if (header == "username") {
+      user.username = changes["username"];
+    } else if (header == "email") {
+      user.email = changes["email"];
+    }
+    var data = json.encode(changes);
+    var response = await http.patch(Uri.encodeFull(url), body: data, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": "Token " + user.token
+    });
+    if (response.statusCode == 200) {
+      return changes;
+    } else {
+      return json.decode(utf8.decode(response.bodyBytes));
+    }
+  }
 
   Future<int> signIn(String username, String password) async {
     UserLogin _loginUser = new UserLogin(username, password);
@@ -211,8 +216,13 @@ class UserMethodBody {
     var localUser = User.fromJson(parsed);
     if (response.statusCode == 200) {
       await setUserPreferences(
-          localUser.token, localUser.profile, localUser.hasPicture,
-          localUser.username, localUser.email, localUser.id, localUser.adverts);
+          localUser.token,
+          localUser.profile,
+          localUser.hasPicture,
+          localUser.username,
+          localUser.email,
+          localUser.id,
+          localUser.adverts);
       await automaticLogin();
     }
     return response.statusCode;

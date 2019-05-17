@@ -44,7 +44,7 @@ class _LandingPageState extends State<LandingPage> {
                   child: Container(
                     color: Colors.transparent,
                     width: MediaQuery.of(context).size.width / 1.2,
-                    height: MediaQuery.of(context).size.height / 4,
+                    height: MediaQuery.of(context).size.height /3,
                     child: LoginPrompt(),
                   ),
                 ),
