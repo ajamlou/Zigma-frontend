@@ -96,6 +96,13 @@ class _AdvertPageState extends State<AdvertPage> {
             child: Image.asset('images/placeholder_book.png'),
           )
         : Container(
+            decoration: BoxDecoration(boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black54,
+                offset: Offset(1.0, 0.0),
+                blurRadius: 8,
+              )
+            ]),
             margin: EdgeInsets.symmetric(horizontal: 65),
             child: SizedBox(
               height: 300,
@@ -104,9 +111,10 @@ class _AdvertPageState extends State<AdvertPage> {
                 onTap: () {
                   carouselDialog();
                 },
-                child: Carousel(images: widget.data.images,
-                  borderRadius: true,
-                  noRadiusForIndicator: false),
+                child: Carousel(
+                    images: widget.data.images,
+                    borderRadius: true,
+                    noRadiusForIndicator: false),
               ),
             ),
           );
@@ -193,7 +201,9 @@ class _AdvertPageState extends State<AdvertPage> {
                             child: FadeInImage.memoryNetwork(
                               fit: BoxFit.fitWidth,
                               placeholder: kTransparentImage,
-                              image: DataProvider.of(context).user.picUrl(snapshot.data.profile),
+                              image: DataProvider.of(context)
+                                  .user
+                                  .picUrl(snapshot.data.profile),
                             ),
                           ),
                         ),
@@ -251,7 +261,9 @@ class _AdvertPageState extends State<AdvertPage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.picUrl(DataProvider.of(context).user.user.profile)),
+          child: Image.network(DataProvider.of(context)
+              .user
+              .picUrl(DataProvider.of(context).user.user.profile)),
         ),
       ),
     );
@@ -360,9 +372,11 @@ class _AdvertPageState extends State<AdvertPage> {
 
   void carouselDialog() {
     Dialog dialog = Dialog(
+      backgroundColor: Colors.transparent,
       child: Container(
         height: MediaQuery.of(context).size.height / 2,
-        child: Carousel(images: widget.data.images,
+        child: Carousel(
+            images: widget.data.images,
             borderRadius: true,
             noRadiusForIndicator: false),
       ),
