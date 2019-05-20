@@ -1,3 +1,6 @@
+
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +23,7 @@ class User {
   int soldBooks;
   @JsonKey(name: 'bought_books')
   int boughtBooks;
+  Image profilePic;
 
   User(this.email, this.id, this.username, this.token, this.profile,
       this.hasPicture, this.adverts, this.soldBooks, this.boughtBooks);
@@ -57,6 +61,7 @@ class UserCreation {
         username = json['username'],
         password = json['password'];
 }
+
 
 class UserLogin {
   String username;
@@ -105,10 +110,14 @@ class UserMethodBody {
     print(user.username);
     return user;
   }
+  Image getImage() {
+    return user.profilePic;
+  }
 
   String picUrl(int id) {
     print("IM IN PICURL");
     String url = urlBody + "/users/profile_pic/" + id.toString()+"/";
+    user.profilePic = Image.network(url);
     print(url);
     return url;
   }
@@ -215,6 +224,7 @@ class UserMethodBody {
           localUser.username, localUser.email, localUser.id, localUser.adverts);
       await automaticLogin();
     }
+    picUrl(localUser.id);
     return response.statusCode;
   }
 }

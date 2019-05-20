@@ -65,356 +65,351 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(),
-      child: Scaffold(
-        resizeToAvoidBottomPadding: true,
-        backgroundColor: Color(0xFFAEDBD3),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          child: AppBar(
-            iconTheme: IconThemeData(color: Colors.transparent),
-            elevation: 0.0,
-            backgroundColor: transaction_type == null
-                ? Colors.transparent
-                : Colors.transparent,
-            title: Text('Lägg till en ny annons',
+    return Scaffold(
+      resizeToAvoidBottomPadding: true,
+      backgroundColor: Color(0xFFAEDBD3),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: AppBar(
+          iconTheme: IconThemeData(color: Colors.transparent),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          title: Text('Lägg till en ny annons',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF373F51),
+                fontSize: 25,
+              )),
+          centerTitle: true,
+          leading: Container(
+            child: IconButton(
+              color: Color(0xFFFFFFFF),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back),
+            ),
+          ),
+          actions: <Widget>[],
+        ),
+      ),
+      body: AnimatedCrossFade(
+        firstCurve: Curves.easeOutCubic,
+        secondCurve: Curves.easeInCubic,
+        duration: Duration(milliseconds: 200),
+        firstChild: Center(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 100.0, left: 20, right: 20, bottom: 50),
+              child: Text(
+                'Söker du efter en bok eller vill du sälja en bok?',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF373F51),
                   fontSize: 25,
-                )),
-            centerTitle: true,
-            leading: Container(
-              child: IconButton(
-                color: Color(0xFFFFFFFF),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            actions: <Widget>[],
-          ),
-        ),
-        body: AnimatedCrossFade(
-          firstCurve: Curves.easeOutCubic,
-          secondCurve: Curves.easeInCubic,
-          duration: Duration(milliseconds: 200),
-          firstChild: Center(
-              child: Column(
+            Container(
+              height: 50,
+              width: 300,
+              child: RaisedButton(
+                elevation: 5,
+                color: Color(0xFFECA72C),
+                onPressed: () {
+                  setState(() {
+                    transaction_type = 'S';
+                  });
+                },
+                child: Text('Sälja',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold)),
+              ),
+            ),
+            SizedBox(
+              height: 35,
+            ),
+            Container(
+              height: 50,
+              width: 300,
+              child: RaisedButton(
+                elevation: 5,
+                color: Color(0xFFECA72C),
+                onPressed: () {
+                  setState(() {
+                    transaction_type = 'B';
+                  });
+                },
+                child: Text('Söker',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ],
+        )),
+        secondChild: Container(
+          width: MediaQuery.of(context).size.width,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            padding: EdgeInsets.all(15.0),
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 100.0, left: 20, right: 20, bottom: 50),
-                child: Text(
-                  'Söker du efter en bok eller vill du sälja en bok?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 150.0,
+                    color: Colors.transparent,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: compressedImageList.length,
+                      itemBuilder: buildGallery,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10),
+                          width: 300,
+                          child: compressedImageList.length == 1
+                              ? Text('')
+                              : RaisedButton(
+                                  color: Color(0xFFDE5D5D),
+                                  child: const Text(
+                                    'Ta bort markerade bilder',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onPressed: _remove,
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        stateButtons('Säljer', 'S'),
+                        stateButtons('Köper', 'B'),
+                      ]),
+                ],
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    width: 3,
+                  ),
+                ),
+                padding: EdgeInsets.only(
+                    left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
+                child: Form(
+                  key: _advertKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        maxLines: 1,
+                        controller: titleController,
+                        cursorColor: Color(0xFF373F51),
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'Titel',
+                          suffixIcon: titleController.text == ""
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xFF373F51))
+                              : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                        ),
+                        validator: (value) =>
+                            value.isEmpty ? 'Obligatoriskt Fält' : null,
+                        onSaved: (value) => _title = value,
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        controller: priceController,
+                        cursorColor: Color(0xFFDE5D5D),
+                        keyboardType: TextInputType.number,
+                        autofocus: false,
+                        // maxLength: 4,
+                        decoration: InputDecoration(
+                          hintText: 'Pris',
+                          suffixIcon: priceController.text.length > 4 ||
+                                  priceController.text == ""
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xFF373F51))
+                              : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Obligatoriskt Fält';
+                          } else if (value.length > 4) {
+                            return 'Priset får inte överstiga 9999kr';
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (value) => _price = stringToInt(value),
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        controller: authorController,
+                        cursorColor: Color(0xFFDE5D5D),
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'Författare',
+                          suffixIcon: authorController.text.length < 5 ||
+                                  !authorController.text.contains(" ")
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xFF373F51))
+                              : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Obligatoriskt Fält';
+                          } else if (!value.contains(" ")) {
+                            return 'Författaren måste ha både förnamn och efternamn';
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (value) => _author = value,
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        cursorColor: Color(0xFFDE5D5D),
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'ISBN',
+                        ),
+                        onSaved: (value) => _isbn = value,
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        controller: contactInfoController,
+                        cursorColor: Color(0xFFDE5D5D),
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'Kontaktinformation',
+                          suffixIcon: contactInfoController.text == ""
+                              ? Icon(Icons.star,
+                                  size: 10, color: Color(0xFF373F51))
+                              : Icon(Icons.check, color: Color(0xFF3FBE7E)),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Obligatoriskt Fält';
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (value) => _contactInfo = value,
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        cursorColor: Color(0xFFDE5D5D),
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: 'Upplaga',
+                        ),
+                        onSaved: (value) => edition = value,
+                      ),
+                      Container(
+                          width: 600,
+                          child: Row(children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(1.0),
+                              child: Text('Skick: ',
+                                  style: TextStyle(fontSize: 16)),
+                            ),
+                            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.all(1.0),
+                              child: dropdownMenu(),
+                            ),
+                          ])),
+                    ],
                   ),
                 ),
               ),
               Container(
-                height: 50,
-                width: 300,
-                child: RaisedButton(
-                  elevation: 5,
-                  color: Color(0xFFECA72C),
-                  onPressed: () {
-                    setState(() {
-                      transaction_type = 'S';
-                    });
-                  },
-                  child: Text('Sälja',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ),
-              SizedBox(
-                height: 35,
-              ),
-              Container(
-                height: 50,
-                width: 300,
-                child: RaisedButton(
-                  elevation: 5,
-                  color: Color(0xFFECA72C),
-                  onPressed: () {
-                    setState(() {
-                      transaction_type = 'B';
-                    });
-                  },
-                  child: Text('Söker',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold)),
+                margin: EdgeInsets.symmetric(horizontal: 60),
+                child: Container(
+                  padding: EdgeInsets.only(top: 35),
+                  width: 300,
+                  child: MaterialButton(
+                    color: Color(0xFF3FBE7E),
+                    onPressed: () async {
+                      int stsCode;
+                      if (_advertKey.currentState.validate()) {
+                        DataProvider.of(context)
+                            .loadingScreen
+                            .showLoadingDialog(context);
+                        _advertKey.currentState.save();
+                        responseList = await DataProvider.of(context)
+                            .advertList
+                            .uploadNewAdvert(
+                                _title,
+                                _price,
+                                _author,
+                                _isbn,
+                                _contactInfo,
+                                encodedImageList,
+                                condition,
+                                transaction_type,
+                                edition,
+                                context);
+                        setState(() {
+                          stsCode = responseList[0];
+                        });
+                        if (stsCode == 201) {
+                          //Confirmed response
+                          var a = await DataProvider.of(context)
+                              .advertList
+                              .getAdvertById(responseList[1]);
+                          Navigator.of(context, rootNavigator: true)
+                              .pop(null);
+                          DataProvider.of(context)
+                              .routing
+                              .routeAdvertPage(context, a, true);
+                        } else {
+                          //Unsuccessful response
+                          Navigator.of(context, rootNavigator: true)
+                              .pop(null);
+                          showAdvertCreationAlertDialog(stsCode);
+                        }
+                      }
+                    },
+                    child: Text("Ladda upp",
+                        style: TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.bold)),
+                  ),
                 ),
               ),
             ],
-          )),
-          secondChild: Container(
-            width: MediaQuery.of(context).size.width,
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              padding: EdgeInsets.all(15.0),
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      height: 150.0,
-                      color: Colors.transparent,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: compressedImageList.length,
-                        itemBuilder: buildGallery,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Container(
-                            padding: EdgeInsets.only(top: 10),
-                            width: 300,
-                            child: compressedImageList.length == 1
-                                ? Text('')
-                                : RaisedButton(
-                                    color: Color(0xFFDE5D5D),
-                                    child: const Text(
-                                      'Ta bort markerade bilder',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    onPressed: _remove,
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          stateButtons('Säljer', 'S'),
-                          stateButtons('Köper', 'B'),
-                        ]),
-                  ],
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 3,
-                    ),
-                  ),
-                  padding: EdgeInsets.only(
-                      left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
-                  child: Form(
-                    key: _advertKey,
-                    child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          maxLines: 1,
-                          controller: titleController,
-                          cursorColor: Color(0xFF373F51),
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Titel',
-                            suffixIcon: titleController.text == ""
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                          ),
-                          validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
-                          onSaved: (value) => _title = value,
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          controller: priceController,
-                          cursorColor: Color(0xFFDE5D5D),
-                          keyboardType: TextInputType.number,
-                          autofocus: false,
-                          // maxLength: 4,
-                          decoration: InputDecoration(
-                            hintText: 'Pris',
-                            suffixIcon: priceController.text.length > 4 ||
-                                    priceController.text == ""
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Obligatoriskt Fält';
-                            } else if (value.length > 4) {
-                              return 'Priset får inte överstiga 9999kr';
-                            } else {
-                              return null;
-                            }
-                          },
-                          onSaved: (value) => _price = stringToInt(value),
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          controller: authorController,
-                          cursorColor: Color(0xFFDE5D5D),
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Författare',
-                            suffixIcon: authorController.text.length < 5 ||
-                                    !authorController.text.contains(" ")
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Obligatoriskt Fält';
-                            } else if (!value.contains(" ")) {
-                              return 'Författaren måste ha både förnamn och efternamn';
-                            } else {
-                              return null;
-                            }
-                          },
-                          onSaved: (value) => _author = value,
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          cursorColor: Color(0xFFDE5D5D),
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'ISBN',
-                          ),
-                          onSaved: (value) => _isbn = value,
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          controller: contactInfoController,
-                          cursorColor: Color(0xFFDE5D5D),
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Kontaktinformation',
-                            suffixIcon: contactInfoController.text == ""
-                                ? Icon(Icons.star,
-                                    size: 10, color: Color(0xFF373F51))
-                                : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Obligatoriskt Fält';
-                            } else {
-                              return null;
-                            }
-                          },
-                          onSaved: (value) => _contactInfo = value,
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          cursorColor: Color(0xFFDE5D5D),
-                          keyboardType: TextInputType.text,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Upplaga',
-                          ),
-                          onSaved: (value) => edition = value,
-                        ),
-                        Container(
-                            width: 600,
-                            child: Row(children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(1.0),
-                                child: Text('Skick: ',
-                                    style: TextStyle(fontSize: 16)),
-                              ),
-                              Divider(),
-                              Padding(
-                                padding: const EdgeInsets.all(1.0),
-                                child: dropdownMenu(),
-                              ),
-                            ])),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 60),
-                  child: Container(
-                    padding: EdgeInsets.only(top: 35),
-                    width: 300,
-                    child: MaterialButton(
-                      color: Color(0xFF3FBE7E),
-                      onPressed: () async {
-                        int stsCode;
-                        if (_advertKey.currentState.validate()) {
-                          DataProvider.of(context)
-                              .loadingScreen
-                              .showLoadingDialog(context);
-                          _advertKey.currentState.save();
-                          responseList = await DataProvider.of(context)
-                              .advertList
-                              .uploadNewAdvert(
-                                  _title,
-                                  _price,
-                                  _author,
-                                  _isbn,
-                                  _contactInfo,
-                                  encodedImageList,
-                                  condition,
-                                  transaction_type,
-                                  edition,
-                                  context);
-                          setState(() {
-                            stsCode = responseList[0];
-                          });
-                          if (stsCode == 201) {
-                            //Confirmed response
-                            var a = await DataProvider.of(context)
-                                .advertList
-                                .getAdvertById(responseList[1]);
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(null);
-                            DataProvider.of(context)
-                                .routing
-                                .routeAdvertPage(context, a, true);
-                          } else {
-                            //Unsuccessful response
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(null);
-                            showAdvertCreationAlertDialog(stsCode);
-                          }
-                        }
-                      },
-                      child: Text("Ladda upp",
-                          style: TextStyle(
-                              color: Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
-          crossFadeState: transaction_type == null
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
         ),
+        crossFadeState: transaction_type == null
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
       ),
     );
   }

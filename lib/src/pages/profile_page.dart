@@ -45,7 +45,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return returnList;
   }
 
-
   void pageChanged(int index) {
     setState(() {
       stateButtonIndex = index;
@@ -295,7 +294,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ))
               : Image.network(
-            DataProvider.of(context).user.picUrl(widget.user.profile),
+                  DataProvider.of(context).user.picUrl(widget.user.profile),
                   fit: BoxFit.cover,
                   width: 150,
                   height: 150,
@@ -352,7 +351,8 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context).user.picUrl(widget.user.profile)),
+          child: Image.network(
+              DataProvider.of(context).user.picUrl(widget.user.profile)),
         ),
       ),
     );

@@ -13,10 +13,10 @@ class Routing {
   void routeChatPage(context, bool replace) {
     if (replace) {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute<void>(builder: (_) => FriendlyChatApp()));
+          MaterialPageRoute<void>(builder: (_) => ZigmaChat()));
     } else {
       Navigator.of(context)
-          .push(MaterialPageRoute<void>(builder: (_) => FriendlyChatApp()));
+          .push(MaterialPageRoute<void>(builder: (_) => ZigmaChat()));
     }
   }
 
