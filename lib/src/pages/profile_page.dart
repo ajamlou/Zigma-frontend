@@ -185,7 +185,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget cardBuilder(Advert a) {
     return MaterialButton(
       onPressed: () {
-        DataProvider.of(context).routing.routeUserAdvertPage(context, a, false);
+        if (identical(widget.user, DataProvider.of(context).user.user)) {
+          DataProvider.of(context)
+              .routing
+              .routeUserAdvertPage(context, a, false);
+        }
+        else{
+          DataProvider.of(context).routing.routeAdvertPage(context, a, false);
+        }
       },
       child: Card(
         color: a.transactionType == "S" ? Color(0xFFe2f1af) : Color(0xFFC1AE9F),
