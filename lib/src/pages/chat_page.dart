@@ -65,7 +65,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           duration: Duration(milliseconds: 500),
           vsync: this,
         ),
-        profilePic: DataProvider.of(context).user.getImage(),
+        profilePic: DataProvider.of(context).user.user.profilePic,
       );
       setState(() => _messages.insert(0, message));
       message.animationController.forward();
@@ -91,11 +91,13 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           duration: Duration(milliseconds: 500),
           vsync: this,
         ),
+        profilePic: DataProvider.of(context).user.user.profilePic,
       );
       setState(() => _messages.insert(0, message));
       message.animationController.forward();
       channel.sink.add(json.encode(newMessage));
       print('message sink');
+      print(DataProvider.of(context).user.user.profilePic);
       _textController.clear();
       _isComposing = !_isComposing;
     }
@@ -169,6 +171,7 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(DataProvider.of(context).user.user.profilePic.toString());
     return SizeTransition(
       sizeFactor:
           CurvedAnimation(parent: animationController, curve: Curves.easeOut),
