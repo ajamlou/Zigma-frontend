@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
+import 'package:zigma2/src/image_handler.dart' as Ih;
+import 'dart:io';
+import 'package:image/image.dart' as Im;
 
 class UserEditPage extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class _UserEditPageState extends State<UserEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    File image;
     return Scaffold(
       appBar: AppBar(
         title: Text("Ändra Profildata"),
@@ -21,7 +25,14 @@ class _UserEditPageState extends State<UserEditPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           MaterialButton(
-            onPressed: () {},
+            onPressed: () async {
+              image = await Ih.showImageAlertDialog(context);
+              if(image != null){
+              DataProvider.of(context).user.user.hasPicture = true;}
+              setState(() {
+
+              });
+            },
             child: Container(
               width: 200,
               height: 200,
@@ -30,12 +41,13 @@ class _UserEditPageState extends State<UserEditPage> {
                       child: Icon(Icons.person),
                       fit: BoxFit.cover,
                     )
-                  : Image.network(
-                      DataProvider.of(context)
-                          .user
-                          .picUrl(DataProvider.of(context).user.user.profile),
-                      fit: BoxFit.cover,
-                    ),
+                  : (image == null
+                      ? Image.network(
+                          DataProvider.of(context).user.picUrl(
+                              DataProvider.of(context).user.user.profile),
+                          fit: BoxFit.cover,
+                        )
+                      : Image.file(image)),
             ),
           ),
           Text(
