@@ -127,7 +127,7 @@ class SearchPage extends SearchDelegate<void> {
           padding: EdgeInsets.all(5),
           child: Container(
               padding: EdgeInsets.only(left: 15, top: 5),
-              child: Text("Här syns de 20 senast upplagda annonserna.",
+              child: Text("Här syns de 20 senaste upplagda annonserna.",
                   style: TextStyle(
                       color: Color(0xFF373F51),
                       fontSize: 16,
