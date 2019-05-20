@@ -146,11 +146,11 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 10),
-                  height: 15,
+                  padding: EdgeInsets.only(top:5),
+                  height: 25,
                   child: MaterialButton(
                     child: Text('Glömt ditt lösenord?'),
-                    onPressed: () {},
+                    onPressed: () {print("hej");},
                   ),
                 ),
                 Container(
