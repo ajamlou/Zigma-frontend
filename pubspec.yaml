@@ -29,9 +29,9 @@ dependencies:
   google_maps_flutter: ^0.4.0
   flutter_image_compress: ^0.4.0
   path_provider: ^0.5.0+1
-  image: ^2.0.7
+  image: ^2.1.0
   transparent_image: ^1.0.0
-  json_annotation:
+  json_annotation: ^2.4.0
 
 
 dev_dependencies:
@@ -39,6 +39,12 @@ dev_dependencies:
     sdk: flutter
   json_serializable:
   build_runner:
+  flutter_launcher_icons:
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/logo.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -54,15 +60,15 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - images/logo_frontpage.png
-  - images/placeholder_book.png
-  - images/logo.png
-  - images/advertPageBackground.jpg
-  - images/placeholderBook.png
-  - images/profile_pic2.png
-  - images/ZigmaLogo4.png
-  - images/background.png
-  - images/chatPageBooks.png
+    - images/logo_frontpage.png
+    - images/placeholder_book.png
+    - images/logo.png
+    - images/advertPageBackground.jpg
+    - images/placeholderBook.png
+    - images/profile_pic2.png
+    - images/ZigmaLogo4.png
+    - images/background.png
+    - images/chatPageBooks.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

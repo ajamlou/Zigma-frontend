@@ -198,8 +198,9 @@ class _AdvertPageState extends State<AdvertPage> {
                           child: Container(
                             width: 50,
                             height: 50,
-                            child: snapshot.data.profile ==
-                                    DataProvider.of(context).user.user.id
+                            child: DataProvider.of(context).user.user != null &&
+                                    snapshot.data.profile ==
+                                        DataProvider.of(context).user.user.id
                                 ? FittedBox(
                                     fit: BoxFit.cover,
                                     child: DataProvider.of(context)

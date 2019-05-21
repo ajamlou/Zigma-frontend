@@ -130,13 +130,13 @@ class RegisterPageState extends State<RegisterPage> {
             ),
             Center(
                 child: Text(
-                  'ZIGMA',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 60.0,
-                    color: Colors.white,
-                  ),
-                )),
+              'ZIGMA',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 60.0,
+                color: Colors.white,
+              ),
+            )),
             Container(
               padding: const EdgeInsets.only(top: 20.0, bottom: 10),
               child: Text(
@@ -148,7 +148,6 @@ class RegisterPageState extends State<RegisterPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-
             Container(
               child: Form(
                 key: _userKey,
@@ -166,7 +165,8 @@ class RegisterPageState extends State<RegisterPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(30.0)),
                                   image: DecorationImage(
-                                    image: AssetImage('images/profile_pic2.png'),
+                                    image:
+                                        AssetImage('images/profile_pic2.png'),
                                   ),
                                 ),
                                 child: MaterialButton(
@@ -223,143 +223,150 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                         child: ListView(
                           shrinkWrap: true,
-                        children: <Widget>[
-                        TextFormField(
-                          maxLines: 1,
-                          controller: usernameController,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Användarnamn',
-                            icon: Container(
-                              margin: EdgeInsets.only(left: 5),
-                              child: Icon(
-                                Icons.person_add,
-                                color: registerColor,
+                          children: <Widget>[
+                            TextFormField(
+                              maxLines: 1,
+                              controller: usernameController,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'Användarnamn',
+                                icon: Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: Icon(
+                                    Icons.person_add,
+                                    color: registerColor,
+                                  ),
+                                ),
+                                suffixIcon: Container(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: usernameController.text == ""
+                                      ? Icon(Icons.star,
+                                          size: 10, color: Color(0xFF373F51))
+                                      : Icon(Icons.check,
+                                          color: Color(0xFF3FBE7E)),
+                                ),
                               ),
+                              validator: (value) =>
+                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              onSaved: (value) => _userName = value,
                             ),
-                            suffixIcon: Container(
-                              padding: EdgeInsets.only(left: 20),
-                              child: usernameController.text == ""
-                                  ? Icon(Icons.star,
-                                      size: 10, color: Color(0xFF373F51))
-                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                            ),
-                          ),
-                          validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
-                          onSaved: (value) => _userName = value,
-                        ),
-                        TextFormField(
-                          maxLines: 1,
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                            icon: Container(
-                              margin: EdgeInsets.only(left: 5),
-                              child: Icon(
-                                Icons.mail,
-                                color: registerColor,
+                            TextFormField(
+                              maxLines: 1,
+                              controller: emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'Email',
+                                icon: Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: Icon(
+                                    Icons.mail,
+                                    color: registerColor,
+                                  ),
+                                ),
+                                suffixIcon: Container(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: !_emailListener()
+                                      ? Icon(Icons.star,
+                                          size: 10, color: Color(0xFF373F51))
+                                      : Icon(Icons.check,
+                                          color: Color(0xFF3FBE7E)),
+                                ),
                               ),
+                              validator: (value) =>
+                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              onSaved: (value) => _userEmail = value,
                             ),
-                            suffixIcon: Container(
-                              padding: EdgeInsets.only(left: 20),
-                              child: !_emailListener()
-                                  ? Icon(Icons.star,
-                                      size: 10, color: Color(0xFF373F51))
-                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                            ),
-                          ),
-                          validator: (value) =>
-                              value.isEmpty ? 'Obligatoriskt Fält' : null,
-                          onSaved: (value) => _userEmail = value,
-                        ),
-                        emailController.text.length == 0
-                            ? SizedBox(
-                                width: 0,
-                                height: 0,
-                              )
-                            : _emailListener()
-                                ? Text(
-                                    "Mejladressen är giltig!",
-                                    style: TextStyle(color: Colors.lightGreen),
+                            emailController.text.length == 0
+                                ? SizedBox(
+                                    width: 0,
+                                    height: 0,
                                   )
-                                : Text("Det måste vara en giltig mejladress",
-                                    style: TextStyle(color: Color(0xFFDE5D5D))),
-                        TextFormField(
-                          maxLines: 1,
-                          controller: passwordController,
-                          obscureText: true,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Lösenord',
-                            icon: Container(
-                              margin: EdgeInsets.only(left: 5),
-                              child: Icon(
-                                Icons.lock,
-                                color: registerColor,
+                                : _emailListener()
+                                    ? Text(
+                                        "Mejladressen är giltig!",
+                                        style:
+                                            TextStyle(color: Colors.lightGreen),
+                                      )
+                                    : Text(
+                                        "Det måste vara en giltig mejladress",
+                                        style: TextStyle(
+                                            color: Color(0xFFDE5D5D))),
+                            TextFormField(
+                              maxLines: 1,
+                              controller: passwordController,
+                              obscureText: true,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'Lösenord',
+                                icon: Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: Icon(
+                                    Icons.lock,
+                                    color: registerColor,
+                                  ),
+                                ),
+                                suffixIcon: Container(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: passwordController.text.length < 8 ||
+                                          validatePasswordController.text !=
+                                              passwordController.text
+                                      ? Icon(Icons.star,
+                                          size: 10, color: Color(0xFF373F51))
+                                      : Icon(Icons.check,
+                                          color: Color(0xFF3FBE7E)),
+                                ),
                               ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Obligatoriskt Fält';
+                                } else if (!passwordRegExp
+                                    .hasMatch(passwordController.text)) {
+                                  return 'Lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onSaved: (value) => _password = value,
                             ),
-                            suffixIcon: Container(
-                              padding: EdgeInsets.only(left: 20),
-                              child: passwordController.text.length < 8 ||
-                                      validatePasswordController.text !=
-                                          passwordController.text
-                                  ? Icon(Icons.star,
-                                      size: 10, color: Color(0xFF373F51))
-                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Obligatoriskt Fält';
-                            } else if (!passwordRegExp
-                                .hasMatch(passwordController.text)) {
-                              return 'Lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
-                            } else {
-                              return null;
-                            }
-                          },
-                          onSaved: (value) => _password = value,
-                        ),
-                        //color: same,
-                        TextFormField(
-                          maxLines: 1,
-                          controller: validatePasswordController,
-                          obscureText: true,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: 'Repetera lösenord',
-                            icon: Container(
-                              margin: EdgeInsets.only(left: 5),
-                              child: Icon(
-                                Icons.lock,
-                                color: registerColor,
+                            //color: same,
+                            TextFormField(
+                              maxLines: 1,
+                              controller: validatePasswordController,
+                              obscureText: true,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: 'Repetera lösenord',
+                                icon: Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child: Icon(
+                                    Icons.lock,
+                                    color: registerColor,
+                                  ),
+                                ),
+                                suffixIcon: Container(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: passwordController.text == "" ||
+                                          validatePasswordController.text !=
+                                              passwordController.text
+                                      ? Icon(Icons.star,
+                                          size: 10, color: Color(0xFF373F51))
+                                      : Icon(Icons.check,
+                                          color: Color(0xFF3FBE7E)),
+                                ),
                               ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Obligatoriskt Fält';
+                                } else if (validatePasswordController.text !=
+                                    passwordController.text) {
+                                  return 'lösenorden måste vara likadana';
+                                } else {
+                                  return null;
+                                }
+                              },
                             ),
-                            suffixIcon: Container(
-                              padding: EdgeInsets.only(left: 20),
-                              child: passwordController.text == "" ||
-                                      validatePasswordController.text !=
-                                          passwordController.text
-                                  ? Icon(Icons.star,
-                                      size: 10, color: Color(0xFF373F51))
-                                  : Icon(Icons.check, color: Color(0xFF3FBE7E)),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Obligatoriskt Fält';
-                            } else if (validatePasswordController.text !=
-                                passwordController.text) {
-                              return 'lösenorden måste vara likadana';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        ],
+                          ],
                         ),
                       ),
                     ],
@@ -370,12 +377,12 @@ class RegisterPageState extends State<RegisterPage> {
             Container(
               padding: EdgeInsets.only(top: 10),
               width: 300,
-              margin:
-                  const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
+              margin: const EdgeInsets.only(top: 10.0, right: 55.0, left: 55.0),
               child: MaterialButton(
                 color: Color(0xFFECA72C),
                 child: Text('Skapa nytt konto',
-                    style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold)),
+                    style: TextStyle(
+                        color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   if (_userKey.currentState.validate() &&
                       passwordController.text ==

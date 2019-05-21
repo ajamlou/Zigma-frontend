@@ -151,7 +151,6 @@ class UserMethodBody {
 
   Future<List> register(String email, String username, String password,
       String imageAsBytes) async {
-    List<dynamic> returnList = [];
     UserCreation _newUser =
         UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
@@ -183,9 +182,7 @@ class UserMethodBody {
     } else if (response.statusCode == 500) {
       localUser = "";
     }
-    returnList.add(response.statusCode);
-    returnList.add(localUser);
-    return returnList;
+    return [response.statusCode, localUser];
   }
 
   Future<Map> editUser(String header, String edit) async {
