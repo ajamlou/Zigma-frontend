@@ -44,7 +44,7 @@ class _LandingPageState extends State<LandingPage> {
                   child: Container(
                     color: Colors.transparent,
                     width: MediaQuery.of(context).size.width / 1.2,
-                    height: MediaQuery.of(context).size.height /3,
+                    height: MediaQuery.of(context).size.height / 3,
                     child: LoginPrompt(),
                   ),
                 ),
@@ -52,10 +52,15 @@ class _LandingPageState extends State<LandingPage> {
             // color: Color(0xFFFFFFFF),
             child: Column(
               children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 12,
+                ),
                 Container(
-                    padding: const EdgeInsets.only(
-                        top: 100.0, left: 50, right: 50, bottom: 100),
+                    padding: const EdgeInsets.only(left: 50, right: 50),
                     child: Image.asset('images/ZigmaLogo4.png')),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 8,
+                ),
 //
                 Container(
                   height: 50,
@@ -166,13 +171,12 @@ class _LandingPageState extends State<LandingPage> {
                           ),
                         ),
                         DataProvider.of(context).user.user.soldBooks > 5
-                            ? Text(
-                                "Ganska Bra Boksäljare",
+                            ? Text("Ganska Bra Boksäljare",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Color(0xFF373F51),
-                              ))
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Color(0xFF373F51),
+                                ))
                             : Text(
                                 "Novis Boksäljare",
                                 style: TextStyle(
@@ -326,8 +330,7 @@ class _LandingPageState extends State<LandingPage> {
             DataProvider.of(context).routing.routeLoginPage(context),
         child: Column(
           children: <Widget>[
-            Container(
-                child: Icon(Icons.contacts, color: Color(0xFF373F51))),
+            Container(child: Icon(Icons.contacts, color: Color(0xFF373F51))),
             Text('Logga In', style: TextStyle(color: Color(0xFF373F51))),
           ],
         ),

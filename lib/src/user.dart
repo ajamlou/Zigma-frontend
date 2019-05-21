@@ -103,7 +103,7 @@ class UserMethodBody {
   String picUrl(int id) {
     print("IM IN PICURL");
     String url = urlBody + "/users/profile_pic/" + id.toString() + "/";
-    if (user.id == id) {
+    if (user.profile == id) {
       user.profilePic = Image.network(url);
     }
     print(url);
