@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'dart:io';
-import 'package:image/image.dart' as Im;
 
 class UserEditPage extends StatefulWidget {
   @override
