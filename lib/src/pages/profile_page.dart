@@ -188,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (identical(widget.user, DataProvider.of(context).user.user)) {
           DataProvider.of(context)
               .routing
-              .routeUserAdvertPage(context, a, false);
+              .routeUserAdvertPage(context, a, buyingAdvertList, sellingAdvertList,false);
         }
         else{
           DataProvider.of(context).routing.routeAdvertPage(context, a, false);

@@ -9,15 +9,15 @@ part 'advert.g.dart';
 @JsonSerializable()
 class Advert {
   @JsonKey(name: 'book_title')
-  final String bookTitle;
+  String bookTitle;
   final int owner;
   @JsonKey(name: 'ISBN')
-  final String isbn;
+  String isbn;
   final String condition;
-  final String edition;
+  String edition;
   int id;
-  final int price;
-  final String authors;
+  int price;
+  String authors;
   String state = "A";
   @JsonKey(name: 'transaction_type')
   final String transactionType;

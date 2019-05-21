@@ -59,7 +59,8 @@ class Routing {
     }
   }
 
-  void routeUserAdvertPage(context, advert, bool replace) {
+  void routeUserAdvertPage(context, advert, List userSellingAdverts,
+      List userBuyingAdverts, bool replace) {
     if (replace) {
       Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
           builder: (_) => UserAdvertPage(advert: advert)));
@@ -67,20 +68,23 @@ class Routing {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => UserAdvertPage(advert: advert),
+          builder: (context) => UserAdvertPage(
+                advert: advert,
+                sellingAdverts: userSellingAdverts,
+                buyingAdverts: userBuyingAdverts,
+              ),
         ),
       );
     }
   }
 
   void routeProfilePage(context, user) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ProfilePage(user: user)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ProfilePage(user: user)));
   }
 
   void routeUserEditPage(context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => UserEditPage()));
   }
-
 }

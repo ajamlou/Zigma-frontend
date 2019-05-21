@@ -31,7 +31,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   TextEditingController authorController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController isbnController = TextEditingController();
-  TextEditingController contactInfoController = TextEditingController();
+  TextEditingController contactInfoController;
   TextEditingController editionController = TextEditingController();
 
   void _listener() {
@@ -60,11 +60,12 @@ class AdvertCreationState extends State<AdvertCreation> {
     titleController.addListener(_listener);
     authorController.addListener(_listener);
     priceController.addListener(_listener);
-    contactInfoController.addListener(_listener);
   }
 
   @override
   Widget build(BuildContext context) {
+    contactInfoController = TextEditingController(text: DataProvider.of(context).user.user.email);
+    contactInfoController.addListener(_listener);
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       backgroundColor: Color(0xFFAEDBD3),
