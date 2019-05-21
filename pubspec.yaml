@@ -56,12 +56,9 @@ flutter:
   assets:
   - images/logo_frontpage.png
   - images/placeholder_book.png
-  - images/backgroundImage.jpg
   - images/logo.png
   - images/advertPageBackground.jpg
   - images/placeholderBook.png
-  - images/profile_pic.png
-  - images/advertCreationPicture.jpg
   - images/profile_pic2.png
   - images/ZigmaLogo4.png
   - images/background.png
