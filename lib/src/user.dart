@@ -1,5 +1,3 @@
-
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -61,7 +59,6 @@ class UserCreation {
         password = json['password'];
 }
 
-
 class UserLogin {
   String username;
   String password;
@@ -98,13 +95,17 @@ class UserMethodBody {
     print(user.username);
     return user;
   }
+
   Image getImage() {
     return user.profilePic;
   }
 
   String picUrl(int id) {
     print("IM IN PICURL");
-    String url = urlBody + "/users/profile_pic/" + id.toString()+"/";
+    String url = urlBody + "/users/profile_pic/" + id.toString() + "/";
+    if (user.profile == id) {
+      user.profilePic = Image.network(url);
+    }
     print(url);
     return url;
   }
@@ -144,6 +145,7 @@ class UserMethodBody {
           prefs.getInt("profile"),
           prefs.getBool("hasPicture"),
           prefs.getStringList("adverts").map((i) => int.parse(i)).toList());
+      picUrl(user.id);
     }
   }
 

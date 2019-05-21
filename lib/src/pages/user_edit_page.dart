@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'dart:io';
-import 'package:image/image.dart' as Im;
 
 class UserEditPage extends StatefulWidget {
   @override
@@ -27,6 +26,7 @@ class _UserEditPageState extends State<UserEditPage> {
           MaterialButton(
             onPressed: () async {
               image = await Ih.showImageAlertDialog(context);
+              print(image.toString());
               if(image != null){
               DataProvider.of(context).user.user.hasPicture = true;}
               setState(() {
@@ -156,7 +156,7 @@ class _EditState extends State<Edit> {
                     child: Row(
                       children: <Widget>[
                         Icon(Icons.arrow_left),
-                        Text("Ändra!")
+                        controller.text == widget.edit ? Text("Tillbaka"): Text("Ändra!")
                       ],
                     ),
                   ),
