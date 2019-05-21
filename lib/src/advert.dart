@@ -101,6 +101,7 @@ class AdvertList {
         owner.toString() +
         "&state=" +
         state;
+    print(url);
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));

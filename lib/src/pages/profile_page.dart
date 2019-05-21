@@ -164,12 +164,12 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            itemCount: snapshot.data is List ? snapshot.data.length : 1,
+            itemCount: snapshot.data.length == 0 ? 1 : snapshot.data.length,
             itemBuilder: (context, index) {
-              if (snapshot.data is List) {
+              if (snapshot.data.length != 0) {
                 return cardBuilder(snapshot.data[index]);
               } else {
-                return snapshot.data;
+                return noAdverts(context);
               }
             },
           );
@@ -300,7 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.white,
                     ),
                   ))
-              : widget.user.id == DataProvider.of(context).user.user.id
+              : DataProvider.of(context).user.user != null && widget.user.id == DataProvider.of(context).user.user.id
                   ? SizedBox(
                       height: 150,
                       width: 150,
