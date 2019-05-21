@@ -180,7 +180,7 @@ class _AdvertPageState extends State<AdvertPage> {
                       onTap: () => getOwnerProfile(),
                       child: Icon(
                         Icons.account_circle,
-                        color: Colors.transparent,
+                        color: Colors.grey,
                       ),
                     ),
                   ),
