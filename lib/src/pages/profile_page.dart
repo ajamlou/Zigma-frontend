@@ -345,7 +345,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 text: widget.user.soldBooks > 5
                     ? "Mellanliggande Bokförsäljare"
                     : "Novis Bokförsäljare",
-                // Email tills vidare
                 style: TextStyle(
                   color: Colors.black,
                 ),
