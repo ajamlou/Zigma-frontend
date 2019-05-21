@@ -198,13 +198,20 @@ class _AdvertPageState extends State<AdvertPage> {
                           child: Container(
                             width: 50,
                             height: 50,
-                            child: FadeInImage.memoryNetwork(
-                              fit: BoxFit.fitWidth,
-                              placeholder: kTransparentImage,
-                              image: DataProvider.of(context)
-                                  .user
-                                  .picUrl(snapshot.data.profile),
-                            ),
+                            child: snapshot.data.profile ==
+                                    DataProvider.of(context).user.user.id
+                                ? FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: DataProvider.of(context)
+                                        .user
+                                        .getImage())
+                                : FadeInImage.memoryNetwork(
+                                    fit: BoxFit.fitWidth,
+                                    placeholder: kTransparentImage,
+                                    image: DataProvider.of(context)
+                                        .user
+                                        .picUrl(snapshot.data.profile),
+                                  ),
                           ),
                         ),
                       ),
@@ -427,8 +434,8 @@ class _AdvertPageState extends State<AdvertPage> {
 
   void getOwnerProfile() async {
     DataProvider.of(context).loadingScreen.showLoadingDialog(context);
-    User owner =
-        await getUser("id,username,sold_books,bought_books,profile,has_picture,adverts");
+    User owner = await getUser(
+        "id,username,sold_books,bought_books,profile,has_picture,adverts");
     Navigator.of(context, rootNavigator: true).pop(null);
     DataProvider.of(context).routing.routeProfilePage(context, owner);
   }

@@ -300,12 +300,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.white,
                     ),
                   ))
-              : Image.network(
-                  DataProvider.of(context).user.picUrl(widget.user.profile),
-                  fit: BoxFit.cover,
-                  width: 150,
-                  height: 150,
-                ),
+              : widget.user.id == DataProvider.of(context).user.user.id
+                  ? SizedBox(
+                      height: 150,
+                      width: 150,
+                      child: FittedBox(
+                          fit: BoxFit.cover, child: DataProvider.of(context).user.getImage()))
+                  : Image.network(
+                      DataProvider.of(context).user.picUrl(widget.user.profile),
+                      fit: BoxFit.cover,
+                      width: 150,
+                      height: 150,
+                    ),
         ),
       ),
     );
