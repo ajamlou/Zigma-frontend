@@ -5,6 +5,7 @@ import 'package:zigma2/src/routes.dart';
 import './src/DataProvider.dart';
 import './src/advert.dart';
 import './src/user.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,6 +28,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return DataProvider(
       advertList: advertList,
       user: user,

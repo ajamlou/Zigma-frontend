@@ -93,12 +93,15 @@ class _UserEditPageState extends State<UserEditPage> {
                 }
               },
               leading: Text("Email"),
-              trailing: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(DataProvider.of(context).user.user.email),
-                  Icon(Icons.arrow_forward_ios),
-                ],
+              trailing: Container(
+                width: MediaQuery.of(context).size.width/2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(DataProvider.of(context).user.user.email),
+                    Icon(Icons.arrow_forward_ios),
+                  ],
+                ),
               ),
             ),
           ),

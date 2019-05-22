@@ -54,21 +54,129 @@ class _AdvertPageState extends State<AdvertPage> {
             getText("Upplaga: ", widget.data.edition),
             getText("Skick: ", widget.data.condition),
             getText("ISBN: ", widget.data.isbn),
-            getAdvertPrice(),
-            getOwnerName(),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                ),
-                getOwnerImage(),
-                getOwnerInformation(),
-              ],
-            ),
+            SizedBox(height: 20,),
+            getOwner(),
+//            getAdvertPrice(),
+//            getOwnerName(),
+//            Row(
+//              children: <Widget>[
+//                Padding(
+//                  padding: EdgeInsets.only(top: 10.0),
+//                ),
+//                getOwnerImage(),
+//                getOwnerInformation(),
+//              ],
+//            ),
             getMessageButton(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget getOwner() {
+    return FutureBuilder(
+      future: getUser(""),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Card(
+            elevation: 3,
+            //color: Colors.grey[50],
+            child: ListTile(
+              onTap: (){
+                DataProvider.of(context).routing.routeProfilePage(context, snapshot.data);
+              },
+              leading: !snapshot.data.hasPicture
+                  ? Container(
+                      width: 50,
+                      height: 50,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: GestureDetector(
+                          onTap: () => getOwnerProfile(),
+                          child: Icon(
+                            Icons.account_circle,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: 50,
+                      height: 50,
+                      child: Stack(
+                        alignment: Alignment(0, 0),
+                        children: <Widget>[
+                          Center(child: CircularProgressIndicator()),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: GestureDetector(
+                              onTap: () => getOwnerProfile(),
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                child: DataProvider.of(context).user.user !=
+                                            null &&
+                                        snapshot.data.profile ==
+                                            DataProvider.of(context)
+                                                .user
+                                                .user
+                                                .id
+                                    ? FittedBox(
+                                        fit: BoxFit.cover,
+                                        child: DataProvider.of(context)
+                                            .user
+                                            .getImage())
+                                    : FadeInImage.memoryNetwork(
+                                        fit: BoxFit.fitWidth,
+                                        placeholder: kTransparentImage,
+                                        image: DataProvider.of(context)
+                                            .user
+                                            .picUrl(snapshot.data.profile),
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+              title: Container(
+                height: 80,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      "Denna bok säljs av " + snapshot.data.username + ".",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF373F51),
+                      ),
+                    ),
+                    Text(
+                      snapshot.data.username +
+                          " har sålt " +
+                          snapshot.data.soldBooks.toString() +
+                          " böcker och köpt " +
+                          snapshot.data.boughtBooks.toString() +
+                          " böcker.",
+                      style: TextStyle(
+                        color: Color(0xFF373F51),
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          return Card(
+            child: ListTile(
+              title: Text("LADDAR..."),
+            ),
+          );
+        }
+      },
     );
   }
 
