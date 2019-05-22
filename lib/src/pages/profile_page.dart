@@ -58,8 +58,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    User user = DataProvider.of(context).user.user;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -67,9 +69,9 @@ class _ProfilePageState extends State<ProfilePage> {
           icon: Icon(Icons.arrow_back),
         ),
         elevation: 0.0,
-        backgroundColor: Color(0xFF93DED0),
+        backgroundColor: Color(0xFFAEDBD3),
         actions: <Widget>[
-          identical(DataProvider.of(context).user.user, widget.user)
+          identical(user, widget.user)
               ? IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
@@ -86,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            color: Color(0xFF93DED0),
+            color: Color(0xFFAEDBD3),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -183,15 +185,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget cardBuilder(Advert a) {
+    User user = DataProvider.of(context).user.user;
+    var routes = DataProvider.of(context).routing;
     return MaterialButton(
       onPressed: () {
-        if (identical(widget.user, DataProvider.of(context).user.user)) {
-          DataProvider.of(context)
-              .routing
-              .routeUserAdvertPage(context, a, buyingAdvertList, sellingAdvertList,false);
-        }
-        else{
-          DataProvider.of(context).routing.routeAdvertPage(context, a, false);
+        if (identical(widget.user, user)) {
+          routes.routeUserAdvertPage(
+              context, a, buyingAdvertList, sellingAdvertList, false);
+        } else {
+          routes.routeAdvertPage(context, a, false);
         }
       },
       child: Card(
@@ -229,7 +231,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-            // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
             Expanded(
                 flex: 2,
                 child: Text(
@@ -270,6 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _profilePictureStyled() {
+    User user = DataProvider.of(context).user.user;
     return GestureDetector(
       onTap: () {
         profilePicDialog();
@@ -300,12 +302,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.white,
                     ),
                   ))
-              : DataProvider.of(context).user.user != null && widget.user.id == DataProvider.of(context).user.user.id
+              : user != null &&
+                      widget.user.id == user.id
                   ? SizedBox(
                       height: 150,
                       width: 150,
                       child: FittedBox(
-                          fit: BoxFit.cover, child: DataProvider.of(context).user.getImage()))
+                          fit: BoxFit.cover,
+                          child: user.profilePic))
                   : Image.network(
                       DataProvider.of(context).user.picUrl(widget.user.profile),
                       fit: BoxFit.cover,
@@ -320,6 +324,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _profileNameStyled() {
     return Center(
       child: RichText(
+        textAlign: TextAlign.center,
         text: TextSpan(
             // set the default style for the children TextSpans
             style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),

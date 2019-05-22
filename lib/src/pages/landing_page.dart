@@ -109,6 +109,8 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget showDrawer(context) {
+    var user = DataProvider.of(context).user.user;
+    var routes = DataProvider.of(context).routing;
     return Drawer(
       child: Container(
         color: Color(0xFFAEDBD3),
@@ -118,11 +120,12 @@ class _LandingPageState extends State<LandingPage> {
               flex: 3,
               child: Row(
                 children: <Widget>[
-                  Flexible(
-                    child: !DataProvider.of(context).user.user.hasPicture
+                  Container(
+                    padding: EdgeInsets.only(top: 12, left: 12, right: 12),
+                    child: !user.hasPicture
                         ? Container(
-                            width: 50,
-                            height: 50,
+                            width: 80,
+                            height: 80,
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: Icon(
@@ -145,11 +148,9 @@ class _LandingPageState extends State<LandingPage> {
                                   child: FadeInImage.memoryNetwork(
                                     fit: BoxFit.fitWidth,
                                     placeholder: kTransparentImage,
-                                    image: DataProvider.of(context).user.picUrl(
-                                        DataProvider.of(context)
-                                            .user
-                                            .user
-                                            .profile),
+                                    image: DataProvider.of(context)
+                                        .user
+                                        .picUrl(user.profile),
                                   ),
                                 ),
                               ),
@@ -161,16 +162,21 @@ class _LandingPageState extends State<LandingPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.only(right: 30),
                           child: Text(
-                            DataProvider.of(context).user.user.username,
+                            user.username,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
-                                fontSize: 35),
+                                fontSize: user.username.length > 12
+                                    ? 13
+                                    : (user.username.length <= 12 &&
+                                            user.username.length > 6
+                                        ? 25
+                                        : 35)),
                           ),
                         ),
-                        DataProvider.of(context).user.user.soldBooks > 5
+                        user.soldBooks > 5
                             ? Text("Ganska Bra Boksäljare",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -211,8 +217,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
               onTap: () async {
-                DataProvider.of(context).routing.routeProfilePage(
-                    context, DataProvider.of(context).user.user);
+                routes.routeProfilePage(context, user);
               },
             ),
             ListTile(
@@ -227,7 +232,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
               onTap: () async {
-                DataProvider.of(context).routing.routeCreationPage(context);
+                routes.routeCreationPage(context);
               },
             ),
             ListTile(
@@ -243,9 +248,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 onTap: () async {
                   Navigator.of(context, rootNavigator: true).pop(null);
-                  DataProvider.of(context)
-                      .routing
-                      .routeChatPage(context, false);
+                  routes.routeChatPage(context, false);
                 }),
             ListTile(
               title: Container(

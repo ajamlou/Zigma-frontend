@@ -18,6 +18,8 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   RegExp passwordRegExp = RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+  RegExp usernameRegExp =
+      RegExp(r'(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{1,15})$');
   RegExp emailRegExp = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
   Color registerColor = Color(0xFF373F51);
@@ -239,15 +241,24 @@ class RegisterPageState extends State<RegisterPage> {
                                 ),
                                 suffixIcon: Container(
                                   padding: EdgeInsets.only(left: 20),
-                                  child: usernameController.text == ""
+                                  child: usernameController.text.length < 1 ||
+                                          usernameController.text.length > 15
                                       ? Icon(Icons.star,
                                           size: 10, color: Color(0xFF373F51))
                                       : Icon(Icons.check,
                                           color: Color(0xFF3FBE7E)),
                                 ),
                               ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Obligatoriskt Fält' : null,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Obligatoriskt Fält';
+                                } else if (value.length < 1 ||
+                                    value.length > 15) {
+                                  return 'Användarnamnet måste vara mellan 1-15 \nkaraktärer';
+                                } else {
+                                  return null;
+                                }
+                              },
                               onSaved: (value) => _userName = value,
                             ),
                             TextFormField(
@@ -322,7 +333,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   return 'Obligatoriskt Fält';
                                 } else if (!passwordRegExp
                                     .hasMatch(passwordController.text)) {
-                                  return 'Lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer';
+                                  return 'Lösenordet måste vara minst 8 karaktärer\noch innehålla minst ett nummer och en bokstav';
                                 } else {
                                   return null;
                                 }

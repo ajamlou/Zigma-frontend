@@ -106,7 +106,7 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
               onPressed: () {
                 DataProvider.of(context)
                     .user
-                    .editAdvert("state", "S", widget.advert.id);
+                    .editAdvert("state", "I", widget.advert.id);
                 widget.sellingAdverts
                     .removeWhere((a) => a.id == widget.advert.id);
                 widget.buyingAdverts
