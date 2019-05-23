@@ -9,8 +9,10 @@ import 'package:zigma2/src/user.dart';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;
+  final List savedSearch;
+  final String query;
 
-  AdvertPage({this.data});
+  AdvertPage({this.data, this.savedSearch, this.query});
 
   @override
   _AdvertPageState createState() => _AdvertPageState();
@@ -33,6 +35,10 @@ class _AdvertPageState extends State<AdvertPage> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(30),
           child: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context, [widget.savedSearch, widget.query]),
+            ),
             iconTheme: IconThemeData(color: Colors.white),
             elevation: 0.0,
             backgroundColor: Colors.transparent,
@@ -115,10 +121,7 @@ class _AdvertPageState extends State<AdvertPage> {
                               child: DataProvider.of(context).user.user !=
                                           null &&
                                       snapshot.data.profile ==
-                                          DataProvider.of(context)
-                                              .user
-                                              .user
-                                              .id
+                                          DataProvider.of(context).user.user.id
                                   ? FittedBox(
                                       fit: BoxFit.cover,
                                       child: DataProvider.of(context)

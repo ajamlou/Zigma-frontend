@@ -45,7 +45,7 @@ class Routing {
         .push(MaterialPageRoute<void>(builder: (_) => AdvertCreation()));
   }
 
-  void routeAdvertPage(context, data, bool replace) {
+  void routeAdvertPage(BuildContext context, data, bool replace,) {
     if (replace) {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => AdvertPage(data: data)));
