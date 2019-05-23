@@ -55,7 +55,7 @@ class _AdvertPageState extends State<AdvertPage> {
             getText("Skick: ", widget.data.condition),
             getText("ISBN: ", widget.data.isbn),
             getAdvertPrice(),
- //           SizedBox(height: 20,),
+            //           SizedBox(height: 20,),
             getOwner(),
 //            getOwnerName(),
 //            Row(
@@ -83,65 +83,61 @@ class _AdvertPageState extends State<AdvertPage> {
             elevation: 3,
             //color: Colors.grey[50],
             child: ListTile(
-              onTap: (){
-                DataProvider.of(context).routing.routeProfilePage(context, snapshot.data);
+              onTap: () {
+                DataProvider.of(context)
+                    .routing
+                    .routeProfilePage(context, snapshot.data);
               },
               leading: !snapshot.data.hasPicture
                   ? Container(
                       width: 50,
                       height: 50,
                       child: FittedBox(
+                        alignment: Alignment(0, 0),
                         fit: BoxFit.contain,
-                        child: GestureDetector(
-                          onTap: () => getOwnerProfile(),
-                          child: Icon(
-                            Icons.account_circle,
-                            color: Colors.grey,
-                          ),
+                        child: Icon(
+                          Icons.account_circle,
+                          color: Colors.grey,
                         ),
                       ),
                     )
                   : Container(
-                      width: 50,
-                      height: 50,
+                      width: 70,
                       child: Stack(
                         alignment: Alignment(0, 0),
                         children: <Widget>[
                           Center(child: CircularProgressIndicator()),
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: GestureDetector(
-                              onTap: () => getOwnerProfile(),
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                child: DataProvider.of(context).user.user !=
-                                            null &&
-                                        snapshot.data.profile ==
-                                            DataProvider.of(context)
-                                                .user
-                                                .user
-                                                .id
-                                    ? FittedBox(
-                                        fit: BoxFit.cover,
-                                        child: DataProvider.of(context)
-                                            .user
-                                            .getImage())
-                                    : FadeInImage.memoryNetwork(
-                                        fit: BoxFit.fitWidth,
-                                        placeholder: kTransparentImage,
-                                        image: DataProvider.of(context)
-                                            .user
-                                            .picUrl(snapshot.data.profile),
-                                      ),
-                              ),
+                            borderRadius: BorderRadius.circular(70),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              child: DataProvider.of(context).user.user !=
+                                          null &&
+                                      snapshot.data.profile ==
+                                          DataProvider.of(context)
+                                              .user
+                                              .user
+                                              .id
+                                  ? FittedBox(
+                                      fit: BoxFit.cover,
+                                      child: DataProvider.of(context)
+                                          .user
+                                          .getImage())
+                                  : FadeInImage.memoryNetwork(
+                                      fit: BoxFit.fitWidth,
+                                      placeholder: kTransparentImage,
+                                      image: DataProvider.of(context)
+                                          .user
+                                          .picUrl(snapshot.data.profile),
+                                    ),
                             ),
                           ),
                         ],
                       ),
                     ),
               title: Container(
-                height: 80,
+                height: 100,
                 padding: EdgeInsets.only(top: 10),
                 child: Column(
                   children: <Widget>[
@@ -152,7 +148,7 @@ class _AdvertPageState extends State<AdvertPage> {
                         color: Color(0xFFECA72C),
                         fontWeight: FontWeight.bold,
                       ),
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.center,
                     ),
                     Text(
                       snapshot.data.username +
@@ -246,154 +242,154 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-  Widget getOwnerName() {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.only(top: 8, left: 10),
-        child: FutureBuilder(
-          future: getUser("username"),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Container(
-                child: Text(
-                  "Denna bok säljs av " + snapshot.data.username + ".",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Color(0xFFECA72C),
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              );
-            } else {
-              return Text(
-                "Denna bok säljs av " + "laddar...",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Color(0xFFECA72C),
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.left,
-              );
-            }
-          },
-        ),
-      ),
-    );
-  }
+//  Widget getOwnerName() {
+//    return Center(
+//      child: Container(
+//        margin: EdgeInsets.only(top: 10),
+//        padding: EdgeInsets.only(top: 8, left: 10),
+//        child: FutureBuilder(
+//          future: getUser("username"),
+//          builder: (context, snapshot) {
+//            if (snapshot.hasData) {
+//              return Container(
+//                child: Text(
+//                  "Denna bok säljs av " + snapshot.data.username + ".",
+//                  style: TextStyle(
+//                    fontSize: 18,
+//                    color: Color(0xFFECA72C),
+//                    fontWeight: FontWeight.bold,
+//                  ),
+//                  textAlign: TextAlign.left,
+//                ),
+//              );
+//            } else {
+//              return Text(
+//                "Denna bok säljs av " + "laddar...",
+//                style: TextStyle(
+//                  fontSize: 18,
+//                  color: Color(0xFFECA72C),
+//                  fontWeight: FontWeight.bold,
+//                ),
+//                textAlign: TextAlign.left,
+//              );
+//            }
+//          },
+//        ),
+//      ),
+//    );
+//  }
 
-  Widget getOwnerImage() {
-    return FutureBuilder(
-      future: getUser("has_picture,profile"),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return !snapshot.data.hasPicture
-              ? Expanded(
-                  flex: 2,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: GestureDetector(
-                      onTap: () => getOwnerProfile(),
-                      child: Icon(
-                        Icons.account_circle,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                )
-              : Expanded(
-                  flex: 2,
-                  child: Stack(
-                    alignment: Alignment(0, 0),
-                    children: <Widget>[
-                      Center(child: CircularProgressIndicator()),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: GestureDetector(
-                          onTap: () => getOwnerProfile(),
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            child: DataProvider.of(context).user.user != null &&
-                                    snapshot.data.profile ==
-                                        DataProvider.of(context).user.user.id
-                                ? FittedBox(
-                                    fit: BoxFit.cover,
-                                    child: DataProvider.of(context)
-                                        .user
-                                        .getImage())
-                                : FadeInImage.memoryNetwork(
-                                    fit: BoxFit.fitWidth,
-                                    placeholder: kTransparentImage,
-                                    image: DataProvider.of(context)
-                                        .user
-                                        .picUrl(snapshot.data.profile),
-                                  ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-        } else {
-          return Expanded(
-            flex: 2,
-            child: FittedBox(
-              fit: BoxFit.none,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-      },
-    );
-  }
+//  Widget getOwnerImage() {
+//    return FutureBuilder(
+//      future: getUser("has_picture,profile"),
+//      builder: (context, snapshot) {
+//        if (snapshot.hasData) {
+//          return !snapshot.data.hasPicture
+//              ? Expanded(
+//                  flex: 2,
+//                  child: FittedBox(
+//                    fit: BoxFit.contain,
+//                    child: GestureDetector(
+//                      onTap: () => getOwnerProfile(),
+//                      child: Icon(
+//                        Icons.account_circle,
+//                        color: Colors.grey,
+//                      ),
+//                    ),
+//                  ),
+//                )
+//              : Expanded(
+//                  flex: 2,
+//                  child: Stack(
+//                    alignment: Alignment(0, 0),
+//                    children: <Widget>[
+//                      Center(child: CircularProgressIndicator()),
+//                      ClipRRect(
+//                        borderRadius: BorderRadius.circular(50),
+//                        child: GestureDetector(
+//                          onTap: () => getOwnerProfile(),
+//                          child: Container(
+//                            width: 50,
+//                            height: 50,
+//                            child: DataProvider.of(context).user.user != null &&
+//                                    snapshot.data.profile ==
+//                                        DataProvider.of(context).user.user.id
+//                                ? FittedBox(
+//                                    fit: BoxFit.cover,
+//                                    child: DataProvider.of(context)
+//                                        .user
+//                                        .getImage())
+//                                : FadeInImage.memoryNetwork(
+//                                    fit: BoxFit.fitWidth,
+//                                    placeholder: kTransparentImage,
+//                                    image: DataProvider.of(context)
+//                                        .user
+//                                        .picUrl(snapshot.data.profile),
+//                                  ),
+//                          ),
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                );
+//        } else {
+//          return Expanded(
+//            flex: 2,
+//            child: FittedBox(
+//              fit: BoxFit.none,
+//              child: CircularProgressIndicator(),
+//            ),
+//          );
+//        }
+//      },
+//    );
+//  }
 
-  Widget getOwnerInformation() {
-    return Expanded(
-      flex: 8,
-      child: FutureBuilder(
-        future: getUser("username,sold_books,bought_books"),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text(
-              snapshot.data.username +
-                  " har sålt " +
-                  snapshot.data.soldBooks.toString() +
-                  " böcker och köpt " +
-                  snapshot.data.boughtBooks.toString() +
-                  " böcker.",
-              style: TextStyle(
-                color: Color(0xFF373F51),
-                fontSize: 16,
-              ),
-              textAlign: TextAlign.right,
-            );
-          } else {
-            return Text("Laddar... har sålt ... böcker och köpt ... böcker.");
-          }
-        },
-      ),
-    );
-  }
+//  Widget getOwnerInformation() {
+//    return Expanded(
+//      flex: 8,
+//      child: FutureBuilder(
+//        future: getUser("username,sold_books,bought_books"),
+//        builder: (context, snapshot) {
+//          if (snapshot.hasData) {
+//            return Text(
+//              snapshot.data.username +
+//                  " har sålt " +
+//                  snapshot.data.soldBooks.toString() +
+//                  " böcker och köpt " +
+//                  snapshot.data.boughtBooks.toString() +
+//                  " böcker.",
+//              style: TextStyle(
+//                color: Color(0xFF373F51),
+//                fontSize: 16,
+//              ),
+//              textAlign: TextAlign.right,
+//            );
+//          } else {
+//            return Text("Laddar... har sålt ... böcker och köpt ... böcker.");
+//          }
+//        },
+//      ),
+//    );
+//  }
 
-  void profilePicDialog() {
-    print("Im in show alertDialog");
-    Dialog dialog = Dialog(
-      insetAnimationCurve: Curves.decelerate,
-      insetAnimationDuration: Duration(milliseconds: 500),
-      backgroundColor: Colors.white,
-      child: Container(
-        child: FittedBox(
-          fit: BoxFit.contain,
-          child: Image.network(DataProvider.of(context)
-              .user
-              .picUrl(DataProvider.of(context).user.user.profile)),
-        ),
-      ),
-    );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
+//  void profilePicDialog() {
+//    print("Im in show alertDialog");
+//    Dialog dialog = Dialog(
+//      insetAnimationCurve: Curves.decelerate,
+//      insetAnimationDuration: Duration(milliseconds: 500),
+//      backgroundColor: Colors.white,
+//      child: Container(
+//        child: FittedBox(
+//          fit: BoxFit.contain,
+//          child: Image.network(DataProvider.of(context)
+//              .user
+//              .picUrl(DataProvider.of(context).user.user.profile)),
+//        ),
+//      ),
+//    );
+//    showDialog(context: context, builder: (BuildContext context) => dialog);
+//  }
 
   Widget getMessageButton() {
     return Row(
@@ -417,14 +413,6 @@ class _AdvertPageState extends State<AdvertPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-//                  Expanded(
-//                    child: Icon(
-//                      Icons.chat_bubble,
-//                      size: 30,
-//                      color: Colors.white,
-//                    ),
-//                    flex: 2,
-//                  ),
                   Expanded(
                     child: FutureBuilder(
                       future: getUser("username"),
@@ -544,19 +532,19 @@ class _AdvertPageState extends State<AdvertPage> {
     }
   }
 
-  Future<List> getOwnerAdvertLists() async {
-    User tempUser = await getUser("adverts");
-    List<Advert> ownerAdvertList = await DataProvider.of(context)
-        .advertList
-        .getAdvertsFromIds(tempUser.adverts);
-    return ownerAdvertList;
-  }
+//  Future<List> getOwnerAdvertLists() async {
+//    User tempUser = await getUser("adverts");
+//    List<Advert> ownerAdvertList = await DataProvider.of(context)
+//        .advertList
+//        .getAdvertsFromIds(tempUser.adverts);
+//    return ownerAdvertList;
+//  }
 
-  void getOwnerProfile() async {
-    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
-    User owner = await getUser(
-        "id,username,sold_books,bought_books,profile,has_picture,adverts");
-    Navigator.of(context, rootNavigator: true).pop(null);
-    DataProvider.of(context).routing.routeProfilePage(context, owner);
-  }
+//  void getOwnerProfile() async {
+//    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+//    User owner = await getUser(
+//        "id,username,sold_books,bought_books,profile,has_picture,adverts");
+//    Navigator.of(context, rootNavigator: true).pop(null);
+//    DataProvider.of(context).routing.routeProfilePage(context, owner);
+//  }
 }
