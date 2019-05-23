@@ -196,52 +196,62 @@ class _ProfilePageState extends State<ProfilePage> {
           routes.routeAdvertPage(context, a, false);
         }
       },
-      child: Card(
-        color: a.transactionType == "S" ? Color(0xFFe2f1af) : Color(0xFFC1AE9F),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Row(children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: EdgeInsets.only(right: 8),
-                height: 100,
-                width: 70,
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: a.images.length == 0
-                      ? Image.asset('images/placeholder_book.png')
-                      : Image.network(a.images[0]),
+      child: Container(
+        decoration: BoxDecoration(boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Color(0xFFEDEDED),
+            offset: Offset(0, 5),
+            blurRadius: 2,
+          )
+        ]),
+        child: Card(
+          color: a.transactionType == "S" ? Colors.white : Colors.white,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Row(children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: EdgeInsets.only(right: 8),
+                  height: 100,
+                  width: 70,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: a.images.length == 0
+                        ? Image.asset('images/placeholder_book.png')
+                        : Image.network(a.images[0]),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 6,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    a.bookTitle,
-                    style: TextStyle(
-                        color: Color(0xff373F51), fontWeight: FontWeight.bold),
-                  ),
-                  Text(a.authors,
-                      style: TextStyle(color: Colors.black87, fontSize: 12)),
-                  Text("Upplaga: " + a.edition, style: TextStyle())
-                ],
+              Expanded(
+                flex: 6,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      a.bookTitle,
+                      style: TextStyle(
+                          color: Color(0xff373F51), fontWeight: FontWeight.bold),
+                    ),
+                    Text(a.authors,
+                        style: TextStyle(color: Color(0xff373F51),)),
+                    Text("Upplaga: " + a.edition, style: TextStyle(
+                        color:  Color(0xff373F51)))
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-                flex: 2,
-                child: Text(
-                  a.price.toString() + ":-",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Color(0xffDE5D5D),
-                      fontWeight: FontWeight.bold),
-                )),
-          ]),
+              Expanded(
+                  flex: 2,
+                  child: Text(
+                    a.price.toString() + ":-",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Color(0xFFDE5D5D),
+                        fontWeight: FontWeight.bold),
+                  )),
+            ]),
+          ),
         ),
       ),
     );
@@ -286,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 : BoxShadow(
                     color: Colors.black87,
                     offset: Offset(0, 5),
-                    blurRadius: 10),
+                    blurRadius: 7),
           ],
         ),
         child: ClipRRect(
