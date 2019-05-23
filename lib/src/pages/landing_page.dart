@@ -250,19 +250,19 @@ class _LandingPageState extends State<LandingPage> {
                   Navigator.of(context, rootNavigator: true).pop(null);
                   routes.routeChatPage(context, false);
                 }),
-            ListTile(
-              title: Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  "Inställningar",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 20),
-                ),
-              ),
-              onTap: () {},
-            ),
+//            ListTile(
+//              title: Container(
+//                padding: EdgeInsets.only(left: 10),
+//                child: Text(
+//                  "Inställningar",
+//                  style: TextStyle(
+//                      fontWeight: FontWeight.bold,
+//                      color: Colors.white,
+//                      fontSize: 20),
+//                ),
+//              ),
+//              onTap: () {},
+//            ),
             Expanded(
               flex: 8,
               child: Align(

@@ -142,14 +142,17 @@ class _AdvertPageState extends State<AdvertPage> {
                     ),
               title: Container(
                 height: 80,
+                padding: EdgeInsets.only(top: 10),
                 child: Column(
                   children: <Widget>[
                     Text(
                       "Denna bok säljs av " + snapshot.data.username + ".",
                       style: TextStyle(
                         fontSize: 18,
-                        color: Color(0xFF373F51),
+                        color: Color(0xFFECA72C),
+                        fontWeight: FontWeight.bold,
                       ),
+                      textAlign: TextAlign.left,
                     ),
                     Text(
                       snapshot.data.username +
@@ -252,11 +255,15 @@ class _AdvertPageState extends State<AdvertPage> {
           future: getUser("username"),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(
-                "Denna bok säljs av " + snapshot.data.username + ".",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Color(0xFF373F51),
+              return Container(
+                child: Text(
+                  "Denna bok säljs av " + snapshot.data.username + ".",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xFFECA72C),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
               );
             } else {
@@ -264,8 +271,10 @@ class _AdvertPageState extends State<AdvertPage> {
                 "Denna bok säljs av " + "laddar...",
                 style: TextStyle(
                   fontSize: 18,
-                  color: Color(0xFF373F51),
+                  color: Color(0xFFECA72C),
+                  fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.left,
               );
             }
           },
@@ -358,7 +367,7 @@ class _AdvertPageState extends State<AdvertPage> {
                 color: Color(0xFF373F51),
                 fontSize: 16,
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.right,
             );
           } else {
             return Text("Laddar... har sålt ... böcker och köpt ... böcker.");
