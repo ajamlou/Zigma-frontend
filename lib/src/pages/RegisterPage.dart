@@ -168,7 +168,7 @@ class RegisterPageState extends State<RegisterPage> {
                                       BorderRadius.all(Radius.circular(30.0)),
                                   image: DecorationImage(
                                     image:
-                                        AssetImage('images/profile_pic2.png'),
+                                        AssetImage('images/placeholderBook.png'),
                                   ),
                                 ),
                                 child: MaterialButton(
