@@ -404,10 +404,11 @@ class _AdvertPageState extends State<AdvertPage> {
           child: Container(),
         ),
         Expanded(
-          flex: 6,
+          flex: 12,
           child: Container(
-            margin: EdgeInsets.only(top: 15),
+            margin: EdgeInsets.only(top: 25),
             width: 300,
+            height: 40,
             child: RaisedButton(
               color: Color(0xFF3FBE7E),
               onPressed: () {
@@ -437,6 +438,7 @@ class _AdvertPageState extends State<AdvertPage> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
                           );
