@@ -54,9 +54,9 @@ class _AdvertPageState extends State<AdvertPage> {
             getText("Upplaga: ", widget.data.edition),
             getText("Skick: ", widget.data.condition),
             getText("ISBN: ", widget.data.isbn),
-            SizedBox(height: 20,),
+            getAdvertPrice(),
+ //           SizedBox(height: 20,),
             getOwner(),
-//            getAdvertPrice(),
 //            getOwnerName(),
 //            Row(
 //              children: <Widget>[
@@ -240,7 +240,7 @@ class _AdvertPageState extends State<AdvertPage> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 45,
-          color: Color(0xFFECA72C),
+          color: Color(0xFF3FBE7E),
         ),
       ),
     );

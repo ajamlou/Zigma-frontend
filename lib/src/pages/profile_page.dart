@@ -171,7 +171,10 @@ class _ProfilePageState extends State<ProfilePage> {
               if (snapshot.data.length != 0) {
                 return cardBuilder(snapshot.data[index]);
               } else {
-                return noAdverts(context);
+                return identical(
+                        widget.user, DataProvider.of(context).user.user)
+                    ? noAdverts(context)
+                    : Container();
               }
             },
           );
@@ -231,12 +234,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text(
                       a.bookTitle,
                       style: TextStyle(
-                          color: Color(0xff373F51), fontWeight: FontWeight.bold),
+                          color: Color(0xff373F51),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(a.authors,
-                        style: TextStyle(color: Color(0xff373F51),)),
-                    Text("Upplaga: " + a.edition, style: TextStyle(
-                        color:  Color(0xff373F51)))
+                        style: TextStyle(
+                          color: Color(0xff373F51),
+                        )),
+                    Text("Upplaga: " + a.edition,
+                        style: TextStyle(color: Color(0xff373F51)))
                   ],
                 ),
               ),
@@ -294,9 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
             !widget.user.hasPicture
                 ? BoxShadow(color: Colors.transparent)
                 : BoxShadow(
-                    color: Colors.black87,
-                    offset: Offset(0, 5),
-                    blurRadius: 7),
+                    color: Colors.black87, offset: Offset(0, 5), blurRadius: 7),
           ],
         ),
         child: ClipRRect(
@@ -312,14 +316,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.white,
                     ),
                   ))
-              : user != null &&
-                      widget.user.id == user.id
+              : user != null && widget.user.id == user.id
                   ? SizedBox(
                       height: 150,
                       width: 150,
-                      child: FittedBox(
-                          fit: BoxFit.cover,
-                          child: user.profilePic))
+                      child:
+                          FittedBox(fit: BoxFit.cover, child: user.profilePic))
                   : Image.network(
                       DataProvider.of(context).user.picUrl(widget.user.profile),
                       fit: BoxFit.cover,

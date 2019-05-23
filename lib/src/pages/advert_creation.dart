@@ -485,6 +485,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                 onPressed: () async {
                   tempImage = await Ih.getImage("gallery");
                   _insert(tempImage);
+                  Navigator.pop(context, true);
                 },
               ),
               RaisedButton(
@@ -493,6 +494,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                 onPressed: () async {
                   tempImage = await Ih.getImage("camera");
                   _insert(tempImage);
+                  Navigator.pop(context, true);
                 },
               ),
             ],
