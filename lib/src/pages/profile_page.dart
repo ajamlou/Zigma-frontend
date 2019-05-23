@@ -113,9 +113,9 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                stateButtons("Säljer", 0),
+                Container(child: stateButtons("Säljer", 0)),
                 stateButtons("Köper", 1),
-                stateButtons("Alla", 2)
+//                stateButtons("Alla", 2)
               ],
             ),
           ),
@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 getAdverts(getUserAds("S")),
                 getAdverts(getUserAds("B")),
-                getAdverts(getCombinedUserLists())
+//                getAdverts(getCombinedUserLists())
               ],
             ),
           ),
@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget stateButtons(String text, int index) {
     return Container(
       alignment: Alignment(0, 0),
-      width: MediaQuery.of(context).size.width / 3.3,
+      width: MediaQuery.of(context).size.width / 2.2,
       height: 35,
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: Color(0xFFECA72C)),
