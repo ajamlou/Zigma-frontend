@@ -19,7 +19,11 @@ class _UserEditPageState extends State<UserEditPage> {
     File image;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ändra Profildata"),
+        title: Text("Ändra Profildata",
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+        )),
+        backgroundColor: Color(0xFFAEDBD3),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,10 +57,18 @@ class _UserEditPageState extends State<UserEditPage> {
           ),
           Text(
             DataProvider.of(context).user.user.username,
-            style: TextStyle(fontSize: 45),
+            style: TextStyle(
+                fontSize: 45,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFECA72C)),
           ),
           MaterialButton(
-            child: Text("Ändra Användarnamn"),
+            child: Text("Ändra användarnamn",
+            style: TextStyle(
+              color: Color(0xFF373F51),
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            )),
             onPressed: () async {
               String newUsername = await Navigator.push(
                 context,
@@ -72,8 +84,11 @@ class _UserEditPageState extends State<UserEditPage> {
               }
             },
           ),
-          Text(
-            "Privat information",
+          Container(
+            margin: EdgeInsets.only(top: 15, bottom: 10),
+            child: Text(
+              "Privat information",
+            ),
           ),
           Card(
             color: Colors.grey[100],
@@ -84,7 +99,7 @@ class _UserEditPageState extends State<UserEditPage> {
                   MaterialPageRoute(
                     builder: (context) => Edit(
                         regExp: email,
-                        title: "MejlAdress",
+                        title: "Email-adress",
                         edit: DataProvider.of(context).user.user.email),
                   ),
                 );
