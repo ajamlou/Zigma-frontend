@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'package:flutter/services.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
@@ -28,6 +28,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   List<String> encodedImageList = [];
   Image placeholderImage = Image.asset('images/placeholderBook.png');
   String barcode;
+  String _platformVersion = "Unknown";
 
   TextEditingController titleController = TextEditingController();
   TextEditingController authorController = TextEditingController();
@@ -35,6 +36,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   TextEditingController isbnController = TextEditingController();
   TextEditingController contactInfoController;
   TextEditingController editionController = TextEditingController();
+
 
   void _listener() {
     setState(() {});
@@ -62,6 +64,42 @@ class AdvertCreationState extends State<AdvertCreation> {
     titleController.addListener(_listener);
     authorController.addListener(_listener);
     priceController.addListener(_listener);
+    //initPlatformState();
+  }
+
+  void couldNotFindBook(){
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      content: Text(
+        "Boken du försökte lägga upp fanns inte i vår databas. Men lägg gärna in den manuellt",
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xFFDE5D5D),
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+  Future<String> _scanQR() async {
+    String qRResult = await BarcodeScanner.scan();
+    List l  = await DataProvider.of(context).advertList.searchAdverts(qRResult);
+    if(l.length == 0){
+      couldNotFindBook();
+      setState(() {
+        isbnController.text = qRResult;
+      });
+      return qRResult;
+    }
+    var a = l[0];
+    setState(() {
+      editionController.text = a.edition;
+      authorController.text = a.authors;
+      titleController.text = a.bookTitle;
+      isbnController.text = a.isbn;
+    });
+    return qRResult;
   }
 
   @override
@@ -156,11 +194,6 @@ class AdvertCreationState extends State<AdvertCreation> {
                         fontWeight: FontWeight.bold)),
               ),
             ),
-            RaisedButton(
-                onPressed: () async {barcode =
-                    await FlutterBarcodeScanner.scanBarcode(
-                        '0xFF000000', 'Cancel', true); },
-                child: barcode != null ? Text(barcode) : Text(''))
           ],
         )),
         secondChild: Container(
@@ -213,6 +246,12 @@ class AdvertCreationState extends State<AdvertCreation> {
                         stateButtons('Säljer', 'S'),
                         stateButtons('Köper', 'B'),
                       ]),
+                  RaisedButton(
+                      child: Text("Scanner"),
+                      onPressed: () async {
+                        String s = await _scanQR();
+                        print(s);
+                      }),
                 ],
               ),
               Container(
@@ -302,6 +341,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                         maxLines: 1,
                         cursorColor: Color(0xFFDE5D5D),
                         keyboardType: TextInputType.text,
+                        controller: isbnController,
                         autofocus: false,
                         decoration: InputDecoration(
                           hintText: 'ISBN',
@@ -420,6 +460,31 @@ class AdvertCreationState extends State<AdvertCreation> {
       ),
     );
   }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+//  initPlatformState() async {
+//    String platformVersion;
+//    // Platform messages may fail, so we use a try/catch PlatformException.
+//    try {
+//      platformVersion = await SimplePermissions.platformVersion;
+//    } on PlatformException {
+//      platformVersion = 'Failed to get platform version.';
+//    }
+//
+//    // If the widget was removed from the tree while the asynchronous platform
+//    // message was in flight, we want to discard the reply rather than calling
+//    // setState to update our non-existent appearance.
+//    if (!mounted) return;
+//
+//    setState(() {
+//      _platformVersion = platformVersion;
+//    });
+//  }
+
+//    requestPermission(Permission permission) async {
+//    final res = await SimplePermissions.requestPermission(permission);
+//    print("permission request result is " + res.toString());
+//  }
 
   Widget stateButtons(String text, String index) {
     return Container(

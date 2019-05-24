@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  barcode_scan:
+    dependency: "direct main"
+    description:
+      name: barcode_scan
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -141,15 +148,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
-  dart_config:
-    dependency: transitive
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: a7ed88a4793e094a4d5d5c2d88a89e55510accde
-      url: "https://github.com/MarkOSullivan94/dart_config.git"
-    source: git
-    version: "0.5.0"
   dart_style:
     dependency: transitive
     description:
@@ -169,13 +167,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_barcode_scanner:
-    dependency: "direct main"
-    description:
-      name: flutter_barcode_scanner
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.9"
   flutter_image_compress:
     dependency: "direct main"
     description:
@@ -189,7 +180,7 @@ packages:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0"
+    version: "0.7.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -257,7 +248,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   image_picker:
     dependency: "direct main"
     description:
@@ -439,7 +430,7 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.2"
+    version: "0.5.2+1"
   shelf:
     dependency: transitive
     description:
@@ -605,7 +596,7 @@ packages:
       name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.12"
+    version: "1.0.13"
   xml:
     dependency: transitive
     description:
