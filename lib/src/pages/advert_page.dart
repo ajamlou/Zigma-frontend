@@ -37,7 +37,8 @@ class _AdvertPageState extends State<AdvertPage> {
           child: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () =>  Navigator.pop(context, [widget.savedSearch, widget.query]),
+              onPressed: () =>
+                  Navigator.pop(context, [widget.savedSearch, widget.query]),
             ),
             iconTheme: IconThemeData(color: Colors.white),
             elevation: 0.0,
@@ -410,26 +411,36 @@ class _AdvertPageState extends State<AdvertPage> {
             height: 40,
             child: RaisedButton(
               color: Color(0xFF3FBE7E),
-              onPressed: () {
-                developerDialog();
-              },
+              onPressed: () {},
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
                     child: FutureBuilder(
-                      future: getUser("username"),
+                      future: getUser(""),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return Container(
-                            child: Text(
-                              "Skicka ett meddelande till " +
-                                  snapshot.data.username,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                          return GestureDetector(
+                            onTap: () => !DataProvider.of(context)
+                                    .chatList
+                                    .chattingUserList
+                                    .contains(snapshot.data.username)
+                                ? DataProvider.of(context)
+                                    .chatList
+                                    .startNewChat(
+                                        DataProvider.of(context).user.user,
+                                        snapshot.data)
+                                : null,
+                            child: Container(
+                              child: Text(
+                                "Skicka ett meddelande till " +
+                                    snapshot.data.username,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           );

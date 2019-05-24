@@ -78,6 +78,10 @@ class Routing {
     }
   }
 
+  void routeSpecificChat(context, chat) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(thisChat: chat)));
+  }
+
   void routeProfilePage(context, user) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ProfilePage(user: user)));
