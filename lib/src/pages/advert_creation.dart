@@ -22,13 +22,11 @@ class AdvertCreationState extends State<AdvertCreation> {
   String _isbn; //Sent
   String _contactInfo;
   String edition;
-  String transaction_type;
+  String transactionType;
   String condition;
   List<Image> compressedImageList = [];
   List<String> encodedImageList = [];
   Image placeholderImage = Image.asset('images/placeholderBook.png');
-  String barcode;
-  String _platformVersion = "Unknown";
 
   TextEditingController titleController = TextEditingController();
   TextEditingController authorController = TextEditingController();
@@ -36,7 +34,6 @@ class AdvertCreationState extends State<AdvertCreation> {
   TextEditingController isbnController = TextEditingController();
   TextEditingController contactInfoController;
   TextEditingController editionController = TextEditingController();
-
 
   void _listener() {
     setState(() {});
@@ -67,7 +64,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     //initPlatformState();
   }
 
-  void couldNotFindBook(){
+  void couldNotFindBook() {
     AlertDialog dialog = AlertDialog(
       backgroundColor: Color(0xFFECE9DF),
       content: Text(
@@ -84,8 +81,10 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   Future<String> _scanQR() async {
     String qRResult = await BarcodeScanner.scan();
-    List l  = await DataProvider.of(context).advertList.searchAdverts(qRResult);
-    if(l.length == 0){
+    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+    List l = await DataProvider.of(context).advertList.searchAdverts(qRResult);
+    Navigator.of(context, rootNavigator: true).pop(null);
+    if (l.length == 0) {
       couldNotFindBook();
       setState(() {
         isbnController.text = qRResult;
@@ -113,26 +112,33 @@ class AdvertCreationState extends State<AdvertCreation> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0),
         child: AppBar(
-          iconTheme: IconThemeData(color: Colors.transparent),
+          iconTheme: IconThemeData(color: Colors.white),
           elevation: 0.0,
           backgroundColor: Colors.transparent,
           title: Text('Lägg till en ny annons',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF373F51),
-                fontSize: 25,
+                fontSize: 20,
               )),
           centerTitle: true,
           leading: Container(
             child: IconButton(
-              color: Color(0xFFFFFFFF),
               onPressed: () {
                 Navigator.pop(context);
               },
               icon: Icon(Icons.arrow_back),
             ),
           ),
-          actions: <Widget>[],
+          actions: <Widget>[
+            transactionType == null ? SizedBox() : IconButton(
+              icon: Icon(Icons.linked_camera, size: 30,),
+              onPressed: () async {
+                String s = await _scanQR();
+                print(s);
+              },
+            ),
+          ],
         ),
       ),
       body: AnimatedCrossFade(
@@ -163,7 +169,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                 color: Color(0xFFECA72C),
                 onPressed: () {
                   setState(() {
-                    transaction_type = 'S';
+                    transactionType = 'S';
                   });
                 },
                 child: Text('Sälja',
@@ -184,7 +190,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                 color: Color(0xFFECA72C),
                 onPressed: () {
                   setState(() {
-                    transaction_type = 'B';
+                    transactionType = 'B';
                   });
                 },
                 child: Text('Söker',
@@ -246,12 +252,6 @@ class AdvertCreationState extends State<AdvertCreation> {
                         stateButtons('Säljer', 'S'),
                         stateButtons('Köper', 'B'),
                       ]),
-                  RaisedButton(
-                      child: Text("Scanner"),
-                      onPressed: () async {
-                        String s = await _scanQR();
-                        print(s);
-                      }),
                 ],
               ),
               Container(
@@ -373,6 +373,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                       TextFormField(
                         maxLines: 1,
                         cursorColor: Color(0xFFDE5D5D),
+                        controller: editionController,
                         keyboardType: TextInputType.text,
                         autofocus: false,
                         decoration: InputDecoration(
@@ -422,7 +423,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 _contactInfo,
                                 encodedImageList,
                                 condition,
-                                transaction_type,
+                                transactionType,
                                 edition,
                                 context);
                         setState(() {
@@ -454,7 +455,7 @@ class AdvertCreationState extends State<AdvertCreation> {
             ],
           ),
         ),
-        crossFadeState: transaction_type == null
+        crossFadeState: transactionType == null
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
       ),
@@ -493,13 +494,13 @@ class AdvertCreationState extends State<AdvertCreation> {
       height: 35,
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: Color(0xFFECA72C)),
-          color: index == transaction_type ? Color(0xFFECA72C) : Colors.white),
+          color: index == transactionType ? Color(0xFFECA72C) : Colors.white),
       child: MaterialButton(
         onPressed: () {
           setState(() {
-            index != transaction_type
-                ? transaction_type = index
-                : transaction_type = transaction_type;
+            index != transactionType
+                ? transactionType = index
+                : transactionType = transactionType;
           });
         },
         child: Text(
@@ -507,7 +508,7 @@ class AdvertCreationState extends State<AdvertCreation> {
           style: TextStyle(
               fontWeight: FontWeight.bold,
               color:
-                  index == transaction_type ? Colors.white : Color(0xFFECA72C)),
+                  index == transactionType ? Colors.white : Color(0xFFECA72C)),
         ),
       ),
     );

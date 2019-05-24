@@ -1,4 +1,3 @@
-import './DataProvider.dart';
 import './user.dart';
 import './pages/chat_page.dart';
 

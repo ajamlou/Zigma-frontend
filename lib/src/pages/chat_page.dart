@@ -11,8 +11,6 @@ class ZigmaChat extends StatelessWidget {
 
   Widget buildChatMenu(context) {
     List<Chat> chatList = DataProvider.of(context).chatList.chatList;
-    bool crossFade = false;
-    Chat selectedChat;
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomPadding: true,
