@@ -425,19 +425,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 condition,
                                 transactionType,
                                 edition,
-                                context);
+                                context, compressedImageList);
                         setState(() {
                           stsCode = responseList[0];
                         });
                         if (stsCode == 201) {
                           //Confirmed response
-                          var a = await DataProvider.of(context)
-                              .advertList
-                              .getAdvertById(responseList[1]);
                           Navigator.of(context, rootNavigator: true).pop(null);
                           DataProvider.of(context)
                               .routing
-                              .routeAdvertPage(context, a, true);
+                              .routeAdvertPage(context, responseList[1], true);
                         } else {
                           //Unsuccessful response
                           Navigator.of(context, rootNavigator: true).pop(null);

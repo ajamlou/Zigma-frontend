@@ -61,8 +61,8 @@ class AdvertList {
     print("The Request body is: " + list.toString());
   }
 
-  String picUrl(int id){
-    String url = urlBody+"/adverts/advertimages/"+id.toString()+"/";
+  String picUrl(int id) {
+    String url = urlBody + "/adverts/advertimages/" + id.toString() + "/";
     return url;
   }
 
@@ -170,10 +170,20 @@ class AdvertList {
       String condition,
       String transactionType,
       String edition,
-      context) async {
+      context,
+      List compressedImageList) async {
     condition = checkCondition(condition);
-    Advert _newAd = Advert(title, price, author, isbn, contactInfo, condition,
-        encodedImageList, transactionType, edition, 1);
+    Advert _newAd = Advert(
+        title,
+        price,
+        author,
+        isbn,
+        contactInfo,
+        condition,
+        encodedImageList,
+        transactionType,
+        edition,
+        DataProvider.of(context).user.user.id);
     var data = json.encode(_newAd.toJson(_newAd));
     print(data);
     final String postURL = urlBody + "/adverts/adverts/?format=json";
@@ -183,12 +193,13 @@ class AdvertList {
       "content-type": "application/json",
       "Authorization": "Token " + DataProvider.of(context).user.user.token
     });
-    Map decoded = json.decode(response.body);
+    Map decoded = jsonDecode(utf8.decode(response.bodyBytes));
+    print(decoded.toString());
     if (response.statusCode == 201) {
-      await loadAdvertList();
-      Advert a = await getAdvertById(decoded["id"]);
-      userListSelling.add(a);
+      Advert a = await DataProvider.of(context).advertList.getAdvertById(decoded["id"]);
+      _newAd.images = a.images;
+      list.insert(0,_newAd);
     }
-    return [response.statusCode, decoded["id"]];
+    return [response.statusCode, _newAd];
   }
 }

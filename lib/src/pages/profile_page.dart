@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0.0,
         backgroundColor: Color(0xFFAEDBD3),
         actions: <Widget>[
-          identical(user, widget.user)
+          identical(user.id, widget.user.id)
               ? IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {

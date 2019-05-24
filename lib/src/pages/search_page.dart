@@ -130,8 +130,8 @@ class SearchPage extends SearchDelegate<void> {
                         ),
                         trailing: Text(
                           query == tempQuery
-                              ? savedSearch[index].price.toString()
-                              : snapshot.data[index].price.toString(),
+                              ? (savedSearch[index].price.toString() + ":-")
+                              : (snapshot.data[index].price.toString() + ":-"),
                           style: TextStyle(
                               fontSize: 15,
                               color: Color(0xFF3FBE7E),
