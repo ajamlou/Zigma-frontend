@@ -4,7 +4,6 @@ import 'package:zigma2/src/DataProvider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../chat.dart';
-import '../user.dart';
 
 class ZigmaChat extends StatelessWidget {
   @override
@@ -12,92 +11,21 @@ class ZigmaChat extends StatelessWidget {
 
   Widget buildChatMenu(context) {
     List<Chat> chatList = DataProvider.of(context).chatList.chatList;
+    bool crossFade = false;
+    Chat selectedChat;
     return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomPadding: true,
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(60.0),
-            child: AppBar(
-              elevation: 1.0,
-              backgroundColor: Color(0xFFAEDBD3),
-              title: Text('Dina aktiva chattar',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 20)),
-              centerTitle: true,
-              leading: Container(
-                child: IconButton(
-                  color: Color(0xFFFFFFFF),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back),
-                ),
-              ),
-              actions: <Widget>[],
-            )),
-        endDrawer: Icon(Icons.settings),
-        body: Container(
-            child: chatList.length == 0
-                ? Container(
-                    child:
-                        Text('you aint got no chats \n you sad motherfucker'))
-                : ListView.builder(
-                    itemBuilder: (context, index) => chatCardBuilder(chatList[index]),
-                    itemCount: chatList.length,
-                  )));
-  }
-
-  Widget chatCardBuilder(thisChat) => Card(
-        color: Colors.white,
-        child: GestureDetector(
-          onTap: () => ChatScreen(thisChat: thisChat),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            child: Row(children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
-                  padding: EdgeInsets.only(right: 8),
-                  height: 100,
-                  width: 70,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: thisChat.otherUser.images.length == 0
-                        ? Image.asset('images/profile_pic2.png')
-                        : Image.network(thisChat.otherUser.images.images[0]),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 6,
-                child: Text(thisChat.chatMessages[0].text, textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontSize: 20)),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Icon(Icons.remove, color: Colors.red),),
-            ]),
-          ),
-        ),
-      );
-
-  Widget buildChatScreen(User respondingUser, context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomPadding: true,
-        appBar: PreferredSize(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomPadding: true,
+      appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
           child: AppBar(
-            iconTheme: IconThemeData(color: Colors.transparent),
-            elevation: 0.0,
+            elevation: 1.0,
             backgroundColor: Color(0xFFAEDBD3),
-            title: Text('Du chattar med -namn-',
+            title: Text('Dina aktiva chattar',
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 20,
-                )),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 20)),
             centerTitle: true,
             leading: Container(
               child: IconButton(
@@ -109,15 +37,66 @@ class ZigmaChat extends StatelessWidget {
               ),
             ),
             actions: <Widget>[],
+          )),
+      endDrawer: Icon(Icons.settings),
+      body: Container(
+          child: chatList.length == 0
+              ? Container(
+                  child: Text('you aint got no chats \n you sad motherfucker'))
+              : ListView.builder(
+                  itemBuilder: (context, index) =>
+                      chatCardBuilder(chatList[index], context),
+                  itemCount: chatList.length,
+                )),
+    );
+  }
+
+  Widget chatCardBuilder(thisChat, context) => GestureDetector(
+        onTap: () => DataProvider.of(context)
+            .routing
+            .routeSpecificChat(context, thisChat),
+        child: Card(
+          color: Colors.white,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Row(children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: EdgeInsets.only(right: 8),
+                  height: 100,
+                  width: 70,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: thisChat.chattingUser.profilePic == null
+                        ? Image.asset('images/profile_pic2.png')
+                        : Image.network(thisChat.chattingUser.profilePic),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: thisChat.chatMessages.length == 0
+                    ? Text('')
+                    : Text(thisChat.chatMessages[0].text,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black, fontSize: 20)),
+              ),
+              Expanded(
+                flex: 2,
+                child: Icon(Icons.remove, color: Colors.red),
+              ),
+            ]),
           ),
         ),
-        body: ChatScreen());
-  }
+      );
 }
 
 class ChatScreen extends StatefulWidget {
-  Chat thisChat;
+  final Chat thisChat;
+
   ChatScreen({this.thisChat});
+
   @override
   State createState() => ChatScreenState();
 }
@@ -130,8 +109,12 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    channel =
-        IOWebSocketChannel.connect('ws://3502f4a2.ngrok.io/ws/chat/olle/');
+    channel = IOWebSocketChannel.connect('ws://79b390be.ngrok.io/ws/chat/bajs/',
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Token " + DataProvider.of(context).user.user.token
+        });
     _textController = TextEditingController();
     channel.stream.listen((data) {
       Message messageText = Message.fromJson(json.decode(data));
@@ -150,7 +133,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-   List<ChatMessage> _messages = widget.thisChat.chatMessages;
+    List<ChatMessage> _messages = widget.thisChat.chatMessages;
     for (ChatMessage message in _messages)
       message.animationController.dispose();
     super.dispose();
@@ -180,28 +163,56 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     List<ChatMessage> _messages = widget.thisChat.chatMessages;
-    return Container(
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              child: ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                reverse: true,
-                itemBuilder: (_, int index) => _messages[index],
-                itemCount: _messages.length,
+    return Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomPadding: true,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60.0),
+          child: AppBar(
+            iconTheme: IconThemeData(color: Colors.transparent),
+            elevation: 0.0,
+            backgroundColor: Color(0xFFAEDBD3),
+            title: Text('Du chattar med ' + widget.thisChat.chattingUser.username,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 20,
+                )),
+            centerTitle: true,
+            leading: Container(
+              child: IconButton(
+                color: Color(0xFFFFFFFF),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back),
               ),
             ),
-            Divider(height: 1.0),
-            Container(
-              decoration: BoxDecoration(color: Colors.white),
-              child: _buildTextComposer(),
-            ),
-          ],
+            actions: <Widget>[],
+          ),
         ),
-        decoration: BoxDecoration(
-            border: Border(
-          top: BorderSide(color: Colors.grey[200]),
-        )));
+        body: Container(
+            child: Column(
+              children: <Widget>[
+                Flexible(
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(8.0),
+                    reverse: true,
+                    itemBuilder: (_, int index) => _messages[index],
+                    itemCount: _messages.length,
+                  ),
+                ),
+                Divider(height: 1.0),
+                Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: _buildTextComposer(),
+                ),
+              ],
+            ),
+            decoration: BoxDecoration(
+                border: Border(
+              top: BorderSide(color: Colors.grey[200]),
+            ))));
   }
 
   Widget _buildTextComposer() {
