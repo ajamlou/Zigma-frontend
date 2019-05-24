@@ -5,6 +5,7 @@ import 'package:zigma2/src/routes.dart';
 import './src/DataProvider.dart';
 import './src/advert.dart';
 import './src/user.dart';
+import './src/chat.dart';
 import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
@@ -24,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   AdvertList advertList = AdvertList();
   UserMethodBody user = UserMethodBody(null);
   Routing routing = Routing();
+  ChatList chatList = ChatList();
   LoadingDialog loadingScreen = LoadingDialog();
 
   @override
@@ -37,6 +39,7 @@ class _MyAppState extends State<MyApp> {
       user: user,
       routing: routing,
       loadingScreen: loadingScreen,
+      chatList: chatList,
       child: MaterialApp(
         title: 'Zigma App',
         theme: ThemeData(

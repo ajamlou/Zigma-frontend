@@ -37,7 +37,7 @@ class _AdvertPageState extends State<AdvertPage> {
           child: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context, [widget.savedSearch, widget.query]),
+              onPressed: () =>  Navigator.pop(context, [widget.savedSearch, widget.query]),
             ),
             iconTheme: IconThemeData(color: Colors.white),
             elevation: 0.0,

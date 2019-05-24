@@ -198,6 +198,7 @@ class UserMethodBody {
     }
     return [response.statusCode, localUser];
   }
+  User getUser() => user;
 
   Future<Map> editAdvert(String header, dynamic edit, int id) async {
     String url = urlBody + "/adverts/adverts/" + id.toString() + "/";

@@ -3,10 +3,86 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import '../chat.dart';
+import '../user.dart';
 
 class ZigmaChat extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => buildChatMenu(context);
+
+  Widget buildChatMenu(context) {
+    List<Chat> chatList = DataProvider.of(context).chatList.chatList;
+    return Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomPadding: true,
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60.0),
+            child: AppBar(
+              elevation: 1.0,
+              backgroundColor: Color(0xFFAEDBD3),
+              title: Text('Dina aktiva chattar',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20)),
+              centerTitle: true,
+              leading: Container(
+                child: IconButton(
+                  color: Color(0xFFFFFFFF),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back),
+                ),
+              ),
+              actions: <Widget>[],
+            )),
+        endDrawer: Icon(Icons.settings),
+        body: Container(
+            child: chatList.length == 0
+                ? Container(
+                    child:
+                        Text('you aint got no chats \n you sad motherfucker'))
+                : ListView.builder(
+                    itemBuilder: (context, index) => chatCardBuilder(chatList[index]),
+                    itemCount: chatList.length,
+                  )));
+  }
+
+  Widget chatCardBuilder(thisChat) => Card(
+        color: Colors.white,
+        child: GestureDetector(
+          onTap: () => ChatScreen(thisChat: thisChat),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Row(children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: EdgeInsets.only(right: 8),
+                  height: 100,
+                  width: 70,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: thisChat.otherUser.images.length == 0
+                        ? Image.asset('images/profile_pic2.png')
+                        : Image.network(thisChat.otherUser.images.images[0]),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Text(thisChat.chatMessages[0].text, textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontSize: 20)),
+              ),
+              Expanded(
+                  flex: 2,
+                  child: Icon(Icons.remove, color: Colors.red),),
+            ]),
+          ),
+        ),
+      );
+
+  Widget buildChatScreen(User respondingUser, context) {
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: true,
@@ -40,12 +116,13 @@ class ZigmaChat extends StatelessWidget {
 }
 
 class ChatScreen extends StatefulWidget {
+  Chat thisChat;
+  ChatScreen({this.thisChat});
   @override
   State createState() => ChatScreenState();
 }
 
 class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
-  final List<ChatMessage> _messages = <ChatMessage>[];
   WebSocketChannel channel;
   TextEditingController _textController;
   bool _isComposing = false;
@@ -66,13 +143,14 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
         profilePic: DataProvider.of(context).user.user.profilePic,
       );
-      setState(() => _messages.insert(0, message));
+      setState(() => widget.thisChat.chatMessages.insert(0, message));
       message.animationController.forward();
     });
   }
 
   @override
   void dispose() {
+   List<ChatMessage> _messages = widget.thisChat.chatMessages;
     for (ChatMessage message in _messages)
       message.animationController.dispose();
     super.dispose();
@@ -92,11 +170,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
         profilePic: DataProvider.of(context).user.user.profilePic,
       );
-      setState(() => _messages.insert(0, message));
-      message.animationController.forward();
       channel.sink.add(json.encode(newMessage));
       print('message sink');
-      print(DataProvider.of(context).user.user.profilePic);
       _textController.clear();
       _isComposing = !_isComposing;
     }
@@ -104,6 +179,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    List<ChatMessage> _messages = widget.thisChat.chatMessages;
     return Container(
         child: Column(
           children: <Widget>[
@@ -170,7 +246,6 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(DataProvider.of(context).user.user.profilePic.toString());
     return SizeTransition(
       sizeFactor:
           CurvedAnimation(parent: animationController, curve: Curves.easeOut),
@@ -184,22 +259,20 @@ class ChatMessage extends StatelessWidget {
               child: Container(
                 width: 50,
                 height: 50,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: profilePic),
-                ),
+                child: FittedBox(fit: BoxFit.fitWidth, child: profilePic),
               ),
+            ),
             Padding(padding: const EdgeInsets.all(8.0)),
             Expanded(
               child: Card(
                 child: ListTile(
                   dense: true,
                   title: Text(DataProvider.of(context).user.user.username,
-                        style: TextStyle(color: Color(0xFFECA72C))),
-                    subtitle: Container(
-                      margin: const EdgeInsets.only(top: 3.0),
-                      child: Text(text, style: TextStyle(color: Colors.black)),
-                    ),
+                      style: TextStyle(color: Color(0xFFECA72C))),
+                  subtitle: Container(
+                    margin: const EdgeInsets.only(top: 3.0),
+                    child: Text(text, style: TextStyle(color: Colors.black)),
+                  ),
                 ),
               ),
             ),

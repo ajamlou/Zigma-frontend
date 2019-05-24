@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'package:flutter/services.dart';
 import 'package:zigma2/src/DataProvider.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
@@ -26,6 +27,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   List<Image> compressedImageList = [];
   List<String> encodedImageList = [];
   Image placeholderImage = Image.asset('images/placeholderBook.png');
+  String barcode;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController authorController = TextEditingController();
@@ -64,7 +66,8 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   @override
   Widget build(BuildContext context) {
-    contactInfoController = TextEditingController(text: DataProvider.of(context).user.user.email);
+    contactInfoController =
+        TextEditingController(text: DataProvider.of(context).user.user.email);
     contactInfoController.addListener(_listener);
     return Scaffold(
       resizeToAvoidBottomPadding: true,
@@ -153,6 +156,11 @@ class AdvertCreationState extends State<AdvertCreation> {
                         fontWeight: FontWeight.bold)),
               ),
             ),
+            RaisedButton(
+                onPressed: () async {barcode =
+                    await FlutterBarcodeScanner.scanBarcode(
+                        '0xFF000000', 'Cancel', true); },
+                child: barcode != null ? Text(barcode) : Text(''))
           ],
         )),
         secondChild: Container(
@@ -385,15 +393,13 @@ class AdvertCreationState extends State<AdvertCreation> {
                           var a = await DataProvider.of(context)
                               .advertList
                               .getAdvertById(responseList[1]);
-                          Navigator.of(context, rootNavigator: true)
-                              .pop(null);
+                          Navigator.of(context, rootNavigator: true).pop(null);
                           DataProvider.of(context)
                               .routing
                               .routeAdvertPage(context, a, true);
                         } else {
                           //Unsuccessful response
-                          Navigator.of(context, rootNavigator: true)
-                              .pop(null);
+                          Navigator.of(context, rootNavigator: true).pop(null);
                           showAdvertCreationAlertDialog(stsCode);
                         }
                       }
