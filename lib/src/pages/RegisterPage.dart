@@ -46,6 +46,8 @@ class RegisterPageState extends State<RegisterPage> {
                 color: Colors.white,
               ),
               onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop(null);
+                DataProvider.of(context).loadingScreen.show(context);
                 tempImage = await Ih.getImage("gallery");
                 setState(() {
                   _image = tempImage;
@@ -60,11 +62,13 @@ class RegisterPageState extends State<RegisterPage> {
                 color: Colors.white,
               ),
               onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop(null);
+                DataProvider.of(context).loadingScreen.show(context);
                 tempImage = await Ih.getImage("camera");
                 setState(() {
                   _image = tempImage;
                 });
-                Navigator.of(context, rootNavigator: true).pop(null);
+                Navigator.pop(context);
               },
             ),
           ],

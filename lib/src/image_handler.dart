@@ -6,6 +6,8 @@ import 'package:image/image.dart' as Im;
 import 'dart:math' as Math;
 import 'dart:io';
 
+
+
 Future<File> getImage(String inputSource) async {
   var image = inputSource == "camera"
       ? await ImagePicker.pickImage(source: ImageSource.camera)
@@ -49,21 +51,24 @@ Future<File> showImageAlertDialog(context) async {
               color: Color(0xFFECA72C),
               child: Icon(Icons.image, color: Colors.white),
               onPressed: () async {
-                tempImage = await getImage("gallery");
+                 tempImage = await getImage("gallery");
+                 return tempImage;
               },
             ),
             RaisedButton(
               color: Color(0xFFECA72C),
               child: Icon(Icons.camera_alt, color: Colors.white),
               onPressed: () async {
-                tempImage = await getImage("camera");
+               tempImage = await getImage("camera");
+               return tempImage;
               },
             ),
           ],
         ),
       ));
   showDialog(context: context, builder: (BuildContext context) => dialog);
-  return tempImage;
+  print("IM TRYING TO RETURN AN IMAGE");
+
 }
 
 String imageFileToString(File _image) {
