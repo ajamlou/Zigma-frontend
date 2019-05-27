@@ -74,11 +74,20 @@ class ZigmaChat extends StatelessWidget {
               ),
               Expanded(
                 flex: 6,
-                child: thisChat.chatMessages.length == 0
-                    ? Text('')
-                    : Text(thisChat.chatMessages[0].text,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black, fontSize: 20)),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      thisChat.chattingUser.username,
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    thisChat.chatMessages.length == 0
+                        ? Text('')
+                        : Text(thisChat.chatMessages[0].text,
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20)),
+                  ],
+                ),
               ),
               Expanded(
                 flex: 2,
@@ -150,14 +159,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     if (_textController.text.isNotEmpty) {
       newMessage = Message(
         text: _textController.text,
-      );
-      ChatMessage message = ChatMessage(
-        text: newMessage.text,
-        animationController: AnimationController(
-          duration: Duration(milliseconds: 500),
-          vsync: this,
-        ),
-        profilePic: DataProvider.of(context).user.user.profilePic,
       );
       channel.sink.add(json.encode(newMessage));
       print('message sink');
