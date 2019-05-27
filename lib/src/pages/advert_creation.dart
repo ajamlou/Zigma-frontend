@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zigma2/src/components/dialog_content.dart';
 import 'dart:io';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'package:flutter/services.dart';
@@ -28,22 +29,13 @@ class AdvertCreationState extends State<AdvertCreation> {
   List<String> encodedImageList = [];
   Image placeholderImage = Image.asset('images/placeholderBook.png');
 
+  bool _isChecked = false;
   TextEditingController titleController = TextEditingController();
   TextEditingController authorController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController isbnController = TextEditingController();
   TextEditingController contactInfoController;
   TextEditingController editionController = TextEditingController();
-
-  void _listener() {
-    setState(() {});
-  }
-
-  int stringToInt(price) {
-    var priceInt = int.parse(price);
-    assert(priceInt is int);
-    return priceInt;
-  }
 
   @override
   void dispose() {
@@ -61,44 +53,36 @@ class AdvertCreationState extends State<AdvertCreation> {
     titleController.addListener(_listener);
     authorController.addListener(_listener);
     priceController.addListener(_listener);
-    //initPlatformState();
+    //delays the appearance of whatever is in this method by one frame
+    //so that the build method has time to build before it is called
+    WidgetsBinding.instance.addPostFrameCallback((_) async {});
   }
 
-  void couldNotFindBook() {
-    AlertDialog dialog = AlertDialog(
-      backgroundColor: Color(0xFFECE9DF),
-      content: Text(
-        "Boken du försökte lägga upp fanns inte i vår databas. Men lägg gärna in den manuellt",
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xFFDE5D5D),
-        ),
-        textAlign: TextAlign.center,
+  void showScannerInfoDialog() {
+    AnimatedPadding dialog = AnimatedPadding(
+      padding: MediaQuery.of(context).viewInsets +
+          EdgeInsets.only(
+              top: 50.0,
+              bottom: MediaQuery.of(context).size.height - 450.0,
+              left: MediaQuery.of(context).size.width - 200.0),
+      duration: Duration(milliseconds: 100),
+      curve: Curves.decelerate,
+      child: MediaQuery.removeViewInsets(
+        removeLeft: true,
+        removeTop: true,
+        removeRight: true,
+        removeBottom: true,
+        context: context,
+        child: DialogContent()
       ),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  Future<String> _scanQR() async {
-    String qRResult = await BarcodeScanner.scan();
-    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
-    List l = await DataProvider.of(context).advertList.searchAdverts(qRResult);
-    Navigator.of(context, rootNavigator: true).pop(null);
-    if (l.length == 0) {
-      couldNotFindBook();
-      setState(() {
-        isbnController.text = qRResult;
-      });
-      return qRResult;
-    }
-    var a = l[0];
+  void setPrefs() {
     setState(() {
-      editionController.text = a.edition;
-      authorController.text = a.authors;
-      titleController.text = a.bookTitle;
-      isbnController.text = a.isbn;
+      _isChecked = !_isChecked;
     });
-    return qRResult;
   }
 
   @override
@@ -131,13 +115,18 @@ class AdvertCreationState extends State<AdvertCreation> {
             ),
           ),
           actions: <Widget>[
-            transactionType == null ? SizedBox() : IconButton(
-              icon: Icon(Icons.linked_camera, size: 30,),
-              onPressed: () async {
-                String s = await _scanQR();
-                print(s);
-              },
-            ),
+            transactionType == null
+                ? SizedBox()
+                : IconButton(
+                    icon: Icon(
+                      Icons.linked_camera,
+                      size: 30,
+                    ),
+                    onPressed: () async {
+                      String s = await _scanQR();
+                      print(s);
+                    },
+                  ),
           ],
         ),
       ),
@@ -171,6 +160,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'S';
                   });
+                  showScannerInfoDialog();
                 },
                 child: Text('Sälja',
                     style: TextStyle(
@@ -192,6 +182,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'B';
                   });
+                  showScannerInfoDialog();
                 },
                 child: Text('Söker',
                     style: TextStyle(
@@ -425,7 +416,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 condition,
                                 transactionType,
                                 edition,
-                                context, compressedImageList);
+                                context,
+                                compressedImageList);
                         setState(() {
                           stsCode = responseList[0];
                         });
@@ -459,30 +451,52 @@ class AdvertCreationState extends State<AdvertCreation> {
     );
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-//  initPlatformState() async {
-//    String platformVersion;
-//    // Platform messages may fail, so we use a try/catch PlatformException.
-//    try {
-//      platformVersion = await SimplePermissions.platformVersion;
-//    } on PlatformException {
-//      platformVersion = 'Failed to get platform version.';
-//    }
-//
-//    // If the widget was removed from the tree while the asynchronous platform
-//    // message was in flight, we want to discard the reply rather than calling
-//    // setState to update our non-existent appearance.
-//    if (!mounted) return;
-//
-//    setState(() {
-//      _platformVersion = platformVersion;
-//    });
-//  }
+  void couldNotFindBook() {
+    AlertDialog dialog = AlertDialog(
+      backgroundColor: Color(0xFFECE9DF),
+      content: Text(
+        "Boken du försökte lägga upp fanns inte i vår databas. Men lägg gärna in den manuellt",
+        style: TextStyle(
+          fontSize: 20,
+          color: Color(0xFFDE5D5D),
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
 
-//    requestPermission(Permission permission) async {
-//    final res = await SimplePermissions.requestPermission(permission);
-//    print("permission request result is " + res.toString());
-//  }
+  Future<String> _scanQR() async {
+    String qRResult = await BarcodeScanner.scan();
+    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+    List l = await DataProvider.of(context).advertList.searchAdverts(qRResult);
+    Navigator.of(context, rootNavigator: true).pop(null);
+    if (l.length == 0) {
+      couldNotFindBook();
+      setState(() {
+        isbnController.text = qRResult;
+      });
+      return qRResult;
+    }
+    var a = l[0];
+    setState(() {
+      editionController.text = a.edition;
+      authorController.text = a.authors;
+      titleController.text = a.bookTitle;
+      isbnController.text = a.isbn;
+    });
+    return qRResult;
+  }
+
+  void _listener() {
+    setState(() {});
+  }
+
+  int stringToInt(price) {
+    var priceInt = int.parse(price);
+    assert(priceInt is int);
+    return priceInt;
+  }
 
   Widget stateButtons(String text, String index) {
     return Container(
