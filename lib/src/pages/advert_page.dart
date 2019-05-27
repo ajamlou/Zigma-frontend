@@ -20,6 +20,7 @@ class AdvertPage extends StatefulWidget {
 
 class _AdvertPageState extends State<AdvertPage> {
   LoginPrompt loginPrompt = LoginPrompt();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -73,18 +74,7 @@ class _AdvertPageState extends State<AdvertPage> {
     return FutureBuilder(
       future: getUser(""),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Card(
-            child: SizedBox(
-              height: 100,
-              child: Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(Color(0xFFAEDBD3)),
-                ),
-              ),
-            ),
-          );
-        } else if (snapshot.hasData) {
+        if (snapshot.hasData) {
           return Card(
             elevation: 3,
             child: ListTile(
@@ -167,6 +157,17 @@ class _AdvertPageState extends State<AdvertPage> {
                       textAlign: TextAlign.center,
                     ),
                   ],
+                ),
+              ),
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return Card(
+            child: SizedBox(
+              height: 100,
+              child: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Color(0xFFAEDBD3)),
                 ),
               ),
             ),
@@ -279,7 +280,7 @@ class _AdvertPageState extends State<AdvertPage> {
                                       .routing
                                       .routeChatPage(context, false);
                                 }
-                              }else{
+                              } else {
                                 loginPrompt.show(context);
                               }
                             },

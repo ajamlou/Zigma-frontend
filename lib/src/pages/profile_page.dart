@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0.0,
         backgroundColor: Color(0xFFAEDBD3),
         actions: <Widget>[
-          identical(user.id, widget.user.id)
+          user != null && identical(user.id, widget.user.id)
               ? IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
@@ -113,9 +113,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(child: stateButtons("Säljer", 0)),
+                stateButtons("Säljer", 0),
                 stateButtons("Köper", 1),
-//                stateButtons("Alla", 2)
               ],
             ),
           ),
@@ -128,7 +127,6 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 getAdverts(getUserAds("S")),
                 getAdverts(getUserAds("B")),
-//                getAdverts(getCombinedUserLists())
               ],
             ),
           ),
@@ -138,17 +136,18 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget stateButtons(String text, int index) {
-    return Container(
-      alignment: Alignment(0, 0),
-      width: MediaQuery.of(context).size.width / 2.2,
-      height: 35,
-      decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Color(0xFFECA72C)),
-          color: index == stateButtonIndex ? Color(0xFFECA72C) : Colors.white),
-      child: MaterialButton(
-        onPressed: () {
-          buttonChangePage(index);
-        },
+    return GestureDetector(
+      onTap: () {
+        buttonChangePage(index);
+      },
+      child: Container(
+        alignment: Alignment(0, 0),
+        width: MediaQuery.of(context).size.width / 2.2,
+        height: 35,
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Color(0xFFECA72C)),
+            color:
+                index == stateButtonIndex ? Color(0xFFECA72C) : Colors.white),
         child: Text(
           text,
           style: TextStyle(
