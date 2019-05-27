@@ -596,12 +596,9 @@ class AdvertCreationState extends State<AdvertCreation> {
         compressedImageList[index] == placeholderImage
             ? showImageAlertDialog()
             : setState(() {
-                print('im in setState of gesturedetector');
                 _selectedItemsIndex.contains(index)
                     ? _selectedItemsIndex.remove(index)
                     : _selectedItemsIndex.add(index);
-                print(index);
-                print(_selectedItemsIndex);
               });
       },
       child: ClipRRect(
@@ -648,8 +645,6 @@ class AdvertCreationState extends State<AdvertCreation> {
           compressedImageList.removeAt(index);
           encodedImageList.removeAt(index - 1);
         }
-        print(compressedImageList);
-        //    print(encodedImageList);
       }
       setState(() {
         _selectedItemsIndex = [];

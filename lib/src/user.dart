@@ -3,6 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:zigma2/src/chat.dart';
+import 'package:zigma2/src/pages/chat_page.dart';
 
 part 'user.g.dart';
 
@@ -21,6 +25,8 @@ class User {
   @JsonKey(name: 'bought_books')
   int boughtBooks;
   Image profilePic;
+  WebSocketChannel myInboxes;
+  ChatList chatList;
 
   User(this.email, this.id, this.username, this.token, this.profile,
       this.hasPicture, this.adverts, this.soldBooks, this.boughtBooks);
@@ -28,6 +34,43 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson(User json) => _$UserToJson(json);
+
+  void initSocketChannel() {
+    if (chatList == null) {
+      chatList = ChatList();
+    }
+    myInboxes = IOWebSocketChannel.connect(
+        'ws://5aea970b.ngrok.io/ws/myinbox/',
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Token " + token
+        });
+    myInboxes.stream.listen((data) async {
+      Message messageText = Message.fromJson(json.decode(data));
+      if (!chatList.getChattingUserList().contains(messageText.username)) {
+        User tempUser = await getUserByUsername(messageText.username);
+        Chat newChat = Chat(chattingUser: tempUser);
+        newChat.chatMessages.insert(0, messageText);
+        chatList.chatList.insert(0, newChat);
+      } else {
+        for (Chat chat in chatList.chatList) {
+          if (chat.chattingUser.username == messageText.username) {
+            chat.chatMessages.insert(0, messageText);
+          }
+        }
+      }
+    });
+  }
+
+  Future<User> getUserByUsername(String username) async {
+    final String url = 'https://5aea970b.ngrok.io/users/users/' + username;
+    var req = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    var resBody = json.decode(utf8.decode(req.bodyBytes));
+    User user = User.fromJson(resBody);
+    return user;
+  }
 }
 
 class UserCreation {
@@ -39,19 +82,18 @@ class UserCreation {
   UserCreation(this.email, this.username, this.password, this.imageAsBytes);
 
   // om imageAsBytes är null, encode utan den parametern
-  Map<String, dynamic> toJson() =>
-      imageAsBytes != null
-          ? {
-        'username': username,
-        'password': password,
-        'email': email,
-        'profile_picture': imageAsBytes,
-      }
-          : {
-        'username': username,
-        'password': password,
-        'email': email,
-      };
+  Map<String, dynamic> toJson() => imageAsBytes != null
+      ? {
+          'username': username,
+          'password': password,
+          'email': email,
+          'profile_picture': imageAsBytes,
+        }
+      : {
+          'username': username,
+          'password': password,
+          'email': email,
+        };
 
   UserCreation.fromJson(Map<String, dynamic> json)
       : email = json['email'],
@@ -65,8 +107,7 @@ class UserLogin {
 
   UserLogin(this.username, this.password);
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'username': username,
         'password': password,
       };
@@ -80,16 +121,7 @@ class UserMethodBody {
 
   void iniUser(String email, int id, String username, String token, int profile,
       bool hasPicture, List<int> adverts) {
-    user = User(
-        email,
-        id,
-        username,
-        token,
-        profile,
-        hasPicture,
-        adverts,
-        0,
-        0);
+    user = User(email, id, username, token, profile, hasPicture, adverts, 0, 0);
   }
 
   Future<User> getUserById(int id, String fields) async {
@@ -144,7 +176,8 @@ class UserMethodBody {
 
   Future<void> automaticLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("token") == null) {} else {
+    if (prefs.getString("token") == null) {
+    } else {
       iniUser(
           prefs.getString("email"),
           prefs.getInt("id"),
@@ -154,13 +187,15 @@ class UserMethodBody {
           prefs.getBool("hasPicture"),
           prefs.getStringList("adverts").map((i) => int.parse(i)).toList());
       picUrl(user.id);
+      user.chatList = ChatList();
+      user.initSocketChannel();
     }
   }
 
   Future<List> register(String email, String username, String password,
       String imageAsBytes) async {
     UserCreation _newUser =
-    UserCreation(email, username, password, imageAsBytes);
+        UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = urlBody + "/users/users/";
@@ -183,8 +218,7 @@ class UserMethodBody {
           localUser.hasPicture,
           localUser.username,
           localUser.email,
-          localUser.id,
-          []);
+          localUser.id, []);
       await automaticLogin();
     } else if (response.statusCode == 400) {
       localUser = UserCreation.fromJson(parsed);
@@ -193,11 +227,12 @@ class UserMethodBody {
     }
     return [response.statusCode, localUser];
   }
+
   User getUser() => user;
 
   Future<Map> editAdvert(String header, dynamic edit, int id) async {
     String url = urlBody + "/adverts/adverts/" + id.toString() + "/";
-    Map changes =  {header: edit};
+    Map changes = {header: edit};
     var data = json.encode(changes);
     var response = await http.patch(Uri.encodeFull(url), body: data, headers: {
       "Accept": "application/json",
@@ -257,6 +292,7 @@ class UserMethodBody {
           localUser.id,
           localUser.adverts);
       await automaticLogin();
+
     }
     picUrl(localUser.id);
     return response.statusCode;

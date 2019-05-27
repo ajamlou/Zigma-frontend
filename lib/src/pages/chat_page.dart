@@ -141,14 +141,14 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
         profilePic: DataProvider.of(context).user.user.profilePic,
       );
-      setState(() => widget.thisChat.chatMessages.insert(0, message));
+      setState(() => widget.thisChat.styledChatMessages.insert(0, message));
       message.animationController.forward();
     });
   }
 
   @override
   void dispose() {
-    List<ChatMessage> _messages = widget.thisChat.chatMessages;
+    List<ChatMessage> _messages = widget.thisChat.styledChatMessages;
     for (ChatMessage message in _messages)
       message.animationController.dispose();
     super.dispose();
@@ -169,7 +169,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<ChatMessage> _messages = widget.thisChat.chatMessages;
+    List<ChatMessage> _messages = widget.thisChat.styledChatMessages;
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: true,
@@ -315,4 +315,5 @@ class Message {
   Message.fromJson(Map map)
       : text = map['text'],
         username = map['user'];
+
 }

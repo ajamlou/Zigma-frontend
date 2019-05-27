@@ -3,10 +3,10 @@ import './pages/chat_page.dart';
 
 class Chat {
   User chattingUser;
-  int advertId;
-  List<ChatMessage> chatMessages = [];
+  List<Message> chatMessages = [];
+  List<ChatMessage> styledChatMessages = [];
 
-  Chat({this.chattingUser, this.advertId});
+  Chat({this.chattingUser});
 
 }
 
@@ -14,11 +14,12 @@ class ChatList {
   final List<Chat> chatList = [];
   final List<String> chattingUserList = [];
 
-  void startNewChat(newUser, advertId) {
-    Chat newChat = Chat(chattingUser: newUser, advertId: advertId);
+  void startNewChat(newUser) {
+    Chat newChat = Chat(chattingUser: newUser);
     chatList.insert(0, newChat);
     chattingUserList.insert(0, newUser.username);
     print('created a new chat with ' + newUser.username);
 
   }
-}
+  List<String> getChattingUserList() => chattingUserList;
+  }

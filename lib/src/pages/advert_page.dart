@@ -274,7 +274,7 @@ class _AdvertPageState extends State<AdvertPage> {
                                   DataProvider.of(context)
                                       .chatList
                                       .startNewChat(
-                                          snapshot.data, widget.data.id);
+                                          snapshot.data);
                                   DataProvider.of(context)
                                       .routing
                                       .routeChatPage(context, false);
