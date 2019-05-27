@@ -66,7 +66,7 @@ class AdvertList {
   Future<List<Advert>> searchAdverts(String query) async {
     List<Advert> returnList = [];
     String url = urlBody +
-        "/adverts/adverts/?fields=book_title,price,authors,edition,image,owner,condition,ISBN&search=" +
+        "/adverts/adverts/?fields=book_title,price,authors,edition,image,owner,condition,ISBN,id&search=" +
         query;
     print(url);
     final req = await http
