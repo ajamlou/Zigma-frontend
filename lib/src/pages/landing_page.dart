@@ -166,7 +166,7 @@ class _LandingPageState extends State<LandingPage> {
                         Container(
                           child: Text(
                             user.username,
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -179,18 +179,18 @@ class _LandingPageState extends State<LandingPage> {
                           ),
                         ),
                         user.soldBooks > 5
-                            ? Text("Ganska Bra Boksäljare",
+                            ? Text("Erfaren boksäljare",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                   color: Color(0xFF373F51),
                                 ))
                             : Text(
-                                "Novis Boksäljare",
+                                "Novis boksäljare",
                                 style: TextStyle(
                                     color: Color(0xFF373F51),
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18),
+                                    fontSize: 18,),
                               ),
                       ],
                     ),
