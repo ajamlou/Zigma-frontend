@@ -127,7 +127,7 @@ class _AdvertPageState extends State<AdvertPage> {
                                       fit: BoxFit.cover,
                                       child: DataProvider.of(context)
                                           .user
-                                          .getImage())
+                                          .user.profilePic)
                                   : FadeInImage.memoryNetwork(
                                       fit: BoxFit.fitWidth,
                                       placeholder: kTransparentImage,

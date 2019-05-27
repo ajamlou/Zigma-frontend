@@ -46,13 +46,10 @@ class Advert {
 class AdvertList {
   final String urlBody = "https://ecf116e6.eu.ngrok.io";
   final List<Advert> list = [];
-  final List<Advert> userListSelling = [];
-  final List<Advert> userListBuying = [];
 
   Future<void> loadAdvertList() async {
-    list.clear();
     final String url = urlBody + "/adverts/adverts/recent_adverts/?format=json";
-    var req = await http
+    final req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
     for (int i = 0; i < resBody.length; i++) {
@@ -62,18 +59,8 @@ class AdvertList {
   }
 
   String picUrl(int id) {
-    String url = urlBody + "/adverts/advertimages/" + id.toString() + "/";
+    final String url = urlBody + "/adverts/advertimages/" + id.toString() + "/";
     return url;
-  }
-
-  void clearUserAdvertList() {
-    userListSelling.clear();
-    userListBuying.clear();
-  }
-
-  Future<List> getCombinedUserLists() async {
-    List newList = [userListBuying, userListSelling].expand((x) => x).toList();
-    return newList;
   }
 
   Future<List<Advert>> searchAdverts(String query) async {
@@ -82,7 +69,7 @@ class AdvertList {
         "/adverts/adverts/?fields=book_title,price,authors,edition,image,owner,condition,ISBN&search=" +
         query;
     print(url);
-    var req = await http
+    final req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final resBody = json.decode(utf8.decode(req.bodyBytes));
     print(resBody.toString());
@@ -102,7 +89,7 @@ class AdvertList {
         "&state=" +
         state;
     print(url);
-    var req = await http
+    final req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
     final List<Advert> returnList = [];
@@ -123,10 +110,10 @@ class AdvertList {
       }
     }
     print(url);
-    var req = await http
+    final req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(req.bodyBytes));
-    List<Advert> returnList = [];
+    final List<Advert> returnList = [];
     for (int i = 0; i < resBody.length; i++) {
       returnList.add(Advert.fromJson(resBody[i]));
     }
@@ -196,9 +183,11 @@ class AdvertList {
     Map decoded = jsonDecode(utf8.decode(response.bodyBytes));
     print(decoded.toString());
     if (response.statusCode == 201) {
-      Advert a = await DataProvider.of(context).advertList.getAdvertById(decoded["id"]);
+      Advert a = await DataProvider.of(context)
+          .advertList
+          .getAdvertById(decoded["id"]);
       _newAd.images = a.images;
-      list.insert(0,_newAd);
+      list.insert(0, _newAd);
     }
     return [response.statusCode, _newAd];
   }
