@@ -62,18 +62,7 @@ class _AdvertPageState extends State<AdvertPage> {
             getText("Skick: ", widget.data.condition),
             getText("ISBN: ", widget.data.isbn),
             getAdvertPrice(),
-            //           SizedBox(height: 20,),
             getOwner(),
-//            getOwnerName(),
-//            Row(
-//              children: <Widget>[
-//                Padding(
-//                  padding: EdgeInsets.only(top: 10.0),
-//                ),
-//                getOwnerImage(),
-//                getOwnerInformation(),
-//              ],
-//            ),
             getMessageButton(),
           ],
         ),
@@ -85,10 +74,19 @@ class _AdvertPageState extends State<AdvertPage> {
     return FutureBuilder(
       future: getUser(""),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Card(
+            child: SizedBox(
+              height: 100,
+              child: Center(
+                child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Color(0xFFAEDBD3)),),
+              ),
+            ),
+          );
+        }
+        else if (snapshot.hasData) {
           return Card(
             elevation: 3,
-            //color: Colors.grey[50],
             child: ListTile(
               onTap: () {
                 DataProvider.of(context)
@@ -173,12 +171,6 @@ class _AdvertPageState extends State<AdvertPage> {
               ),
             ),
           );
-        } else {
-          return Card(
-            child: ListTile(
-              title: Text("LADDAR..."),
-            ),
-          );
         }
       },
     );
@@ -247,155 +239,6 @@ class _AdvertPageState extends State<AdvertPage> {
     );
   }
 
-//  Widget getOwnerName() {
-//    return Center(
-//      child: Container(
-//        margin: EdgeInsets.only(top: 10),
-//        padding: EdgeInsets.only(top: 8, left: 10),
-//        child: FutureBuilder(
-//          future: getUser("username"),
-//          builder: (context, snapshot) {
-//            if (snapshot.hasData) {
-//              return Container(
-//                child: Text(
-//                  "Denna bok säljs av " + snapshot.data.username + ".",
-//                  style: TextStyle(
-//                    fontSize: 18,
-//                    color: Color(0xFFECA72C),
-//                    fontWeight: FontWeight.bold,
-//                  ),
-//                  textAlign: TextAlign.left,
-//                ),
-//              );
-//            } else {
-//              return Text(
-//                "Denna bok säljs av " + "laddar...",
-//                style: TextStyle(
-//                  fontSize: 18,
-//                  color: Color(0xFFECA72C),
-//                  fontWeight: FontWeight.bold,
-//                ),
-//                textAlign: TextAlign.left,
-//              );
-//            }
-//          },
-//        ),
-//      ),
-//    );
-//  }
-
-//  Widget getOwnerImage() {
-//    return FutureBuilder(
-//      future: getUser("has_picture,profile"),
-//      builder: (context, snapshot) {
-//        if (snapshot.hasData) {
-//          return !snapshot.data.hasPicture
-//              ? Expanded(
-//                  flex: 2,
-//                  child: FittedBox(
-//                    fit: BoxFit.contain,
-//                    child: GestureDetector(
-//                      onTap: () => getOwnerProfile(),
-//                      child: Icon(
-//                        Icons.account_circle,
-//                        color: Colors.grey,
-//                      ),
-//                    ),
-//                  ),
-//                )
-//              : Expanded(
-//                  flex: 2,
-//                  child: Stack(
-//                    alignment: Alignment(0, 0),
-//                    children: <Widget>[
-//                      Center(child: CircularProgressIndicator()),
-//                      ClipRRect(
-//                        borderRadius: BorderRadius.circular(50),
-//                        child: GestureDetector(
-//                          onTap: () => getOwnerProfile(),
-//                          child: Container(
-//                            width: 50,
-//                            height: 50,
-//                            child: DataProvider.of(context).user.user != null &&
-//                                    snapshot.data.profile ==
-//                                        DataProvider.of(context).user.user.id
-//                                ? FittedBox(
-//                                    fit: BoxFit.cover,
-//                                    child: DataProvider.of(context)
-//                                        .user
-//                                        .getImage())
-//                                : FadeInImage.memoryNetwork(
-//                                    fit: BoxFit.fitWidth,
-//                                    placeholder: kTransparentImage,
-//                                    image: DataProvider.of(context)
-//                                        .user
-//                                        .picUrl(snapshot.data.profile),
-//                                  ),
-//                          ),
-//                        ),
-//                      ),
-//                    ],
-//                  ),
-//                );
-//        } else {
-//          return Expanded(
-//            flex: 2,
-//            child: FittedBox(
-//              fit: BoxFit.none,
-//              child: CircularProgressIndicator(),
-//            ),
-//          );
-//        }
-//      },
-//    );
-//  }
-
-//  Widget getOwnerInformation() {
-//    return Expanded(
-//      flex: 8,
-//      child: FutureBuilder(
-//        future: getUser("username,sold_books,bought_books"),
-//        builder: (context, snapshot) {
-//          if (snapshot.hasData) {
-//            return Text(
-//              snapshot.data.username +
-//                  " har sålt " +
-//                  snapshot.data.soldBooks.toString() +
-//                  " böcker och köpt " +
-//                  snapshot.data.boughtBooks.toString() +
-//                  " böcker.",
-//              style: TextStyle(
-//                color: Color(0xFF373F51),
-//                fontSize: 16,
-//              ),
-//              textAlign: TextAlign.right,
-//            );
-//          } else {
-//            return Text("Laddar... har sålt ... böcker och köpt ... böcker.");
-//          }
-//        },
-//      ),
-//    );
-//  }
-
-//  void profilePicDialog() {
-//    print("Im in show alertDialog");
-//    Dialog dialog = Dialog(
-//      insetAnimationCurve: Curves.decelerate,
-//      insetAnimationDuration: Duration(milliseconds: 500),
-//      backgroundColor: Colors.white,
-//      child: Container(
-//        child: FittedBox(
-//          fit: BoxFit.contain,
-//          child: Image.network(DataProvider.of(context)
-//              .user
-//              .picUrl(DataProvider.of(context).user.user.profile)),
-//        ),
-//      ),
-//    );
-//    showDialog(context: context, builder: (BuildContext context) => dialog);
-//  }
-
   Widget getMessageButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -427,9 +270,8 @@ class _AdvertPageState extends State<AdvertPage> {
                                   .chatList
                                   .chattingUserList
                                   .contains(snapshot.data.username)) {
-                                DataProvider.of(context)
-                                    .chatList
-                                    .startNewChat(snapshot.data, widget.data.id);
+                                DataProvider.of(context).chatList.startNewChat(
+                                    snapshot.data, widget.data.id);
                                 DataProvider.of(context)
                                     .routing
                                     .routeChatPage(context, false);
@@ -449,13 +291,12 @@ class _AdvertPageState extends State<AdvertPage> {
                             ),
                           );
                         } else {
-                          return Text(
-                              "Skicka ett meddelande till " + "laddar...",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ));
+                          return LinearProgressIndicator(
+                            backgroundColor: Colors.white,
+                            valueColor: AlwaysStoppedAnimation(
+                              Color(0xFFAEDBD3),
+                            ),
+                          );
                         }
                       },
                     ),
@@ -479,28 +320,6 @@ class _AdvertPageState extends State<AdvertPage> {
         .user
         .getUserById(widget.data.owner, fields);
     return userData;
-  }
-
-  void developerDialog() {
-    Dialog dialog = Dialog(
-      backgroundColor: Colors.transparent,
-      child: Container(
-        height: MediaQuery.of(context).size.height / 3,
-        child: Center(
-          child: DataProvider.of(context).user.user == null
-              ? LoginPrompt()
-              : Container(
-                  color: Colors.white,
-                  child: Text(
-                    "Denna knapp är ej implementerad :(",
-                    style: TextStyle(fontSize: 45),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-        ),
-      ),
-    );
-    showDialog(context: context, builder: (context) => dialog);
   }
 
   void carouselDialog() {
@@ -550,19 +369,4 @@ class _AdvertPageState extends State<AdvertPage> {
     }
   }
 
-//  Future<List> getOwnerAdvertLists() async {
-//    User tempUser = await getUser("adverts");
-//    List<Advert> ownerAdvertList = await DataProvider.of(context)
-//        .advertList
-//        .getAdvertsFromIds(tempUser.adverts);
-//    return ownerAdvertList;
-//  }
-
-//  void getOwnerProfile() async {
-//    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
-//    User owner = await getUser(
-//        "id,username,sold_books,bought_books,profile,has_picture,adverts");
-//    Navigator.of(context, rootNavigator: true).pop(null);
-//    DataProvider.of(context).routing.routeProfilePage(context, owner);
-//  }
 }

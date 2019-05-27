@@ -68,13 +68,12 @@ class AdvertCreationState extends State<AdvertCreation> {
       duration: Duration(milliseconds: 100),
       curve: Curves.decelerate,
       child: MediaQuery.removeViewInsets(
-        removeLeft: true,
-        removeTop: true,
-        removeRight: true,
-        removeBottom: true,
-        context: context,
-        child: DialogContent()
-      ),
+          removeLeft: true,
+          removeTop: true,
+          removeRight: true,
+          removeBottom: true,
+          context: context,
+          child: DialogContent()),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
@@ -237,12 +236,16 @@ class AdvertCreationState extends State<AdvertCreation> {
                       ),
                     ],
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        stateButtons('Säljer', 'S'),
-                        stateButtons('Köper', 'B'),
-                      ]),
+                  Text(
+                    transactionType == "S" ? "Säljesannons" : "Köpesannons",
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                 ],
               ),
               Container(

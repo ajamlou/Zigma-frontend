@@ -167,8 +167,8 @@ class RegisterPageState extends State<RegisterPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(30.0)),
                                   image: DecorationImage(
-                                    image:
-                                        AssetImage('images/placeholderBook.png'),
+                                    image: AssetImage(
+                                        'images/placeholderBook.png'),
                                   ),
                                 ),
                                 child: MaterialButton(
@@ -463,6 +463,9 @@ class RegisterPageState extends State<RegisterPage> {
                 Navigator.of(context, rootNavigator: true).pop(null);
               }),
     );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => dialog);
   }
 }
