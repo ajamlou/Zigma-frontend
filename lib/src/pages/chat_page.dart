@@ -116,8 +116,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     channel = IOWebSocketChannel.connect(
         'ws://5aea970b.ngrok.io/ws/chat/' +
             widget.thisChat.chattingUser.username +
-            '/' +
-            widget.thisChat.advertId.toString() +
             '/',
         headers: {
           "Accept": "application/json",
