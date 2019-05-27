@@ -23,7 +23,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   AdvertList advertList = AdvertList();
-  UserMethodBody user = UserMethodBody(null);
+  UserMethodBody user = UserMethodBody();
   Routing routing = Routing();
   ChatList chatList = ChatList();
   LoadingDialog loadingScreen = LoadingDialog();

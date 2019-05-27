@@ -127,7 +127,8 @@ class _AdvertPageState extends State<AdvertPage> {
                                       fit: BoxFit.cover,
                                       child: DataProvider.of(context)
                                           .user
-                                          .user.profilePic)
+                                          .user
+                                          .profilePic)
                                   : FadeInImage.memoryNetwork(
                                       fit: BoxFit.fitWidth,
                                       placeholder: kTransparentImage,
@@ -421,16 +422,19 @@ class _AdvertPageState extends State<AdvertPage> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return GestureDetector(
-                            onTap: () => !DataProvider.of(context)
+                            onTap: () {
+                              if (!DataProvider.of(context)
+                                  .chatList
+                                  .chattingUserList
+                                  .contains(snapshot.data.username)) {
+                                DataProvider.of(context)
                                     .chatList
-                                    .chattingUserList
-                                    .contains(snapshot.data.username)
-                                ? DataProvider.of(context)
-                                    .chatList
-                                    .startNewChat(
-                                        DataProvider.of(context).user.user,
-                                        snapshot.data)
-                                : null,
+                                    .startNewChat(snapshot.data, widget.data.id);
+                                DataProvider.of(context)
+                                    .routing
+                                    .routeChatPage(context, false);
+                              }
+                            },
                             child: Container(
                               child: Text(
                                 "Skicka ett meddelande till " +

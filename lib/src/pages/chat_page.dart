@@ -4,6 +4,7 @@ import 'package:zigma2/src/DataProvider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../chat.dart';
+import '../user.dart';
 
 class ZigmaChat extends StatelessWidget {
   @override
@@ -50,9 +51,8 @@ class ZigmaChat extends StatelessWidget {
   }
 
   Widget chatCardBuilder(thisChat, context) => GestureDetector(
-        onTap: () => DataProvider.of(context)
-            .routing
-            .routeSpecificChat(context, thisChat),
+        onTap: () => DataProvider.of(context).routing.routeSpecificChat(
+            context, thisChat, DataProvider.of(context).user.user.token),
         child: Card(
           color: Colors.white,
           child: Container(
@@ -92,8 +92,9 @@ class ZigmaChat extends StatelessWidget {
 
 class ChatScreen extends StatefulWidget {
   final Chat thisChat;
+  final String token;
 
-  ChatScreen({this.thisChat});
+  ChatScreen({this.thisChat, this.token});
 
   @override
   State createState() => ChatScreenState();
@@ -107,13 +108,22 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    channel = IOWebSocketChannel.connect('ws://79b390be.ngrok.io/ws/chat/bajs/',
+    _textController = TextEditingController();
+    initSocket();
+  }
+
+  void initSocket() {
+    channel = IOWebSocketChannel.connect(
+        'ws://5aea970b.ngrok.io/ws/chat/' +
+            widget.thisChat.chattingUser.username +
+            '/' +
+            widget.thisChat.advertId.toString() +
+            '/',
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
-          "Authorization": "Token " + DataProvider.of(context).user.user.token
+          "Authorization": "Token " + widget.token
         });
-    _textController = TextEditingController();
     channel.stream.listen((data) {
       Message messageText = Message.fromJson(json.decode(data));
       ChatMessage message = ChatMessage(
@@ -170,12 +180,13 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             iconTheme: IconThemeData(color: Colors.transparent),
             elevation: 0.0,
             backgroundColor: Color(0xFFAEDBD3),
-            title: Text('Du chattar med ' + widget.thisChat.chattingUser.username,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 20,
-                )),
+            title:
+                Text('Du chattar med ' + widget.thisChat.chattingUser.username,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20,
+                    )),
             centerTitle: true,
             leading: Container(
               child: IconButton(
@@ -295,11 +306,14 @@ class ChatMessage extends StatelessWidget {
 class Message {
   Message({this.text});
 
+  String username;
   String text;
 
   Map<String, dynamic> toJson() => {
         'message': text,
       };
 
-  Message.fromJson(Map map) : text = map['message'];
+  Message.fromJson(Map map)
+      : text = map['text'],
+        username = map['user'];
 }

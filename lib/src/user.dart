@@ -76,7 +76,7 @@ class UserMethodBody {
   User user;
   String urlBody = "https://ecf116e6.eu.ngrok.io";
 
-  UserMethodBody(this.user);
+  UserMethodBody({this.user});
 
   void iniUser(String email, int id, String username, String token, int profile,
       bool hasPicture, List<int> adverts) {
