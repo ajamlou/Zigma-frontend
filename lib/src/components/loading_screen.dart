@@ -95,7 +95,7 @@ class _LoadingScreenState extends State<LoadingScreen>
 }
 
 class LoadingDialog {
-  void showLoadingDialog(context) {
+  void show(context) {
     AlertDialog dialog = AlertDialog(
         title: Text(
           "Laddar...",

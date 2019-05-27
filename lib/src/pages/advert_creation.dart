@@ -405,7 +405,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                       if (_advertKey.currentState.validate()) {
                         DataProvider.of(context)
                             .loadingScreen
-                            .showLoadingDialog(context);
+                            .show(context);
                         _advertKey.currentState.save();
                         responseList = await DataProvider.of(context)
                             .advertList
@@ -471,7 +471,7 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   Future<String> _scanQR() async {
     String qRResult = await BarcodeScanner.scan();
-    DataProvider.of(context).loadingScreen.showLoadingDialog(context);
+    DataProvider.of(context).loadingScreen.show(context);
     List l = await DataProvider.of(context).advertList.searchAdverts(qRResult);
     Navigator.of(context, rootNavigator: true).pop(null);
     if (l.length == 0) {

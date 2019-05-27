@@ -400,7 +400,7 @@ class RegisterPageState extends State<RegisterPage> {
                           validatePasswordController.text) {
                     DataProvider.of(context)
                         .loadingScreen
-                        .showLoadingDialog(context);
+                        .show(context);
                     _userKey.currentState.save();
                     _success = await DataProvider.of(context).user.register(
                         _userEmail,

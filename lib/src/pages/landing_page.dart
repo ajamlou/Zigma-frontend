@@ -284,7 +284,7 @@ class _LandingPageState extends State<LandingPage> {
                       onPressed: () async {
                         DataProvider.of(context)
                             .loadingScreen
-                            .showLoadingDialog(context);
+                            .show(context);
                         Future.delayed(Duration(milliseconds: 1500), () async {
                           await DataProvider.of(context).user.logout(context);
                           setState(() {});

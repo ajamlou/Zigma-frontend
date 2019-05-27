@@ -19,8 +19,7 @@ class AdvertPage extends StatefulWidget {
 }
 
 class _AdvertPageState extends State<AdvertPage> {
-  //Build method
-
+  LoginPrompt loginPrompt = LoginPrompt();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,17 +73,18 @@ class _AdvertPageState extends State<AdvertPage> {
     return FutureBuilder(
       future: getUser(""),
       builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.waiting){
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Card(
             child: SizedBox(
               height: 100,
               child: Center(
-                child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Color(0xFFAEDBD3)),),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Color(0xFFAEDBD3)),
+                ),
               ),
             ),
           );
-        }
-        else if (snapshot.hasData) {
+        } else if (snapshot.hasData) {
           return Card(
             elevation: 3,
             child: ListTile(
@@ -266,15 +266,21 @@ class _AdvertPageState extends State<AdvertPage> {
                         if (snapshot.hasData) {
                           return GestureDetector(
                             onTap: () {
-                              if (!DataProvider.of(context)
-                                  .chatList
-                                  .chattingUserList
-                                  .contains(snapshot.data.username)) {
-                                DataProvider.of(context).chatList.startNewChat(
-                                    snapshot.data, widget.data.id);
-                                DataProvider.of(context)
-                                    .routing
-                                    .routeChatPage(context, false);
+                              if (DataProvider.of(context).user.user != null) {
+                                if (!DataProvider.of(context)
+                                    .chatList
+                                    .chattingUserList
+                                    .contains(snapshot.data.username)) {
+                                  DataProvider.of(context)
+                                      .chatList
+                                      .startNewChat(
+                                          snapshot.data, widget.data.id);
+                                  DataProvider.of(context)
+                                      .routing
+                                      .routeChatPage(context, false);
+                                }
+                              }else{
+                                loginPrompt.show(context);
                               }
                             },
                             child: Container(
@@ -368,5 +374,4 @@ class _AdvertPageState extends State<AdvertPage> {
       );
     }
   }
-
 }

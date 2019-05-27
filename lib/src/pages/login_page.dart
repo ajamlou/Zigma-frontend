@@ -123,7 +123,7 @@ class LoginPageState extends State<LoginPage> {
                       if (_userKey.currentState.validate()) {
                         DataProvider.of(context)
                             .loadingScreen
-                            .showLoadingDialog(context);
+                            .show(context);
                         _userKey.currentState.save();
                         _success = await DataProvider.of(context)
                             .user

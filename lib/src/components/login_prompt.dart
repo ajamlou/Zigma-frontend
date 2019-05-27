@@ -27,7 +27,9 @@ class LoginPrompt extends StatelessWidget {
             width: 300,
             child: RaisedButton(
               color: Color(0xFF3FBE7E),
-              child: Text("Logga in", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              child: Text("Logga in",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
               onPressed: () async =>
                   DataProvider.of(context).routing.routeLoginPage(context),
             ),
@@ -38,7 +40,8 @@ class LoginPrompt extends StatelessWidget {
             child: RaisedButton(
               color: Color(0xFFECA72C),
               child: Text("Skapa ett Zigma konto",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
               onPressed: () async =>
                   DataProvider.of(context).routing.routeRegisterPage(context),
             ),
@@ -46,5 +49,15 @@ class LoginPrompt extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void show(context) {
+    AlertDialog dialog = AlertDialog(
+      content: Container(
+        height: 200,
+        child: LoginPrompt(),
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 }
