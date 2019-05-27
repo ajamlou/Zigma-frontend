@@ -169,6 +169,19 @@ class UserMethodBody {
     prefs.setStringList("adverts", adverts.map((i) => i.toString()).toList());
   }
 
+  Future<void> setTutorialPrefs(bool _isChecked) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("tutorial", _isChecked);
+  }
+
+  Future<bool> getTutorialPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("tutorial") != null) {
+      return prefs.getBool("tutorial");
+    } else
+      return false;
+  }
+
   Future<void> clearPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();

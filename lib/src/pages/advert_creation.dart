@@ -25,11 +25,11 @@ class AdvertCreationState extends State<AdvertCreation> {
   String edition;
   String transactionType;
   String condition;
+  bool _isSelected;
   List<Image> compressedImageList = [];
   List<String> encodedImageList = [];
   Image placeholderImage = Image.asset('images/placeholderBook.png');
 
-  bool _isChecked = false;
   TextEditingController titleController = TextEditingController();
   TextEditingController authorController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -55,7 +55,9 @@ class AdvertCreationState extends State<AdvertCreation> {
     priceController.addListener(_listener);
     //delays the appearance of whatever is in this method by one frame
     //so that the build method has time to build before it is called
-    WidgetsBinding.instance.addPostFrameCallback((_) async {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _isSelected = await DataProvider.of(context).user.getTutorialPrefs();
+    });
   }
 
   void showScannerInfoDialog() {
@@ -68,21 +70,17 @@ class AdvertCreationState extends State<AdvertCreation> {
       duration: Duration(milliseconds: 100),
       curve: Curves.decelerate,
       child: MediaQuery.removeViewInsets(
-          removeLeft: true,
-          removeTop: true,
-          removeRight: true,
-          removeBottom: true,
-          context: context,
-          child: DialogContent()),
+        removeLeft: true,
+        removeTop: true,
+        removeRight: true,
+        removeBottom: true,
+        context: context,
+        child: DialogContent(isSelected: _isSelected,),
+      ),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  void setPrefs() {
-    setState(() {
-      _isChecked = !_isChecked;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +157,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'S';
                   });
-                  showScannerInfoDialog();
+                  if(!_isSelected){showScannerInfoDialog();}
                 },
                 child: Text('Sälja',
                     style: TextStyle(
@@ -181,7 +179,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'B';
                   });
-                  showScannerInfoDialog();
+                  if(!_isSelected){showScannerInfoDialog();}
                 },
                 child: Text('Söker',
                     style: TextStyle(
@@ -403,9 +401,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                     onPressed: () async {
                       int stsCode;
                       if (_advertKey.currentState.validate()) {
-                        DataProvider.of(context)
-                            .loadingScreen
-                            .show(context);
+                        DataProvider.of(context).loadingScreen.show(context);
                         _advertKey.currentState.save();
                         responseList = await DataProvider.of(context)
                             .advertList
