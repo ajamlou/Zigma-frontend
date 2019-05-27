@@ -111,6 +111,8 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                     .removeWhere((a) => a.id == widget.advert.id);
                 widget.buyingAdverts
                     .removeWhere((a) => a.id == widget.advert.id);
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Text("Ja"),
             ),
