@@ -11,7 +11,7 @@ class ZigmaChat extends StatelessWidget {
   Widget build(BuildContext context) => buildChatMenu(context);
 
   Widget buildChatMenu(context) {
-    List<Chat> chatList = DataProvider.of(context).chatList.chatList;
+    ChatList chatList = DataProvider.of(context).user.user.chatList;
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomPadding: true,
@@ -39,13 +39,13 @@ class ZigmaChat extends StatelessWidget {
           )),
       endDrawer: Icon(Icons.settings),
       body: Container(
-          child: chatList.length == 0
+          child: chatList.chatList.length == 0
               ? Container(
                   child: Text('you aint got no chats \n you sad motherfucker'))
               : ListView.builder(
                   itemBuilder: (context, index) =>
-                      chatCardBuilder(chatList[index], context),
-                  itemCount: chatList.length,
+                      chatCardBuilder(chatList.chatList[index], context),
+                  itemCount: chatList.chatList.length,
                 )),
     );
   }

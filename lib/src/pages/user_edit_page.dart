@@ -4,6 +4,8 @@ import 'package:zigma2/src/components/edit.dart';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'dart:io';
 
+import '../image_handler.dart';
+
 class UserEditPage extends StatefulWidget {
   @override
   _UserEditPageState createState() => _UserEditPageState();
@@ -11,18 +13,19 @@ class UserEditPage extends StatefulWidget {
 
 class _UserEditPageState extends State<UserEditPage> {
   final RegExp username = RegExp(r'^.{0,12}$');
+  File image;
   final RegExp email = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
   @override
   Widget build(BuildContext context) {
-    File image;
+    var user = DataProvider.of(context).user.user;
     return Scaffold(
       appBar: AppBar(
         title: Text("Ändra Profildata",
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-        )),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            )),
         backgroundColor: Color(0xFFAEDBD3),
       ),
       body: Column(
@@ -30,33 +33,30 @@ class _UserEditPageState extends State<UserEditPage> {
         children: <Widget>[
           MaterialButton(
             onPressed: () async {
-              image = await Ih.showImageAlertDialog(context);
-              print(image.toString());
-              if(image != null){
-              DataProvider.of(context).user.user.hasPicture = true;}
-              setState(() {
-
-              });
+              await showImageAlertDialog(context);
+              user.hasPicture = true;
+              user.profilePic = Image.file(image);
+              String base64 = Ih.imageFileToString(image);
+              DataProvider.of(context).user.editUser("image", base64);
             },
             child: Container(
               width: 200,
               height: 200,
-              child: !DataProvider.of(context).user.user.hasPicture
+              child: !user.hasPicture
                   ? FittedBox(
                       child: Icon(Icons.person),
                       fit: BoxFit.cover,
                     )
                   : (image == null
                       ? Image.network(
-                          DataProvider.of(context).user.picUrl(
-                              DataProvider.of(context).user.user.profile),
+                          DataProvider.of(context).user.picUrl(user.profile),
                           fit: BoxFit.cover,
                         )
                       : Image.file(image)),
             ),
           ),
           Text(
-            DataProvider.of(context).user.user.username,
+            user.username,
             style: TextStyle(
                 fontSize: 45,
                 fontWeight: FontWeight.bold,
@@ -64,11 +64,11 @@ class _UserEditPageState extends State<UserEditPage> {
           ),
           MaterialButton(
             child: Text("Ändra användarnamn",
-            style: TextStyle(
-              color: Color(0xFF373F51),
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            )),
+                style: TextStyle(
+                  color: Color(0xFF373F51),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                )),
             onPressed: () async {
               String newUsername = await Navigator.push(
                 context,
@@ -76,10 +76,10 @@ class _UserEditPageState extends State<UserEditPage> {
                   builder: (context) => Edit(
                       regExp: username,
                       title: "Användarnamn",
-                      edit: DataProvider.of(context).user.user.username),
+                      edit: user.username),
                 ),
               );
-              if (newUsername != DataProvider.of(context).user.user.username) {
+              if (newUsername != user.username) {
                 DataProvider.of(context).user.editUser("username", newUsername);
               }
             },
@@ -98,22 +98,20 @@ class _UserEditPageState extends State<UserEditPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => Edit(
-                        regExp: email,
-                        title: "Email-adress",
-                        edit: DataProvider.of(context).user.user.email),
+                        regExp: email, title: "Email-adress", edit: user.email),
                   ),
                 );
-                if (newEmail != DataProvider.of(context).user.user.email) {
+                if (newEmail != user.email) {
                   DataProvider.of(context).user.editUser('email', newEmail);
                 }
               },
               leading: Text("Email"),
               trailing: Container(
-                width: MediaQuery.of(context).size.width/2,
+                width: MediaQuery.of(context).size.width / 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(DataProvider.of(context).user.user.email),
+                    Text(user.email),
                     Icon(Icons.arrow_forward_ios),
                   ],
                 ),
@@ -124,5 +122,48 @@ class _UserEditPageState extends State<UserEditPage> {
       ),
     );
   }
-}
 
+  Future<void> showImageAlertDialog(context) async {
+    File tempImage;
+    AlertDialog dialog = AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text(
+          "Välj från galleri eller fota med kameran.",
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xFF373F51),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: Container(
+          margin: EdgeInsets.only(left: 25, right: 25),
+          child: ButtonBar(
+            children: <Widget>[
+              RaisedButton(
+                color: Color(0xFFECA72C),
+                child: Icon(Icons.image, color: Colors.white),
+                onPressed: () async {
+                  tempImage = await getImage("gallery");
+                  setState(() {
+                    image = tempImage;
+                  });
+                  Navigator.of(context, rootNavigator: true).pop(null);
+                },
+              ),
+              RaisedButton(
+                color: Color(0xFFECA72C),
+                child: Icon(Icons.camera_alt, color: Colors.white),
+                onPressed: () async {
+                  tempImage = await getImage("camera");
+                  setState(() {
+                    image = tempImage;
+                  });
+                  Navigator.of(context, rootNavigator: true).pop(null);
+                },
+              ),
+            ],
+          ),
+        ));
+    showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+}

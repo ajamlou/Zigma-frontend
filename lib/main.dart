@@ -25,7 +25,6 @@ class _MyAppState extends State<MyApp> {
   AdvertList advertList = AdvertList();
   UserMethodBody user = UserMethodBody();
   Routing routing = Routing();
-  ChatList chatList = ChatList();
   LoadingDialog loadingScreen = LoadingDialog();
 
   @override
@@ -39,7 +38,6 @@ class _MyAppState extends State<MyApp> {
       user: user,
       routing: routing,
       loadingScreen: loadingScreen,
-      chatList: chatList,
       child: MaterialApp(
         title: 'Zigma App',
         theme: ThemeData(
