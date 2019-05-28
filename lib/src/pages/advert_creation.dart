@@ -268,7 +268,6 @@ class AdvertCreationState extends State<AdvertCreation> {
                         cursorColor: Color(0xFFDE5D5D),
                         keyboardType: TextInputType.number,
                         autofocus: false,
-                        // maxLength: 4,
                         decoration: InputDecoration(
                           hintText: 'Pris',
                           suffixIcon: priceController.text.length > 4 ||

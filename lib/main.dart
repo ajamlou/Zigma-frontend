@@ -59,11 +59,6 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-//  @override
-//  void dispose() {
-//    advertList.client.close();
-//    super.dispose();
-//  }
 
   @override
   void initState() {
@@ -71,5 +66,6 @@ class _MyAppState extends State<MyApp> {
     print("im in initState in the main MyApp");
     advertList.loadAdvertList();
     user.automaticLogin();
+
   }
 }
