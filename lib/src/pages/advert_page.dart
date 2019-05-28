@@ -269,11 +269,11 @@ class _AdvertPageState extends State<AdvertPage> {
                             onTap: () {
                               if (DataProvider.of(context).user.user != null) {
                                 if (!DataProvider.of(context)
-                                    .chatList
+                                    .user.user.chatList
                                     .chattingUserList
                                     .contains(snapshot.data.username)) {
                                   DataProvider.of(context)
-                                      .chatList
+                                      .user.user.chatList
                                       .startNewChat(
                                           snapshot.data);
                                   DataProvider.of(context)
