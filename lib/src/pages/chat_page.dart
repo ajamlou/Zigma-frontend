@@ -113,12 +113,30 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   WebSocketChannel channel;
   TextEditingController _textController;
   bool _isComposing = false;
+  final List<ChatMessage> chatMessages = [];
 
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
+    loadChatMessages();
     initSocket();
+  }
+
+  void loadChatMessages() {
+    final List<Message> rawMessages = widget.thisChat.chatMessages;
+    for (Message message in rawMessages) {
+      ChatMessage chatMessage = ChatMessage(
+        text: message.text,
+        animationController: AnimationController(
+          duration: Duration(milliseconds: 500),
+          vsync: this,
+        ),
+        profilePic: DataProvider.of(context).user.user.profilePic,
+      );
+      setState(() => chatMessages.insert(0, chatMessage));
+      chatMessage.animationController.forward();
+    }
   }
 
   void initSocket() {
@@ -131,25 +149,11 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           "content-type": "application/json",
           "Authorization": "Token " + widget.token
         });
-    channel.stream.listen((data) {
-      Message messageText = Message.fromJson(json.decode(data));
-      ChatMessage message = ChatMessage(
-        text: messageText.text,
-        animationController: AnimationController(
-          duration: Duration(milliseconds: 500),
-          vsync: this,
-        ),
-        profilePic: DataProvider.of(context).user.user.profilePic,
-      );
-      setState(() => widget.thisChat.styledChatMessages.insert(0, message));
-      message.animationController.forward();
-    });
   }
 
   @override
   void dispose() {
-    List<ChatMessage> _messages = widget.thisChat.styledChatMessages;
-    for (ChatMessage message in _messages)
+    for (ChatMessage message in chatMessages)
       message.animationController.dispose();
     super.dispose();
   }
@@ -169,7 +173,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<ChatMessage> _messages = widget.thisChat.styledChatMessages;
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: true,
@@ -206,8 +209,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   child: ListView.builder(
                     padding: EdgeInsets.all(8.0),
                     reverse: true,
-                    itemBuilder: (_, int index) => _messages[index],
-                    itemCount: _messages.length,
+                    itemBuilder: (_, int index) => chatMessages[index],
+                    itemCount: chatMessages.length,
                   ),
                 ),
                 Divider(height: 1.0),
@@ -307,6 +310,7 @@ class Message {
 
   String username;
   String text;
+  String receivingUser;
 
   Map<String, dynamic> toJson() => {
         'message': text,
@@ -314,6 +318,6 @@ class Message {
 
   Message.fromJson(Map map)
       : text = map['text'],
-        username = map['user'];
-
+        username = map['user'],
+        receivingUser = map['receiving_user'];
 }

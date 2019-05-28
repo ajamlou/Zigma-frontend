@@ -48,19 +48,26 @@ class User {
         });
     myInboxes.stream.listen((data) async {
       Message messageText = Message.fromJson(json.decode(data));
-      if (!chatList.getChattingUserList().contains(messageText.username)) {
-        User tempUser = await getUserByUsername(messageText.username);
-        Chat newChat = Chat(chattingUser: tempUser);
-        newChat.chatMessages.insert(0, messageText);
-        chatList.chatList.insert(0, newChat);
+      if (identical(messageText.receivingUser, username)) {
+      if (!chatList.getChattingUserList ()
+          .contains(messageText.username)) {
+      User tempUser = await getUserByUsername(messageText.username);
+      Chat newChat = Chat(chattingUser: tempUser);
+      newChat.chatMessages.insert(0, messageText);
+      chatList.chatList.insert(0, newChat);
       } else {
-        for (Chat chat in chatList.chatList) {
-          if (chat.chattingUser.username == messageText.username) {
-            chat.chatMessages.insert(0, messageText);
-          }
-        }
+      for (Chat chat in chatList.chatList) {
+      if (chat.chattingUser.username == messageText.username) {
+      chat.chatMessages.insert(0, messageText);
+      break;
       }
-    });
+      }
+      }
+      }
+      else {
+
+      }
+      });
   }
 
   Future<User> getUserByUsername(String username) async {
@@ -82,18 +89,19 @@ class UserCreation {
   UserCreation(this.email, this.username, this.password, this.imageAsBytes);
 
   // om imageAsBytes är null, encode utan den parametern
-  Map<String, dynamic> toJson() => imageAsBytes != null
-      ? {
-          'username': username,
-          'password': password,
-          'email': email,
-          'profile_picture': imageAsBytes,
-        }
-      : {
-          'username': username,
-          'password': password,
-          'email': email,
-        };
+  Map<String, dynamic> toJson() =>
+      imageAsBytes != null
+          ? {
+        'username': username,
+        'password': password,
+        'email': email,
+        'profile_picture': imageAsBytes,
+      }
+          : {
+        'username': username,
+        'password': password,
+        'email': email,
+      };
 
   UserCreation.fromJson(Map<String, dynamic> json)
       : email = json['email'],
@@ -107,7 +115,8 @@ class UserLogin {
 
   UserLogin(this.username, this.password);
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'username': username,
         'password': password,
       };
@@ -121,7 +130,16 @@ class UserMethodBody {
 
   void iniUser(String email, int id, String username, String token, int profile,
       bool hasPicture, List<int> adverts) {
-    user = User(email, id, username, token, profile, hasPicture, adverts, 0, 0);
+    user = User(
+        email,
+        id,
+        username,
+        token,
+        profile,
+        hasPicture,
+        adverts,
+        0,
+        0);
   }
 
   Future<User> getUserById(int id, String fields) async {
@@ -189,8 +207,7 @@ class UserMethodBody {
 
   Future<void> automaticLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("token") == null) {
-    } else {
+    if (prefs.getString("token") == null) {} else {
       iniUser(
           prefs.getString("email"),
           prefs.getInt("id"),
@@ -208,7 +225,7 @@ class UserMethodBody {
   Future<List> register(String email, String username, String password,
       String imageAsBytes) async {
     UserCreation _newUser =
-        UserCreation(email, username, password, imageAsBytes);
+    UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = urlBody + "/users/users/";
@@ -231,7 +248,8 @@ class UserMethodBody {
           localUser.hasPicture,
           localUser.username,
           localUser.email,
-          localUser.id, []);
+          localUser.id,
+          []);
       await automaticLogin();
     } else if (response.statusCode == 400) {
       localUser = UserCreation.fromJson(parsed);
@@ -305,7 +323,6 @@ class UserMethodBody {
           localUser.id,
           localUser.adverts);
       await automaticLogin();
-
     }
     picUrl(localUser.id);
     return response.statusCode;

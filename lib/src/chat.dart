@@ -4,7 +4,6 @@ import './pages/chat_page.dart';
 class Chat {
   User chattingUser;
   List<Message> chatMessages = [];
-  List<ChatMessage> styledChatMessages = [];
 
   Chat({this.chattingUser});
 
