@@ -75,12 +75,13 @@ class AdvertCreationState extends State<AdvertCreation> {
         removeRight: true,
         removeBottom: true,
         context: context,
-        child: DialogContent(isSelected: isSelected,),
+        child: DialogContent(
+          isSelected: isSelected,
+        ),
       ),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +158,9 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'S';
                   });
-                  if(!isSelected){showScannerInfoDialog();}
+                  if (!isSelected) {
+                    showScannerInfoDialog();
+                  }
                 },
                 child: Text('Sälja',
                     style: TextStyle(
@@ -179,7 +182,9 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'B';
                   });
-                  if(!isSelected){showScannerInfoDialog();}
+                  if (!isSelected) {
+                    showScannerInfoDialog();
+                  }
                 },
                 child: Text('Söker',
                     style: TextStyle(
@@ -545,52 +550,12 @@ class AdvertCreationState extends State<AdvertCreation> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  void showImageAlertDialog() {
-    File tempImage;
-    AlertDialog dialog = AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Välj från galleri eller fota med kameran.",
-          style: TextStyle(
-            fontSize: 20,
-            color: Color(0xFF373F51),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        content: Container(
-          margin: EdgeInsets.only(left: 25, right: 25),
-          child: ButtonBar(
-            children: <Widget>[
-              RaisedButton(
-                color: Color(0xFFECA72C),
-                child: Icon(Icons.image, color: Colors.white),
-                onPressed: () async {
-                  tempImage = await Ih.getImage("gallery");
-                  _insert(tempImage);
-                  Navigator.pop(context, true);
-                },
-              ),
-              RaisedButton(
-                color: Color(0xFFECA72C),
-                child: Icon(Icons.camera_alt, color: Colors.white),
-                onPressed: () async {
-                  tempImage = await Ih.getImage("camera");
-                  _insert(tempImage);
-                  Navigator.pop(context, true);
-                },
-              ),
-            ],
-          ),
-        ));
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
-
   Widget buildGallery(BuildContext context, int index) {
     Image _galleryImage = compressedImageList[index];
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         compressedImageList[index] == placeholderImage
-            ? showImageAlertDialog()
+            ? _insert(await Ih.showImageAlertDialog(context))
             : setState(() {
                 _selectedItemsIndex.contains(index)
                     ? _selectedItemsIndex.remove(index)

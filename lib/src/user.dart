@@ -282,6 +282,7 @@ class UserMethodBody {
     String url = urlBody + "/users/users/" + user.id.toString() + "/";
     print(url);
     Map changes = {header: edit};
+    print(changes.toString());
     if (header == "username") {
       user.username = changes["username"];
     } else if (header == "email") {

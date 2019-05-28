@@ -34,11 +34,11 @@ class _UserEditPageState extends State<UserEditPage> {
         children: <Widget>[
           MaterialButton(
             onPressed: () async {
-              File image = await showImageAlertDialog(context);
-              DataProvider.of(context).user.user.hasPicture = true;
-              DataProvider.of(context).user.user.profilePic = Image.file(image);
+              File image = await Ih.showImageAlertDialog(context);
+              user.hasPicture = true;
+              user.profilePic = Image.file(image);
               String base64 = Ih.imageFileToString(image);
-              DataProvider.of(context).user.editUser("image", base64);
+              DataProvider.of(context).user.editUser("profile_picture", base64);
               setState(() {});
             },
             child: Container(
@@ -120,42 +120,5 @@ class _UserEditPageState extends State<UserEditPage> {
     );
   }
 
-  Future<File> showImageAlertDialog(context) async {
-    File tempImage;
-    AlertDialog dialog = AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Välj från galleri eller fota med kameran.",
-          style: TextStyle(
-            fontSize: 20,
-            color: Color(0xFF373F51),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        content: Container(
-          margin: EdgeInsets.only(left: 25, right: 25),
-          child: ButtonBar(
-            children: <Widget>[
-              RaisedButton(
-                color: Color(0xFFECA72C),
-                child: Icon(Icons.image, color: Colors.white),
-                onPressed: () async {
-                  tempImage = await getImage("gallery");
-                  Navigator.pop(context, tempImage);
-                },
-              ),
-              RaisedButton(
-                color: Color(0xFFECA72C),
-                child: Icon(Icons.camera_alt, color: Colors.white),
-                onPressed: () async {
-                  tempImage = await getImage("camera");
-                  Navigator.pop(context, tempImage);
-                },
-              ),
-            ],
-          ),
-        ));
-    return showDialog(
-        context: context, builder: (BuildContext context) => dialog);
-  }
+
 }

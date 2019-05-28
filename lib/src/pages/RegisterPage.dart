@@ -25,57 +25,6 @@ class RegisterPageState extends State<RegisterPage> {
   Color registerColor = Color(0xFF373F51);
   File _image;
 
-  void showImageAlertDialog() async {
-    File tempImage;
-    AlertDialog dialog = AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Kamera eller Galleri?",
-          style: TextStyle(
-            fontSize: 20,
-            color: Color(0xFF373F51),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        content: ButtonBar(
-          children: <Widget>[
-            RaisedButton(
-              color: Color(0xFFAEDBD3),
-              child: Icon(
-                Icons.image,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop(null);
-                DataProvider.of(context).loadingScreen.show(context);
-                tempImage = await Ih.getImage("gallery");
-                setState(() {
-                  _image = tempImage;
-                });
-                Navigator.of(context, rootNavigator: true).pop(null);
-              },
-            ),
-            RaisedButton(
-              color: Color(0xFFAEDBD3),
-              child: Icon(
-                Icons.camera_alt,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop(null);
-                DataProvider.of(context).loadingScreen.show(context);
-                tempImage = await Ih.getImage("camera");
-                setState(() {
-                  _image = tempImage;
-                });
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ));
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -176,7 +125,11 @@ class RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 child: MaterialButton(
-                                  onPressed: showImageAlertDialog,
+                                  onPressed: () async {
+                                    _image =
+                                        await Ih.showImageAlertDialog(context);
+                                    setState(() {});
+                                  },
                                 ),
                               )
                             : Container(
@@ -204,11 +157,11 @@ class RegisterPageState extends State<RegisterPage> {
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
                                             )),
-                                        onPressed: () {
-                                          showImageAlertDialog();
-                                          setState(() {
-                                            _image = null;
-                                          });
+                                        onPressed: () async {
+                                          _image =
+                                              await Ih.showImageAlertDialog(
+                                                  context);
+                                          setState(() {});
                                         },
                                       ),
                                     ),
@@ -402,9 +355,7 @@ class RegisterPageState extends State<RegisterPage> {
                   if (_userKey.currentState.validate() &&
                       passwordController.text ==
                           validatePasswordController.text) {
-                    DataProvider.of(context)
-                        .loadingScreen
-                        .show(context);
+                    DataProvider.of(context).loadingScreen.show(context);
                     _userKey.currentState.save();
                     _success = await DataProvider.of(context).user.register(
                         _userEmail,
