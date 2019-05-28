@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:zigma2/src/advert.dart';
+import 'package:zigma2/src/data/advert.dart';
 import 'package:zigma2/src/components/carousel.dart';
 import 'dart:async';
 import 'package:zigma2/src/components/login_prompt.dart';
-import 'package:zigma2/src/user.dart';
+import 'package:zigma2/src/data/user.dart';
 
 class AdvertPage extends StatefulWidget {
   final Advert data;

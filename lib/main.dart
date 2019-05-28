@@ -3,8 +3,8 @@ import 'package:zigma2/src/components/loading_screen.dart';
 import 'package:zigma2/src/pages/splashscreen.dart';
 import 'package:zigma2/src/routes.dart';
 import './src/DataProvider.dart';
-import './src/advert.dart';
-import './src/user.dart';
+import 'package:zigma2/src/data/advert.dart';
+import 'package:zigma2/src/data/user.dart';
 import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());

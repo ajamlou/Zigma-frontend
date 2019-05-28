@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zigma2/src/advert.dart';
+import 'package:zigma2/src/data/advert.dart';
 import 'package:zigma2/src/components/edit.dart';
 
 import '../DataProvider.dart';

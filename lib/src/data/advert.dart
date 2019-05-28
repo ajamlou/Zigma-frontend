@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'DataProvider.dart';
+import 'package:zigma2/src/DataProvider.dart';
 
-part 'advert.g.dart';
+part 'package:zigma2/src/data/advert.g.dart';
 
 class Advert {
   String bookTitle;

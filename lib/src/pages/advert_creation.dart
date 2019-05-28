@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 
-import '../book.dart';
+import 'package:zigma2/src/data/book.dart';
 
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();

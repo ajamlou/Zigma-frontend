@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-part 'book.g.dart';
+part 'package:zigma2/src/data/book.g.dart';
 
 class Book {
   final String title;

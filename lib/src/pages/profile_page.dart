@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:zigma2/src/advert.dart';
-import 'package:zigma2/src/user.dart';
+import 'package:zigma2/src/data/advert.dart';
+import 'package:zigma2/src/data/user.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;

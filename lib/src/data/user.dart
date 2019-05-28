@@ -7,7 +7,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:zigma2/src/chat.dart';
 import 'package:zigma2/src/pages/chat_page.dart';
 
-part 'user.g.dart';
+part 'package:zigma2/src/data/user.g.dart';
 
 class User {
   String email;

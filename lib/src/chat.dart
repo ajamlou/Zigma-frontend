@@ -1,4 +1,4 @@
-import './user.dart';
+import 'package:zigma2/src/data/user.dart';
 import './pages/chat_page.dart';
 
 class Chat {
