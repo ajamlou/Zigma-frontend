@@ -267,17 +267,26 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: <Widget>[
           Container(
+            padding: EdgeInsets.only(top: 40, bottom: 15),
             child: Text(
-              "Wooops! Verkar som du inte lagt upp några annonser än! (synd!)",
+              "Woops! Det verkar som att du inte lagt upp några annonser än!",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 25),
             ),
           ),
-          RaisedButton(
-            onPressed: () {
-              DataProvider.of(context).routing.routeCreationPage(context);
-            },
-            child: Text("Lägg till en annons"),
+          Container(
+            width: 300,
+            child: RaisedButton(
+              color: Color(0xFF3FBE7E),
+              onPressed: () {
+                DataProvider.of(context).routing.routeCreationPage(context);
+              },
+              child: Text("Lägg till en annons",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              )),
+            ),
           ),
         ],
       ),
