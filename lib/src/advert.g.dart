@@ -16,7 +16,7 @@ Advert _$AdvertFromJson(Map<String, dynamic> json) {
       json['contact_info'] as String,
       json['condition'] as String,
       (json['image'] as List)
-          ?.map((id) => url + id.toString() + "/" as String)
+          ?.map((id) => url + id.toString() + "/")
           ?.toList(),
       json['transaction_type'] as String,
       json['edition'] as String,

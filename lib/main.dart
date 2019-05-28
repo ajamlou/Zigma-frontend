@@ -5,7 +5,6 @@ import 'package:zigma2/src/routes.dart';
 import './src/DataProvider.dart';
 import './src/advert.dart';
 import './src/user.dart';
-import './src/chat.dart';
 import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());

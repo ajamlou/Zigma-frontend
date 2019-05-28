@@ -25,7 +25,7 @@ class AdvertCreationState extends State<AdvertCreation> {
   String edition;
   String transactionType;
   String condition;
-  bool _isSelected;
+  bool isSelected;
   List<Image> compressedImageList = [];
   List<String> encodedImageList = [];
   Image placeholderImage = Image.asset('images/placeholderBook.png');
@@ -56,7 +56,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     //delays the appearance of whatever is in this method by one frame
     //so that the build method has time to build before it is called
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _isSelected = await DataProvider.of(context).user.getTutorialPrefs();
+      isSelected = await DataProvider.of(context).user.getTutorialPrefs();
     });
   }
 
@@ -75,7 +75,7 @@ class AdvertCreationState extends State<AdvertCreation> {
         removeRight: true,
         removeBottom: true,
         context: context,
-        child: DialogContent(isSelected: _isSelected,),
+        child: DialogContent(isSelected: isSelected,),
       ),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
@@ -157,7 +157,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'S';
                   });
-                  if(!_isSelected){showScannerInfoDialog();}
+                  if(!isSelected){showScannerInfoDialog();}
                 },
                 child: Text('Sälja',
                     style: TextStyle(
@@ -179,7 +179,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                   setState(() {
                     transactionType = 'B';
                   });
-                  if(!_isSelected){showScannerInfoDialog();}
+                  if(!isSelected){showScannerInfoDialog();}
                 },
                 child: Text('Söker',
                     style: TextStyle(

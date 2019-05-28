@@ -13,12 +13,10 @@ class _DialogContentState extends State<DialogContent> {
   SharedPreferences prefs;
 
   Future<void> setTutorialPrefs() async {
-    print("IM IN SET PREFS");
     prefs.setBool("tutorial", widget.isSelected);
   }
 
   Future<bool> getTutorialPrefs() async {
-    print("IM IN GET PREFS");
     print(prefs.getBool("tutorial").toString());
     if (prefs.getBool("tutorial") != null) {
       return prefs.getBool("tutorial");

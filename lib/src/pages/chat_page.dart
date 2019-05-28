@@ -4,7 +4,6 @@ import 'package:zigma2/src/DataProvider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../chat.dart';
-import '../user.dart';
 
 class ZigmaChat extends StatelessWidget {
   @override

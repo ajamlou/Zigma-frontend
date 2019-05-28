@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
@@ -31,45 +30,43 @@ Future<File> compressImageFile(File _uploadedImage) async {
   return compressedImage;
 }
 
-Future<File> showImageAlertDialog(context) async {
-  File tempImage;
-  AlertDialog dialog = AlertDialog(
-      backgroundColor: Colors.white,
-      title: Text(
-        "Välj från galleri eller fota med kameran.",
-        style: TextStyle(
-          fontSize: 20,
-          color: Color(0xFF373F51),
-        ),
-        textAlign: TextAlign.center,
-      ),
-      content: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
-        child: ButtonBar(
-          children: <Widget>[
-            RaisedButton(
-              color: Color(0xFFECA72C),
-              child: Icon(Icons.image, color: Colors.white),
-              onPressed: () async {
-                 tempImage = await getImage("gallery");
-                 return tempImage;
-              },
-            ),
-            RaisedButton(
-              color: Color(0xFFECA72C),
-              child: Icon(Icons.camera_alt, color: Colors.white),
-              onPressed: () async {
-               tempImage = await getImage("camera");
-               return tempImage;
-              },
-            ),
-          ],
-        ),
-      ));
-  showDialog(context: context, builder: (BuildContext context) => dialog);
-  print("IM TRYING TO RETURN AN IMAGE");
-
-}
+//Future<File> showImageAlertDialog(context) async {
+//  File tempImage;
+//  AlertDialog dialog = AlertDialog(
+//      backgroundColor: Colors.white,
+//      title: Text(
+//        "Välj från galleri eller fota med kameran.",
+//        style: TextStyle(
+//          fontSize: 20,
+//          color: Color(0xFF373F51),
+//        ),
+//        textAlign: TextAlign.center,
+//      ),
+//      content: Container(
+//        margin: EdgeInsets.only(left: 25, right: 25),
+//        child: ButtonBar(
+//          children: <Widget>[
+//            RaisedButton(
+//              color: Color(0xFFECA72C),
+//              child: Icon(Icons.image, color: Colors.white),
+//              onPressed: () async {
+//                 tempImage = await getImage("gallery");
+//              },
+//            ),
+//            RaisedButton(
+//              color: Color(0xFFECA72C),
+//              child: Icon(Icons.camera_alt, color: Colors.white),
+//              onPressed: () async {
+//               tempImage = await getImage("camera");
+//              },
+//            ),
+//          ],
+//        ),
+//      ));
+//  showDialog(context: context, builder: (BuildContext context) => dialog);
+//  print("IM TRYING TO RETURN AN IMAGE");
+//
+//}
 
 String imageFileToString(File _image) {
   String imageString = _image.toString();

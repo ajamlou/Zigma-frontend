@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:zigma2/src/chat.dart';
 import 'package:zigma2/src/user.dart';
 
 class LoginPage extends StatefulWidget {
