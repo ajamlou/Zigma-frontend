@@ -91,16 +91,19 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                 getCard(RegExp(""), widget.advert.isbn, "ISBN", widget.advert),
                 Container(
                   padding: EdgeInsets.only(top: 10),
-                  child: RaisedButton(
-                    color: Color(0xFF3FBE7E),
-                    onPressed: () async {
-                      await soldDialog(context);
-                    },
-                    child: Text("Markera annons som såld!",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    )),
+                  child: Container(
+                    width: 300,
+                    child: RaisedButton(
+                      color: Color(0xFF3FBE7E),
+                      onPressed: () async {
+                        await soldDialog(context);
+                      },
+                      child: Text("Markera annons som såld!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )),
+                    ),
                   ),
                 ),
               ],
