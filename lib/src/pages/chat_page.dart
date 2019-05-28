@@ -22,7 +22,7 @@ class ZigmaChat extends StatelessWidget {
           title: Text('Dina aktiva chattar',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Color(0xFF373F51),
                   fontSize: 20)),
           centerTitle: true,
           leading: Container(
@@ -50,7 +50,8 @@ class ZigmaChat extends StatelessWidget {
     );
   }
 
-  Widget chatCardBuilder(thisChat, context) => GestureDetector(
+  Widget chatCardBuilder(thisChat, context) {
+    return GestureDetector(
         onTap: () => DataProvider.of(context).routing.routeSpecificChat(
             context, thisChat, DataProvider.of(context).user.user.token),
         child: Card(
@@ -68,7 +69,7 @@ class ZigmaChat extends StatelessWidget {
                     fit: BoxFit.cover,
                     child: thisChat.chattingUser.profilePic == null
                         ? Image.asset('images/profile_pic2.png')
-                        : Image.network(thisChat.chattingUser.profilePic),
+                        : DataProvider.of(context).user.picUrl(thisChat.chattingUser.id),
                   ),
                 ),
               ),
@@ -97,7 +98,7 @@ class ZigmaChat extends StatelessWidget {
           ),
         ),
       );
-}
+}}
 
 class ChatScreen extends StatefulWidget {
   final Chat thisChat;
@@ -153,20 +154,24 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           thisIsAMessage.receiverId = actuallyMessages["receiver_id"];
           thisIsAMessage.senderId = actuallyMessages["sender_id"];
           ChatMessage chatMessage = ChatMessage(
+            username: thisIsAMessage.username,
             text: thisIsAMessage.text,
             animationController: AnimationController(
               duration: Duration(milliseconds: 500),
               vsync: this,
             ),
-            profilePic: DataProvider.of(context).user.user.profilePic,
+            profilePic: DataProvider.of(context).user.user.profilePic
           );
           setState(() => chatMessages.add(chatMessage));
           chatMessage.animationController.forward();
         }
       } else {
         Message messageText = Message.fromJson(json.decode(data));
+        print(messageText.username);
+        print(messageText.text);
         ChatMessage message = ChatMessage(
           text: messageText.text,
+          username: messageText.username,
           animationController: AnimationController(
             duration: Duration(milliseconds: 500),
             vsync: this,
@@ -288,10 +293,12 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 }
 
 class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.animationController, this.profilePic});
+  ChatMessage(
+      {this.text, this.username, this.animationController, this.profilePic});
 
   final Image profilePic;
   final String text;
+  final String username;
   final AnimationController animationController;
 
   @override
@@ -317,7 +324,7 @@ class ChatMessage extends StatelessWidget {
               child: Card(
                 child: ListTile(
                   dense: true,
-                  title: Text(DataProvider.of(context).user.user.username,
+                  title: Text(username,
                       style: TextStyle(color: Color(0xFFECA72C))),
                   subtitle: Container(
                     margin: const EdgeInsets.only(top: 3.0),

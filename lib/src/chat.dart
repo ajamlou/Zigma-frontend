@@ -1,13 +1,16 @@
 import 'package:zigma2/src/data/user.dart';
 import './pages/chat_page.dart';
 
+
 class Chat {
   User chattingUser;
   List<Message> chatMessages = [];
 
+
   Chat({this.chattingUser});
 
-}
+  }
+
 
 class ChatList {
   final List<Chat> chatList = [];

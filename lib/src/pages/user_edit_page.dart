@@ -21,9 +21,11 @@ class _UserEditPageState extends State<UserEditPage> {
     var user = DataProvider.of(context).user.user;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ändra Profildata",
+        title: Text("Redigera profil",
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
+              color: Color(0xFF373F51),
             )),
         backgroundColor: Color(0xFFAEDBD3),
       ),
