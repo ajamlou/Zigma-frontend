@@ -4,8 +4,6 @@ import 'package:zigma2/src/components/edit.dart';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 import 'dart:io';
 
-import '../image_handler.dart';
-
 class UserEditPage extends StatefulWidget {
   @override
   _UserEditPageState createState() => _UserEditPageState();

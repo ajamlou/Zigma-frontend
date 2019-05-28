@@ -60,29 +60,6 @@ class AdvertCreationState extends State<AdvertCreation> {
     });
   }
 
-  void showScannerInfoDialog() {
-    AnimatedPadding dialog = AnimatedPadding(
-      padding: MediaQuery.of(context).viewInsets +
-          EdgeInsets.only(
-              top: 50.0,
-              bottom: MediaQuery.of(context).size.height - 450.0,
-              left: MediaQuery.of(context).size.width - 200.0),
-      duration: Duration(milliseconds: 100),
-      curve: Curves.decelerate,
-      child: MediaQuery.removeViewInsets(
-        removeLeft: true,
-        removeTop: true,
-        removeRight: true,
-        removeBottom: true,
-        context: context,
-        child: DialogContent(
-          isSelected: isSelected,
-        ),
-      ),
-    );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
-
   @override
   Widget build(BuildContext context) {
     contactInfoController =
@@ -453,6 +430,29 @@ class AdvertCreationState extends State<AdvertCreation> {
             : CrossFadeState.showSecond,
       ),
     );
+  }
+
+  void showScannerInfoDialog() {
+    AnimatedPadding dialog = AnimatedPadding(
+      padding: MediaQuery.of(context).viewInsets +
+          EdgeInsets.only(
+              top: 50.0,
+              bottom: MediaQuery.of(context).size.height - 450.0,
+              left: MediaQuery.of(context).size.width - 200.0),
+      duration: Duration(milliseconds: 100),
+      curve: Curves.decelerate,
+      child: MediaQuery.removeViewInsets(
+        removeLeft: true,
+        removeTop: true,
+        removeRight: true,
+        removeBottom: true,
+        context: context,
+        child: DialogContent(
+          isSelected: isSelected,
+        ),
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
   void couldNotFindBook() {
