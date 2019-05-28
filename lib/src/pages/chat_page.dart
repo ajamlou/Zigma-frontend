@@ -22,7 +22,7 @@ class ZigmaChat extends StatelessWidget {
           title: Text('Dina aktiva chattar',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Color(0xFF373F51),
                   fontSize: 20)),
           centerTitle: true,
           leading: Container(
