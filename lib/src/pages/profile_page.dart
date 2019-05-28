@@ -309,7 +309,7 @@ class _ProfilePageState extends State<ProfilePage> {
             !widget.user.hasPicture
                 ? BoxShadow(color: Colors.transparent)
                 : BoxShadow(
-                    color: Colors.black87, offset: Offset(0, 5), blurRadius: 7),
+                    color: Colors.black87, offset: Offset(0, 3), blurRadius: 3),
           ],
         ),
         child: ClipRRect(
