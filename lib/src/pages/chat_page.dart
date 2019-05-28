@@ -119,29 +119,13 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _textController = TextEditingController();
-    loadChatMessages();
     initSocket();
   }
 
-  void loadChatMessages() {
-    final List<Message> rawMessages = widget.thisChat.chatMessages;
-    for (Message message in rawMessages) {
-      ChatMessage chatMessage = ChatMessage(
-        text: message.text,
-        animationController: AnimationController(
-          duration: Duration(milliseconds: 500),
-          vsync: this,
-        ),
-        profilePic: DataProvider.of(context).user.user.profilePic,
-      );
-      setState(() => chatMessages.insert(0, chatMessage));
-      chatMessage.animationController.forward();
-    }
-  }
-
   void initSocket() {
+    final List<Message> rawMessages = [];
     channel = IOWebSocketChannel.connect(
-        'ws://5aea970b.ngrok.io/ws/chat/' +
+        'ws://24e1a551.ngrok.io/ws/chat/' +
             widget.thisChat.chattingUser.username +
             '/',
         headers: {
@@ -149,6 +133,50 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           "content-type": "application/json",
           "Authorization": "Token " + widget.token
         });
+    print('socket to ' +
+        widget.thisChat.chattingUser.username +
+        ' has been opened');
+    MessageHistory messageHistory = MessageHistory('get_history');
+    channel.sink.add(json.encode(messageHistory));
+    print("I sunk MessageHistory");
+    channel.stream.listen((data) {
+      if (json.decode(data).toString().contains("data")) {
+        MessageHistory messageHistory =
+            MessageHistory.fromJson(json.decode(data));
+        print(messageHistory.fullMessageHistory);
+        for (Map<String, dynamic> actuallyMessages
+            in messageHistory.fullMessageHistory) {
+          print(actuallyMessages["message"]);
+          Message thisIsAMessage = Message(text: actuallyMessages["message"]);
+          thisIsAMessage.username = actuallyMessages["sender"];
+          thisIsAMessage.receivingUser = actuallyMessages["receiver"];
+          thisIsAMessage.receiverId = actuallyMessages["receiver_id"];
+          thisIsAMessage.senderId = actuallyMessages["sender_id"];
+          ChatMessage chatMessage = ChatMessage(
+            text: thisIsAMessage.text,
+            animationController: AnimationController(
+              duration: Duration(milliseconds: 500),
+              vsync: this,
+            ),
+            profilePic: DataProvider.of(context).user.user.profilePic,
+          );
+          setState(() => chatMessages.add(chatMessage));
+          chatMessage.animationController.forward();
+        }
+      } else {
+        Message messageText = Message.fromJson(json.decode(data));
+        ChatMessage message = ChatMessage(
+          text: messageText.text,
+          animationController: AnimationController(
+            duration: Duration(milliseconds: 500),
+            vsync: this,
+          ),
+          profilePic: DataProvider.of(context).user.user.profilePic,
+        );
+        setState(() => chatMessages.insert(0, message));
+        message.animationController.forward();
+      }
+    });
   }
 
   @override
@@ -311,13 +339,30 @@ class Message {
   String username;
   String text;
   String receivingUser;
+  int senderId;
+  int receiverId;
 
   Map<String, dynamic> toJson() => {
         'message': text,
       };
 
   Message.fromJson(Map map)
-      : text = map['text'],
-        username = map['user'],
-        receivingUser = map['receiving_user'];
+      : text = map['message'],
+        username = map['sender'],
+        receivingUser = map['receiver'],
+        senderId = map['sender_id'],
+        receiverId = map['receiver_id'];
+}
+
+class MessageHistory {
+  List fullMessageHistory;
+  String command;
+
+  MessageHistory(this.command);
+
+  Map<String, dynamic> toJson() => {
+        'command': command,
+      };
+
+  MessageHistory.fromJson(Map map) : fullMessageHistory = map['data'];
 }
