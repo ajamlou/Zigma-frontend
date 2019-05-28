@@ -20,15 +20,27 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text("Redigera annons",
+            style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF373F51),
+            fontSize: 20,),
+          textAlign: TextAlign.center,),
+          backgroundColor: Color(0xFFAEDBD3),),
         body: ListView(
           shrinkWrap: true,
           children: <Widget>[
             Column(
               children: <Widget>[
-                Text(
-                  "Bilder",
-                  style: TextStyle(fontSize: 30),
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    "Bilder",
+                    style: TextStyle(fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF373F51)),
+                  ),
                 ),
                 Container(
                   height: 200,
@@ -64,7 +76,9 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                 ),
                 Text(
                   "Annonsinformation",
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF373F51))
                 ),
                 getCard(RegExp(""), widget.advert.bookTitle, "Titel",
                     widget.advert),
@@ -75,11 +89,19 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                 getCard(RegExp(""), widget.advert.price.toString(), "Pris",
                     widget.advert),
                 getCard(RegExp(""), widget.advert.isbn, "ISBN", widget.advert),
-                RaisedButton(
-                  onPressed: () async {
-                    await soldDialog(context);
-                  },
-                  child: Text("Markera annons som såld!"),
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: RaisedButton(
+                    color: Color(0xFF3FBE7E),
+                    onPressed: () async {
+                      await soldDialog(context);
+                    },
+                    child: Text("Markera annons som såld!",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    )),
+                  ),
                 ),
               ],
             ),
@@ -92,7 +114,7 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
   Future<void> soldDialog(context) async {
     AlertDialog dialog = AlertDialog(
         title: Text(
-          "Är du säker på att du vill markera annonsen som såld? Detta kommer ta bort din annons",
+          "Är du säker på att du vill markera annonsen som såld? Detta kommer ta bort din annons.",
           style: TextStyle(
             fontSize: 20,
             color: Color(0xFF373F51),
@@ -103,6 +125,7 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
+              color: Color(0xFF3FBE7E),
               onPressed: () {
                 DataProvider.of(context)
                     .user
@@ -114,16 +137,23 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
-              child: Text("Ja"),
+              child: Text("Ja",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
             ),
             SizedBox(
               width: 25,
             ),
             RaisedButton(
+            color: Color(0xFFDE5D5D),
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop(null);
               },
-              child: Text("Nej"),
+              child: Text("Nej",
+                  style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
             ),
           ],
         ));
