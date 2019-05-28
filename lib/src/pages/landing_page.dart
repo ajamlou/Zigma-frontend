@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/components/login_prompt.dart';
 import 'package:zigma2/src/pages/search_page.dart';
 import 'package:zigma2/src/DataProvider.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -10,8 +9,6 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -145,16 +142,11 @@ class _LandingPageState extends State<LandingPage> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(40),
                                 child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  child: FadeInImage.memoryNetwork(
-                                    fit: BoxFit.fitWidth,
-                                    placeholder: kTransparentImage,
-                                    image: DataProvider.of(context)
-                                        .user
-                                        .picUrl(user.profile),
-                                  ),
-                                ),
+                                    width: 80,
+                                    height: 80,
+                                    child: FittedBox(
+                                        fit: BoxFit.cover,
+                                        child: user.profilePic)),
                               ),
                             ],
                           ),
@@ -188,9 +180,10 @@ class _LandingPageState extends State<LandingPage> {
                             : Text(
                                 "Novis boksäljare",
                                 style: TextStyle(
-                                    color: Color(0xFF373F51),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,),
+                                  color: Color(0xFF373F51),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
                       ],
                     ),
@@ -282,9 +275,7 @@ class _LandingPageState extends State<LandingPage> {
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       onPressed: () async {
-                        DataProvider.of(context)
-                            .loadingScreen
-                            .show(context);
+                        DataProvider.of(context).loadingScreen.show(context);
                         Future.delayed(Duration(milliseconds: 1500), () async {
                           await DataProvider.of(context).user.logout(context);
                           setState(() {});

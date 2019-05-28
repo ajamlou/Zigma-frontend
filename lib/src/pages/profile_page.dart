@@ -315,7 +315,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.white,
                     ),
                   ))
-              : user != null && widget.user.id == user.id
+              : (user != null && widget.user.id == user.id
                   ? SizedBox(
                       height: 150,
                       width: 150,
@@ -326,7 +326,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fit: BoxFit.cover,
                       width: 150,
                       height: 150,
-                    ),
+                    )),
         ),
       ),
     );
@@ -379,8 +379,10 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(
-              DataProvider.of(context).user.picUrl(widget.user.profile)),
+          child: widget.user.id == DataProvider.of(context).user.user.id
+              ? widget.user.profilePic
+              : Image.network(
+                  DataProvider.of(context).user.picUrl(widget.user.profile)),
         ),
       ),
     );

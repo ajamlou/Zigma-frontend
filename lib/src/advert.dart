@@ -46,12 +46,15 @@ class Advert {
 class AdvertList {
   final String urlBody = "https://ecf116e6.eu.ngrok.io";
   final List<Advert> list = [];
+  final client =  http.Client();
 
   Future<void> loadAdvertList() async {
     final String url = urlBody + "/adverts/adverts/recent_adverts/?format=json";
-    final req = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
-    final List resBody = json.decode(utf8.decode(req.bodyBytes));
+    final request = await client.get(Uri.encodeFull(url), headers:{"Accept":"application/json"});
+    print(request.body);
+//    final req = await http
+//        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    final List resBody = json.decode(utf8.decode(request.bodyBytes));
     for (int i = 0; i < resBody.length; i++) {
       list.add(Advert.fromJson(resBody[i]));
     }

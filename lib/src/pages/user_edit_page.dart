@@ -13,7 +13,8 @@ class UserEditPage extends StatefulWidget {
 
 class _UserEditPageState extends State<UserEditPage> {
   final RegExp username = RegExp(r'^.{0,12}$');
-  File image;
+
+  //File image;
   final RegExp email = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
@@ -33,11 +34,12 @@ class _UserEditPageState extends State<UserEditPage> {
         children: <Widget>[
           MaterialButton(
             onPressed: () async {
-              await showImageAlertDialog(context);
-              user.hasPicture = true;
-              user.profilePic = Image.file(image);
+              File image = await showImageAlertDialog(context);
+              DataProvider.of(context).user.user.hasPicture = true;
+              DataProvider.of(context).user.user.profilePic = Image.file(image);
               String base64 = Ih.imageFileToString(image);
               DataProvider.of(context).user.editUser("image", base64);
+              setState(() {});
             },
             child: Container(
               width: 200,
@@ -47,12 +49,7 @@ class _UserEditPageState extends State<UserEditPage> {
                       child: Icon(Icons.person),
                       fit: BoxFit.cover,
                     )
-                  : (image == null
-                      ? Image.network(
-                          DataProvider.of(context).user.picUrl(user.profile),
-                          fit: BoxFit.cover,
-                        )
-                      : Image.file(image)),
+                  : user.profilePic,
             ),
           ),
           Text(
@@ -123,7 +120,7 @@ class _UserEditPageState extends State<UserEditPage> {
     );
   }
 
-  Future<void> showImageAlertDialog(context) async {
+  Future<File> showImageAlertDialog(context) async {
     File tempImage;
     AlertDialog dialog = AlertDialog(
         backgroundColor: Colors.white,
@@ -144,10 +141,7 @@ class _UserEditPageState extends State<UserEditPage> {
                 child: Icon(Icons.image, color: Colors.white),
                 onPressed: () async {
                   tempImage = await getImage("gallery");
-                  setState(() {
-                    image = tempImage;
-                  });
-                  Navigator.of(context, rootNavigator: true).pop(null);
+                  Navigator.pop(context, tempImage);
                 },
               ),
               RaisedButton(
@@ -155,15 +149,13 @@ class _UserEditPageState extends State<UserEditPage> {
                 child: Icon(Icons.camera_alt, color: Colors.white),
                 onPressed: () async {
                   tempImage = await getImage("camera");
-                  setState(() {
-                    image = tempImage;
-                  });
-                  Navigator.of(context, rootNavigator: true).pop(null);
+                  Navigator.pop(context, tempImage);
                 },
               ),
             ],
           ),
         ));
-    showDialog(context: context, builder: (BuildContext context) => dialog);
+    return showDialog(
+        context: context, builder: (BuildContext context) => dialog);
   }
 }

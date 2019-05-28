@@ -293,6 +293,7 @@ class UserMethodBody {
       "content-type": "application/json",
       "Authorization": "Token " + user.token
     });
+    print(response.statusCode.toString());
     if (response.statusCode == 200) {
       return changes;
     } else {
