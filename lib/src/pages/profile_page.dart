@@ -114,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 stateButtons("Säljer", 0),
-                stateButtons("Köper", 1),
+                stateButtons("Söker", 1),
               ],
             ),
           ),

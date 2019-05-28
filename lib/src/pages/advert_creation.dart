@@ -235,7 +235,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                     ],
                   ),
                   Text(
-                    transactionType == "S" ? "Säljesannons" : "Köpesannons",
+                    transactionType == "S" ? "Säljesannons" : "Sökessannons",
                     style: TextStyle(
                         fontSize: 30,
                         color: Colors.white,
