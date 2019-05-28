@@ -15,37 +15,38 @@ class ZigmaChat extends StatelessWidget {
       backgroundColor: Colors.white,
       resizeToAvoidBottomPadding: true,
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          child: AppBar(
-            elevation: 1.0,
-            backgroundColor: Color(0xFFAEDBD3),
-            title: Text('Dina aktiva chattar',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20)),
-            centerTitle: true,
-            leading: Container(
-              child: IconButton(
-                color: Color(0xFFFFFFFF),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
+        preferredSize: Size.fromHeight(60.0),
+        child: AppBar(
+          elevation: 1.0,
+          backgroundColor: Color(0xFFAEDBD3),
+          title: Text('Dina aktiva chattar',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 20)),
+          centerTitle: true,
+          leading: Container(
+            child: IconButton(
+              color: Color(0xFFFFFFFF),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back),
             ),
-            actions: <Widget>[],
-          )),
+          ),
+        ),
+      ),
       endDrawer: Icon(Icons.settings),
       body: Container(
-          child: chatList.chatList.length == 0
-              ? Container(
-                  child: Text('you aint got no chats \n you sad motherfucker'))
-              : ListView.builder(
-                  itemBuilder: (context, index) =>
-                      chatCardBuilder(chatList.chatList[index], context),
-                  itemCount: chatList.chatList.length,
-                )),
+        child: chatList.chatList.length == 0
+            ? Container(
+                child: Text('you aint got no chats \n you sad motherfucker'))
+            : ListView.builder(
+                itemBuilder: (context, index) =>
+                    chatCardBuilder(chatList.chatList[index], context),
+                itemCount: chatList.chatList.length,
+              ),
+      ),
     );
   }
 

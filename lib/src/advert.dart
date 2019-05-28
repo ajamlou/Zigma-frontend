@@ -2,16 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'DataProvider.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'advert.g.dart';
 
-@JsonSerializable()
 class Advert {
-  @JsonKey(name: 'book_title')
   String bookTitle;
   final int owner;
-  @JsonKey(name: 'ISBN')
   String isbn;
   final String condition;
   String edition;
@@ -19,11 +15,8 @@ class Advert {
   int price;
   String authors;
   String state = "A";
-  @JsonKey(name: 'transaction_type')
   final String transactionType;
-  @JsonKey(name: 'contact_info')
   final String contactInfo;
-  @JsonKey(name: 'image')
   List<String> images;
 
   Advert(

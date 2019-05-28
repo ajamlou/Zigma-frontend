@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:zigma2/src/chat.dart';
@@ -10,19 +9,15 @@ import 'package:zigma2/src/pages/chat_page.dart';
 
 part 'user.g.dart';
 
-@JsonSerializable()
 class User {
   String email;
   int id;
   String username;
   String token;
-  @JsonKey(name: 'img_link')
   int profile;
   bool hasPicture;
   List<int> adverts;
-  @JsonKey(name: 'sold_books')
   int soldBooks;
-  @JsonKey(name: 'bought_books')
   int boughtBooks;
   Image profilePic;
   WebSocketChannel myInboxes;

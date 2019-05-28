@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 
+import '../book.dart';
+
 class AdvertCreation extends StatefulWidget {
   State createState() => AdvertCreationState();
 }
@@ -470,24 +472,23 @@ class AdvertCreationState extends State<AdvertCreation> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
+
   Future<String> _scanQR() async {
     String qRResult = await BarcodeScanner.scan();
     DataProvider.of(context).loadingScreen.show(context);
-    List l = await DataProvider.of(context).advertList.searchAdverts(qRResult);
+    Book book = await getBookByIsbn(qRResult);
     Navigator.of(context, rootNavigator: true).pop(null);
-    if (l.length == 0) {
+    if (book.title == null) {
       couldNotFindBook();
       setState(() {
         isbnController.text = qRResult;
       });
       return qRResult;
     }
-    var a = l[0];
     setState(() {
-      editionController.text = a.edition;
-      authorController.text = a.authors;
-      titleController.text = a.bookTitle;
-      isbnController.text = a.isbn;
+      authorController.text = book.authors;
+      titleController.text = book.title;
+      isbnController.text = book.isbn;
     });
     return qRResult;
   }
