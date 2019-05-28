@@ -436,7 +436,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                     child: Text("Ladda upp",
                         style: TextStyle(
                             color: Color(0xFFFFFFFF),
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16)),
                   ),
                 ),
               ),

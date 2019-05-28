@@ -102,6 +102,7 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
+                          fontSize: 16
                       )),
                     ),
                   ),

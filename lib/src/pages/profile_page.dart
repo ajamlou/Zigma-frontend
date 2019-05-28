@@ -269,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             padding: EdgeInsets.only(top: 40, bottom: 15),
             child: Text(
-              "Woops! Det verkar som att du inte lagt upp några annonser än!",
+              "Woops! Det verkar som att du inte lagt upp några annonser här ännu!",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 25),
             ),
@@ -285,6 +285,7 @@ class _ProfilePageState extends State<ProfilePage> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
+                  fontSize: 16
               )),
             ),
           ),
