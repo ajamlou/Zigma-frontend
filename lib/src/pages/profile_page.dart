@@ -114,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 stateButtons("Säljer", 0),
-                stateButtons("Köper", 1),
+                stateButtons("Söker", 1),
               ],
             ),
           ),
@@ -267,17 +267,27 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: <Widget>[
           Container(
+            padding: EdgeInsets.only(top: 100, bottom: 40),
             child: Text(
-              "Wooops! Verkar som du inte lagt upp några annonser än! (synd!)",
+              "Woops! Det verkar som att du inte lagt upp några annonser här ännu.",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 25),
             ),
           ),
-          RaisedButton(
-            onPressed: () {
-              DataProvider.of(context).routing.routeCreationPage(context);
-            },
-            child: Text("Lägg till en annons"),
+          Container(
+            width: 300,
+            child: RaisedButton(
+              color: Color(0xFF3FBE7E),
+              onPressed: () {
+                DataProvider.of(context).routing.routeCreationPage(context);
+              },
+              child: Text("Lägg till en annons",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                  fontSize: 16
+              )),
+            ),
           ),
         ],
       ),

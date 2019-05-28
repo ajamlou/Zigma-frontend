@@ -278,7 +278,9 @@ class _LandingPageState extends State<LandingPage> {
                       child: Text(
                         "Logga ut",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 16),
                       ),
                       onPressed: () async {
                         DataProvider.of(context).loadingScreen.show(context);

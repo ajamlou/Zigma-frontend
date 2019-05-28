@@ -350,7 +350,10 @@ class RegisterPageState extends State<RegisterPage> {
                 color: Color(0xFFECA72C),
                 child: Text('Skapa nytt konto',
                     style: TextStyle(
-                        color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold)),
+                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                    ),
                 onPressed: () async {
                   if (_userKey.currentState.validate() &&
                       passwordController.text ==

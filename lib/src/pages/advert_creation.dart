@@ -219,7 +219,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                     ],
                   ),
                   Text(
-                    transactionType == "S" ? "Säljesannons" : "Köpesannons",
+                    transactionType == "S" ? "Säljesannons" : "Sökessannons",
                     style: TextStyle(
                         fontSize: 30,
                         color: Colors.white,
@@ -419,7 +419,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                     child: Text("Ladda upp",
                         style: TextStyle(
                             color: Color(0xFFFFFFFF),
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16)),
                   ),
                 ),
               ),
