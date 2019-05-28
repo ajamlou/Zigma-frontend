@@ -267,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: 40, bottom: 15),
+            padding: EdgeInsets.only(top: 100, bottom: 40),
             child: Text(
               "Woops! Det verkar som att du inte lagt upp några annonser här ännu!",
               textAlign: TextAlign.center,
