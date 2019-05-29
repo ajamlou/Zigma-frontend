@@ -47,11 +47,11 @@ class User {
       if (json.decode(data).toString().contains("data")) {
         print('i recognize that I have received something containing data');
         MessageHistory messageHistory =
-            MessageHistory.fromJson(json.decode(data));
+        MessageHistory.fromJson(json.decode(data));
         print(messageHistory.fullMessageHistory);
         List<Message> newMessageListWow = [];
         for (Map<String, dynamic> actuallyMessages
-            in messageHistory.fullMessageHistory) {
+        in messageHistory.fullMessageHistory) {
           print(actuallyMessages["message"]);
           Message thisIsAMessage = Message(text: actuallyMessages["message"]);
           thisIsAMessage.username = actuallyMessages["sender"];
@@ -64,38 +64,36 @@ class User {
           print(message.receivingUser);
           if (message.receivingUser == username) {
             print("this message has been received by you");
-            if (chatList.chattingUserList.contains(message.username)) {
-              print("this chat already exists");
-              for (Chat chat in chatList.chatList) {
-                if (chat.chattingUser.username == message.receivingUser) {
-                  chat.chatMessages.add(message);
-                }
-              }
-            } else {
+            if (!chatList.chattingUserList.contains(message.username)) {
               print("this chat didnt exist");
               Chat c = Chat(chattingUser: await getUserById(message.senderId));
+              c.chattingUser.profilePic = Image.network(
+                  'https://24e1a551.ngrok.io/users/profile_pic/' +
+                      c.chattingUser.id.toString() + '/');
+              ;
               chatList.chattingUserList.insert(0, c.chattingUser.username);
               print("starting a chat with " + c.chattingUser.username);
               chatList.chatList.add(c);
               c.chatMessages.add(message);
+            } else {
+              print("this chat already exists");
             }
           }
           else {
             print("this message was sent by you");
-            if (chatList.chattingUserList.contains(message.receivingUser)) {
-              print("this chat already exists");
-              for (Chat chat in chatList.chatList) {
-                if (chat.chattingUser.username == message.receivingUser) {
-                  chat.chatMessages.add(message);
-                }
-              }
-            } else {
+            if (!chatList.chattingUserList.contains(message.receivingUser)) {
               print("this chat didnt exist");
-              Chat c = Chat(chattingUser: await getUserById(message.receiverId));
+              Chat c = Chat(
+                  chattingUser: await getUserById(message.receiverId));
+              c.chattingUser.profilePic = Image.network(
+                  'https://24e1a551.ngrok.io/users/profile_pic/' +
+                      c.chattingUser.id.toString() + '/');
               print("starting a chat with " + c.chattingUser.username);
               chatList.chattingUserList.insert(0, c.chattingUser.username);
               chatList.chatList.add(c);
               c.chatMessages.add(message);
+            } else {
+              print("this chat already exists");
             }
           }
         }
@@ -103,9 +101,14 @@ class User {
         print("this is just a normal message received");
         Message messageText = Message.fromJson(json.decode(data));
         if (identical(messageText.receivingUser, username)) {
+          print('this is a message received by you');
           if (!chatList.getChattingUserList().contains(messageText.username)) {
+            print("you didnt have a chat with this user previously");
             User tempUser = await getUserById(messageText.senderId);
             Chat newChat = Chat(chattingUser: tempUser);
+            newChat.chattingUser.profilePic = Image.network(
+                'https://24e1a551.ngrok.io/users/profile_pic/' +
+                    newChat.chattingUser.id.toString() + '/');
             newChat.chatMessages.insert(0, messageText);
             chatList.chatList.insert(0, newChat);
           } else {
@@ -116,13 +119,22 @@ class User {
               }
             }
           }
-        } else {}
+        } else {
+          print('this is a message you sent to someone else');
+          for (Chat chat in chatList.chatList) {
+            if (chat.chattingUser.username == messageText.receivingUser) {
+              chat.chatMessages.insert(0, messageText);
+              break;
+            }
+          }
+        }
       }
     });
   }
 
   Future<User> getUserById(int senderId) async {
-    final String url = 'https://24e1a551.ngrok.io/users/users/' + senderId.toString() + '/';
+    final String url = 'https://24e1a551.ngrok.io/users/users/' +
+        senderId.toString() + '/';
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     var resBody = json.decode(utf8.decode(req.bodyBytes));
@@ -140,18 +152,19 @@ class UserCreation {
   UserCreation(this.email, this.username, this.password, this.imageAsBytes);
 
   // om imageAsBytes är null, encode utan den parametern
-  Map<String, dynamic> toJson() => imageAsBytes != null
-      ? {
-          'username': username,
-          'password': password,
-          'email': email,
-          'profile_picture': imageAsBytes,
-        }
-      : {
-          'username': username,
-          'password': password,
-          'email': email,
-        };
+  Map<String, dynamic> toJson() =>
+      imageAsBytes != null
+          ? {
+        'username': username,
+        'password': password,
+        'email': email,
+        'profile_picture': imageAsBytes,
+      }
+          : {
+        'username': username,
+        'password': password,
+        'email': email,
+      };
 
   UserCreation.fromJson(Map<String, dynamic> json)
       : email = json['email'],
@@ -165,7 +178,8 @@ class UserLogin {
 
   UserLogin(this.username, this.password);
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'username': username,
         'password': password,
       };
@@ -173,13 +187,22 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
-  String urlBody = "https://ecf116e6.eu.ngrok.io";
+  String urlBody = "https://24e1a551.ngrok.io";
 
   UserMethodBody({this.user});
 
   void iniUser(String email, int id, String username, String token, int profile,
       bool hasPicture, List<int> adverts) {
-    user = User(email, id, username, token, profile, hasPicture, adverts, 0, 0);
+    user = User(
+        email,
+        id,
+        username,
+        token,
+        profile,
+        hasPicture,
+        adverts,
+        0,
+        0);
   }
 
   Future<User> getUserById(int id, String fields) async {
@@ -247,8 +270,7 @@ class UserMethodBody {
 
   Future<void> automaticLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("token") == null) {
-    } else {
+    if (prefs.getString("token") == null) {} else {
       iniUser(
           prefs.getString("email"),
           prefs.getInt("id"),
@@ -266,7 +288,7 @@ class UserMethodBody {
   Future<List> register(String email, String username, String password,
       String imageAsBytes) async {
     UserCreation _newUser =
-        UserCreation(email, username, password, imageAsBytes);
+    UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = urlBody + "/users/users/";
@@ -289,7 +311,8 @@ class UserMethodBody {
           localUser.hasPicture,
           localUser.username,
           localUser.email,
-          localUser.id, []);
+          localUser.id,
+          []);
       await automaticLogin();
     } else if (response.statusCode == 400) {
       localUser = UserCreation.fromJson(parsed);

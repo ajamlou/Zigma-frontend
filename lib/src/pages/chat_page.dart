@@ -52,53 +52,55 @@ class ZigmaChat extends StatelessWidget {
 
   Widget chatCardBuilder(thisChat, context) {
     return GestureDetector(
-        onTap: () => DataProvider.of(context).routing.routeSpecificChat(
-            context, thisChat, DataProvider.of(context).user.user.token),
-        child: Card(
-          color: Colors.white,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            child: Row(children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
-                  padding: EdgeInsets.only(right: 8),
-                  height: 100,
-                  width: 70,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: thisChat.chattingUser.profilePic == null
-                        ? Image.asset('images/profile_pic2.png')
-                        : DataProvider.of(context).user.picUrl(thisChat.chattingUser.id),
+      onTap: () => DataProvider.of(context).routing.routeSpecificChat(
+          context, thisChat, DataProvider.of(context).user.user.token),
+      child: Card(
+        color: Colors.white,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: Row(children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: EdgeInsets.only(right: 8),
+                height: 100,
+                width: 70,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: thisChat.chattingUser.profilePic == null
+                      ? Image.asset('images/profile_pic2.png')
+                      : DataProvider.of(context)
+                          .user
+                          .picUrl(thisChat.chattingUser.id),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 6,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    thisChat.chattingUser.username,
+                    style: TextStyle(fontSize: 30),
                   ),
-                ),
+                  thisChat.chatMessages.length == 0
+                      ? Text('')
+                      : Text(thisChat.chatMessages[0].text,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black, fontSize: 20)),
+                ],
               ),
-              Expanded(
-                flex: 6,
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      thisChat.chattingUser.username,
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    thisChat.chatMessages.length == 0
-                        ? Text('')
-                        : Text(thisChat.chatMessages[0].text,
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20)),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Icon(Icons.remove, color: Colors.red),
-              ),
-            ]),
-          ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Icon(Icons.remove, color: Colors.red),
+            ),
+          ]),
         ),
-      );
-}}
+      ),
+    );
+  }
+}
 
 class ChatScreen extends StatefulWidget {
   final Chat thisChat;
@@ -154,14 +156,13 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           thisIsAMessage.receiverId = actuallyMessages["receiver_id"];
           thisIsAMessage.senderId = actuallyMessages["sender_id"];
           ChatMessage chatMessage = ChatMessage(
-            username: thisIsAMessage.username,
-            text: thisIsAMessage.text,
-            animationController: AnimationController(
-              duration: Duration(milliseconds: 500),
-              vsync: this,
-            ),
-            profilePic: DataProvider.of(context).user.user.profilePic
-          );
+              username: thisIsAMessage.username,
+              text: thisIsAMessage.text,
+              animationController: AnimationController(
+                duration: Duration(milliseconds: 500),
+                vsync: this,
+              ),
+              profilePic: DataProvider.of(context).user.user.profilePic);
           setState(() => chatMessages.add(chatMessage));
           chatMessage.animationController.forward();
         }
@@ -309,28 +310,40 @@ class ChatMessage extends StatelessWidget {
       axisAlignment: 0.0,
       child: Container(
         child: Row(
+          mainAxisAlignment: username == DataProvider.of(context).user.user.username ?
+          MainAxisAlignment.start:
+          MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Container(
-                width: 50,
-                height: 50,
-                child: FittedBox(fit: BoxFit.fitWidth, child: profilePic),
-              ),
-            ),
-            Padding(padding: const EdgeInsets.all(8.0)),
             Expanded(
               child: Card(
+                color: username == DataProvider.of(context).user.user.username
+                    ? Color(0xFF373F51)
+                    : Color(0xFFAEDBD3),
                 child: ListTile(
                   dense: true,
                   title: Text(username,
                       style: TextStyle(color: Color(0xFFECA72C))),
                   subtitle: Container(
                     margin: const EdgeInsets.only(top: 3.0),
-                    child: Text(text, style: TextStyle(color: Colors.black)),
+                    child: Text(text,
+                        style: TextStyle(
+                            color: username == DataProvider.of(context).user.user.username
+                                ? Color(0xFFAEDBD3)
+                                : Color(0xFF373F51))),
                   ),
                 ),
+              ),
+            ),
+            Padding(padding: const EdgeInsets.all(8.0)),
+            username == DataProvider.of(context).user.user.username
+                ? Container()
+                : ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Container(
+                width: 50,
+                height: 50,
+                child: FittedBox(fit: BoxFit.fitWidth, child: profilePic),
               ),
             ),
           ],

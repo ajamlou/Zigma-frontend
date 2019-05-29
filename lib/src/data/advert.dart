@@ -37,7 +37,7 @@ class Advert {
 }
 
 class AdvertList {
-  final String urlBody = "https://ecf116e6.eu.ngrok.io";
+  final String urlBody = "https://24e1a551.ngrok.io";
   final List<Advert> list = [];
   final client =  http.Client();
 
