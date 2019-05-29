@@ -20,6 +20,18 @@ class ImageItem {
       this.isFirst = false,
       this.selected = false,
       this.isNew = false});
+
+  @override
+  String toString() {
+    String s = compressedImage.toString() +
+        encodedImage.toString() +
+        id.toString() +
+        selected.toString() +
+        isFirst.toString() +
+        isNew.toString();
+    super.toString();
+    return s;
+  }
 }
 
 class MultipleImagePicker extends StatefulWidget {
@@ -35,6 +47,7 @@ class MultipleImagePicker extends StatefulWidget {
 class _MultipleImagePickerState extends State<MultipleImagePicker> {
   Image placeholderImage = Image.asset('images/placeholderBook.png');
   List<ImageItem> _images = [];
+  List<ImageItem> _stateHolder;
   List<int> _imgToRemove = [];
 
   @override
@@ -58,6 +71,7 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
         isFirst: true,
       ),
     );
+    _stateHolder = List<ImageItem>.from(_images);
     super.initState();
   }
 
@@ -110,23 +124,32 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
                 ],
               )
             : Container(), // show nothing
-        Container(
-          width: 300,
-          child: RaisedButton(
-            color: Colors.lightBlue[400],
-            onPressed: () {
-              editImages();
-              Navigator.pop(context);
-            },
-            child: Text(
-              "Spara bildförändringar!",
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-        ),
+        !listIdentical()
+            ? Container(
+                width: 300,
+                child: RaisedButton(
+                  color: Colors.lightBlue[400],
+                  onPressed: () {
+                    editImages();
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Spara bildförändringar!",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
+  }
+
+  bool listIdentical() {
+    if (_stateHolder.toString().compareTo(_images.toString()) == 0)
+      return true;
+    else
+      return false;
   }
 
   Widget buildGallery(BuildContext context, int index) {
@@ -221,5 +244,6 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
       _images.forEach((item) => checkItem(item));
       _images.removeWhere((item) => item.selected);
     });
+    setState(() {});
   }
 }

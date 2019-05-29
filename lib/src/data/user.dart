@@ -87,7 +87,7 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
-  String urlBody = "https://2652879d.eu.ngrok.io";
+  String urlBody = "https://c2abc9f7.ngrok.io";
 
   UserMethodBody({this.user});
 
@@ -109,7 +109,7 @@ class UserMethodBody {
     if (user.chatList == null) {
       user.chatList = ChatList();
     }
-    user.myInboxes = IOWebSocketChannel.connect('wss://2652879d.eu.ngrok.io/ws/myinbox/',
+    user.myInboxes = IOWebSocketChannel.connect('wss://c2abc9f7.ngrok.io/ws/myinbox/',
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
