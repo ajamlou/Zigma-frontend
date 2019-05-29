@@ -87,7 +87,7 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
-  String urlBody = "https://24e1a551.ngrok.io";
+  String urlBody = "https://2652879d.eu.ngrok.io";
 
   UserMethodBody({this.user});
 

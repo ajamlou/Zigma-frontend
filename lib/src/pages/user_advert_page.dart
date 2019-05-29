@@ -50,9 +50,7 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                 ),
                 Container(
                   child: MultipleImagePicker(
-                    images: widget.advert.images,
-                    id: widget.advert.id
-                  ),
+                      images: widget.advert.images, id: widget.advert.id),
                 ),
                 Text("Annonsinformation",
                     style: TextStyle(
@@ -92,7 +90,6 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
       ),
     );
   }
-
 
   Future<void> soldDialog(context) async {
     AlertDialog dialog = AlertDialog(

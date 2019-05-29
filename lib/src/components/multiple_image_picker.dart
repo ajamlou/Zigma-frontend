@@ -27,6 +27,7 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
   void initState() {
     for (String item in widget.images) {
       _compressedImageList.add(Image.network(item));
+      _encodedImageList.add("placeholder");
     }
     _compressedImageList.add(placeholderImage);
     _originalListLength = _compressedImageList.length;
@@ -148,10 +149,9 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
 // Remove the selected items from the lists
   void _remove() {
     if (_selectedItemsIndex.length != 0) {
-      for (int index = _compressedImageList.length; index >= 0; index--) {
-        if (_selectedItemsIndex.contains(index)) {
-          _compressedImageList.removeAt(index);
-        }
+      for (int i = 0; i <= _selectedItemsIndex.length; i++) {
+          _compressedImageList.removeAt(_selectedItemsIndex[i]);
+          _encodedImageList.removeAt(_selectedItemsIndex[i]);
       }
       _selectedItemsIndex = [];
       setState(() {});
