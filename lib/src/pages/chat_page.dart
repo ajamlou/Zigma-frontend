@@ -120,16 +120,28 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   TextEditingController _textController;
   bool _isComposing = false;
   final List<ChatMessage> chatMessages = [];
+  ScrollController scrollController;
+
+  _scrollController(){
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      setState(() {
+        print('reached my limit');
+      });
+    }
+}
 
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
+    scrollController = ScrollController();
+    scrollController.addListener(_scrollController);
     initSocket();
   }
 
   void initSocket() {
-   // final List<Message> rawMessages = [];
+    // final List<Message> rawMessages = [];
     channel = IOWebSocketChannel.connect(
         'wss://c2abc9f7.ngrok.io/ws/chat/' +
             widget.thisChat.chattingUser.username +
@@ -142,13 +154,14 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     print('socket to ' +
         widget.thisChat.chattingUser.username +
         ' has been opened');
-    MessageHistory messageHistory = MessageHistory('get_history');
+    MessageHistory messageHistory = MessageHistory('get_history', startIndex: 0, endIndex: 10);
     channel.sink.add(json.encode(messageHistory));
     print("I sunk MessageHistory");
     channel.stream.listen((data) {
       if (json.decode(data).toString().contains("data")) {
         MessageHistory messageHistory =
             MessageHistory.fromJson(json.decode(data));
+          print(messageHistory.pagination.toString());
         for (Map<String, dynamic> actuallyMessages
             in messageHistory.fullMessageHistory) {
           print(actuallyMessages["message"]);
@@ -162,10 +175,12 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 duration: Duration(milliseconds: 500),
                 vsync: this,
               ),
-              profilePic: thisIsAMessage.username == DataProvider.of(context).user.user.username ?
-              null : Image.network(DataProvider.of(context)
-                  .user
-                  .picUrl(widget.thisChat.chattingUser.id)));
+              profilePic: thisIsAMessage.username ==
+                      DataProvider.of(context).user.user.username
+                  ? null
+                  : Image.network(DataProvider.of(context)
+                      .user
+                      .picUrl(widget.thisChat.chattingUser.id)));
           setState(() => chatMessages.add(chatMessage));
           chatMessage.animationController.forward();
         }
@@ -174,17 +189,18 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         print(messageText.username);
         print(messageText.text);
         ChatMessage message = ChatMessage(
-          text: messageText.text,
-          username: messageText.username,
-          animationController: AnimationController(
-            duration: Duration(milliseconds: 500),
-            vsync: this,
-          ),
-          profilePic: messageText.username == DataProvider.of(context).user.user.username ?
-          null : Image.network(DataProvider.of(context)
-              .user
-              .picUrl(widget.thisChat.chattingUser.id))
-        );
+            text: messageText.text,
+            username: messageText.username,
+            animationController: AnimationController(
+              duration: Duration(milliseconds: 500),
+              vsync: this,
+            ),
+            profilePic: messageText.username ==
+                    DataProvider.of(context).user.user.username
+                ? null
+                : Image.network(DataProvider.of(context)
+                    .user
+                    .picUrl(widget.thisChat.chattingUser.id)));
         setState(() => chatMessages.insert(0, message));
         message.animationController.forward();
       }
@@ -247,6 +263,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               children: <Widget>[
                 Flexible(
                   child: ListView.builder(
+                    controller: scrollController,
                     padding: EdgeInsets.all(8.0),
                     reverse: true,
                     itemBuilder: (_, int index) => chatMessages[index],
@@ -380,13 +397,22 @@ class Message {
 
 class MessageHistory {
   List fullMessageHistory;
+  Map<String, dynamic> pagination;
   String command;
+  int startIndex;
+  int endIndex;
+  int finalIndex;
+  bool hasMoreMessages;
 
-  MessageHistory(this.command);
+  MessageHistory(this.command, {this.startIndex, this.endIndex});
 
-  Map<String, dynamic> toJson() => {
-        'command': command,
-      };
+  Map<String, dynamic> toJson() =>
+      {'command': command, 'start_index': startIndex, 'end_index': endIndex};
 
-  MessageHistory.fromJson(Map map) : fullMessageHistory = map['data'];
+  MessageHistory.fromJson(Map map)
+      : fullMessageHistory = map['data'],
+        pagination = map['pagination'];
+
+  void unMapPagination(map) {
+  }
 }
