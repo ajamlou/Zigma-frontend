@@ -135,9 +135,11 @@ class CarouselState extends State<Carousel> {
                 children: <Widget>[
                   Center(child: CircularProgressIndicator()),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: netImage['file']
-                  ),
+                      borderRadius: BorderRadius.circular(20),
+                      child: FittedBox(
+                        child: netImage['file'],
+                        fit: BoxFit.cover,
+                      )),
                 ],
               ),
             ))
