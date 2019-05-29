@@ -36,5 +36,5 @@ Map<String, dynamic> _$AdvertToJson(Advert instance) => <String, dynamic>{
       'state': instance.state,
       'transaction_type': instance.transactionType,
       'contact_info': instance.contactInfo,
-      'image': instance.images
+      'image': instance.encodedImageList
     };

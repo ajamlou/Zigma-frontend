@@ -174,8 +174,7 @@ class AdvertList {
       String condition,
       String transactionType,
       String edition,
-      context,
-      List compressedImageList) async {
+      context) async {
     condition = checkCondition(condition);
     Advert _newAd = Advert(
         bookTitle: title,
