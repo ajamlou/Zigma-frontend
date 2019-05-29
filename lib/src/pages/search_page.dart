@@ -79,12 +79,10 @@ class SearchPage extends SearchDelegate<void> {
                             child: query == tempQuery
                                 ? (savedSearch[index].images.length == 0
                                     ? Image.asset("images/placeholder_book.png")
-                                    : Image.network(
-                                        savedSearch[index].images[0]))
+                                    : savedSearch[index].images[0]['file'])
                                 : (snapshot.data[index].images.length == 0
                                     ? Image.asset("images/placeholder_book.png")
-                                    : Image.network(
-                                        snapshot.data[index].images[0])),
+                                    : snapshot.data[index].images[0]["file"]),
                           ),
                         ),
                         onTap: () async {

@@ -398,8 +398,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                                 condition,
                                 transactionType,
                                 edition,
-                                context,
-                                compressedImageList);
+                                context);
                         setState(() {
                           stsCode = responseList[0];
                         });

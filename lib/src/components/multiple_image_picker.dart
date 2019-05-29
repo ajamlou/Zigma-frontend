@@ -35,7 +35,7 @@ class ImageItem {
 }
 
 class MultipleImagePicker extends StatefulWidget {
-  final List<String> images;
+  final List<Map<String, dynamic>> images;
   final int id;
 
   MultipleImagePicker({this.images, this.id});
@@ -53,14 +53,11 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
   @override
   void initState() {
     //extract id:s from the list of images
-    for (String image in widget.images) {
-      List l = image.split("/");
+    for (Map image in widget.images) {
       _images.add(
         ImageItem(
-          id: int.parse(
-            l[l.length - 2],
-          ),
-          compressedImage: Image.network(image),
+          id: image["id"],
+          compressedImage: image["file"],
         ),
       );
     }
@@ -131,7 +128,7 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
                   color: Colors.lightBlue[400],
                   onPressed: () {
                     editImages();
-                    Navigator.pop(context);
+                    Navigator.pop(context, getImages());
                   },
                   child: Text(
                     "Spara bildförändringar!",
@@ -143,6 +140,19 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
             : Container(),
       ],
     );
+  }
+
+  List<Map<String, dynamic>> getImages() {
+    List<Map<String, dynamic>> l = [];
+    _images.removeWhere((item) => item.isFirst);
+    if (_images.length == 0) {
+      return l;
+    }
+    for (ImageItem item in _images) {
+      l.add({'file': item.compressedImage, 'id': item.id});
+    }
+
+    return l;
   }
 
   bool listIdentical() {
