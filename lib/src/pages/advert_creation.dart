@@ -594,9 +594,11 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   // Insert the new item to the lists
   void _insert(File _nextItem) {
-    compressedImageList.add(Image.file(_nextItem));
-    encodedImageList.add(Ih.imageFileToString(_nextItem));
-    setState(() {});
+    if(_nextItem != null) {
+      compressedImageList.add(Image.file(_nextItem));
+      encodedImageList.add(Ih.imageFileToString(_nextItem));
+      setState(() {});
+    }
   }
 
 // Remove the selected items from the lists

@@ -35,11 +35,15 @@ class _UserEditPageState extends State<UserEditPage> {
           MaterialButton(
             onPressed: () async {
               File image = await Ih.showImageAlertDialog(context);
-              user.hasPicture = true;
-              user.profilePic = Image.file(image);
-              String base64 = Ih.imageFileToString(image);
-              DataProvider.of(context).user.editUser("profile_picture", base64);
-              setState(() {});
+              if (image != null) {
+                user.hasPicture = true;
+                user.profilePic = Image.file(image);
+                String base64 = Ih.imageFileToString(image);
+                DataProvider.of(context)
+                    .user
+                    .editUser("profile_picture", base64);
+                setState(() {});
+              }
             },
             child: Container(
               width: 200,
@@ -119,6 +123,4 @@ class _UserEditPageState extends State<UserEditPage> {
       ),
     );
   }
-
-
 }

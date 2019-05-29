@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zigma2/src/components/multiple_image_picker.dart';
 import 'package:zigma2/src/data/advert.dart';
 import 'package:zigma2/src/components/edit.dart';
 
@@ -21,13 +22,17 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
     return Container(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Redigera annons",
+          title: Text(
+            "Redigera annons",
             style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF373F51),
-            fontSize: 20,),
-          textAlign: TextAlign.center,),
-          backgroundColor: Color(0xFFAEDBD3),),
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF373F51),
+              fontSize: 20,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Color(0xFFAEDBD3),
+        ),
         body: ListView(
           shrinkWrap: true,
           children: <Widget>[
@@ -37,49 +42,23 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                   padding: EdgeInsets.only(top: 10),
                   child: Text(
                     "Bilder",
-                    style: TextStyle(fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF373F51)),
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF373F51)),
                   ),
                 ),
                 Container(
-                  height: 200,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.advert.images.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 150,
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(border: Border.all(width: 2)),
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: <Widget>[
-                              Image.network(
-                                widget.advert.images[index],
-                              ),
-                              Positioned(
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: 80,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                  child: MultipleImagePicker(
+                    images: widget.advert.images,
+                    id: widget.advert.id
                   ),
                 ),
-                Text(
-                  "Annonsinformation",
-                  style: TextStyle(fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF373F51))
-                ),
+                Text("Annonsinformation",
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF373F51))),
                 getCard(RegExp(""), widget.advert.bookTitle, "Titel",
                     widget.advert),
                 getCard(RegExp(""), widget.advert.authors, "Författare",
@@ -99,11 +78,10 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                         await soldDialog(context);
                       },
                       child: Text("Markera annons som såld!",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                          fontSize: 16
-                      )),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 16)),
                     ),
                   ),
                 ),
@@ -114,6 +92,7 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
       ),
     );
   }
+
 
   Future<void> soldDialog(context) async {
     AlertDialog dialog = AlertDialog(
@@ -142,22 +121,20 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                 Navigator.pop(context);
               },
               child: Text("Ja",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
             SizedBox(
               width: 25,
             ),
             RaisedButton(
-            color: Color(0xFFDE5D5D),
+              color: Color(0xFFDE5D5D),
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop(null);
               },
               child: Text("Nej",
                   style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold)),
+                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           ],
         ));
