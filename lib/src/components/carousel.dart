@@ -136,11 +136,7 @@ class CarouselState extends State<Carousel> {
                   Center(child: CircularProgressIndicator()),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: FadeInImage.memoryNetwork(
-                      fit: BoxFit.cover,
-                      placeholder: kTransparentImage,
-                      image: netImage,
-                    ),
+                    child: netImage['file']
                   ),
                 ],
               ),

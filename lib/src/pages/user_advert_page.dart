@@ -31,6 +31,14 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
             ),
             textAlign: TextAlign.center,
           ),
+          leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context, widget.advert.images);
+              }),
           backgroundColor: Color(0xFFAEDBD3),
         ),
         body: ListView(

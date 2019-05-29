@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:zigma2/src/data/advert.dart';
 import 'package:zigma2/src/data/user.dart';
+import 'package:zigma2/src/pages/user_advert_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -190,10 +191,18 @@ class _ProfilePageState extends State<ProfilePage> {
     User user = DataProvider.of(context).user.user;
     var routes = DataProvider.of(context).routing;
     return MaterialButton(
-      onPressed: () {
+      onPressed: () async {
         if (identical(widget.user, user)) {
-          routes.routeUserAdvertPage(
-              context, a, buyingAdvertList, sellingAdvertList, false);
+          a.images = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserAdvertPage(
+                    advert: a,
+                    sellingAdverts: sellingAdvertList,
+                    buyingAdverts: buyingAdvertList,
+                  ),
+            ),
+          );
         } else {
           routes.routeAdvertPage(context, a, false);
         }
@@ -221,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     fit: BoxFit.cover,
                     child: a.images.length == 0
                         ? Image.asset('images/placeholder_book.png')
-                        : Image.network(a.images[0]),
+                        : a.images[0]["file"],
                   ),
                 ),
               ),
@@ -282,11 +291,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 DataProvider.of(context).routing.routeCreationPage(context);
               },
               child: Text("Lägg till en annons",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                  fontSize: 16
-              )),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 16)),
             ),
           ),
         ],

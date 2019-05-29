@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'package:zigma2/src/DataProvider.dart';
+import 'package:flutter/material.dart';
 
 part 'package:zigma2/src/data/advert.g.dart';
 
@@ -17,10 +19,10 @@ class Advert {
   String state = "A";
   final String transactionType;
   final String contactInfo;
-  List<String> images;
-
+  List<Map<String, dynamic>> images;
+  List<String> encodedImageList;
   Advert(
-      this.bookTitle,
+      {this.bookTitle,
       this.price,
       this.authors,
       this.isbn,
@@ -29,7 +31,8 @@ class Advert {
       this.images,
       this.transactionType,
       this.edition,
-      this.owner);
+      this.owner,
+      this.encodedImageList});
 
   factory Advert.fromJson(Map<String, dynamic> json) => _$AdvertFromJson(json);
 
@@ -39,11 +42,12 @@ class Advert {
 class AdvertList {
   final String urlBody = "https://c2abc9f7.ngrok.io";
   final List<Advert> list = [];
-  final client =  http.Client();
+  final client = http.Client();
 
   Future<void> loadAdvertList() async {
     final String url = urlBody + "/adverts/adverts/recent_adverts/?format=json";
-    final request = await client.get(Uri.encodeFull(url), headers:{"Accept":"application/json"});
+    final request = await client
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     print(request.body);
 //    final req = await http
 //        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
@@ -174,16 +178,16 @@ class AdvertList {
       List compressedImageList) async {
     condition = checkCondition(condition);
     Advert _newAd = Advert(
-        title,
-        price,
-        author,
-        isbn,
-        contactInfo,
-        condition,
-        encodedImageList,
-        transactionType,
-        edition,
-        DataProvider.of(context).user.user.id);
+        bookTitle: title,
+        price: price,
+        authors: author,
+        isbn: isbn,
+        contactInfo: contactInfo,
+        condition: condition,
+        encodedImageList: encodedImageList,
+        transactionType: transactionType,
+        edition: edition,
+        owner: DataProvider.of(context).user.user.id);
     var data = json.encode(_newAd.toJson(_newAd));
     print(data);
     final String postURL = urlBody + "/adverts/adverts/?format=json";
