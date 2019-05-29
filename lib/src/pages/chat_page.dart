@@ -61,17 +61,20 @@ class ZigmaChat extends StatelessWidget {
           child: Row(children: <Widget>[
             Expanded(
               flex: 2,
-              child: Container(
-                padding: EdgeInsets.only(right: 8),
-                height: 100,
-                width: 70,
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: thisChat.chattingUser.profilePic == null
-                      ? Image.asset('images/profile_pic2.png')
-                      : Image.network(DataProvider.of(context)
-                          .user
-                          .picUrl(thisChat.chattingUser.id)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Container(
+                  padding: EdgeInsets.only(right: 8),
+                  height: 60,
+                  width: 60,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: thisChat.chattingUser.profilePic == null
+                        ? Image.asset('images/profile_pic2.png')
+                        : Image.network(DataProvider.of(context)
+                            .user
+                            .picUrl(thisChat.chattingUser.id)),
+                  ),
                 ),
               ),
             ),
@@ -151,8 +154,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           print(actuallyMessages["message"]);
           Message thisIsAMessage = Message(text: actuallyMessages["message"]);
           thisIsAMessage.username = actuallyMessages["sender"];
-          thisIsAMessage.receivingUser = actuallyMessages["receiver"];
-          thisIsAMessage.receiverId = actuallyMessages["receiver_id"];
           thisIsAMessage.senderId = actuallyMessages["sender_id"];
           ChatMessage chatMessage = ChatMessage(
               username: thisIsAMessage.username,
@@ -161,7 +162,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 duration: Duration(milliseconds: 500),
                 vsync: this,
               ),
-              profilePic: Image.network(DataProvider.of(context)
+              profilePic: thisIsAMessage.username == DataProvider.of(context).user.user.username ?
+              null : Image.network(DataProvider.of(context)
                   .user
                   .picUrl(widget.thisChat.chattingUser.id)));
           setState(() => chatMessages.add(chatMessage));
@@ -178,7 +180,10 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             duration: Duration(milliseconds: 500),
             vsync: this,
           ),
-          profilePic: DataProvider.of(context).user.user.profilePic,
+          profilePic: messageText.username == DataProvider.of(context).user.user.username ?
+          null : Image.network(DataProvider.of(context)
+              .user
+              .picUrl(widget.thisChat.chattingUser.id))
         );
         setState(() => chatMessages.insert(0, message));
         message.animationController.forward();
@@ -313,29 +318,28 @@ class ChatMessage extends StatelessWidget {
       child: Container(
         child: Row(
           mainAxisAlignment:
-              myChat ? MainAxisAlignment.start : MainAxisAlignment.end,
+              myChat ? MainAxisAlignment.end : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            myChat ? Container() : Padding(padding: const EdgeInsets.all(20.0)),
-            Expanded(
-              child: Card(
-                color: myChat ? Color(0xFF373F51) : Color(0xFFAEDBD3),
-                child: ListTile(
-                  dense: true,
-                  title: Text(username,
-                      style: TextStyle(color: Color(0xFFECA72C))),
-                  subtitle: Container(
-                    margin: const EdgeInsets.only(top: 3.0),
-                    child: Text(text,
-                        style: TextStyle(
-                            color: myChat
-                                ? Color(0xFFAEDBD3)
-                                : Color(0xFF373F51))),
-                  ),
-                ),
-              ),
-            ),
             myChat ? Padding(padding: const EdgeInsets.all(30.0)) : Container(),
+            Flexible(
+              child: Card(
+                  color: myChat ? Color(0xFF373F51) : Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: RichText(
+                      softWrap: true,
+                      textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                          text: text,
+                          style: TextStyle(
+                              color:
+                                  myChat ? Colors.white : Color(0xFF373F51))),
+                    ),
+                  )),
+            ),
+            myChat ? Container() : Padding(padding: const EdgeInsets.all(20.0)),
             myChat
                 ? Container()
                 : ClipRRect(

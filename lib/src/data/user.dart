@@ -130,28 +130,13 @@ class UserMethodBody {
           print(actuallyMessages["message"]);
           Message thisIsAMessage = Message(text: actuallyMessages["message"]);
           thisIsAMessage.username = actuallyMessages["sender"];
-          thisIsAMessage.receivingUser = actuallyMessages["receiver"];
-          thisIsAMessage.receiverId = actuallyMessages["receiver_id"];
           thisIsAMessage.senderId = actuallyMessages["sender_id"];
+          thisIsAMessage.receivingUser = actuallyMessages["thread_participant"];
+          thisIsAMessage.receiverId = actuallyMessages["thread_participant_id"];
           newMessageListWow.add(thisIsAMessage);
         }
         for (Message message in newMessageListWow) {
           print(message.receivingUser);
-          if (message.receivingUser == user.username) {
-            print("this message has been received by you");
-            if (!user.chatList.chattingUserList.contains(message.username)) {
-              print("this chat didnt exist");
-              Chat c = Chat(chattingUser: await getUserById(message.senderId, ""));
-              user.chatList.chattingUserList.insert(0, c.chattingUser.username);
-              print("starting a chat with " + c.chattingUser.username);
-              user.chatList.chatList.add(c);
-              c.chatMessages.add(message);
-            } else {
-              print("this chat already exists");
-            }
-          }
-          else {
-            print("this message was sent by you");
             if (!user.chatList.chattingUserList.contains(message.receivingUser)) {
               print("this chat didnt exist");
               Chat c = Chat(
@@ -163,7 +148,6 @@ class UserMethodBody {
             } else {
               print("this chat already exists");
             }
-          }
         }
       } else {
         print("this is just a normal message received");
@@ -195,6 +179,7 @@ class UserMethodBody {
         }
       }
     });
+    print('i have stopped listening to my inbox');
   }
 
 
