@@ -5,33 +5,70 @@ import 'package:zigma2/src/image_handler.dart' as Ih;
 
 import '../DataProvider.dart';
 
+class ImageItem {
+  final Image compressedImage;
+  final String encodedImage;
+  final int id;
+  bool selected;
+  final bool isFirst;
+  final bool isNew;
+
+  ImageItem(
+      {this.id,
+      this.compressedImage,
+      this.encodedImage,
+      this.isFirst = false,
+      this.selected = false,
+      this.isNew = false});
+}
+
 class MultipleImagePicker extends StatefulWidget {
   final List<String> images;
-  final bool edit;
   final int id;
 
-  MultipleImagePicker({this.images, this.edit, this.id});
+  MultipleImagePicker({this.images, this.id});
 
   @override
   _MultipleImagePickerState createState() => _MultipleImagePickerState();
 }
 
 class _MultipleImagePickerState extends State<MultipleImagePicker> {
-  List<int> _selectedItemsIndex = [];
-  List<Image> _compressedImageList = [];
-  List<String> _encodedImageList = [];
-  int _originalListLength;
   Image placeholderImage = Image.asset('images/placeholderBook.png');
+  List<ImageItem> _images = [];
+  List<int> _imgToRemove = [];
 
   @override
   void initState() {
-    for (String item in widget.images) {
-      _compressedImageList.add(Image.network(item));
-      _encodedImageList.add("placeholder");
+    //extract id:s from the list of images
+    for (String image in widget.images) {
+      List l = image.split("/");
+      _images.add(
+        ImageItem(
+          id: int.parse(
+            l[l.length - 2],
+          ),
+          compressedImage: Image.network(image),
+        ),
+      );
     }
-    _compressedImageList.add(placeholderImage);
-    _originalListLength = _compressedImageList.length;
+    //Add the placeholder image that you click on to add more images
+    _images.add(
+      ImageItem(
+        compressedImage: placeholderImage,
+        isFirst: true,
+      ),
+    );
     super.initState();
+  }
+
+  //checks if any picture is selected
+  bool anySelected() {
+    for (ImageItem item in _images) {
+      if (item.selected) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -44,11 +81,11 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: _compressedImageList.length,
+            itemCount: _images.length,
             itemBuilder: buildGallery,
           ),
         ),
-        _selectedItemsIndex.length > 0
+        anySelected() //if any is selected, show row
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -57,53 +94,54 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
                     child: Container(
                       padding: EdgeInsets.only(top: 10),
                       width: 300,
-                      child: _compressedImageList.length == 1
-                          ? Text('')
-                          : RaisedButton(
-                              color: Color(0xFFDE5D5D),
-                              child: const Text(
-                                'Ta bort markerade bilder',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              onPressed: _remove,
-                            ),
+                      child: RaisedButton(
+                        color: Color(0xFFDE5D5D),
+                        child: const Text(
+                          'Ta bort markerade bilder',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: _remove,
+                      ),
                     ),
                   ),
                 ],
               )
-            : Container(),
-        _originalListLength != _compressedImageList.length
-            ? Container(
-                width: 300,
-                child: RaisedButton(
-                  color: Colors.lightBlue[400],
-                  onPressed: () {},
-                  child: Text("Ändra bilder!", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
-                ),
-              )
-            : Container(),
+            : Container(), // show nothing
+        Container(
+          width: 300,
+          child: RaisedButton(
+            color: Colors.lightBlue[400],
+            onPressed: () {
+              editImages();
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Spara bildförändringar!",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+        ),
       ],
     );
   }
 
   Widget buildGallery(BuildContext context, int index) {
-    Image _galleryImage = _compressedImageList[index];
+    Image _galleryImage = _images[index].compressedImage;
     return GestureDetector(
       onTap: () async {
-        _compressedImageList[index] == placeholderImage
+        _images[index].isFirst
             ? _insert(await Ih.showImageAlertDialog(context))
             : setState(() {
-                _selectedItemsIndex.contains(index)
-                    ? _selectedItemsIndex.remove(index)
-                    : _selectedItemsIndex.add(index);
+                _images[index].selected = !_images[index].selected;
               });
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
-        child: _selectedItemsIndex.contains(index)
+        child: _images[index].selected
             ? Container(
                 height: 250,
                 width: 150,
@@ -133,31 +171,55 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
   // Insert the new item to the lists
   void _insert(File _nextItem) {
     if (_nextItem != null) {
-      _compressedImageList.insert(
-          _compressedImageList.length - 1, Image.file(_nextItem));
-//      DataProvider.of(context).user.editAdvert(
-//          'new_images', [Ih.imageFileToString(_nextItem)], widget.id);
+      _images.insert(
+        _images.length - 1,
+        ImageItem(
+            compressedImage: Image.file(_nextItem),
+            encodedImage: Ih.imageFileToString(_nextItem),
+            isNew: true),
+      );
       setState(() {});
     }
   }
 
-  Future<void> editImages() async {
+  //sends the images that has been changed to the http:request methods
+  void editImages() {
+    if (_imgToRemove.length != 0) {
+      DataProvider.of(context)
+          .advertList
+          .editAdvert('delete_images', _imgToRemove, widget.id, context);
+    }
+    List _imagesToUpload = imagesToUpload();
+    if (_imagesToUpload.length != 0) {
+      DataProvider.of(context)
+          .advertList
+          .editAdvert('new_images', _imagesToUpload, widget.id, context);
+    }
+  }
 
+  //checks which images to upload and sorts their base64 strings into a List
+  List<String> imagesToUpload() {
+    List<String> imagesToUpload = [];
+    for (ImageItem item in _images) {
+      if (item.isNew) {
+        imagesToUpload.add(item.encodedImage);
+      }
+    }
+    return imagesToUpload;
+  }
 
+  //checks if item was from previous advert and puts them in the remove list
+  void checkItem(ImageItem item) {
+    if (item.selected && !item.isNew) {
+      _imgToRemove.add(item.id);
+    }
   }
 
 // Remove the selected items from the lists
   void _remove() {
-    print(_selectedItemsIndex.toString());
-    print(_compressedImageList.toString());
-    print(_encodedImageList.toString());
-    if (_selectedItemsIndex.length != 0) {
-      for (int i = 0; i >= _selectedItemsIndex.length; i++) {
-          _compressedImageList.removeAt(_selectedItemsIndex[i]);
-          _encodedImageList.removeAt(_selectedItemsIndex[i]);
-      }
-      _selectedItemsIndex = [];
-      setState(() {});
-    }
+    setState(() {
+      _images.forEach((item) => checkItem(item));
+      _images.removeWhere((item) => item.selected);
+    });
   }
 }

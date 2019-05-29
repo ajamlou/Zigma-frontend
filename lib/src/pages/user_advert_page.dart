@@ -108,8 +108,8 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
               color: Color(0xFF3FBE7E),
               onPressed: () {
                 DataProvider.of(context)
-                    .user
-                    .editAdvert("state", "I", widget.advert.id);
+                    .advertList
+                    .editAdvert("state", "I", widget.advert.id, context);
                 widget.sellingAdverts
                     .removeWhere((a) => a.id == widget.advert.id);
                 widget.buyingAdverts
@@ -153,26 +153,30 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
           if (newString != edit) {
             if (title == "Titel") {
               DataProvider.of(context)
-                  .user
-                  .editAdvert("book_title", newString, a.id);
+                  .advertList
+                  .editAdvert("book_title", newString, a.id, context);
               a.bookTitle = newString;
             } else if (title == "Författare") {
               DataProvider.of(context)
-                  .user
-                  .editAdvert("authors", newString, a.id);
+                  .advertList
+                  .editAdvert("authors", newString, a.id, context);
               a.authors = newString;
             } else if (title == "Upplaga") {
               DataProvider.of(context)
-                  .user
-                  .editAdvert("edition", newString, a.id);
+                  .advertList
+                  .editAdvert("edition", newString, a.id, context);
               a.edition = newString;
             } else if (title == "Pris") {
               var newInt = int.parse(newString);
               assert(newInt is int);
-              DataProvider.of(context).user.editAdvert("price", newInt, a.id);
+              DataProvider.of(context)
+                  .advertList
+                  .editAdvert("price", newInt, a.id, context);
               a.price = newInt;
             } else if (title == "ISBN") {
-              DataProvider.of(context).user.editAdvert(title, newString, a.id);
+              DataProvider.of(context)
+                  .advertList
+                  .editAdvert(title, newString, a.id, context);
               a.isbn = newString;
             }
           }

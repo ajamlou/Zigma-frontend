@@ -302,21 +302,7 @@ class UserMethodBody {
 
   User getUser() => user;
 
-  Future<Map> editAdvert(String header, dynamic edit, int id) async {
-    String url = urlBody + "/adverts/adverts/" + id.toString() + "/";
-    Map changes = {header: edit};
-    var data = json.encode(changes);
-    var response = await http.patch(Uri.encodeFull(url), body: data, headers: {
-      "Accept": "application/json",
-      "content-type": "application/json",
-      "Authorization": "Token " + user.token
-    });
-    if (response.statusCode == 200) {
-      return changes;
-    } else {
-      return json.decode(utf8.decode(response.bodyBytes));
-    }
-  }
+
 
   Future<Map> editUser(String header, String edit) async {
     print("IM IN EDIT USER");
