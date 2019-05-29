@@ -21,6 +21,7 @@ class Advert {
   final String contactInfo;
   List<Map<String, dynamic>> images;
   List<String> encodedImageList;
+
   Advert(
       {this.bookTitle,
       this.price,
@@ -33,6 +34,29 @@ class Advert {
       this.edition,
       this.owner,
       this.encodedImageList});
+
+  String toString() {
+    return "BookTitle: " +
+        bookTitle +
+        " Price: " +
+        price.toString() +
+        " Authors: " +
+        authors +
+        " isbn: " +
+        isbn +
+        " Contact info: " +
+        contactInfo +
+        " Condition: " +
+        condition +
+        " Transaction Type: " +
+        transactionType +
+        " Edition: " +
+        edition +
+        " Owner: " +
+        owner.toString() +
+        " Encoded Image List: " +
+        encodedImageList.toString();
+  }
 
   factory Advert.fromJson(Map<String, dynamic> json) => _$AdvertFromJson(json);
 

@@ -8,11 +8,11 @@ import 'package:zigma2/src/components/login_prompt.dart';
 import 'package:zigma2/src/data/user.dart';
 
 class AdvertPage extends StatefulWidget {
-  final Advert data;
+  final Advert advert;
   final List savedSearch;
   final String query;
 
-  AdvertPage({this.data, this.savedSearch, this.query});
+  AdvertPage({this.advert, this.savedSearch, this.query});
 
   @override
   _AdvertPageState createState() => _AdvertPageState();
@@ -57,10 +57,10 @@ class _AdvertPageState extends State<AdvertPage> {
             SizedBox(
               height: 30,
             ),
-            getText("Författare: ", widget.data.authors),
-            getText("Upplaga: ", widget.data.edition),
-            getText("Skick: ", widget.data.condition),
-            getText("ISBN: ", widget.data.isbn),
+            getText("Författare: ", widget.advert.authors),
+            getText("Upplaga: ", widget.advert.edition),
+            getText("Skick: ", widget.advert.condition),
+            getText("ISBN: ", widget.advert.isbn),
             getAdvertPrice(),
             getOwner(),
             getMessageButton(),
@@ -183,7 +183,7 @@ class _AdvertPageState extends State<AdvertPage> {
       alignment: Alignment(0, 0),
       height: 50,
       child: Text(
-        widget.data.bookTitle,
+        widget.advert.bookTitle,
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 20,
@@ -195,7 +195,7 @@ class _AdvertPageState extends State<AdvertPage> {
   }
 
   Widget getAdvertPictures() {
-    return widget.data.images.length == 0
+    return widget.advert.images.length == 0
         ? Container(
             height: 300,
             child: Image.asset('images/placeholder_book.png'),
@@ -217,7 +217,7 @@ class _AdvertPageState extends State<AdvertPage> {
                   carouselDialog();
                 },
                 child: Carousel(
-                    images: widget.data.images,
+                    images: widget.advert.images,
                     borderRadius: true,
                     noRadiusForIndicator: false),
               ),
@@ -229,7 +229,7 @@ class _AdvertPageState extends State<AdvertPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Text(
-        widget.data.price.toString() + ":-",
+        widget.advert.price.toString() + ":-",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold,
@@ -325,7 +325,7 @@ class _AdvertPageState extends State<AdvertPage> {
   Future<User> getUser(String fields) async {
     User userData = await DataProvider.of(context)
         .user
-        .getUserById(widget.data.owner, fields);
+        .getUserById(widget.advert.owner, fields);
     return userData;
   }
 
@@ -335,7 +335,7 @@ class _AdvertPageState extends State<AdvertPage> {
       child: Container(
         height: MediaQuery.of(context).size.height / 2,
         child: Carousel(
-            images: widget.data.images,
+            images: widget.advert.images,
             borderRadius: true,
             noRadiusForIndicator: false),
       ),

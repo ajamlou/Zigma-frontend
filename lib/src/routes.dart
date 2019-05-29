@@ -48,12 +48,12 @@ class Routing {
   void routeAdvertPage(BuildContext context, data, bool replace,) {
     if (replace) {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => AdvertPage(data: data)));
+          MaterialPageRoute(builder: (_) => AdvertPage(advert: data)));
     } else {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AdvertPage(data: data),
+          builder: (context) => AdvertPage(advert: data),
         ),
       );
     }

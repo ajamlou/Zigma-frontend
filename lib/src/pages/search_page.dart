@@ -90,7 +90,7 @@ class SearchPage extends SearchDelegate<void> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => AdvertPage(
-                                  data: query == tempQuery
+                                  advert: query == tempQuery
                                       ? savedSearch[index]
                                       : snapshot.data[index],
                                   savedSearch: savedSearch,

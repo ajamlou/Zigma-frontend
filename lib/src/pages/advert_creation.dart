@@ -405,6 +405,8 @@ class AdvertCreationState extends State<AdvertCreation> {
                         if (stsCode == 201) {
                           //Confirmed response
                           Navigator.of(context, rootNavigator: true).pop(null);
+                          print("Response after uploading is: " +
+                              responseList[1].toString());
                           DataProvider.of(context)
                               .routing
                               .routeAdvertPage(context, responseList[1], true);
@@ -470,7 +472,6 @@ class AdvertCreationState extends State<AdvertCreation> {
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
-
 
   Future<String> _scanQR() async {
     String qRResult = await BarcodeScanner.scan();
@@ -593,7 +594,7 @@ class AdvertCreationState extends State<AdvertCreation> {
 
   // Insert the new item to the lists
   void _insert(File _nextItem) {
-    if(_nextItem != null) {
+    if (_nextItem != null) {
       compressedImageList.add(Image.file(_nextItem));
       encodedImageList.add(Ih.imageFileToString(_nextItem));
       setState(() {});
