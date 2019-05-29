@@ -305,22 +305,21 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool myChat = username == DataProvider.of(context).user.user.username;
     return SizeTransition(
       sizeFactor:
           CurvedAnimation(parent: animationController, curve: Curves.easeOut),
       axisAlignment: 0.0,
       child: Container(
         child: Row(
-          mainAxisAlignment: username == DataProvider.of(context).user.user.username ?
-          MainAxisAlignment.start:
-          MainAxisAlignment.end,
+          mainAxisAlignment:
+              myChat ? MainAxisAlignment.start : MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            myChat ? Container() : Padding(padding: const EdgeInsets.all(20.0)),
             Expanded(
               child: Card(
-                color: username == DataProvider.of(context).user.user.username
-                    ? Color(0xFF373F51)
-                    : Color(0xFFAEDBD3),
+                color: myChat ? Color(0xFF373F51) : Color(0xFFAEDBD3),
                 child: ListTile(
                   dense: true,
                   title: Text(username,
@@ -329,24 +328,24 @@ class ChatMessage extends StatelessWidget {
                     margin: const EdgeInsets.only(top: 3.0),
                     child: Text(text,
                         style: TextStyle(
-                            color: username == DataProvider.of(context).user.user.username
+                            color: myChat
                                 ? Color(0xFFAEDBD3)
                                 : Color(0xFF373F51))),
                   ),
                 ),
               ),
             ),
-            Padding(padding: const EdgeInsets.all(8.0)),
-            username == DataProvider.of(context).user.user.username
+            myChat ? Padding(padding: const EdgeInsets.all(30.0)) : Container(),
+            myChat
                 ? Container()
                 : ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Container(
-                width: 50,
-                height: 50,
-                child: FittedBox(fit: BoxFit.fitWidth, child: profilePic),
-              ),
-            ),
+                    borderRadius: BorderRadius.circular(40),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      child: FittedBox(fit: BoxFit.fitWidth, child: profilePic),
+                    ),
+                  ),
           ],
         ),
       ),
