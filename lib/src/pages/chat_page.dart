@@ -129,7 +129,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   void initSocket() {
-    final List<Message> rawMessages = [];
+   // final List<Message> rawMessages = [];
     channel = IOWebSocketChannel.connect(
         'wss://c2abc9f7.ngrok.io/ws/chat/' +
             widget.thisChat.chattingUser.username +

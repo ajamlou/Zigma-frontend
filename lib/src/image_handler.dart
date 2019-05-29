@@ -44,7 +44,6 @@ Future<File> showImageAlertDialog(context) async {
         textAlign: TextAlign.center,
       ),
       content: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
         child: ButtonBar(
           children: <Widget>[
             RaisedButton(
