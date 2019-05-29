@@ -19,81 +19,85 @@ class UserAdvertPage extends StatefulWidget {
 class _UserAdvertPageState extends State<UserAdvertPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Redigera annons",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF373F51),
-              fontSize: 20,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Container(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "Redigera annons",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF373F51),
+                fontSize: 20,
               ),
-              onPressed: () {
-                Navigator.pop(context, widget.advert.images);
-              }),
-          backgroundColor: Color(0xFFAEDBD3),
-        ),
-        body: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text(
-                    "Bilder",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF373F51)),
-                  ),
+              textAlign: TextAlign.center,
+            ),
+            leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
                 ),
-                Container(
-                  child: MultipleImagePicker(
-                      images: widget.advert.images, id: widget.advert.id),
-                ),
-                Text("Annonsinformation",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF373F51))),
-                getCard(RegExp(""), widget.advert.bookTitle, "Titel",
-                    widget.advert),
-                getCard(RegExp(""), widget.advert.authors, "Författare",
-                    widget.advert),
-                getCard(RegExp(""), widget.advert.edition, "Upplaga",
-                    widget.advert),
-                getCard(RegExp(""), widget.advert.price.toString(), "Pris",
-                    widget.advert),
-                getCard(RegExp(""), widget.advert.isbn, "ISBN", widget.advert),
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Container(
-                    width: 300,
-                    child: RaisedButton(
-                      color: Color(0xFF3FBE7E),
-                      onPressed: () async {
-                        await soldDialog(context);
-                      },
-                      child: Text("Markera annons som såld!",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 16)),
+                onPressed: () {
+                  Navigator.pop(context, widget.advert.images);
+                }),
+            backgroundColor: Color(0xFFAEDBD3),
+          ),
+          body: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Text(
+                      "Bilder",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF373F51)),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Container(
+                    child: MultipleImagePicker(
+                        images: widget.advert.images, id: widget.advert.id),
+                  ),
+                  Text("Annonsinformation",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF373F51))),
+                  getCard(RegExp(""), widget.advert.bookTitle, "Titel",
+                      widget.advert),
+                  getCard(RegExp(""), widget.advert.authors, "Författare",
+                      widget.advert),
+                  getCard(RegExp(""), widget.advert.edition, "Upplaga",
+                      widget.advert),
+                  getCard(RegExp(""), widget.advert.price.toString(), "Pris",
+                      widget.advert),
+                  getCard(
+                      RegExp(""), widget.advert.isbn, "ISBN", widget.advert),
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Container(
+                      width: 300,
+                      child: RaisedButton(
+                        color: Color(0xFF3FBE7E),
+                        onPressed: () async {
+                          await soldDialog(context);
+                        },
+                        child: Text("Markera annons som såld!",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 16)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -190,13 +194,24 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
           }
           setState(() {});
         },
-        leading: Text(title),
+        leading: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         trailing: Container(
-          width: MediaQuery.of(context).size.width / 2,
+          width: MediaQuery.of(context).size.width / 1.4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Text(edit),
+              Container(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Text(
+                  edit,
+                  textAlign: TextAlign.center,
+                ),
+              ),
               Icon(Icons.arrow_forward_ios),
             ],
           ),
