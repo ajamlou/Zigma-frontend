@@ -49,8 +49,10 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
                   ),
                 ),
                 Container(
-                  height: 225,
-                  child: MultipleImagePicker(images: widget.advert.images,)
+                  child: MultipleImagePicker(
+                    images: widget.advert.images,
+                    id: widget.advert.id
+                  ),
                 ),
                 Text("Annonsinformation",
                     style: TextStyle(
@@ -91,32 +93,6 @@ class _UserAdvertPageState extends State<UserAdvertPage> {
     );
   }
 
-  Future<void> changepic() async {
-    AlertDialog dialog = AlertDialog(
-        title: Text(
-          "Ta bort eller ersätt?",
-          style: TextStyle(
-            fontSize: 20,
-            color: Color(0xFF373F51),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        content: Column(
-          children: <Widget>[
-            RaisedButton(
-              onPressed: (){},
-              child: Text("Ta bort!"),
-            ),
-            RaisedButton(
-              onPressed: () {},
-              child: Text(
-                "Välj ny bild",
-              ),
-            ),
-          ],
-        ));
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-  }
 
   Future<void> soldDialog(context) async {
     AlertDialog dialog = AlertDialog(

@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:zigma2/src/image_handler.dart' as Ih;
 
+import '../DataProvider.dart';
+
 class MultipleImagePicker extends StatefulWidget {
   final List<String> images;
   final bool edit;
+  final int id;
 
-  MultipleImagePicker({this.images, this.edit});
+  MultipleImagePicker({this.images, this.edit, this.id});
 
   @override
   _MultipleImagePickerState createState() => _MultipleImagePickerState();
@@ -15,17 +18,18 @@ class MultipleImagePicker extends StatefulWidget {
 
 class _MultipleImagePickerState extends State<MultipleImagePicker> {
   List<int> _selectedItemsIndex = [];
-  List<Image> compressedImageList = [];
-  List<String> encodedImageList = [];
+  List<Image> _compressedImageList = [];
+  List<String> _encodedImageList = [];
+  int _originalListLength;
   Image placeholderImage = Image.asset('images/placeholderBook.png');
 
   @override
   void initState() {
     for (String item in widget.images) {
-      compressedImageList.add(Image.network(item));
-      encodedImageList.add("Placeholder");
+      _compressedImageList.add(Image.network(item));
     }
-    compressedImageList.add(placeholderImage);
+    _compressedImageList.add(placeholderImage);
+    _originalListLength = _compressedImageList.length;
     super.initState();
   }
 
@@ -39,44 +43,56 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: compressedImageList.length,
+            itemCount: _compressedImageList.length,
             itemBuilder: buildGallery,
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Container(
-                padding: EdgeInsets.only(top: 10),
+        _selectedItemsIndex.length > 0
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Container(
+                      padding: EdgeInsets.only(top: 10),
+                      width: 300,
+                      child: _compressedImageList.length == 1
+                          ? Text('')
+                          : RaisedButton(
+                              color: Color(0xFFDE5D5D),
+                              child: const Text(
+                                'Ta bort markerade bilder',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onPressed: _remove,
+                            ),
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
+        _originalListLength != _compressedImageList.length
+            ? Container(
                 width: 300,
-                child: compressedImageList.length == 1
-                    ? Text('')
-                    : RaisedButton(
-                        color: Color(0xFFDE5D5D),
-                        child: const Text(
-                          'Ta bort markerade bilder',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: _remove,
-                      ),
-              ),
-            ),
-          ],
-        ),
+                child: RaisedButton(
+                  color: Colors.lightBlue[400],
+                  onPressed: () {},
+                  child: Text("Ändra bilder!", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                ),
+              )
+            : Container(),
       ],
     );
   }
 
   Widget buildGallery(BuildContext context, int index) {
-    Image _galleryImage = compressedImageList[index];
+    Image _galleryImage = _compressedImageList[index];
     return GestureDetector(
       onTap: () async {
-        compressedImageList[index] == placeholderImage
+        _compressedImageList[index] == placeholderImage
             ? _insert(await Ih.showImageAlertDialog(context))
             : setState(() {
                 _selectedItemsIndex.contains(index)
@@ -116,25 +132,29 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
   // Insert the new item to the lists
   void _insert(File _nextItem) {
     if (_nextItem != null) {
-      compressedImageList.insert(
-          compressedImageList.length - 1, Image.file(_nextItem));
-      encodedImageList.add(Ih.imageFileToString(_nextItem));
+      _compressedImageList.insert(
+          _compressedImageList.length - 1, Image.file(_nextItem));
+//      DataProvider.of(context).user.editAdvert(
+//          'new_images', [Ih.imageFileToString(_nextItem)], widget.id);
       setState(() {});
     }
+  }
+
+  Future<void> editImages() async {
+
+
   }
 
 // Remove the selected items from the lists
   void _remove() {
     if (_selectedItemsIndex.length != 0) {
-      for (int index = compressedImageList.length; index >= 0; index--) {
+      for (int index = _compressedImageList.length; index >= 0; index--) {
         if (_selectedItemsIndex.contains(index)) {
-          compressedImageList.removeAt(index);
-          encodedImageList.removeAt(index);
+          _compressedImageList.removeAt(index);
         }
       }
-      setState(() {
-        _selectedItemsIndex = [];
-      });
+      _selectedItemsIndex = [];
+      setState(() {});
     }
   }
 }

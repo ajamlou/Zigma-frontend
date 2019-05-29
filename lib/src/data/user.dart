@@ -34,7 +34,7 @@ class User {
     if (chatList == null) {
       chatList = ChatList();
     }
-    myInboxes = IOWebSocketChannel.connect('ws://24e1a551.ngrok.io/ws/myinbox/',
+    myInboxes = IOWebSocketChannel.connect('wss://2652879d.eu.ngrok.io/ws/myinbox/',
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
@@ -122,7 +122,7 @@ class User {
   }
 
   Future<User> getUserById(int senderId) async {
-    final String url = 'https://24e1a551.ngrok.io/users/users/' + senderId.toString() + '/';
+    final String url = 'https://2652879d.eu.ngrok.io/users/users/' + senderId.toString() + '/';
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     var resBody = json.decode(utf8.decode(req.bodyBytes));
@@ -173,7 +173,7 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
-  String urlBody = "https://ecf116e6.eu.ngrok.io";
+  String urlBody = "https://2652879d.eu.ngrok.io";
 
   UserMethodBody({this.user});
 
