@@ -146,7 +146,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       if (json.decode(data).toString().contains("data")) {
         MessageHistory messageHistory =
             MessageHistory.fromJson(json.decode(data));
-        print(messageHistory.fullMessageHistory);
         for (Map<String, dynamic> actuallyMessages
             in messageHistory.fullMessageHistory) {
           print(actuallyMessages["message"]);
@@ -162,7 +161,9 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 duration: Duration(milliseconds: 500),
                 vsync: this,
               ),
-              profilePic: DataProvider.of(context).user.user.profilePic);
+              profilePic: Image.network(DataProvider.of(context)
+                  .user
+                  .picUrl(widget.thisChat.chattingUser.id)));
           setState(() => chatMessages.add(chatMessage));
           chatMessage.animationController.forward();
         }

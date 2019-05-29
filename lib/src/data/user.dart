@@ -142,10 +142,6 @@ class UserMethodBody {
             if (!user.chatList.chattingUserList.contains(message.username)) {
               print("this chat didnt exist");
               Chat c = Chat(chattingUser: await getUserById(message.senderId, ""));
-              c.chattingUser.profilePic = Image.network(
-                  'https://24e1a551.ngrok.io/users/profile_pic/' +
-                      c.chattingUser.id.toString() + '/');
-              ;
               user.chatList.chattingUserList.insert(0, c.chattingUser.username);
               print("starting a chat with " + c.chattingUser.username);
               user.chatList.chatList.add(c);
@@ -160,9 +156,6 @@ class UserMethodBody {
               print("this chat didnt exist");
               Chat c = Chat(
                   chattingUser: await getUserById(message.receiverId,""));
-              c.chattingUser.profilePic = Image.network(
-                  'https://24e1a551.ngrok.io/users/profile_pic/' +
-                      c.chattingUser.id.toString() + '/');
               print("starting a chat with " + c.chattingUser.username);
               user.chatList.chattingUserList.insert(0, c.chattingUser.username);
               user.chatList.chatList.add(c);
@@ -181,9 +174,6 @@ class UserMethodBody {
             print("you didnt have a chat with this user previously");
             User tempUser = await getUserById(messageText.senderId, "");
             Chat newChat = Chat(chattingUser: tempUser);
-            newChat.chattingUser.profilePic = Image.network(
-                'https://24e1a551.ngrok.io/users/profile_pic/' +
-                    newChat.chattingUser.id.toString() + '/');
             newChat.chatMessages.insert(0, messageText);
             user.chatList.chatList.insert(0, newChat);
           } else {
