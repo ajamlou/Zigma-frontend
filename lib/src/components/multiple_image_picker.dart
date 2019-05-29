@@ -148,8 +148,11 @@ class _MultipleImagePickerState extends State<MultipleImagePicker> {
 
 // Remove the selected items from the lists
   void _remove() {
+    print(_selectedItemsIndex.toString());
+    print(_compressedImageList.toString());
+    print(_encodedImageList.toString());
     if (_selectedItemsIndex.length != 0) {
-      for (int i = 0; i <= _selectedItemsIndex.length; i++) {
+      for (int i = 0; i >= _selectedItemsIndex.length; i++) {
           _compressedImageList.removeAt(_selectedItemsIndex[i]);
           _encodedImageList.removeAt(_selectedItemsIndex[i]);
       }

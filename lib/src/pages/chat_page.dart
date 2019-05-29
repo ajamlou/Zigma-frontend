@@ -69,9 +69,9 @@ class ZigmaChat extends StatelessWidget {
                   fit: BoxFit.cover,
                   child: thisChat.chattingUser.profilePic == null
                       ? Image.asset('images/profile_pic2.png')
-                      : DataProvider.of(context)
+                      : Image.network(DataProvider.of(context)
                           .user
-                          .picUrl(thisChat.chattingUser.id),
+                          .picUrl(thisChat.chattingUser.id)),
                 ),
               ),
             ),
