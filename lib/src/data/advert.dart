@@ -64,22 +64,17 @@ class Advert {
 }
 
 class AdvertList {
-  final String urlBody = "https://c2abc9f7.ngrok.io";
+  final String urlBody = "https://magis.serveo.net";
   final List<Advert> list = [];
-  final client = http.Client();
 
   Future<void> loadAdvertList() async {
     final String url = urlBody + "/adverts/adverts/recent_adverts/?format=json";
-    final request = await client
+    final request = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
-    print(request.body);
-//    final req = await http
-//        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     final List resBody = json.decode(utf8.decode(request.bodyBytes));
     for (int i = 0; i < resBody.length; i++) {
       list.add(Advert.fromJson(resBody[i]));
     }
-    print("The Request body is: " + list.toString());
   }
 
   Future<Map> editAdvert(String header, dynamic edit, int id, context) async {

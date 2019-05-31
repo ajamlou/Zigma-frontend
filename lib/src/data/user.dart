@@ -33,7 +33,7 @@ class User {
 
 
   Future<User> getUserById(int senderId) async {
-    final String url = 'https://24e1a551.ngrok.io/users/users/' +
+    final String url = 'https://magis.serveo.net/users/users/' +
         senderId.toString() + '/';
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
@@ -87,7 +87,7 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
-  String urlBody = "https://c2abc9f7.ngrok.io";
+  String urlBody = "https://magis.serveo.net";
 
   UserMethodBody({this.user});
 
@@ -109,7 +109,7 @@ class UserMethodBody {
     if (user.chatList == null) {
       user.chatList = ChatList();
     }
-    user.myInboxes = IOWebSocketChannel.connect('wss://c2abc9f7.ngrok.io/ws/myinbox/',
+    user.myInboxes = IOWebSocketChannel.connect('wss://magis.serveo.net/ws/myinbox/',
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
@@ -119,6 +119,7 @@ class UserMethodBody {
     user.myInboxes.sink.add(json.encode(messageHistoryCommand));
     print('i have sunk messageHistoryCommand');
     user.myInboxes.stream.listen((data) async {
+      print(json.decode(data.toString()));
       if (json.decode(data).toString().contains("data")) {
         print('i recognize that I have received something containing data');
         MessageHistory messageHistory =

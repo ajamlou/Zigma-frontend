@@ -6,7 +6,7 @@ part of 'advert.dart';
 // **************************************************************************
 
 Advert _$AdvertFromJson(Map<String, dynamic> json) {
-  String url = "https://c2abc9f7.ngrok.io/adverts/advertimages/";
+  String url = "https://magis.serveo.net/adverts/advertimages/";
   return Advert(
       bookTitle: json['book_title'] as String,
       price: json['price'] as int,
