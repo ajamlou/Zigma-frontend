@@ -121,15 +121,17 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   bool _isComposing = false;
   final List<ChatMessage> chatMessages = [];
   ScrollController scrollController;
+  MessageHistory messageHistory;
 
-  _scrollController(){
+  _scrollController() {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
       setState(() {
-        print('reached my limit');
+        messageHistory.hasMoreMessages ? loadMessages() : null;
       });
     }
-}
+  }
+
 
   @override
   void initState() {
@@ -138,6 +140,44 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     scrollController = ScrollController();
     scrollController.addListener(_scrollController);
     initSocket();
+  }
+
+
+  void loadMessages() {
+    MessageHistory messageHistoryCommand = MessageHistory('get_history',
+        startIndex: chatMessages.length, endIndex: (chatMessages.length + 10));
+    channel.sink.add(json.encode(messageHistoryCommand));
+  }
+
+  void sortMessageHistory(data) {
+    messageHistory = MessageHistory.fromJson(json.decode(data));
+    messageHistory.hasMoreMessages =
+        messageHistory.pagination["has_more_messages"];
+
+    for (Map<String, dynamic> messageMap in messageHistory.fullMessageHistory) {
+      ChatMessage message = constructMessage(messageMap);
+      setState(() => chatMessages.add(message));
+      message.animationController.forward();
+    }
+  }
+
+  ChatMessage constructMessage(data) {
+    Message messageText = Message.fromJson(json.decode(data));
+
+    return ChatMessage(
+        text: messageText.text,
+        username: messageText.username,
+        animationController: AnimationController(
+          duration: Duration(milliseconds: 500),
+          vsync: this,
+        ),
+        profilePic:
+            messageText.username == DataProvider.of(context).user.user.username
+                ? null
+                : Image.network(DataProvider.of(context)
+                    .user
+                    .picUrl(widget.thisChat.chattingUser.id)));
+
   }
 
   void initSocket() {
@@ -154,55 +194,19 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     print('socket to ' +
         widget.thisChat.chattingUser.username +
         ' has been opened');
-    MessageHistory messageHistory = MessageHistory('get_history', startIndex: 0, endIndex: 10);
-    channel.sink.add(json.encode(messageHistory));
+
+    loadMessages();
+
     print("I sunk MessageHistory");
+
     channel.stream.listen((data) {
       if (json.decode(data).toString().contains("data")) {
-        MessageHistory messageHistory =
-            MessageHistory.fromJson(json.decode(data));
-          print(messageHistory.pagination.toString());
-        for (Map<String, dynamic> actuallyMessages
-            in messageHistory.fullMessageHistory) {
-          print(actuallyMessages["message"]);
-          Message thisIsAMessage = Message(text: actuallyMessages["message"]);
-          thisIsAMessage.username = actuallyMessages["sender"];
-          thisIsAMessage.senderId = actuallyMessages["sender_id"];
-          ChatMessage chatMessage = ChatMessage(
-              username: thisIsAMessage.username,
-              text: thisIsAMessage.text,
-              animationController: AnimationController(
-                duration: Duration(milliseconds: 500),
-                vsync: this,
-              ),
-              profilePic: thisIsAMessage.username ==
-                      DataProvider.of(context).user.user.username
-                  ? null
-                  : Image.network(DataProvider.of(context)
-                      .user
-                      .picUrl(widget.thisChat.chattingUser.id)));
-          setState(() => chatMessages.add(chatMessage));
-          chatMessage.animationController.forward();
-        }
+        sortMessageHistory(data);
       } else {
-        Message messageText = Message.fromJson(json.decode(data));
-        print(messageText.username);
-        print(messageText.text);
-        ChatMessage message = ChatMessage(
-            text: messageText.text,
-            username: messageText.username,
-            animationController: AnimationController(
-              duration: Duration(milliseconds: 500),
-              vsync: this,
-            ),
-            profilePic: messageText.username ==
-                    DataProvider.of(context).user.user.username
-                ? null
-                : Image.network(DataProvider.of(context)
-                    .user
-                    .picUrl(widget.thisChat.chattingUser.id)));
-        setState(() => chatMessages.insert(0, message));
-        message.animationController.forward();
+       ChatMessage message = constructMessage(data);
+       setState(() => chatMessages.insert(0,message));
+       message.animationController.forward();
+
       }
     });
   }
@@ -217,9 +221,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void sendData() {
     Message newMessage;
     if (_textController.text.isNotEmpty) {
-      newMessage = Message(
-        text: _textController.text,
-      );
+      newMessage = Message(_textController.text);
       channel.sink.add(json.encode(newMessage));
       print('message sink');
       _textController.clear();
@@ -375,7 +377,8 @@ class ChatMessage extends StatelessWidget {
 }
 
 class Message {
-  Message({this.text});
+  Message(this.text,
+      {this.username, this.receivingUser, this.senderId, this.receiverId});
 
   String username;
   String text;
@@ -389,14 +392,18 @@ class Message {
 
   Message.fromJson(Map map)
       : text = map['message'],
-        username = map['sender'],
+        username = map.containsKey('sender')
+            ? map['sender']
+            : map['thread_participant'],
         receivingUser = map['receiver'],
-        senderId = map['sender_id'],
+        senderId = map.containsKey('sender_id')
+            ? map['sender_id']
+            : map['thread_participant_id'],
         receiverId = map['receiver_id'];
 }
 
 class MessageHistory {
-  List fullMessageHistory;
+  List<Map<String, dynamic>> fullMessageHistory;
   Map<String, dynamic> pagination;
   String command;
   int startIndex;
@@ -413,6 +420,5 @@ class MessageHistory {
       : fullMessageHistory = map['data'],
         pagination = map['pagination'];
 
-  void unMapPagination(map) {
-  }
+  void unMapPagination(map) {}
 }

@@ -31,7 +31,6 @@ class User {
   Map<String, dynamic> toJson(User json) => _$UserToJson(json);
 
 
-
   Future<User> getUserById(int senderId) async {
     final String url = 'https://magis.serveo.net/users/users/' +
         senderId.toString() + '/';
@@ -109,63 +108,77 @@ class UserMethodBody {
     if (user.chatList == null) {
       user.chatList = ChatList();
     }
-    user.myInboxes = IOWebSocketChannel.connect('wss://magis.serveo.net/ws/myinbox/',
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json",
-          "Authorization": "Token " + user.token
-        });
+    user.myInboxes =
+        IOWebSocketChannel.connect('wss://magis.serveo.net/ws/myinbox/',
+            headers: {
+              "Accept": "application/json",
+              "content-type": "application/json",
+              "Authorization": "Token " + user.token
+            });
     MessageHistory messageHistoryCommand = MessageHistory('get_history');
     user.myInboxes.sink.add(json.encode(messageHistoryCommand));
     print('i have sunk messageHistoryCommand');
     user.myInboxes.stream.listen((data) async {
-      print(json.decode(data.toString()));
+
       if (json.decode(data).toString().contains("data")) {
         print('i recognize that I have received something containing data');
+
         MessageHistory messageHistory =
         MessageHistory.fromJson(json.decode(data));
-        print(messageHistory.fullMessageHistory);
-        List<Message> newMessageListWow = [];
-        for (Map<String, dynamic> actuallyMessages
+        List<Message> listMessages = [];
+        for (Map<String, dynamic> messageMap
         in messageHistory.fullMessageHistory) {
-          print(actuallyMessages["message"]);
-          Message thisIsAMessage = Message(text: actuallyMessages["message"]);
-          thisIsAMessage.username = actuallyMessages["sender"];
-          thisIsAMessage.senderId = actuallyMessages["sender_id"];
-          thisIsAMessage.receivingUser = actuallyMessages["thread_participant"];
-          thisIsAMessage.receiverId = actuallyMessages["thread_participant_id"];
-          newMessageListWow.add(thisIsAMessage);
+          Message message = Message.fromJson(messageMap);
+
+          /* Onödig kod
+          Message message = Message(
+              actuallyMessages["message"], username: actuallyMessages["sender"],
+              senderId: actuallyMessages["sender_id"],
+              receivingUser: actuallyMessages["thread_participant"],
+              receiverId: actuallyMessages["thread_participant_id");*/
+
+          listMessages.add(message);
         }
-        for (Message message in newMessageListWow) {
+        for (Message message in listMessages) {
           print(message.receivingUser);
-            if (!user.chatList.chattingUserList.contains(message.receivingUser)) {
-              print("this chat didnt exist");
-              Chat c = Chat(
-                  chattingUser: await getUserById(message.receiverId,""));
-              print("starting a chat with " + c.chattingUser.username);
-              user.chatList.chattingUserList.insert(0, c.chattingUser.username);
-              user.chatList.chatList.add(c);
-              c.chatMessages.add(message);
-            } else {
-              print("this chat already exists");
-            }
+          if (!user.chatList.chattingUserList.contains(message.receivingUser)) {
+
+            print("this chat didnt exist");
+
+            Chat c = Chat(
+                chattingUser: await getUserById(message.receiverId, ""));
+
+            print("starting a chat with " + c.chattingUser.username);
+
+            user.chatList.chattingUserList.insert(0, c.chattingUser.username);
+            user.chatList.chatList.add(c);
+            c.chatMessages.add(message);
+          } else {
+            print("this chat already exists");
+          }
         }
       } else {
         print("this is just a normal message received");
+
         Message messageText = Message.fromJson(json.decode(data));
         if (identical(messageText.receivingUser, user.username)) {
+
           print('this is a message received by you');
-          if (!user.chatList.getChattingUserList().contains(messageText.username)) {
+
+          if (!user.chatList.getChattingUserList().contains(
+              messageText.username)) {
+
             print("you didnt have a chat with this user previously");
+
             User tempUser = await getUserById(messageText.senderId, "");
             Chat newChat = Chat(chattingUser: tempUser);
             newChat.chatMessages.insert(0, messageText);
             user.chatList.chatList.insert(0, newChat);
+
           } else {
             for (Chat chat in user.chatList.chatList) {
               if (chat.chattingUser.username == messageText.username) {
                 chat.chatMessages.insert(0, messageText);
-                break;
               }
             }
           }
@@ -174,7 +187,6 @@ class UserMethodBody {
           for (Chat chat in user.chatList.chatList) {
             if (chat.chattingUser.username == messageText.receivingUser) {
               chat.chatMessages.insert(0, messageText);
-              break;
             }
           }
         }
@@ -302,7 +314,6 @@ class UserMethodBody {
   }
 
   User getUser() => user;
-
 
 
   Future<Map> editUser(String header, String edit) async {
