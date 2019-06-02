@@ -408,7 +408,6 @@ class MessageHistory {
   String command;
   int startIndex;
   int endIndex;
-  int finalIndex;
   bool hasMoreMessages;
 
   MessageHistory(this.command, {this.startIndex, this.endIndex});

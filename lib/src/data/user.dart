@@ -23,17 +23,22 @@ class User {
   WebSocketChannel myInboxes;
   ChatList chatList;
 
-  User(this.email, this.id, this.username, this.token, this.profile,
-      this.hasPicture, this.adverts, this.soldBooks, this.boughtBooks);
+  User(this.id, this.username,
+      {this.email,
+      this.token,
+      this.profile,
+      this.hasPicture,
+      this.adverts,
+      this.soldBooks,
+      this.boughtBooks});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson(User json) => _$UserToJson(json);
 
-
   Future<User> getUserById(int senderId) async {
-    final String url = 'https://magis.serveo.net/users/users/' +
-        senderId.toString() + '/';
+    final String url =
+        'https://magis.serveo.net/users/users/' + senderId.toString() + '/';
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     var resBody = json.decode(utf8.decode(req.bodyBytes));
@@ -51,19 +56,18 @@ class UserCreation {
   UserCreation(this.email, this.username, this.password, this.imageAsBytes);
 
   // om imageAsBytes är null, encode utan den parametern
-  Map<String, dynamic> toJson() =>
-      imageAsBytes != null
-          ? {
-        'username': username,
-        'password': password,
-        'email': email,
-        'profile_picture': imageAsBytes,
-      }
-          : {
-        'username': username,
-        'password': password,
-        'email': email,
-      };
+  Map<String, dynamic> toJson() => imageAsBytes != null
+      ? {
+          'username': username,
+          'password': password,
+          'email': email,
+          'profile_picture': imageAsBytes,
+        }
+      : {
+          'username': username,
+          'password': password,
+          'email': email,
+        };
 
   UserCreation.fromJson(Map<String, dynamic> json)
       : email = json['email'],
@@ -77,8 +81,7 @@ class UserLogin {
 
   UserLogin(this.username, this.password);
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'username': username,
         'password': password,
       };
@@ -92,103 +95,66 @@ class UserMethodBody {
 
   void iniUser(String email, int id, String username, String token, int profile,
       bool hasPicture, List<int> adverts) {
-    user = User(
-        email,
-        id,
-        username,
-        token,
-        profile,
-        hasPicture,
-        adverts,
-        0,
-        0);
+    user = User(id, username,
+        email: email,
+        token: token,
+        profile: profile,
+        hasPicture: hasPicture,
+        adverts: adverts,
+        soldBooks: 0,
+        boughtBooks: 0);
   }
 
   void initSocketChannel() {
     if (user.chatList == null) {
       user.chatList = ChatList();
     }
-    user.myInboxes =
-        IOWebSocketChannel.connect('wss://magis.serveo.net/ws/myinbox/',
-            headers: {
-              "Accept": "application/json",
-              "content-type": "application/json",
-              "Authorization": "Token " + user.token
-            });
+    user.myInboxes = IOWebSocketChannel.connect(
+        'wss://magis.serveo.net/ws/myinbox/',
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Token " + user.token
+        });
     MessageHistory messageHistoryCommand = MessageHistory('get_history');
     user.myInboxes.sink.add(json.encode(messageHistoryCommand));
     print('i have sunk messageHistoryCommand');
     user.myInboxes.stream.listen((data) async {
-
       if (json.decode(data).toString().contains("data")) {
         print('i recognize that I have received something containing data');
 
         MessageHistory messageHistory =
         MessageHistory.fromJson(json.decode(data));
-        List<Message> listMessages = [];
         for (Map<String, dynamic> messageMap
         in messageHistory.fullMessageHistory) {
           Message message = Message.fromJson(messageMap);
-
-          /* Onödig kod
-          Message message = Message(
-              actuallyMessages["message"], username: actuallyMessages["sender"],
-              senderId: actuallyMessages["sender_id"],
-              receivingUser: actuallyMessages["thread_participant"],
-              receiverId: actuallyMessages["thread_participant_id");*/
-
-          listMessages.add(message);
-        }
-        for (Message message in listMessages) {
-          print(message.receivingUser);
           if (!user.chatList.chattingUserList.contains(message.receivingUser)) {
-
-            print("this chat didnt exist");
-
             Chat c = Chat(
-                chattingUser: await getUserById(message.receiverId, ""));
-
-            print("starting a chat with " + c.chattingUser.username);
-
+                chattingUser: User(message.receiverId, message.receivingUser));
             user.chatList.chattingUserList.insert(0, c.chattingUser.username);
             user.chatList.chatList.add(c);
             c.chatMessages.add(message);
-          } else {
-            print("this chat already exists");
           }
         }
       } else {
-        print("this is just a normal message received");
-
         Message messageText = Message.fromJson(json.decode(data));
         if (identical(messageText.receivingUser, user.username)) {
-
-          print('this is a message received by you');
-
-          if (!user.chatList.getChattingUserList().contains(
-              messageText.username)) {
-
-            print("you didnt have a chat with this user previously");
-
-            User tempUser = await getUserById(messageText.senderId, "");
-            Chat newChat = Chat(chattingUser: tempUser);
+          if (!user.chatList
+              .getChattingUserList()
+              .contains(messageText.username)) {
+            Chat newChat = Chat(
+                chattingUser: User(messageText.senderId, messageText.username));
             newChat.chatMessages.insert(0, messageText);
             user.chatList.chatList.insert(0, newChat);
-
           } else {
-            for (Chat chat in user.chatList.chatList) {
-              if (chat.chattingUser.username == messageText.username) {
-                chat.chatMessages.insert(0, messageText);
-              }
-            }
+            Chat someChat = user.chatList.chatList.firstWhere((chat) =>
+                identical(chat.chattingUser.username, messageText.username));
+            someChat.chatMessages.insert(0, messageText);
           }
         } else {
-          print('this is a message you sent to someone else');
-          for (Chat chat in user.chatList.chatList) {
-            if (chat.chattingUser.username == messageText.receivingUser) {
-              chat.chatMessages.insert(0, messageText);
-            }
-          }
+          Chat someChat = user.chatList.chatList.firstWhere((chat) =>
+              identical(chat.chattingUser.username, messageText.receivingUser));
+          someChat.chatMessages.insert(0, messageText);
         }
       }
     });
@@ -196,6 +162,9 @@ class UserMethodBody {
   }
 
 
+// Används inte längre i metoden ovanför eftersom vi ändå kör picUrl
+// som ett HTTP request och vi bara behöver ID och username på User för allt annat
+  // ---------------------------------------------------------------
   Future<User> getUserById(int id, String fields) async {
     final String url =
         urlBody + "/users/users/" + id.toString() + "/?fields=" + fields;
@@ -209,6 +178,7 @@ class UserMethodBody {
     print(user.username);
     return user;
   }
+  // -------------------------------------------------------------
 
   Image getImage() {
     return user.profilePic;
@@ -261,7 +231,8 @@ class UserMethodBody {
 
   Future<void> automaticLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("token") == null) {} else {
+    if (prefs.getString("token") == null) {
+    } else {
       iniUser(
           prefs.getString("email"),
           prefs.getInt("id"),
@@ -279,7 +250,7 @@ class UserMethodBody {
   Future<List> register(String email, String username, String password,
       String imageAsBytes) async {
     UserCreation _newUser =
-    UserCreation(email, username, password, imageAsBytes);
+        UserCreation(email, username, password, imageAsBytes);
     var data = json.encode(_newUser);
     print(data);
     String postURL = urlBody + "/users/users/";
@@ -302,8 +273,7 @@ class UserMethodBody {
           localUser.hasPicture,
           localUser.username,
           localUser.email,
-          localUser.id,
-          []);
+          localUser.id, []);
       await automaticLogin();
     } else if (response.statusCode == 400) {
       localUser = UserCreation.fromJson(parsed);
@@ -314,7 +284,6 @@ class UserMethodBody {
   }
 
   User getUser() => user;
-
 
   Future<Map> editUser(String header, String edit) async {
     print("IM IN EDIT USER");
