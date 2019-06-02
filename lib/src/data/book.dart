@@ -19,7 +19,6 @@ class Book {
 Future<Book> getBookByIsbn(String isbn)async{
   String url = "http://libris.kb.se/xsearch?query="+isbn+"&format=json&database=libris&n=1";
   final response =  await http.get(Uri.parse(url));
-  //print(response.body.toString());
   final resBody = json.decode(utf8.decode(response.bodyBytes));
   print(resBody);
   return Book.fromJson(resBody);

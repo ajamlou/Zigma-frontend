@@ -22,7 +22,7 @@ Future<File> compressImageFile(File _uploadedImage) async {
   final int rand = new Math.Random().nextInt(10000);
 
   Im.Image image = Im.decodeImage(_uploadedImage.readAsBytesSync());
-  Im.Image smallerImage = Im.copyResize(image,  400);
+  Im.Image smallerImage = Im.copyResize(image,  width: 400);
   File compressedImage = new File('$path/img_$rand.jpg')
     ..writeAsBytesSync(Im.encodeJpg(
       smallerImage,
