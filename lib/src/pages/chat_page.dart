@@ -343,6 +343,16 @@ class ChatMessage extends StatelessWidget {
               myChat ? MainAxisAlignment.end : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            myChat
+                ? Container()
+                : ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Container(
+                width: 50,
+                height: 50,
+                child: FittedBox(fit: BoxFit.fitWidth, child: profilePic),
+              ),
+            ),
             myChat ? Padding(padding: const EdgeInsets.all(30.0)) : Container(),
             Flexible(
               child: Card(
@@ -362,16 +372,6 @@ class ChatMessage extends StatelessWidget {
                   )),
             ),
             myChat ? Container() : Padding(padding: const EdgeInsets.all(20.0)),
-            myChat
-                ? Container()
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      child: FittedBox(fit: BoxFit.fitWidth, child: profilePic),
-                    ),
-                  ),
           ],
         ),
       ),

@@ -150,14 +150,12 @@ class UserMethodBody {
             newChat.chatMessages.insert(0, messageText);
             user.chatList.chatList.insert(0, newChat);
           } else {
-            Chat someChat = user.chatList.chatList.firstWhere((chat) =>
-                identical(chat.chattingUser.username, messageText.username));
-            someChat.chatMessages.insert(0, messageText);
+            user.chatList.chatList.firstWhere((chat) =>
+                identical(chat.chattingUser.username, messageText.username)).chatMessages.insert(0, messageText);
           }
         } else {
-          Chat someChat = user.chatList.chatList.firstWhere((chat) =>
-              identical(chat.chattingUser.username, messageText.receivingUser));
-          someChat.chatMessages.insert(0, messageText);
+          user.chatList.chatList.firstWhere((chat) =>
+              identical(chat.chattingUser.username, messageText.receivingUser)).chatMessages.insert(0, messageText);
         }
       }
     });
