@@ -138,8 +138,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     super.initState();
     _textController = TextEditingController();
     scrollController = ScrollController();
-    scrollController.addListener(_scrollController);
     initSocket();
+    scrollController.addListener(_scrollController);
   }
 
 
