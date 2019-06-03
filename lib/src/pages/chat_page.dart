@@ -403,7 +403,7 @@ class Message {
 }
 
 class MessageHistory {
-  List<Map<String, dynamic>> fullMessageHistory;
+  List<dynamic> fullMessageHistory;
   Map<String, dynamic> pagination;
   String command;
   int startIndex;
