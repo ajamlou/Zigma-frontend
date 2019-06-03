@@ -12,8 +12,6 @@ class LoginPageState extends State<LoginPage> {
   int _success;
   String _password;
   String _userName;
-  Map parsed;
-  User user;
 
   @override
   Widget build(BuildContext context) {

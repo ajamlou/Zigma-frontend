@@ -127,7 +127,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
       setState(() {
-        messageHistory.hasMoreMessages ? loadMessages() : null;
+        messageHistory.hasMoreMessages ? loadMessages() : print("no more messages");
       });
     }
   }
@@ -183,7 +183,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void initSocket() {
     // final List<Message> rawMessages = [];
     channel = IOWebSocketChannel.connect(
-        'wss://c2abc9f7.ngrok.io/ws/chat/' +
+        'wss://magis.serveo.net/ws/chat/' +
             widget.thisChat.chattingUser.username +
             '/',
         headers: {
