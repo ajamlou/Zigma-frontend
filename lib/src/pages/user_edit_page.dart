@@ -28,32 +28,46 @@ class _UserEditPageState extends State<UserEditPage> {
               color: Color(0xFF373F51),
             )),
         backgroundColor: Color(0xFFAEDBD3),
+        centerTitle: true,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          MaterialButton(
-            onPressed: () async {
-              File image = await Ih.showImageAlertDialog(context);
-              if (image != null) {
-                user.hasPicture = true;
-                user.profilePic = Image.file(image);
-                String base64 = Ih.imageFileToString(image);
-                DataProvider.of(context)
-                    .user
-                    .editUser("profile_picture", base64);
-                setState(() {});
-              }
-            },
-            child: Container(
-              width: 200,
-              height: 200,
-              child: !user.hasPicture
-                  ? FittedBox(
-                      child: Icon(Icons.person),
-                      fit: BoxFit.cover,
-                    )
-                  : user.profilePic,
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: MaterialButton(
+              onPressed: () async {
+                File image = await Ih.showImageAlertDialog(context);
+                if (image != null) {
+                  user.hasPicture = true;
+                  user.profilePic = Image.file(image);
+                  String base64 = Ih.imageFileToString(image);
+                  DataProvider.of(context)
+                      .user
+                      .editUser("profile_picture", base64);
+                  setState(() {});
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black54,
+                    offset: Offset(1.0, 0.0),
+                    blurRadius: 8,
+                  )
+                ]),
+                width: 200,
+                height: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: !user.hasPicture
+                      ? FittedBox(
+                          child: Icon(Icons.person),
+                          fit: BoxFit.cover,
+                        )
+                      : user.profilePic,
+                ),
+              ),
             ),
           ),
           Text(
