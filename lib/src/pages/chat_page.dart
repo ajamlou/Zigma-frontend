@@ -127,11 +127,12 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
       setState(() {
-        messageHistory.hasMoreMessages ? loadMessages() : print("no more messages");
+        messageHistory.hasMoreMessages
+            ? loadMessages()
+            : print("no more messages");
       });
     }
   }
-
 
   @override
   void initState() {
@@ -141,7 +142,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     initSocket();
     scrollController.addListener(_scrollController);
   }
-
 
   void loadMessages() {
     MessageHistory messageHistoryCommand = MessageHistory('get_history',
@@ -162,7 +162,12 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   ChatMessage constructMessage(data) {
-    Message messageText = Message.fromJson(json.decode(data));
+    print(data.toString());
+    Message messageText;
+    if (data is String) {
+      messageText = Message.fromJson(json.decode(data));
+    } else
+      messageText = Message.fromJson(data);
 
     return ChatMessage(
         text: messageText.text,
@@ -177,7 +182,6 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 : Image.network(DataProvider.of(context)
                     .user
                     .picUrl(widget.thisChat.chattingUser.id)));
-
   }
 
   void initSocket() {
@@ -203,10 +207,9 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       if (json.decode(data).toString().contains("data")) {
         sortMessageHistory(data);
       } else {
-       ChatMessage message = constructMessage(data);
-       setState(() => chatMessages.insert(0,message));
-       message.animationController.forward();
-
+        ChatMessage message = constructMessage(data);
+        setState(() => chatMessages.insert(0, message));
+        message.animationController.forward();
       }
     });
   }
@@ -392,14 +395,14 @@ class Message {
 
   Message.fromJson(Map map)
       : text = map['message'],
-        username = map.containsKey('sender')
-            ? map['sender']
+        username = map['sender'],
+        receivingUser = map.containsKey('receiver')
+            ? map['receiver']
             : map['thread_participant'],
-        receivingUser = map['receiver'],
-        senderId = map.containsKey('sender_id')
-            ? map['sender_id']
+        receiverId = map.containsKey('receiver_id')
+            ? map['receiver_id']
             : map['thread_participant_id'],
-        receiverId = map['receiver_id'];
+        senderId = map['sender_id'];
 }
 
 class MessageHistory {

@@ -121,6 +121,7 @@ class UserMethodBody {
     print('i have sunk messageHistoryCommand');
     user.myInboxes.stream.listen((data) async {
       if (json.decode(data).toString().contains("data")) {
+        print(json.decode(data).toString());
         print('i recognize that I have received something containing data');
 
         MessageHistory messageHistory =
@@ -128,6 +129,8 @@ class UserMethodBody {
         for (Map<String, dynamic> messageMap
         in messageHistory.fullMessageHistory) {
           Message message = Message.fromJson(messageMap);
+          print(message.receivingUser);
+          print(message.username);
           if (!user.chatList.chattingUserList.contains(message.receivingUser)) {
             Chat c = Chat(
                 chattingUser: User(message.receiverId, message.receivingUser));
