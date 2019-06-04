@@ -144,9 +144,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   void loadMessages() {
-    MessageHistory messageHistoryCommand = MessageHistory('get_history',
-        startIndex: chatMessages.length, endIndex: (chatMessages.length + 10));
-    channel.sink.add(json.encode(messageHistoryCommand));
+    channel.sink.add(json.encode(MessageHistory('get_history',
+        startIndex: chatMessages.length, endIndex: (chatMessages.length + 10))));
   }
 
   void sortMessageHistory(data) {

@@ -99,10 +99,7 @@ class AdvertCreationState extends State<AdvertCreation> {
                       Icons.linked_camera,
                       size: 30,
                     ),
-                    onPressed: () async {
-                      String s = await _scanQR();
-                      print(s);
-                    },
+                    onPressed: ()  => _scanQR()
                   ),
           ],
         ),
@@ -473,7 +470,7 @@ class AdvertCreationState extends State<AdvertCreation> {
     showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 
-  Future<String> _scanQR() async {
+  void _scanQR() async {
     String qRResult = await BarcodeScanner.scan();
     DataProvider.of(context).loadingScreen.show(context);
     Book book = await getBookByIsbn(qRResult);
@@ -483,14 +480,12 @@ class AdvertCreationState extends State<AdvertCreation> {
       setState(() {
         isbnController.text = qRResult;
       });
-      return qRResult;
     }
     setState(() {
       authorController.text = book.authors;
       titleController.text = book.title;
       isbnController.text = book.isbn;
     });
-    return qRResult;
   }
 
   void _listener() {

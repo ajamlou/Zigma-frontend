@@ -116,11 +116,12 @@ class UserMethodBody {
           "content-type": "application/json",
           "Authorization": "Token " + user.token
         });
-    MessageHistory messageHistoryCommand = MessageHistory('get_history');
-    user.myInboxes.sink.add(json.encode(messageHistoryCommand));
+    user.myInboxes.sink.add(json.encode(MessageHistory('get_history')));
     print('i have sunk messageHistoryCommand');
-    user.myInboxes.stream.listen((data) async {
+    user.myInboxes.stream.listen((data) {
+      // The if-clause catches the message history that we request upon login
       if (json.decode(data).toString().contains("data")) {
+
         print(json.decode(data).toString());
         print('i recognize that I have received something containing data');
 
@@ -131,6 +132,7 @@ class UserMethodBody {
           Message message = Message.fromJson(messageMap);
           print(message.receivingUser);
           print(message.username);
+          // If the thread doesn't exist already, create a new chat with this user
           if (!user.chatList.chattingUserList.contains(message.receivingUser)) {
             Chat c = Chat(
                 chattingUser: User(message.receiverId, message.receivingUser));
@@ -139,9 +141,13 @@ class UserMethodBody {
             c.chatMessages.add(message);
           }
         }
-      } else {
+      }
+      // The else-clause catches individual messages that are sent from the back-end
+      else {
         Message messageText = Message.fromJson(json.decode(data));
+        // If this is your thread
         if (identical(messageText.receivingUser, user.username)) {
+          // If the sender of the message on your thread is not already in your list of chats
           if (!user.chatList
               .getChattingUserList()
               .contains(messageText.username)) {
@@ -149,11 +155,15 @@ class UserMethodBody {
                 chattingUser: User(messageText.senderId, messageText.username));
             newChat.chatMessages.insert(0, messageText);
             user.chatList.chatList.insert(0, newChat);
-          } else {
+          }
+          // Or if the chat already exists, just add the message
+          else {
             user.chatList.chatList.firstWhere((chat) =>
                 identical(chat.chattingUser.username, messageText.username)).chatMessages.insert(0, messageText);
           }
-        } else {
+        }
+        // Or if this is a message you have sent to someone else, then the chat already exists, so just add the message
+        else {
           user.chatList.chatList.firstWhere((chat) =>
               identical(chat.chattingUser.username, messageText.receivingUser)).chatMessages.insert(0, messageText);
         }
