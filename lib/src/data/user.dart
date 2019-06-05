@@ -38,7 +38,7 @@ class User {
 
   Future<User> getUserById(int senderId) async {
     final String url =
-        'https://magis.serveo.net/users/users/' + senderId.toString() + '/';
+        'https://0a28ddc6.eu.ngrok.io' + senderId.toString() + '/';
     var req = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
     var resBody = json.decode(utf8.decode(req.bodyBytes));
@@ -89,7 +89,7 @@ class UserLogin {
 
 class UserMethodBody {
   User user;
-  String urlBody = "https://magis.serveo.net";
+  String urlBody = "https://1b55720e.eu.ngrok.io";
 
   UserMethodBody({this.user});
 
@@ -110,7 +110,7 @@ class UserMethodBody {
       user.chatList = ChatList();
     }
     user.myInboxes = IOWebSocketChannel.connect(
-        'wss://magis.serveo.net/ws/myinbox/',
+        'wss://1b55720e.eu.ngrok.io/ws/myinbox/',
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",

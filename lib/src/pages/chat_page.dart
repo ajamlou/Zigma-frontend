@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:zigma2/src/DataProvider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../chat.dart';
 
-class ZigmaChat extends StatelessWidget {
+class ZigmaChat extends StatefulWidget {
   @override
+  ZigmaChatState createState() => ZigmaChatState();
+}
+class ZigmaChatState extends State<ZigmaChat> {
   Widget build(BuildContext context) => buildChatMenu(context);
 
   Widget buildChatMenu(context) {
@@ -43,65 +47,82 @@ class ZigmaChat extends StatelessWidget {
                 child: Text('you aint got no chats \n you sad motherfucker'))
             : ListView.builder(
                 itemBuilder: (context, index) =>
-                    chatCardBuilder(chatList.chatList[index], context),
+                    chatCardBuilder(chatList.chatList[index], context, index),
                 itemCount: chatList.chatList.length,
               ),
       ),
     );
   }
 
-  Widget chatCardBuilder(thisChat, context) {
+  Widget chatCardBuilder(thisChat, context, index) {
     return GestureDetector(
       onTap: () => DataProvider.of(context).routing.routeSpecificChat(
           context, thisChat, DataProvider.of(context).user.user.token),
       child: Card(
         color: Colors.white,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Row(children: <Widget>[
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+               mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
             Expanded(
               flex: 2,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(30),
                 child: Container(
+                  alignment: Alignment.centerLeft,
                   padding: EdgeInsets.only(right: 8),
-                  height: 60,
-                  width: 60,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: thisChat.chattingUser.profilePic == null
-                        ? Image.asset('images/profile_pic2.png')
-                        : Image.network(DataProvider.of(context)
-                            .user
-                            .picUrl(thisChat.chattingUser.id)),
-                  ),
+                  height: 65,
+                  width: 35,
+                  child: FadeInImage.memoryNetwork(
+                    fit: BoxFit.fill,
+                    placeholder: kTransparentImage,
+                    image: DataProvider.of(context)
+                          .user
+                          .picUrl(thisChat.chattingUser.id)),
                 ),
               ),
             ),
             Expanded(
               flex: 6,
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    thisChat.chattingUser.username,
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  thisChat.chatMessages.length == 0
-                      ? Text('')
-                      : Text(thisChat.chatMessages[0].text,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black, fontSize: 20)),
-                ],
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      thisChat.chattingUser.username,
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    thisChat.chatMessages.length == 0
+                        ? Text('')
+                        : Text(thisChat.chatMessages[0].text,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black, fontSize: 20)),
+                  ],
+                ),
               ),
             ),
             Expanded(
               flex: 2,
-              child: Icon(Icons.remove, color: Colors.red),
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: IconButton(onPressed: () => removeChat(thisChat),
+                    icon: Icon(Icons.remove, size: 35, color: Colors.red)),
+              ),
             ),
           ]),
         ),
       ),
     );
+  }
+  void removeChat(chatToBeRemoved) {
+    ChatList chatList = DataProvider.of(context).user.user.chatList;
+    setState(() {
+      chatList.chattingUserList.remove(chatToBeRemoved.chattingUser.username);
+      chatList.chatList.remove(chatToBeRemoved);
+      // Här bör det skickas ett HTTP request till servern om att ta bort chatten så att den inte laddas in nästa gång
+    });
   }
 }
 
@@ -186,7 +207,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void initSocket() {
     // final List<Message> rawMessages = [];
     channel = IOWebSocketChannel.connect(
-        'wss://magis.serveo.net/ws/chat/' +
+        'wss://1b55720e.eu.ngrok.io/ws/chat/' +
             widget.thisChat.chattingUser.username +
             '/',
         headers: {

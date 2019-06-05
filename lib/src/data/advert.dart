@@ -64,7 +64,7 @@ class Advert {
 }
 
 class AdvertList {
-  final String urlBody = "https://magis.serveo.net";
+  final String urlBody = "https://1b55720e.eu.ngrok.io";
   final List<Advert> list = [];
 
   Future<void> loadAdvertList() async {
