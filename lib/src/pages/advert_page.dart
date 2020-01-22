@@ -201,13 +201,15 @@ class _AdvertPageState extends State<AdvertPage> {
             child: Image.asset('images/placeholder_book.png'),
           )
         : Container(
-            decoration: BoxDecoration(boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Colors.black54,
-                offset: Offset(1.0, 0.0),
-                blurRadius: 8,
-              )
-            ]),
+            decoration: BoxDecoration(
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black54,
+                  offset: Offset(1.0, 0.0),
+                  blurRadius: 8,
+                )
+              ],
+            ),
             margin: EdgeInsets.symmetric(horizontal: 65),
             child: SizedBox(
               height: 300,
@@ -269,13 +271,16 @@ class _AdvertPageState extends State<AdvertPage> {
                             onTap: () {
                               if (DataProvider.of(context).user.user != null) {
                                 if (!DataProvider.of(context)
-                                    .user.user.chatList
+                                    .user
+                                    .user
+                                    .chatList
                                     .chattingUserList
                                     .contains(snapshot.data.username)) {
                                   DataProvider.of(context)
-                                      .user.user.chatList
-                                      .startNewChat(
-                                          snapshot.data);
+                                      .user
+                                      .user
+                                      .chatList
+                                      .startNewChat(snapshot.data);
                                   DataProvider.of(context)
                                       .routing
                                       .routeChatPage(context, false);

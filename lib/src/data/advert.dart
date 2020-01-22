@@ -67,11 +67,20 @@ class AdvertList {
   final String urlBody = "https://1b55720e.eu.ngrok.io";
   final List<Advert> list = [];
 
+
   Future<void> loadAdvertList() async {
+    print("request sent");
     final String url = urlBody + "/adverts/adverts/recent_adverts/?format=json";
-    final request = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    final stopwatch = Stopwatch()..start();
+    final request = await http.get(Uri.encodeFull(url), headers: {
+      "Accept": "application/json",
+      "Connection": "close",
+      "Content-Type": "applicaion/json"
+    });
+    print('doSomething() executed in ${stopwatch.elapsed}');
+    stopwatch.stop();
     final List resBody = json.decode(utf8.decode(request.bodyBytes));
+    print("request recieved");
     for (int i = 0; i < resBody.length; i++) {
       list.add(Advert.fromJson(resBody[i]));
     }
