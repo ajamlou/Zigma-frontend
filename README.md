@@ -1,4 +1,4 @@
-# zigma2
+# Zigma
 
-A application written in the laguage Dart with the flutter framework. This is a mobile application that aims to centralize the second hand book selling market in a swedish town called Uppsala.
+Front end code for the mobile application Zigma. The application aims to centralize the academic second hand book market. The application has a backend written in python that can be seen [here]https://github.com/MaxSoneback/zigma_backend.
 
